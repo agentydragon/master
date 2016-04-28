@@ -1,0 +1,9 @@
+text/*.aux
+text/*.log
+text/*.bbl
+text/*.blg
+text/*.lof
+text/*.lot
+text/*.out
+text/*.toc
+text/thesis.pdf
