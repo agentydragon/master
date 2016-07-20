@@ -1,0 +1,91 @@
+KB completion: filling in facts missing from KB
+
+Path Ranking Algorithm (PRE)
+	link prediction in graph with labeled edges
+	feature matrices over node pairs in the graph
+	connection to logical inference
+	feature space: restricted class of Horn clauses found in the graph
+
+computed random walk probabilities are not useful
+=> simpler algorithm: Subgraph Feature Extraction (SFE)
+
+PRA:
+two-step algorithm for generating a feature matrix over node pairs in a graph
+feature matrix then plugged into ML (logistic regression)
+
+1) find set of potentially useful path types that connect node pairs
+	=> columns of feature matrix
+2) compute values in feature matrix by finding random walk probabilities
+
+PRA: for each pair (s_j, t_j), will generate features
+	each feature: sequence of edge labels (-e1-e2-...-e_l-)
+	edge sequence ("path type") exists between source, target => feature>0
+
+1) feature selection (because there are so many features)
+	done by random walks over graph
+	will find path types likely useful in predicting new instances
+	of source->target relation
+
+	start random walks in source and target
+	two-sided, unconstrained random walks
+		((could also use BFS, but it would be too much))
+	-> select K path types as features
+
+	Lao et al.: select by precision, recall
+	Gardner et al.: most frequently seen
+2) compute values for each cell of feature matrix
+	value: probability of source->target hit of random walk restricted to
+	follow the path type
+
+	exact BFS -> high complexity
+
+	to reduce:
+		a) random walks to approximate probability via rejection sampling
+		   random walk restarted when type cannot be followed anymore
+		b) if target node known: two-sided BFS cuts exponent by 2
+		c) replace BFS by multiplication of adjacency matrices;
+		   can do just once per path type, instead of once per path type
+		   per source node. HOWEVER, for training, need to disconnect
+		   source->target :/
+
+KBC using RE alone cannot use rich structure of KB
+
+motivation:
+	1) binarization (>=0 ---> 1) doesn't significantly harm performance ---
+	   surprising
+	2) path bigram features are good (each sequential pair of edge types in each
+	   path added as feature);
+	   increasing feature size beyond computable with PRA seems useful
+
+SFE:
+	for each source and target: grab subgraph by k random walks
+	combine source, target subgraphs
+	grab PRE-like (binary) features
+	problem: random walks are all *unconstrained* (PRA leverages
+	*path-constrained* random walks)
+	-> BFS for small fan-out nodes. SFE-BFS has much better performance.
+
+features additional to PRA:
+	path bigrams
+	one-sided paths ("city that has a lot of sport teams -> likely to be IsCapitalOf")
+		gender=male, gender=female -> more likely to be married
+	one-sided feature comparisons ("COMPARISON:-Gender-:/m/Male:/m/Female")
+
+	incorporate relation similarity in vector space
+		(replace only 1 at a time -- avoid combinatorial explosion)
+
+interesting: obtaining negative evidence
+	for SFE: find other nodes in same category that are close in
+		"personalized page rank" (PPR) -> negative evidence for
+		training and testing
+		TODO: what's "personalized page rank"?
+
+	(SFE needs both source and target node; PRA selects negative samples on its own)
+
+SFE significantly outperforms PRA
+
+TODO: "highest-weighted features were almost always -Alias-[some textual relation]-Alias^{-1}-"
+	"wrote" / "describes in" / ...
+
+	graph: edges from formal KB mixed with edges from extracted textual relations
+	^-- by far the most useful

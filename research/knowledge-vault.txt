@@ -1,0 +1,133 @@
+TXT, TAB, HTML, HUMAN, prior from existing KB
+fusion
+very big
+
+Freebase: 71% people have no birth place, 75% have no nationality, coverage
+	elsewhere is even smaller
+
+RDF triple + confidence score
+
+1.6B triples
+324M have confidence >= 0.7
+271M have confidence >= 0.9
+	(about 38x of largest previous system -- DeepDive has 7M confident facts)
+	about 1/3 of these weren't previously in Freebase
+
+* benefits of using multiple extraction sources
+* investigate validity of closed-world assumption
+
+extractors, graph-based priors, knowledge fusion
+
+predicting E x P x E 0-1 matrix (entities X predicates X entities)
+
+testing protocol (selecting <=10k instances of each predicate to ensure non-domination)
+
+local closed-world assumption
+
+TXT:	1) entity recognition, POS tagging, dependency parsing, co-reference
+	   resolution, entity linkage
+	2) train relation extractors using distant supervision
+	   features (like in distant-supervision)
+
+DOM: extra features connecting entities in DOM trees
+TBL
+ANO (human-annotated -- microformats)
+
+separate classifier for predicting Pr(t=1|f(t)) for triple
+	for every extractor: sqrt(Nsources) [nebo log(1+Nsources)] after dedup
+		mean of extractions from extractor
+
+for fusion:
+	1) logistic regression
+	2) much better performance: boosted decision stumps!
+	Platt Scaling ([33]) -- fit logistic regression model to the scores, using a separate validation set
+
+	each individual extractor is calibrated
+	then final fused probability is calibrated
+
+	alternative: isotonic regression
+
+AUC (area under ROC curve): probability of ranking random positive instance > random negative instance
+
+performance of fused system dominated by DOM system
+
+graph priors:
+	path ranking algorithm: measure path type support, precision
+		feature = probability of this random walk
+		overall AUC: 0.884 (surprisingly high)
+
+	neural network model (MLP)
+		E x P x E matice
+		low-rank decomposition of tensor
+
+		Pr(G(s,p,o)=1) =~= sigmoid(\sum_{k=1}^K u_{sk} w_{pk} v_{ok})
+			K ~ 60 = pocet skrytych dimenzi
+
+			inner product
+
+		more powerful model (Reasoning with Neural Tensor Networks for Knowledge Base Completion)
+			Pr(G(s,p,o)=1) =~=
+				sigmoid(\beta_p^T f[u_s^T W_p^{1:M} v_o])
+
+				f: nonlinear function (napriklad tanh)
+				\beta_p: Kx1 vektor
+				W_p^m je KxK matice
+
+				kazdy predikat P ma M matic velkych K * K
+				parametru je O(KE+K^2 MP)
+
+		used in Knowledge Vault:
+		Pr(G(s,p,o)=1) =~= sigmoid(\beta^T f[ A Concat(u_s w_p v_o) ])
+
+			A: L x 3K matice
+			je to two-layer perceptron
+
+			mene parametru
+			velmi podobny perf jako Reasoning with Neural Tensor Networks ...
+			(AUC 0.882 vs. 0.884)
+
+fusing different priors
+	prior confidences, 0/1 whether did prior work
+	-> build boosted classifier, calibrate with Platt Scaling
+	complementary strengths and weaknesses of prior systems; fused system
+	has AUC 0.911
+
+using human labels without LCWA makes performance a bit worse, but that's OK
+
+graph link prediction:
+	discrete Markov random fields (learning-to-refine...), continuous relaxations thereof (knowledge-graph-identification)
+	latent variables to model correlations indirectly.
+		discrete factors (infinite-hidden-relational-models)
+		continuous factors (factorizing-yago,
+		predicting-rdf-triples-tensor-factorization,
+		latent-factor-model-...,
+		reasoning-with-neural-tensor-networks-for-kb-completion)
+	approximation of correlation, e.g. random walks (PRA)
+
+open issues:
+	* modeling mutual exclusion (e.g., collect all options, force
+	  distribution to sum up to 1)
+		problem: different levels of granularity (e.g. Obama was born in
+		Honolulu, Hawaii)
+
+		currently investigating more sophisticated methods
+
+		simialr: logical uncertainty from MIRI?
+
+	* modeling soft correlations: ~0..5 children per person
+		work: joint Gaussian models to represent correlations among
+		numerical values (need to fully integrate prior into KV)
+
+	* values at different levels of abstraction (e.g. geo)
+		"Obama was born on Hawaii" is a correct extraction (at higher
+		level of abstraction)
+
+	* dealing correlated sources (currently just deduplication)
+	* some facts only temporarily true
+		Freebase allows this
+	* adding new entities and relations (problems for open IE: synonymous
+	  relations, redundant relations -- Biperpedia has possible approach to
+	  this problem)
+	* RDF useful for facts, but not for richer knowledge
+		(neural network??? no citations or pointers here.)
+

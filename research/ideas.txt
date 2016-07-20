@@ -1,0 +1,24 @@
+PRA: it normally reasons over KB graph.
+     could we reason over KB graph + semantic/lexical structure of sentences?
+	apparently they already did that...
+
+     (could we instead put the graph structure & sentences into a neural net? no
+     idea.)
+
+put mentioning sentence + some small neighborhood into RNN to get
+	probability of relation
+
+	possibly put X top sentences into RNN to aggregate?
+
+replicate Knowledge Vault atop DBpedia
+
+napriklad neuronky do predpovidani podle vet, misto logisticke regrese
+
+kombinace entity linkage a distant supervision pro slot filling:
+	"Barack and Michelle are married." => vygenerovat milion hypotez, ktery Barack a ktera Michelle?
+
+	nesel by udelat nejaky joint learning?
+	ze bych na zacatku nevedel, ktery Barack a ktera Michelle, ani ze ta
+	veta znamena "jsou v relaci Marriage"
+
+

@@ -1,0 +1,165 @@
+from kb-completion-using-subgraph-features:
+	* Path Ranking Algorithm (Lao et al., 2011; Dong et al., 2014)
+
+	* distantly-supervised relation extraction (Mintz et al., 2009;
+	  Hoffmann et al., 2011; Surdeanu et al., 2012)
+	* techniques that use KB more fully can perform better on KB completion
+	  (Weston et al., 2013; Riedel et al., 2013)
+
+	* embedding methods for KB completion: learn embedded representation of entities
+	  and relations, infer missing relationships
+	* RESCAL model (Nickel et al., 2011)
+	* Structured Embeddings (Bordes et al., 2011)
+	* TransE (Bordes et al., 2013)
+	* Neural Tensor Networks (Socher et al., 2013)
+		+ many variants
+	* Markov logic networks (Richardson and Domingos, 2006)
+	* ProPPR (Wang et al., 2013)
+	* PRA with parsed corpus as additional evidence (Lao et al., 2012)
+	* better representations of text corpus (Gardner et al., 2013; 2014)
+	* recursive NN to create embedded representations of PRA-style paths
+	  (Neelakantan et al., 2015)
+	* Gardner et at., 2014 (vector space similarity between relations in graph --
+	  combining with textual relations)
+
+	co je to "mean reciprocal rank"?
+
+	code and data used in the experiments: http://rtw.ml.cmu.edu/emnlp2015_sfe/
+
+from knowledge-vault:
+	* TAC-KBP slot-filling competition
+	* other KBs: Freebase, YAGO, Microsoft's Satori, KG, NELL, Elementary/DeepDive
+	* open IE: Reverb
+	* more sophisticated training methods without LCWA [28, 36]
+		* Distant supervision for relation extraction with an incomplete knowledge base
+		* Modeling missing data in distant supervision for information extraction.
+	* methods for entity linkage: Evaluating entity linking with wikipedia.
+	* boosted decision stumps: How boosting the margin can also boost classifier complexity.
+
+	"PARAFAC tensor decomposition" (latent scalar multiplication)
+
+	* growing body of work on automatic KB construction:
+		* from-information-to-knowledge
+		* The Knowledge Extraction Workshop at NAACL-HLT
+			https://akbcwekex2012.wordpress.com/
+			http://videolectures.net/akbcwekex2012_montreal/ --- videa
+
+	built from Wiki infoboxes & structured data: YAGO, YAGO2, DBpedia [3], Freebase
+	Reverb, OLLIE, PRISMATIC: open schema-less information extraction on web
+	NELL/ReadTheWeb, PROSPERA, DeepDive/Eleemntary: fixed ontology & info from web
+		KB belongs here
+	Probase: constructs taxonomies, as opposed to KBs
+
+	* biperpedia
+		extending with new relations and entities, without synonymity, redundancy spam
+	* learning-to-refine-...
+
+from dbpedia:
+	* ExtractingSemantics
+	* http://oldwiki.dbpedia.org/Datasets/NLP
+		DBpedia Lexicalizations Dataset: used by DBpedia Lookup, DBpedia Spotlight
+	* download RDF dumps!
+		* datasets are apparently separate
+
+	* WordNet, US Census, Geonames, MusicBrainz, DBLP bibliography, Cyc
+
+	YAGO
+
+	TODO: rikaji, ze zlepsi kvalitu DBpedia datasetu a udelaji vice
+	automatizovane extrakce
+
+	interlinking DBpedia with other KBs such as Cyc
+	-> (semi-)automatic consistency checks for Wikipedia content
+
+Jak vypadaji DBpediove extraktory::
+from http://wiki.dbpedia.org/services-resources/documentation/extractor#h110-3:
+	Extractors:
+		LabelExtractor (title of article)
+		MappingExtractor (structured data from infoboxes to DBpedia ontology)
+		InfoboxExtractor (all properties from all infoboxes, noisy)
+		WikiPageExtractor (links to corresponding articles)
+		PageLinksExtractor (internal DBpedia links from internal Wiki page links)
+			use: structural analysis, PageRank, ...
+		GeoExtractor (geographic coordinates)
+		ArticleCategoriesExtractor (concepts => categories - SKOS vocabulary)
+		CategoryLabelExtractor
+		ImageExtractor (first image -> thumbnail and full-size image)
+		ExternalLinksExtractor (extract links to external webpages)
+		HomepageExtractor (extract official homepage)
+		DisambiguationExtractor (extract disambiguation links)
+		PersondataExtractor (extract data about persons from English, German wikipedia)
+		PndExtractor (special case of ^^^ for some German PND thingie)
+		SkosCategoriesExtractor (relations of categories - SKOS)
+		RedirectExtractor (redirects between articles)
+
+TODO: jak vypadaji DBpediove datasety?
+TODO: pouziva nekdo DBpedii jako zacatek?
+
+from kb-population-approaches:
+	http://nlp.stanford.edu/projects/kbp/
+	http://www.nist.gov/tac/2015/KBP/
+		cold start: includes slot filling
+
+	* KBP Slot Filling competition
+	* ACE Relation Extraction
+
+	* CUNY slot filling system (maximum entropy re-ranking model to combine pipelines)
+
+	* novel training methods: distant (and noisy) supervision through Infoboxes:
+		* simple-distant-supervision-tac-kbp.pdf
+		* cuny-blender.pdf
+
+od Paskyho:
+	more accurate QA on Freebase, podsekce "relation matching"
+
+from automatic-kg-refinement-survey:
+	* knowledge graphs are never perfect (Constructing and mining web-scale knowledge graphs)
+	* Freebase data is being transferred to Wikidata: https://plus.google.com/109936836907132434202/posts/3aYFVNf92A1
+	* OpenCyc: freely available version of Cyc knowledge base (back to 80's)
+	* DBpedia creates different interlinked KGs for each language of Wikipedia
+	* YAGO aims at automatic fusion of knowledge from various Wikipedia languages
+	* [89] data in NELL can be exposed as semantic web data
+	* table of popular KGs
+	* [79] multi/single-label classification
+	* [76] classification to predict existence of relations from chains of
+	  other relations (tensor neural network); applied to Freebase and WordNet
+	* SDType algorithm [62, 63] - deployed for DBpedia, adds ~3.4M type
+	  statements
+	* [78] stat methods to enrich schemas with new axioms -- TODO, nejde stahnout z eClubu
+	* [60] exploit association rules to predict missing types in DBpedia (from YAGO)
+	* association rule mining to extend schemas [80]
+	* learn disjointness axioms by association rule mining [20]
+
+	* "Hearst patterns"
+	* distant supervision for DBpedia:
+	  extending-dbpedia-coverage-using-distant-supervision-over-wikipedia
+	* [84] web search to fill gaps in KGs
+		(use Web as corpus, combine IR and extraction for KG completion)
+	* [51] relation extraction from tables in Wikipedia
+	* [65] use List pages to generate type, relation assertions in KGs
+		("List of Jewish-American writers")
+	* [10] different DBpedia languages used to fill missing values in
+	  English DBpedia
+	* [78] explicit reasoning & enriching with new schema axioms
+	* [85] outlier detection for DBpedia (both natural and errorneous outliers)
+	* [40] DeFacto (external error detection)
+
+	TODO: look at YAGO, Wikidata, DBpedia, NELL
+	TODO: what kinds of axioms hold on DBpedia?
+		("persons and cities are disjoint", ...)
+
+	* NLP: entity set expansion methods [59, 72, 83]
+	* RDF graph kernel functions proposed for SVMs, other ML algos [33,44,15]
+
+	* public gold standards
+
+extending-dbpedia-coverage-using-distant-supervision-over-wiki
+	* wider effort devoted to the automatic expansion of DBpedia [16-18]
+		(automatic mapping for new languages // instance-based
+		classification; classes // properties)
+	* [19] new approach to distant supervision, deadling with noisy examples
+	* [20] survey of noise reduction methods for distant supervision
+	* distant supervision for fact checking [13]
+	* [15] YAGO as resource to collect training sentences
+	* [24] DBpedia and distant supervision for TAC-KBP slot filling task
+

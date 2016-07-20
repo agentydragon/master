@@ -1,0 +1,5 @@
+RELATION EXTRACTION: what relationship is expressed by this sentence?
+KB COMPLETION: predict which relationships hold between which entities
+
+KB completion can use RE system, but KBC typically don't predict on single sentences
+

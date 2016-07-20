@@ -1,0 +1,141 @@
+different KGs:
+	* DBpedia
+	* YAGO
+	* Freebase
+
+often from semi-structured knowledge (Wikipedie), or harvested (stats + NLP)
+
+curated: Cyc
+community-edited: Freebase, Wikidata
+extracted from large-scale semi-structured KBs like Wikipedia: DBpedia, YAGO
+information extraction for unstructured, semi-structured information: NELL, PROSPERA, Knowledge Vault
+
+not KG construction, but KG refinement
+
+Linked Data: proposes interlinking of different datasets in the semantic web
+
+~1000 datasets linked in the Linked Open Data cloud; majority of links connect
+	identical entities
+
+OpenCyc: >900 person-years to construct
+Freebase: serves as seed for non-public Google Knowledge Graph
+
+approaches: completion vs. correction
+	(adding missing knowledge, identifying wrong information)
+
+	targeting: completing/correcting entity type,
+		relations between entities,
+		literal values (numbers, ...),
+		interlinks between KGs,
+		extension of the *schema* used by the KG
+
+internal: KG itself used as input
+external: also additional data (e.g., text corpora)
+	[crowdsourcing, games with a purpose, ...]
+
+KG completion: can we replicate relations in KG by a graph completion method?
+	result quality: recall, precision, F-measure
+
+for correction:
+	accuracy and/or AUC
+
+partial gold standards: sometimes sourced from people
+using other interlinked KG as gold:
+	problems: ~20% of identity intelinks DBpedia<->Freebase are incorrect
+	~1/2 of owl:sameAs connect similar, but not *exactly* the same things
+
+for example, when evaluating error detection methods, a sample for a partial
+	gold standard from a high-quality graph is likely not to contain a
+	meaningful number of errors
+		==> post-hoc methodologies preferred
+
+completion methods predict:
+	* missing entities
+	* missing types for entities
+	* missing relations that hold
+
+internal completion methods
+
+	classification: predict type/class of entity given characteristics
+	supervised; multi-label (Arnold Schwarzenegger: Actor, Politician);
+	hierarchical classification (no applications so far)
+	link-based classification; Bayesian classifiers, SVMs, ...
+
+	classification to predict relation between entities: (e1,e2) -> (type of
+	relation); tensor neural network to predict relations based on chains of
+	other relations
+
+	prob, stats methods: SDType, ProSWIP
+
+	statistical methods to enrich schema with more domains, ranges of
+	relations, disjointness, ... by analyzing co-occurence of classes,
+	properties [78]
+
+	association rule mining - predict missing types, enrich schema, ...
+
+external completion methods
+
+	type prediction from external data
+
+	Wiki link graph -> types in KG (using KNN classifier)
+	predicting missing types from other DBpedia languages (kNN, different kernel fns)
+
+	text-based methods for predicting types and relations
+	predicting types: "Hearst patterns", abstracts, entire articles, ...
+	predicting relations: usually *distant supervision*
+		1) Named Entity Recognition: link to KG
+		2) mine for patterns
+
+	IE from semi-structured data (e.g. Wikipedia)
+		(entity linkage is mostly free)
+
+	using interlinks
+
+error detection -- internal
+	classifications -- in Knowledge Vault
+		LCWA for negative samples
+
+	reasoning (from semantic web community):
+		given set of axiom, is it free of contradictions?
+
+		DBpedia lacks disjointness assertions etc.
+		typically used in conjunction with methods for enriching topologies
+
+	outlier/anomaly detection
+		numerical values
+		outlier scores: "Local Outlier Factor" [9]; wiki linky
+		statistical methods - characteristic distribution of subject/object types in relations
+
+	graph-based:
+		clustering coefficient, centrality, ...
+		mark suspicious links
+
+error detection -- external
+	still rare
+	[40] DeFacto -- DBpedia -> lexicalizations -> web search -> mark if few hits
+
+interesting: rarely paired
+	exception: SDType, SDValidate
+		(output completion axioms, errors)
+
+	in principle, many methods could be used for both
+		(e.g. flagging when there's no evidence for statements)
+
+	simultaneous completion and error detection:
+		simultaneous predictive model creation, creating weights for pieces of information
+
+	correction algorithm could find replacement for error
+
+	rarely trying to complete many things (types, relations, literals, etc.)
+
+	no approaches yet for POPULATING with new entities
+
+evaluations
+	varies: silver standard KG; ex post evaluations; partial gold standards
+
+	usually evaluated on DBpedia
+
+	~2/3 of approaches evaluated *ONLY* on DBpedia
+		sometimes they work only on DBpedia *BY DESIGN*!
+
+	statements of computational performance only rarely included

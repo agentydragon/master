@@ -1,0 +1,37 @@
+problem: stitch together information, answer semantically rich queries
+
+problem: both data AND metadata must continually evolve
+
+grass-roots Semantic Web needs to handle:
+	* inconsistency
+	* ambiguity
+	* uncertainty
+	* data provenance (source)
+
+DBpedia: such a data corpus derived from Wikipedia
+
+contributions
+* information extraction framework: Wikipedia -> RDF
+	foundation for conducting research into IE, clustering, uncertainty
+	management, query processing
+* Wikipedia as large, multi-domain RDF dataset
+* interlink with other datasets (2B RDF triples)
+* series of interfaces, access modules (web services, etc.)
+
+Section 2: IE techniques
+Section 3: resulting datasets
+Section 4: methods for programmatic access
+Section 5: vision as nucleus of Web of open data
+
+wiki dumps ==>
+	articles, infobox, ..., categories (extraction) ==>
+	loaded into Virtuoso, MySQL ==>
+	published via SPARQL endpoint, Linked Data, SNORQL browser, ...
+
+Wikipedia: free text and structured information
+	structured information from parsing articles
+
+infobox extraction algorithm: pattern matching
+
+concepts described by short & long abstracts
+103M RDF triples

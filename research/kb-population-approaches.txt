@@ -1,0 +1,73 @@
+KBP track at 2010 Text Analysis Conference
+
+entity linking + slot filling
+
+sources: newswire, web documents
+reference KB is derived from Wikipedia infoboxes
+
+goal of KBP:
+	automatically identify salient and novel entities
+	link to corresponding KB
+	discover attributes
+
+entity linking: mention (name and document) => entity
+slot filling: collect info from corpus
+
+reference KB: stotisice entit ze clanku z Oct 2008 dumpu Wikipedie
+source collection: 1.3M newswire docs, 500k web documents
+
+entity linking:
+	1) query expansion (wiki hyperlink mining; coreference resolution -- "he")
+	2) kb node candidate generation (document semantic analysis; information retrieval)
+		IR: consider entire background document as query
+	3) kb node candidate ranking
+		* unsupervised similarity computation (TODO: ?)
+		* supervised classification
+		* rule-based
+		* global graph-based ranking
+			^-- optimization
+		* information retrieval (IR)
+			consider entire background document as query
+
+slot filling:
+	hybrid of traditional IE (a fixed set of relations) and QA (responding
+	to a query, generating unified response from large collection)
+
+	hybrid system
+
+	query expansion -> information retrieval (document level) ->
+		IR, QA (sentence/passage level) ->
+		information extraction:
+			distant learning / bootstrapping
+			patterns, classifiers
+		OR: QA; rules ->
+		(redundancy removal)
+
+	external databases (YAGO, DBpedia, Freebase, Linked Open Data): as
+	background; we want to use news, unstructured web data instead of
+	manually constructed KBs
+		can use external KBs for bootstrapping, buiding distant learning
+
+	systems benefited from "recursive, global reasoning"
+		("is subsidiary of" <--> "is parent of")
+
+	Most of the shortfall in system performance reflects inadequacies in the answer extraction stage,
+	reflecting limitations in the current state-of-the-art in information extraction. An analysis of the 2010
+	training data shows that cross-sentence coreference and some types of inference are critical to slot fill-
+	ing. In only 60.4% of the cases do the entity name and slot fill appear together in the same sentence,
+	so a system which processes sentences in isolation is severely limited in its performance. 22.8% of
+	the cases require cross-sentence (identity) coreference; 15% require some cross-sentence inference
+	and 1.8% require cross-slot inference.
+
+	non-identity coreference: between sentences ("children, son, ...")
+
+	cross-slot inference ("improving story consistency")
+
+	KBP Slot Filling is similar to ACE Relation Extraction, which has been extensively studied for past 7 years
+		coreference, cross-sentence inference is more critical
+		(ACE RE required having all arguments in 1 sentence)
+
+	While the types of inferences which may be required is open-ended, certain types come up repeatedly, reflecting the types of slots to be filled:
+	systems would benefit from specialists which are able to reason about times, locations, family relationships, and employment relationships.
+
+	combination of entity linking systems
