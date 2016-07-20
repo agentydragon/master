@@ -1,0 +1,34 @@
+Zadání:
+---
+
+Cílem práce je prozkoumat techniky automatického doplňování grafových
+znalostních databází jako Freebase, DBpedia nebo Wikidata o neznámé relace a
+případné navržení a otestování nových technik.
+
+Hlavní cíl práce bude vytvořit open-source software rozšiřující databázi
+DBpedie o nová fakta odvozená z dat již existujících v DBpedii a z dodatečného
+textovém korpusu. Jako předloha pro tento systém může sloužit architektura
+proprietárního systému Knowledge Vault, který rozšiřuje Knowledge Graph.
+Práce prozkoumá různé metody odvozování nových faktů: jak pouze z existujících
+znalostí v databázi, tak jejich získávání s pomocí doplňujícího korpusu.
+
+Seznam odborné literatury:
+---
+
+Dong, X. L., Murphy, K., Gabrilovich, E., Heitz, G., Horn, W., Lao, N.,
+... & Zhang, W. (2014). Knowledge Vault: A Web-scale approach to probabilistic
+knowledge fusion.
+
+Gardner, Matt, and Tom Mitchell. "Efficient and expressive knowledge base
+completion using subgraph feature extraction." Proceedings of the 2015
+Conference on Empirical Methods in Natural Language Processing. 2015.
+
+Ji, Heng, and Ralph Grishman. "Knowledge base population: Successful approaches
+and challenges." Proceedings of the 49th Annual Meeting of the Association for
+Computational Linguistics: Human Language Technologies-Volume 1. Association
+for Computational Linguistics, 2011.
+
+Aprosio, Alessio Palmero, Claudio Giuliano, and Alberto Lavelli. "Extending
+the coverage of DBpedia properties using distant supervision over Wikipedia."
+Proceedings of the 2013th International Conference on NLP & DBpedia-Volume
+1064. CEUR-WS. org, 2013.
