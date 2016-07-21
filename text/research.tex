@@ -155,7 +155,7 @@ graph.
 The final confidence scores are calculated by \textit{knowledge fusion},
 which combines extractor outputs with prior probabilities.
 Confidence scores from extractors are calibrated to fit the actual probabilities
-with Platt scaling.
+with Platt scaling\ref{platt-scaling}.
 (An alternative would be using isotonic regression.)
 
 Priors are probabilities of a relation being true, conditional
@@ -198,7 +198,7 @@ logistic regression, whose inputs are confidence scores of each extractor and
 the number of sources used by each extractor, represented as its square root.
 The classifier can learn the relative reliabilities of each extractor.
 They tried logistic regression, and got a better result with boosted decision
-stumps.
+stumps\ref{boosted-decision-stumps}.
 
 TODO: RESULTS of Knowledge Vault
 
@@ -242,5 +242,23 @@ Honolulu vs. born in Hawaii), discounting correlated sources, temporarily true
 facts, adding new entities and relation types.
 
 \section{Boosted decision stumps}
+\label{boosted-decision-stumps}
 A decision stump is a one-level decision tree, a type of weak learner
 well suited for boosting (for instance, by AdaBoost).
+
+\section{Platt scaling}
+\label{platt-scaling}
+
+Platt scaling\cite{platt-scaling} is a technique that scales the output $x$ of a binary classifier
+to the probability the sample belongs to the positive class. It is used as a
+calibration step for models that do not automatically learn to give good
+probability estimates.
+
+The probability estimated by Platt scaling that the sample $x$ belongs to the
+positive class is:
+$$\Pr[y=1|x] = \frac{1}{1+\exp(Ax+B)}$$
+$A$ and $B$ are parameters trained on a held-out calibration set.
+Platt suggested learning them using Levenberg-Marquardt.
+
+\section{Isotonic regression}
+TODO

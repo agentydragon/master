@@ -1,5 +1,5 @@
 from kb-completion-using-subgraph-features:
-	* Path Ranking Algorithm (Lao et al., 2011; Dong et al., 2014)
+	* (Dong et al., 2014)
 
 	* distantly-supervised relation extraction (Mintz et al., 2009;
 	  Hoffmann et al., 2011; Surdeanu et al., 2012)
