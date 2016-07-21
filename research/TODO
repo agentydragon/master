@@ -1,13 +1,11 @@
 from kb-completion-using-subgraph-features:
-	* (Dong et al., 2014)
+	* Path Ranking Algorithm (TODO: WAT: Dong et al., 2014)
 
 	* distantly-supervised relation extraction (Mintz et al., 2009;
 	  Hoffmann et al., 2011; Surdeanu et al., 2012)
 	* techniques that use KB more fully can perform better on KB completion
 	  (Weston et al., 2013; Riedel et al., 2013)
 
-	* embedding methods for KB completion: learn embedded representation of entities
-	  and relations, infer missing relationships
 	* RESCAL model (Nickel et al., 2011)
 	* Structured Embeddings (Bordes et al., 2011)
 	* TransE (Bordes et al., 2013)
