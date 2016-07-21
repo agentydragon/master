@@ -164,3 +164,6 @@ extending-dbpedia-coverage-using-distant-supervision-over-wiki
 	* [24] DBpedia and distant supervision for TAC-KBP slot filling task
 
 TODO: knowledge base completion via search-based question answering
+
+kb-completion-using-subgraph-features:
+	TODO: combining-vector-space-embeddings-with-inference

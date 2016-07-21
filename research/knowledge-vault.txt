@@ -1,6 +1,5 @@
 TXT, TAB, HTML, HUMAN, prior from existing KB
 fusion
-very big
 
 Freebase: 71% people have no birth place, 75% have no nationality, coverage
 	elsewhere is even smaller
@@ -21,8 +20,6 @@ extractors, graph-based priors, knowledge fusion
 predicting E x P x E 0-1 matrix (entities X predicates X entities)
 
 testing protocol (selecting <=10k instances of each predicate to ensure non-domination)
-
-local closed-world assumption
 
 TXT:	1) entity recognition, POS tagging, dependency parsing, co-reference
 	   resolution, entity linkage

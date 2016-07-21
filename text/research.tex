@@ -1,8 +1,138 @@
 \chapter{Research}
 
+Knowledge base completion (KBC) is the task of adding missing facts to an
+incomplete knowledge base.
+
+Knowledge base completion by relation extraction alone cannot use rich structure
+of knowledge base.
+
+\section{Predicting new edges by inference}
+
+By automated reasoning over an existing knowledge graph, we can predict the
+existence of new edges. For instance, when a person was born in Germany, it's
+likely the person's nationality is German.
+
+Both PRA and SFE produce a feature matrix -- for each node pair and relation
+type, they give a vector of features. The vector is then fed to a binary
+classifier, e.g., logistic regression.
+
+\subsection{Path ranking algorithm (PRA)}
+\label{path-ranking-algorithm}
+
+The path ranking algorithm\cite{path-ranking-algorithm}
+tries to predict the existence of unseen instances of a relation.
+First, in a training phrase, it collects known pairs of nodes in that relation.
+For each such A-B pair, it performs random walks starting from A along KG edges
+and keeps the paths that reach the entity B. Each path is converted into a
+\textit{path prototype}, which is a list of edge types taken along the path, e.g.
+"place-of-birth, people-born-here, education, institution" could connect a
+person to her college.
+
+After the training phrase, when we try to predict the probability of a relation
+between entities P and Q, for each interesting path prototype, we compute the
+probability of reaching Q from P by performing a random walk among paths
+following the same path prototype.
+The probabilities are then used as the feature vector for a binary classifier.
+
+TODO: Fakt to je pravdepodobnost uvnitr tohohle prototypu? Neni to uvnitr vsech
+cest?
+
+The path prototypes we use as features are selected either as the top $K$ path
+prototypes by frequency among training pairs (TODO: Gardner et al.), or by
+measures of precision and recall (TODO: Lao et al.)
+
+PRA has a strong connection to logical inference. (TODO: Investigate --
+combining-vector-space-embeddings-with-inference.)
+The feature space extracted by PRA is a restricted class of Horn clauses over
+the graph.\cite{subgraph-feature-extraction}
+
+The prediction step is very expensive: calculating the random walk
+probabilities exactly by BFS takes time $\O(d^l)$, where $d$ is the
+average out-degree of the graph and $l$ is the length of path prototypes,
+\textit{per entity pair}.
+The exponent can be cut in half by using a two-sided BFS with some careful
+bookkeeping. We can also estimate the probability by using random walks with
+rejection sampling.
+
+TODO: Neat list of embedding models in kb-completion-using-subgraph-features
+
+TODO: Look at some relevant article, get numbers.
+
+\subsection{Subgraph Feature Extraction (SFE)}
+
+TODO: This is something we should try.
+
+Subgraph Feature Extraction\cite{subgraph-feature-extraction} is a more
+efficient algorithm than PRE and it allows the binary classifier to use richer
+features. On a KB completion task on NELL, it improved precision from .432 with
+PRE to .528.
+
+% Code: http://rtw.ml.cmu.edu/emnlp2015\_sfe/
+
+The authors of the algorithm observed that the probabilities expensively
+computed by PRA at the prediction step are not
+useful\cite{subgraph-feature-extraction} -- just setting a binary flag for the
+presence or absence of a path gives statistically indistinguishable performance.
+SFE is also faster by an order of magnitude.
+
+TODO: what's K?
+
+Given a pair of nodes, SFE runs $k$ one-sided random walks starting from both,
+and then joins the subgraphs induced by these random walks on common ends of
+random walks. Features are then extracted from this subgraph.
+The subgraph extraction step can be augmented to include a few steps of BFS
+that includes relation types with a reasonably low fan-out.
+(PRA leverages path-constrained random walks, this lets us have the same
+benefit without having to include lots of irrelevant entities reachable via,
+e.g., "entity-has-type" edges.)
+
+The simplest features extracted from the common subgraph are equivalent to
+binarized PRA features: for each path connecting the two starting nodes, a
+feature representing the existence of a path of that type is added.
+Additionally, SFE makes possible the extraction of certain more expressive
+features that are not encodable by PRA, or hard to sample with rejection
+sampling (used in one variant of PRA). These features significantly improve
+performance.
+
+The added features include:
+\begin{itemize}
+\item Path bigrams (one feature for every pair of adjacent
+edge types, plus begin-end marker edges).
+\item One-sided features (e.g., "SOURCE:-GENDER-:male", "TARGET:-GENDER-:female"
+are good predictors of marriage; capitals are likely to have many sports teams)
+\item Comparisons of one-sided features. (Where constructing PRA features
+"intersect the graphs on common ends of walks", comparisons "intersect on
+path types".) "COMPARISON:-Gender-:/m/Male:/m/Female"
+\item Vector-similar features. Find semantically similar features by an
+embedding technique, then for every edge type on every path type, generate
+a vector-similar feature by replacing the edge with a similar edge type.
+(Replace just 1 edge on each path to avoid combinatorial explosion.)
+(Also including a vector-similar feature that doesn't change any edge.)
+\item ANYREL features: similarly to vector-similar features, add features
+by replacing each single edge by a "any relation" marker. (Sometimes, the
+existence of any relation between entities is useful evidence.)
+\end{itemize}
+
+TODO: Graph-based methods for KB completion
+TODO: Neelakantan et al. (2015)
+
+Low probability of hitting, e.g. "city in state" if node has high fan-out =>
+do a few steps of BFS on promising types. (And exclude edge types of too high
+fan-out -- e.g. /type/object/type). (SFE-BFS vs. SFE-RW)
+
+TODO: "On Obtaining Negative Evidence"
+
+TODO: How long are the random paths?
+
+TODO: Textual relations -- high-weighted
+
+\subsection{Embedding}
+
+TODO
+
 \section{Knowledge Vault}
 
-\textit{Knowledge Vault} is Google's project of extending its proprietary
+\textit{Knowledge Vault}\cite{knowledge-vault} is Google's project of extending its proprietary
 Knowledge Graph with relations extracted by reasoning over the knowledge graph
 and from a corpus of plain text, HTML pages and HTML tables. Because
 the sources are noisy, each relation has an associated confidence score
@@ -26,6 +156,7 @@ The final confidence scores are calculated by \textit{knowledge fusion},
 which combines extractor outputs with prior probabilities.
 Confidence scores from extractors are calibrated to fit the actual probabilities
 with Platt scaling.
+(An alternative would be using isotonic regression.)
 
 Priors are probabilities of a relation being true, conditional
 on the prior knowledge graph. They are useful for checking the consistency of
@@ -69,17 +200,10 @@ The classifier can learn the relative reliabilities of each extractor.
 They tried logistic regression, and got a better result with boosted decision
 stumps.
 
+TODO: RESULTS of Knowledge Vault
+
 Two algorithms were used to predict prior probabilities.
-\paragraph{Path ranking algorithm}
-One is the \textit{path ranking algorithm}. The algorithm starts with a set of
-pairs of entities known to be connected by a relation of some type, and then
-performs a random walk starting from one entity and collects those random paths
-that reach the second entity. Each path is compressed to the types of its edges,
-e.g. "place-of-birth, people-born-here, education, institution" is useful
-to predict the college a person went to.
-A binary classifier is then fit to predict the existence of a relation
-from useful path "shapes", given the probability of reaching entity B from
-entity A by following each path "shape".
+One of them is PRA \ref{path-ranking-algorithm}.
 
 \subsection{Neural network models}
 
@@ -116,3 +240,7 @@ Modeling mutual exclusion, modeling soft correlations
 (e.g., most people have <=10 kids), multiple levels of abstraction (born in
 Honolulu vs. born in Hawaii), discounting correlated sources, temporarily true
 facts, adding new entities and relation types.
+
+\section{Boosted decision stumps}
+A decision stump is a one-level decision tree, a type of weak learner
+well suited for boosting (for instance, by AdaBoost).
