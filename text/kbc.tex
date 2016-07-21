@@ -1,0 +1,56 @@
+\chapter{Knowledge base completion}
+
+Source: \cite{kg-refinement-survey}
+
+\section{Knowledge graphs}
+
+Freebase: closed. Wikidata: data migrated from Freebase.
+DBpedia: automatically extracted from Wikipedia.
+YAGO, NELL, ...
+Knowledge Vault: uses information extraction from unstructured data.
+
+\section{Methods}
+
+Completion: adding new facts.
+Error detection: identifying wrong information in graph.
+
+TODO: What about non-edges? (e.g. population = 10M, ...)
+
+Knowledge base completion is the process of automatically extending an
+incomplete knowledge base by adding missing entities and relations.
+Methods for knowledge base completion are \em{internal} and \em{external}.
+
+Internal methods only use preexisting features of the graph to predict unseen
+but true edges.
+
+External methods additionally use a corpus of text, from which they extract
+relations not necessarily supported by the prior knowledge base.
+
+Knowledge bases: tabulka vypadá divně. Proč je KV menší než KG?
+Jak je velká DBpedie, Wikidata? Proč jsou Wikidata menší než Freebase?
+Jak dělali migraci na Freebase?
+
+\subsection{Completion - Internal methods}
+
+Predicting type of entity: classification (supervised).
+Predicting existence of relations between entities (e.g. born in city in Germany
+=> German).
+Statistical methods (association rule mining). Type prediction, used by DBpedia.
+
+\subsection{Completion - External methods}
+
+Classification. (e.g. k-NN on Wiki links)
+
+NLP methods. Predicting types of entities by classification.
+Distant supervision.
+
+[50], [4]: extending Freebase, DBpedia with Wikipedia as external data
+
+Some methods with semi-structured data.
+
+\section{Evaluation}
+
+Knowledge graph as silver standard (replicating missing edges).
+Measuring recall, precision, F-measure.
+Can use other KG as partial gold standard.
+Or ex-post evaluations by humans.

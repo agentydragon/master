@@ -163,3 +163,4 @@ extending-dbpedia-coverage-using-distant-supervision-over-wiki
 	* [15] YAGO as resource to collect training sentences
 	* [24] DBpedia and distant supervision for TAC-KBP slot filling task
 
+TODO: knowledge base completion via search-based question answering

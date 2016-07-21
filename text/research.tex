@@ -1,0 +1,118 @@
+\chapter{Research}
+
+\section{Knowledge Vault}
+
+\textit{Knowledge Vault} is Google's project of extending its proprietary
+Knowledge Graph with relations extracted by reasoning over the knowledge graph
+and from a corpus of plain text, HTML pages and HTML tables. Because
+the sources are noisy, each relation has an associated confidence score
+(an estimate of the probability that the relation actually holds).
+
+Knowledge Vault has 1.6B triples, of which 324M have a confidence of 0.7 or
+higher, and 271M have a confidence of 0.9 or higher.
+This is 38x more than previous comparable system - DeepDive.
+About 1/3 of the 271M confident triples were not previously in Freebase, so
+the noisy sources are actually adding new relations.
+
+Knowledge Vault consists of several \textit{extractors}. Each extractor runs on a
+document and yields triples and confidence scores, representing uncertainty
+about the identity of the relation and its arguments. The confidence score is
+the probability of the relation being true, conditional on features seen by
+the extractor.
+For each possible triple, Knowledge Vault also learns its \textit{prior
+probability}, conditional only on information present in the source knowledge
+graph.
+The final confidence scores are calculated by \textit{knowledge fusion},
+which combines extractor outputs with prior probabilities.
+Confidence scores from extractors are calibrated to fit the actual probabilities
+with Platt scaling.
+
+Priors are probabilities of a relation being true, conditional
+on the prior knowledge graph. They are useful for checking the consistency of
+facts extracted from unreliable sources with known true facts in the knowledge
+graph.
+
+Evaluation protocol: 1) extract 1.6B candidates, 2) split them into test/train
+
+TODO: Why are there fewer confident facts in Knowledge Vault than in Freebase?
+Confident facts:
+
+Freebase: 1500 entity types, 40M instances, 35000 relation types, 637M
+facts.
+Knowledge Graph: 1500 entity types, 570M instances, 35000 relation types, 18000M
+facts.
+Knowledge Vault: 1100 entity types, 45M instances, 4469 relation types, 271M
+facts.
+
+To prepare training data including negative samples, Knowledge Vault uses the
+\textit{local closed world assumption}: e.g., if the set of actors in a movie listed
+in Knowledge Graph is non-empty, it is assumed to be complete and all other
+actors are used as negative samples.
+They tested the assumption and LCWA labels are not too far off.
+
+\paragraph{Extractors}
+The text extractor performs entity recognition, POS tagging, dependency parsing,
+co-reference resolution (within one document) and entity linkage (from mentions
+to KG entities).
+Then, a binary classifier (using logistic regression) is trained for each of
+4469 relation types using distant supervision.
+For the HTML extractor, similar features are used, augmented with DOM
+information.
+The remaining two extractors find relations in HTML tables and in webpages
+with microformats or schema.org metadata.
+
+For each relation, the output of all extractors is fused into one probability
+conditional on the features used by all extractors. This is performed by
+logistic regression, whose inputs are confidence scores of each extractor and
+the number of sources used by each extractor, represented as its square root.
+The classifier can learn the relative reliabilities of each extractor.
+They tried logistic regression, and got a better result with boosted decision
+stumps.
+
+Two algorithms were used to predict prior probabilities.
+\paragraph{Path ranking algorithm}
+One is the \textit{path ranking algorithm}. The algorithm starts with a set of
+pairs of entities known to be connected by a relation of some type, and then
+performs a random walk starting from one entity and collects those random paths
+that reach the second entity. Each path is compressed to the types of its edges,
+e.g. "place-of-birth, people-born-here, education, institution" is useful
+to predict the college a person went to.
+A binary classifier is then fit to predict the existence of a relation
+from useful path "shapes", given the probability of reaching entity B from
+entity A by following each path "shape".
+
+\subsection{Neural network models}
+
+\paragraph{Simple model}
+Low-rank decomposition of 3d $E\times P\times E$ matrix. Learn $K$-dimensional
+latent vectors, two for each entity ($u_s$ and $v_o$) and one for each relation
+($w_p$). $K=60$. (Equivalent to PARAFAC method of tensor decomposition +
+sigmoid.)
+$$\Pr[G(s,p,o)=1] = \sigma(\sum\limits{k=1}^K u_{sk} w_{pk} v_{ok})$$
+
+\paragraph{[37]}
+Associate a different tensor with each relation.
+$$\Pr[G(s,p,o)=1] = \sigma(\vec{\beta}_p f[\vec{u}_s^T \vec{W}_p^{1:M} \vec{v}_o])$$
+$\vec{\beta}_p\in\R^K$, $\vec{W}_p^m\in\R^{K\times K}$.
+Number of parameters: $\O(KE+K^2 MP)$ ($M$: number of "layers" in $W_p$ tensors)
+
+\paragraph{The one they actually used}
+One vector per predicate, then MLP to capture interaction terms.
+$$\Pr[G(s,p,o)=1]=\sigma(\vec{\beta}^T f[\vec{A} [\vec{u}_s; \vec{w}_p, \vec{v}_o] ])$$
+$\vec{A}\in\R^{L\times 3K}$.
+$L$ second-layer weights in $\vec{\beta}$.
+Parameters: $\O(L+LK+KE+KP)$, essentially same performance as [37].
+
+Neural network models have essentially same AUC as PRA
+(0.882 for NN, 0.884 for PRA).
+The outputs of both systems for estimating the prior probability are then
+fused. An extra feature is a 0/1 flag specifying whether the given prior system
+could make a prediction.
+
+Finally, the priors and the extracted confidence scores are again fused.
+
+\paragraph{Proposed extensions}
+Modeling mutual exclusion, modeling soft correlations
+(e.g., most people have <=10 kids), multiple levels of abstraction (born in
+Honolulu vs. born in Hawaii), discounting correlated sources, temporarily true
+facts, adding new entities and relation types.
