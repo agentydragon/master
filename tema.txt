@@ -6,11 +6,12 @@ znalostních databází jako Freebase, DBpedia nebo Wikidata o neznámé relace 
 případné navržení a otestování nových technik.
 
 Hlavní cíl práce bude vytvořit open-source software rozšiřující databázi
-DBpedie o nová fakta odvozená z dat již existujících v DBpedii a z dodatečného
-textovém korpusu. Jako předloha pro tento systém může sloužit architektura
-proprietárního systému Knowledge Vault, který rozšiřuje Knowledge Graph.
-Práce prozkoumá různé metody odvozování nových faktů: jak pouze z existujících
-znalostí v databázi, tak jejich získávání s pomocí doplňujícího korpusu.
+Wikidata o nová fakta odvozená z dat již existujících ve Wikidata a
+z dodatečného textovém korpusu. Jako předloha pro tento systém může sloužit
+architektura proprietárního systému Knowledge Vault, který rozšiřuje Knowledge
+Graph. Práce prozkoumá různé metody odvozování nových faktů: jak pouze
+z existujících znalostí v databázi, tak jejich získávání s pomocí doplňujícího
+korpusu.
 
 Seznam odborné literatury:
 ---
