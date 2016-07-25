@@ -391,7 +391,7 @@ latent vectors, two for each entity ($u_s$ and $v_o$) and one for each relation
 sigmoid.)
 $$\Pr[G(s,p,o)=1] = \sigma(\sum\limits{k=1}^K u_{sk} w_{pk} v_{ok})$$
 
-\paragraph{[37]}
+\paragraph{Neural tensor networks\ref{neural-tensor-networks-for-kbc}}
 Associate a different tensor with each relation.
 $$\Pr[G(s,p,o)=1] = \sigma(\vec{\beta}_p f[\vec{u}_s^T \vec{W}_p^{1:M} \vec{v}_o])$$
 $\vec{\beta}_p\in\R^K$, $\vec{W}_p^m\in\R^{K\times K}$.
@@ -701,3 +701,88 @@ The features fed into the binary classifier include:
 in both cases: Wikipedia is the corpus
 
 TODO: kb-completion-via-search-based-qa
+
+\section{Neural tensor networks for KBC}
+\label{neural-tensor-networks-for-kbc}
+
+http://www.socher.org/index.php/Main/ReasoningWithNeuralTensorNetworksForKnowledgeBaseCompletion
+
+Contributions:
+
+\paragraph{Relations as NTNs}
+Each entity is represented as a vector. Each relation is defined through the
+parameters of a neural tensor network which can explicitly relate two entity
+vectors.
+
+\paragraph{Averaging word vectors}
+The vector representing each entity is the average of its word vectors, which
+allows weight sharing (e.g., Bank of China, China).
+The word vectors are trained on large unlabeled text.
+
+Outperforms [8,9,10]. [8,9] can also benefit from initializing with unsupervised
+word vectors.
+
+Each relation triple is described by a neural network. Pairs of database
+entities are given as inputs.
+
+$e_1, e_2\in\R^d$: vector representations of two entities.
+
+Associate a different tensor with each relation.
+$$g(R,\vec{e_1},\vec{e_2}) = \vec{\beta}_R f[\vec{e_1}^T \vec{W}_R^{1:M}
+\vec{e_2} + V_R [\vec{e_1};\vec{e_2}]^T + b_R]$$
+$\vec{\beta}_R\in\R^K$, $\vec{W}_R^m\in\R^{D\times D}, \vec{W}^{1:K}_R\in\R^{D\times
+D\times K}$, $V_R\in\R^{K\times 2D}$, $b_R\in\R^K$.
+
+The tensor multiplication adds multiplication terms.
+The intuition is that each slide of the tensor is responsible for one type of
+entity pair or instantiation of a relation. ("Mechanical entities - cars - have
+parts."; "animals have parts")
+
+\paragraph{Distance model}: $$g(R,\vec{e_1},\vec{e_2})=\|W_{R,1} \vec{e_1} -
+W_{R,2} \vec{e_2}\|$$
+Low distance here means "likely to have relation". One problem of this model
+is that it allows no interaction between terms of the two vectors.
+
+\paragraph{Single layer model} $$g(R,\vec{e_1},\vec{e_2})=u_R^T
+f(W_{R,1}\vec{e_1} + W_{R,2}\vec{e_2})=u_R^T f([W_{R,1}
+W_{R,2}] [\vec{e_1} \vec{e_2}]^T)$$
+Non-linearity only provides a weak interaction.
+(Special case of tensor network with tensor set to 0.)
+
+\paragraph{Hadamard model}
+Hadamard product: $(A\otimes B)_{ij}=A_{ij}B_{ij}$
+$$g(R,\vec{e_1},\vec{e_2})=(W_1 \vec{e_1}\otimes W_{rel,1}\vec{e_R}+b_1)^T (W_2
+\vec{e_2}\otimes W_{rel,2}\vec{e_R}+b_2)$$
+The parameters $W_1,W_{rel,1},W_2,W_{rel,2}\in\R^{d\times d}$, $b_1,b_2\in\R^d$
+are shared by all relations. It allows us to treat relations and entities in the
+same way. Giving each relationship its own matrix operators gave increased
+performance.
+
+\paragraph{Bilinear model}
+$$g(R,\vec{e_1},\vec{e_2})=\vec{e_1}^T W_R e_2$$
+The model is restricted by dimensionality of embedding vectors. It can model
+only linear interactions. It's a special case of NTNs with
+$V_R=0,b_R=0,k=1,f=id$. For larger datasets, NTN has a larger expressive power
+thanks to more layers.
+
+Some exotic objective function.
+
+All models work well with randomly initialized entity vectors.
+A further improvement comes from representing entities by their word vectors
+and pre-trained initialization.
+
+$e_{homo sapiens} = \frac{1}{2}(e_{homo} + e_{sapiens})$, with backpropagation
+to $e_{homo}$ representation.
+In WordNet, 60\% entities only have a single word and $>90\%$ have $\leq 2$
+words. RNNs did not give any distinct improvement over averaging.
+Using $d=100$ vectors. Not dealing with homonyms.
+
+Train/test split: removes "trivial" symmetries (if "A is similar to B" is in
+train, then "B is similar to A" is not in test).
+
+Neural tensor net gets 90\% accuracy on Freebase for predicting Person
+attributes (e.g., gender, nationality). At least 2\% higher than bilinear model,
+4\% higher than single layer model. (Institution, cause of death: hard, ~77\%.
+Gender: ~97\%.)
+
+

@@ -25,7 +25,6 @@ external completion methods
 
 	type prediction from external data
 
-	Wiki link graph -> types in KG (using KNN classifier)
 	predicting missing types from other DBpedia languages (kNN, different kernel fns)
 
 	text-based methods for predicting types and relations
@@ -40,11 +39,6 @@ external completion methods
 	using interlinks
 
 error detection -- internal
-	outlier/anomaly detection
-		numerical values
-		outlier scores: "Local Outlier Factor" [9]; wiki linky
-		statistical methods - characteristic distribution of subject/object types in relations
-
 	graph-based:
 		clustering coefficient, centrality, ...
 		mark suspicious links
