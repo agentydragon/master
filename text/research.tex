@@ -35,18 +35,135 @@ TODO
 
 TODO
 
-It's a supersed of Freebase.
+Wikidata was developed by Wikimedia Deutschland in 2012 and is operated by the
+Wikimedia Foundation.
+
+Wikidata's data model contains items and statements. An item represents an
+entity, has an identifier called a "qid", and may have labels, descriptions and
+aliases in multiple languages, and links to other Wikimedia projects. Wikidata
+states \textit{do not aim to encode true facts}, but \textit{claims} from
+different sources, which can also contradict each other (e.g., border
+conflicts).
+
+A statement is composed of a claim and zero or more references to the claim.
+
+As of September 2015, Wikidata counted about 70 million statements on 18 million
+entities.
+
+Wikidata has no explicit notion of types. Type is just another relation
+("instance of" -- P31).
+
+TODO: more in-depth comparison: A Comparative Survey of DBpedia, Freebase,
+OpenCyc, Wikidata and YAGO
+
+It's a superset of Freebase.
 
 \subsection{Freebase}
 
 TODO
 
-Freebase is the seed for the proprietary Google Knowledge
+Freebase was a community-edited knowledge base originally launched by Metaweb in
+2007 and acquired by Google in 2010. Aside from many usages outside Google,
+Freebase served as the seed for the proprietary Google Knowledge
 Graph\cite{kg-refinement-survey}.
+
+Objects in Freebase are identified by their MID (e.g. /m/02mjmr). Each object
+has a type.
+Freebase uses \textit{complex value types} to represent N-ary relations for
+$N>3$ (e.g., geographic coordinates, political positions held with a start and
+an end). CVTs are objects and have MIDs. Non-CVT objects are called
+\textit{topics} to distinguish them from CVTs.
+
+The content of Freebase has been partially imported from other sources, such as
+Wikipedia or MusicBrainz.
 
 As of July 2016, it's closed.
 
-Its data was migrated to Wikidata (TODO: the great migration).
+\subsection{The migration from Freebase to Wikidata\cite{freebase-wikidata-migration}}
+
+In 2014, Google decided to shut down Freebase and to offer the content
+of Freebase to the Wikidata community.
+The motivation for this migration was the perception of the Knowledge Graph team
+at Google that the Wikidata community was in a better position to lead the
+collective effort to collect and curate structured knowledge about the world.
+
+Freebase was turned read-only on March 31, 2015, and at that time, it had 3
+billion facts (000 000 000) and almost 50 million entities. Freebase data is
+available as an N-triples dump in RDF under the CC-BY license at
+https://developers.google.com/freebase/data.
+
+One challenge of the migration was the difference in licensing: Wikidata is
+published under CC0, Freebase is published under CC-BY. The Freebase dump had to
+be filtered down to data Google could relicense under CC0. This reduced the
+number of Freebase facts by about 1.4\% (by about 42 million from the original
+3 billion).
+
+Knowledge Vault\ref{knowledge-vault} was reused to provide external references
+for Freebase statements without sources. A domain blacklist was used to filter
+down references that would not be accepted for inclusion in Wikidata (e.g.,
+social networks, reviews on shopping sites, etc.).
+
+The data quality of imported data was found to be low by Wikidata standards.
+The migration relied on the so-called \textit{Primary Sources Tool}, which
+displays Freebase statements for curation by the contributor that can be added
+to the currently shown Wikidata item.
+
+Wholesale ingestion of Freebase would necessiate a large increase in
+maintenance effort on part of Wikidata. To counter the costs, new tools
+(including the Primary Sources Tool) were developed to help the community
+more efficiently maintain the data.
+
+Only 4.56 million Freebase entities were mapped to Wikidata items, with the help
+of existing Wikipedia mappings by Google and Samsung and IDs in external
+databases.
+Mapped topics had an average of 13.9 facts, whereas not mapped topics had an
+average of 5.7 facts. The majority of topics with at least 47 facts were maped
+(191K non-mapped vs. 195K mapped), so the most important topics in Freebase were
+mapped.
+
+Around 360 properties were quickly mapped by the help of the community. In
+summer of 2015 when the work was completed, Wikidata had about 1800 properties,
+whereas Freebase had around 37700.
+
+CVTs were transformed into more complex Wikidata statements:
+Obama - "position held", from 20.1.2009 to (unknown value).
+
+Factoid: removed dates prior to 1920, because cannot be sure if they're in
+Gregorian or Julian calendar.
+
+The last Freebase dump from March 2015 contained 48 million topics, 2997 million
+triples, 442 million "useful" facts (excluding names, descriptions etc.) and 68
+million labels.
+In comparison, by August 2015, Wikidata contained 14.5 million items, 66 million
+statements and 82 million labels.
+
+Why are the numbers so different? Freebase has a lot of topics that do not match
+Wikidata's notability criteria (https://www.wikidata.org/wiki/Wikidata:Notability).
+Freebase is also much more redundant than Wikidata -- properties often have a
+\textit{reverse}.
+CVTs use a lot of facts that are represented as one Wikidata statement.
+
+If we attempted to encode Wikidata statements as if they were Freebase facts
+(remove sources, use CVTs, add reverses) -> would lead to 110 million facts
+(167\% increase over raw number of statements).
+Freebase also often contains duplicate data.
+
+The migration added about 14 million new statements, which would increase the
+number of Wikidata statements by ~21\% if they were all added.
+
+Why is this so low compared to 3 billion facts? Because only ~4.56 million items
+were mapped to Wikidata.
+
+Restricted to human-reviewed facts (1.6M), of them, 0.58M have their subject
+mapped to Wikidata, of which 0.52M (92\%) are converted to Wikidata statements.
+Of those, 58\% are already in Wikidata, so they added 0.25M new reviewed
+statements to Wikidata.
+
+[17] discusses Wikidata representation in RDF.
+
+Raw number of triples is NOT a good measure of quality.
+
+TODO
 
 \subsection{YAGO}
 
@@ -543,22 +660,46 @@ There are few holistic solutions which try to improve the entire KG at once.
 
 \section{Distant supervision}
 \label{distant-supervision}
-Distant supervision predicts the existence of relations based on positive and
-negative samples of relations and a large text corpus.
-First, Named Entity Recognition is performed on the corpus to find KG entities.
+Distant supervision\cite{distant-supervision} predicts the existence of
+relations based on positive and negative samples of relations and a large text
+corpus. First, Named Entity Recognition is performed on the corpus to find KG
+entities.
 Then, Reference Resolution resolves references within each document.
 
-If entities X and Y are in relation R, each sentence that contains both
+Distant supervision is trained to predict the occurence of one relation,
+e.g. IsCapitalOf.
+
+If entities X and Y are in the IsCapitalOf, each sentence that contains both
 entity X and entity Y is presumed to potentially contain information about
-the R relation existing between X and Y.
+the IsCapitalOf relation existing between X and Y.
 For all positive and negative samples, we find all sentences containing the two
 entities, transform the sentences (and the entity mentions) into a feature
 vector and train a binary classifier.
 The binary classifier is then run on the entire corpus to predict unknown
 relations.
 
+The negative samples can be selected
+by randomly sampling a pair of entities with the proper type that don't have the
+IsCapitalOf relation. We assume that this is a true negative, not a missing
+relation in the knowledge graph.
+
+The features fed into the binary classifier include:
+\begin{itemize}
+\item The sequence of words between the two entities.
+\item The POS tags of this sequence.
+\item A flag indicating which entity came first.
+\item A window of $k$ words to the left of entity 1 and right of entity 2.
+\item The dependency path between the two entities in the parse.
+\item For each entity, one "window" node not part of the dependency path.
+	(A node connected to one of the two entities and not part of the path.)
+		-- generate 1 conjunctive feature for each pair of left, right
+		window nodes, and features which omit one or both of them
+	\cite{distant-supervision}
+\item Conjunction features.
+\end{itemize}
+
 [50]: for Freebase
 [4]: for DBpedia
 in both cases: Wikipedia is the corpus
 
-[84]: search-based QA for completion
+TODO: kb-completion-via-search-based-qa
