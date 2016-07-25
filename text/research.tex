@@ -1,14 +1,58 @@
 \chapter{Research}
 
+TODO: How do ontologies look?
+
+The Linked Data cloud contains roughly 1000 datasets. The majority of links
+connect identical entities between datasets.\cite{kg-refinement-survey}.
+
 \section{Knowledge bases}
 
 TODO
 
+Many knowledge bases are often construced either from semi-structured knowledge
+(e.g., Wikipedia), or harvested by large-scale NLP. Others are curated.
+
+Curated: Cyc
+
+Community-edited: Freebase, Wikidata
+
+Extracted from large-scale semi-structured knowledge bases (e.g. Wikipedia):
+DBpedia, YAGO
+
+Information extraction from unstructured or semi-structured data: NELL,
+PROSPERA, Knowledge Vault
+
 \subsection{DBpedia}
+
+DBpedia is automatically extracted from the text of Wikipedia articles.
+
+DBpedia is created separately for every language edition of Wikipedia.
+A new edition is published every year.
 
 TODO
 
 \subsection{Wikidata}
+
+TODO
+
+It's a supersed of Freebase.
+
+\subsection{Freebase}
+
+TODO
+
+Freebase is the seed for the proprietary Google Knowledge
+Graph\cite{kg-refinement-survey}.
+
+As of July 2016, it's closed.
+
+Its data was migrated to Wikidata (TODO: the great migration).
+
+\subsection{YAGO}
+
+TODO
+
+\subsection{NELL}
 
 TODO
 
@@ -149,11 +193,12 @@ TODO
 
 \section{Knowledge Vault}
 
-\textit{Knowledge Vault}\cite{knowledge-vault} is Google's project of extending its proprietary
-Knowledge Graph with relations extracted by reasoning over the knowledge graph
-and from a corpus of plain text, HTML pages and HTML tables. Because
-the sources are noisy, each relation has an associated confidence score
-(an estimate of the probability that the relation actually holds).
+\textit{Knowledge Vault}\cite{knowledge-vault} is Google's project of extending
+its proprietary Knowledge Graph with relations extracted by reasoning over
+the knowledge graph and from a corpus of plain text, HTML pages and HTML
+tables. Because the sources are noisy, each relation has an associated
+confidence score (an estimate of the probability that the relation actually
+holds).
 
 Knowledge Vault has 1.6B triples, of which 324M have a confidence of 0.7 or
 higher, and 271M have a confidence of 0.9 or higher.
@@ -279,3 +324,241 @@ Platt suggested learning them using Levenberg-Marquardt.
 
 \section{Isotonic regression}
 TODO
+
+\section{Knowledge graph refinement survey\cite{kg-refinement-survey}}
+
+Most existing work for KG refinement runs on DBpedia, YAGO, or Freebase.
+
+It's useful to study refinement isolated from construction -- better
+understanding and separation of effects, generality over KGs.
+
+The authors classify KG refinement methods as \textit{completion}, or
+\textit{error correction}. Completion enhances completeness, correction
+reduces error.
+Some approaches are also \textit{targeted} to correct only some part of the
+knowledge graph, e.g. one relation type (like entity types), knowledge graph
+intelinks or literal values.
+Some methods try to extends the knowledge graph's \textit{schema}.
+\textit{Internal} methods only operate on the input knowledge graph, while
+\textit{external} methods use additional data, like text corpora.
+
+There are several approaches to evalute the methods.
+\paragraph{KG as silver standard}
+KG completion can use the KG itself as a \textit{silver standard}: we check how
+well can we predict existing relations in the KG if we hide them from the
+algorithm. Silver standard is not suitable to measure error detection, because
+it assumes the KG to be correct.
+A slight problem is that the entire KG is used as input to completion and then
+also for evaluation, but it would be hard to split it into a "train" and "test"
+set, so most work uses the entire KG anyway.
+
+The measured metrics are usually recall, precision and F-measure ($F_1 =
+2\cdot\frac{prec \cdot recall}{prec + recall}$).
+
+Another problem is that most KGs are \textit{open world}, and if the method
+correctly completes a new edge that's missing in the knowledge graph, it would
+count as a negative sample and lower the precision. To obtain better negative
+samples, we can use the \textit{local closed world assumption}.
+
+\paragraph{Partial gold standard}
+We can also use a \textit{partial gold standard}: take a part of the KG and
+manually fill in every relation that "should be there" (for completion), or
+manually label a set of relations as correct or incorrect (for correction).
+Completion is usually again compared by recall, precision and $F_1$.
+Correction uses accuracy and/or area under ROC curve (AUC).
+Gold standards can be collected from human experts, or we can use another
+interlinked KG as a partial gold standard (through 20\% of interlinks between
+DBpedia and Freebase are incorrect; ~50\% of owl:sameAs connect similar, but not
+exactly same entities).
+
+\paragraph{Ex post evaluations}
+Completions or corrections are given to human raters to label as correct or
+incorrect. Useful, for example, when partial gold standard from high-quality KG
+is used to evaluate correction methods, the standard might not have
+meaningfully many errors.
+
+\subsection{KG completion methods}
+Internal methods use only the KG itself as input.
+
+\paragraph{Internal - Classification}
+Supervised classification can be used to predict entity types (sometimes
+\textit{multi-label} - e.g. Arnold Schwarzenegger is a Politician and Actor).
+The features used for classification are usually relations connecting to other
+entities. In hierarchical ontologies, type prediction is a \textit{hierarchical
+classification} problem (through there have been no applications of it so far).
+Classification can be used also to predict the existence of a relation between
+a pair of entities.
+One work predicts the existence of relations between entities by a tensor
+neural network, based on chains of other
+relations in Freebase and WordNet.\cite{neural-tensor-networks-for-kbc}
+
+TODO: [76]
+
+TODO: again. figure out what exactly's going on here.
+
+\paragraph{Probabilistic and statistical methods}
+SDType: predicts the type of an entity based on graph features (e.g., lots of
+"cast" nodes mean high likelihood it's an Actor). Deployed on DBpedia, adds 3.4
+million type statements.
+ProSWIP: predicts entity types.
+
+Statistical methods to enrich schema with additional domains/ranges of
+relations, disjointness axioms, ...
+
+Oren et al. [58]: predicts relation, but not which entity it connects to.
+
+[60]: Predict missing types in DBpedia based on redundancies in type systems
+(YAGO vs. DBpedia ontology -- based on infoboxes vs. categories).
+
+Association rule mining to extend schemas (e.g., domain/range restrictions,
+disjointness axioms, ...) [80, 20]
+
+\paragraph{External methods}
+External methods use data sources external to the KG (e.g., knowledge graph
+interlinks, Wikipedia, text corpora, ...).
+
+\paragraph{External - Classification}
+[57]: predict entity types by k-NN on Wikipedia link graph.
+There are typically more interlinks between Wikipedia pages than KG entities.
+[3]: different-language DBpedias to predict missing types.
+
+\paragraph{External - NLP-based methods}
+Text-based methods for predicting types and relations.
+Types: Hearst patterns[28] ("ISA") in abstracts ([23, 36]).
+[38] learns patterns on Wiki abstract using conditional random fields [37].
+On entire articles: [86]
+
+Prediction of relation between two entities: usually by \textit{distant
+supervision}\ref{distant-supervision}.
+
+\paragraph{External - information extraction from semi-structured data}
+For example, some methods leverage extra tags in Wikipedia.
+This is usually combined with DBpedia.
+
+[51] extract information from tables in Wikipedia.
+For two entities co-occurring in a table, they likely share a relation.
+They first collect all relations that could possibly hold between at least 1
+pair of entities, then train a classifier to predict which relation actually
+holds.
+
+[65] proposes the use of List pages in Wikipedia to generate type and relation
+assertions (e.g., "List of Jewish-American Writers").
+
+\paragraph{Knowledge Graph Fusion based on interlinks}
+E.g.: different DBpedia languages ([10]). [18]: probabilistic mapping between
+KGs.
+
+\subsection{Error detection methods}
+No methods combine completion and correction. The only exception is SDType and
+SDValidate (they can output both errors and completion axioms).
+
+\paragraph{Internal - Classification}
+Knowledge Vault uses binary classification to tell which relations should hold,
+as a cleaning step after knowledge extraction.
+
+\paragraph{Internal - Reasoning}
+Reasoning is a semantic web technique that finds whether a set of assertions is
+free of contradictions (based on a rich ontology).
+NELL and PROSPERA use reasoning to determine whether a proposed new axiom is
+plausible. Real KGs have to deal with errors and noise.
+
+Many KGs - e.g., DBpedia - don't have enough richness for useful reasoning
+(e.g., disjointness assertions). We need to enrich such ontologies to let
+reasoning find errors -- e.g. [78] uses statistical methods; [39] association
+rule mining; [46] inductive logic programming.
+
+\paragraph{Internal - Outlier detection}
+Numeric literals are a natural target. ([85]: applied to DBpedia; most found
+outliers are actual errors; extra split -- e.g. population, for countries,
+cities, towns in isolation)
+
+Outlier detection can be used to find suspicious interlinks -- e.g., using
+entity types in both KGs as features.
+Techniques: Local Outlier Factor [9], cluster-based outlier detection [27].
+
+[63]: characteristic distribution of subject/object types for every relation
+
+Graph-based measures (degree, clustering coefficient, centrality, ...) to
+identify wrong KG interlinks [25] -- compares expected to actual distribution
+(e.g., power-law-like for degree of entities).
+
+\paragraph{External}
+External methods for error detection are few.
+DeFacto[40] checks facts in DBpedia by lexicalizing them to natural language
+sentences and searching the Web ofr them. Sentences with few hits are assigned
+a low confidence score.
+
+\subsection{Findings}
+
+\paragraph{Methods}
+
+\paragraph{No combining of error detection and completion}
+Only SDType/SDValidate combines error detection and completion (the algorithms
+are highly similar and output either completion axioms, or errors).
+In principle, we could use many approaches to do both (e.g., find relations
+which have no supporting statements in corpus), but they don't.
+Boosting weights, random forest attribute weights, ... could be used to develop
+a system for both.
+
+Hardly any error-detecting mechanisms also say how to correct the error.
+
+Most approaches also focus only on one target -- rarely on e.g. both type and
+relation assertions.
+
+\paragraph{Adding new entities}
+No examined approaches try to \textit{add new} entities. Entity set expansion
+methods have been deeply investigated in NLP. ([59, 72, 83])
+This might be interesting to apply to long-tail entities.
+Example: what if there's a missing page in Wikidata? Wikipedia has fairly high
+standards for inclusion.
+
+Many methods are not genuinely graph-based. For example, we could do graph-based
+outlier detection or association rule mining ([2, 35]) or graph kernel functions
+(e.g. for SVMs) for RDF graphs ([33, 44, 15]).
+
+\paragraph{Evaluation methodologies}
+
+Most papers use precision and recall (or, post-hoc, precision and number of
+extracted statements). Others: ROC curves, accuracy, root mean squared error,
+...
+KG as silver standard, ex-post evaluations and partial gold standards appear
+with equal frequency. Ex-post evaluations are mostly used for error detection.
+
+Partial gold standards are usually publicly available, which allows for
+replication and comparison.
+
+The major KG used is DBpedia. One problem is that DBpedia is republished every
+year.
+
+Roughly 2/3 of approaches evaluated on DBpedia are evaluated \textit{only} on
+DBpedia. Roughly 1/2 of approaches are evaluated on only one knowledge graph.
+Some work only on DBpedia \textit{by design}.
+
+The question of computational performance and scalability is often neglected.
+
+It would be useful to have a common selection of benchmarks, as in, e.g.,
+question answering.
+
+There are few holistic solutions which try to improve the entire KG at once.
+
+\section{Distant supervision}
+\label{distant-supervision}
+Distant supervision predicts the existence of relations based on positive and
+negative samples of relations and a large text corpus.
+First, Named Entity Recognition is performed on the corpus to find KG entities.
+Then, Reference Resolution resolves references within each document.
+
+If entities X and Y are in relation R, each sentence that contains both
+entity X and entity Y is presumed to potentially contain information about
+the R relation existing between X and Y.
+For all positive and negative samples, we find all sentences containing the two
+entities, transform the sentences (and the entity mentions) into a feature
+vector and train a binary classifier.
+The binary classifier is then run on the entire corpus to predict unknown
+relations.
+
+[50]: for Freebase
+[4]: for DBpedia
+in both cases: Wikipedia is the corpus
+
+[84]: search-based QA for completion
