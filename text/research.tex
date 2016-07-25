@@ -24,12 +24,15 @@ PROSPERA, Knowledge Vault
 
 \subsection{DBpedia}
 
-DBpedia is automatically extracted from the text of Wikipedia articles.
-
+DBpedia is automatically extracted from the text of Wikipedia articles -- in
+particular, infoboxes.
+DBpedia maintains an ontology downloadable inthe OWL format.
 DBpedia is created separately for every language edition of Wikipedia.
 A new edition is published every year.
 
 TODO
+
+TODO: Airpedia: extending class coverage of DBpedia
 
 \subsection{Wikidata}
 
@@ -363,7 +366,7 @@ The text extractor performs entity recognition, POS tagging, dependency parsing,
 co-reference resolution (within one document) and entity linkage (from mentions
 to KG entities).
 Then, a binary classifier (using logistic regression) is trained for each of
-4469 relation types using distant supervision.
+4469 relation types using distant supervision\ref{distant-supervision}.
 For the HTML extractor, similar features are used, augmented with DOM
 information.
 The remaining two extractors find relations in HTML tables and in webpages
@@ -440,6 +443,12 @@ Platt suggested learning them using Levenberg-Marquardt.
 \section{Isotonic regression}
 TODO
 
+\section{$F_1$ score}
+\label{f-1}
+TODO: Why is it useful as a measure?
+
+$$F_1 = 2\cdot\frac{prec \cdot recall}{prec + recall}$$
+
 \section{Knowledge graph refinement survey\cite{kg-refinement-survey}}
 
 Most existing work for KG refinement runs on DBpedia, YAGO, or Freebase.
@@ -467,8 +476,7 @@ A slight problem is that the entire KG is used as input to completion and then
 also for evaluation, but it would be hard to split it into a "train" and "test"
 set, so most work uses the entire KG anyway.
 
-The measured metrics are usually recall, precision and F-measure ($F_1 =
-2\cdot\frac{prec \cdot recall}{prec + recall}$).
+The measured metrics are usually recall, precision and F-measure\ref{f-1}.
 
 Another problem is that most KGs are \textit{open world}, and if the method
 correctly completes a new edge that's missing in the knowledge graph, it would
@@ -677,6 +685,9 @@ by randomly sampling a pair of entities with the proper type that don't have the
 IsCapitalOf relation. We assume that this is a true negative, not a missing
 relation in the knowledge graph.
 
+The main benefit of distant supervision is that it removes the need to manually
+label sentences as samples of relations.
+
 The features fed into the binary classifier include:
 \begin{itemize}
 \item The sequence of words between the two entities.
@@ -691,20 +702,92 @@ The features fed into the binary classifier include:
 	\cite{distant-supervision}
 \item Conjunction features.
 \end{itemize}
-
-TODO: [50]: for Freebase
 in both cases: Wikipedia is the corpus
 
 TODO: kb-completion-via-search-based-qa
 
+TODO: distant-supervision-noise-reduction
+
 \subsection{Applied to extend DBpedia coverage}
 Article:
 \cite{extending-dbpedia-coverage-using-distant-supervision-over-wikipedia}
+Part of wider effort to extend DBpedia -- other articles add classes and
+automatic mappings to other languages.
+
+TODO: Modeling relations and their mentions without labeled text -- better
+dealing with noise; can't be dowloaded.
 
 DBpedia comes from infoboxes but more than 50\% of Wiki articles don't have one.
 
+Assumption: information present in the infobox is also expressed somewhere in
+the article text. The tool used is jSRE (http://htl.fbk.eu/en/technology/jSRE).
+The results were tested on 7 DBpedia properties.
+JWPL (https://code.google.com/p/jwpl/) was used to produce plain text from
+article source code (by removing tables, images and wiki markup). Stanford
+CoreNLP was used to perform tokenization, sentence splitting, POS tagging,
+lemmatization and Named Entity Recognition. (CoreNLP's NER module annotates
+persons, organizations, locations, numbers and dates. CoreNLP's MISC tag was
+used for other DBpedia classes.)
 
-TODO
+Given a DBpedia relation (e.g. Barack Obama was born in Honolulu), they look for
+sentences containing entities of the correct type for both domain and range
+where the corresponding strings match. They use different matching strategies:
+1) exact match, 2) deleting parts between brackets (e.g., "Carrie (novel)"), 3)
+"John Fitzgerald Kennedy" => "John", "John Kennedy", ... -- any combination
+of tokens in the right order. Numerical values are matched if their relative
+difference is less than 5\%.
+
+Negative sample sentences are collected by looking for sentences that contain
+the domain entity and an entity with the same type as the range entity different
+from the actual value. (e.g., Obama and Los Angeles would be negative for "was
+born in") This works well where there is no ambiguity in the relation.
+
+Extra strategies:
+
+\paragraph{"Positives cannot be negatives"}: If you already used a sentence as a
+positive sample, don't use it as a negative sample as well.
+
+\paragraph{"Only one sentence per relation"}: Discard all pages where there is
+more than one sentence that has more than 1 sentence with both the domain and
+the range entity.
+
+\paragraph{"Only one relation for each value"}: If there's more than 1 relation
+sharing the same domain and range, remove all (e.g., "Mark Zuckenberg" worked
+for / founded "Facebook") -- we cannot disambiguate one from the other
+
+jSRE uses kernel methods to embed input data into a feature space. Uses SVMs
+with "global context kernel" and "local context kernel". "Global context":
+bag-of-words on before-between, between, between-after. Second: basic NLP
+features -- lemma, POS, stem, capitalization, etc.
+TODO: details?
+
+TODO: I could do a bottleneck study on the ML pipeline. Would it be worth it to
+improve the RE algorithm?
+
+Without strategies:
+
+(capital: precision 82\% recall 67\% -- also feasible on small sets)
+birthDate: precision 92\% recall 100\%.
+deathPlace: precision 51\% recall 61\%.
+deathDate: precision 94\% recall 99\%.
+headquarter: precision 71\% recall 84\%.
+
+With strategies (increases $F_1$ score):
+
+birthDate: precision 91\% recall 100\%.
+deathPlace: precision 59\% recall 77\%.
+deathDate: precision 93\% recall 100\%.
+headquarter: precision 81\% recall 80\%.
+
+TODO: [24] DBpedia + distant supervision for TAC-KBP slot-filling
+
+Future work: add disambiguation tools, Wiki-specific features, coreference
+resolution (e.g., "he"), multiple languages (distant supervision is
+language-independent in principle).
+
+\subsection{Applied to Freebase}
+
+TODO: [50]: for Freebase
 
 \section{Neural tensor networks for KBC}
 \label{neural-tensor-networks-for-kbc}
