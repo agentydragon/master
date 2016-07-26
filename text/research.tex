@@ -172,6 +172,17 @@ TODO
 
 \subsection{NELL}
 
+NELL starts with an ontology with hundreds of categories (e.g., person, athlete,
+sport) and binary relations (e.g., athletePlaysSport). Each category and
+relation starts with a seed set of 10 to 20 positive examples.
+It uses a dataset of 500 million web pages from the ClueWeb2009 corpus and
+has access to 100k Google searches per day.
+The objective of NELL is to extract additional beliefs from the web and to
+perform this task better every day.
+
+TODO: Carlson et al., 2010 -- Towards an architecture for never-ending language
+learning (1500 different classifiers and extraction methods)
+
 TODO
 
 \section{Knowledge base completion}
@@ -233,6 +244,8 @@ rejection sampling.
 TODO: Neat list of embedding models in kb-completion-using-subgraph-features
 
 TODO: Look at some relevant article, get numbers.
+
+Good description in \cite{random-walk-inference}.
 
 \subsection{Subgraph Feature Extraction (SFE)}
 
@@ -301,6 +314,37 @@ TODO: "On Obtaining Negative Evidence"
 TODO: How long are the random paths?
 
 TODO: Textual relations -- high-weighted
+
+\subsection{Random walk inference and learning}
+
+\cite{random-walk-inference} tries to draw reliable inferences from imperfectly
+extracted knowledge. Logical inference is too brittle to use on automatically
+extracted knowledge, probabilistic inference is too unscalable.
+Evaluated on NELL.
+
+NELL uses Horn clauses: AthletePlaysForTeam(x,y) \& TeamPlaysInLeague(y,z) =>
+AtheletePlaysInLeague(x,z). There are \~600 such rules, each has a probability
+that conclusion will hold.
+
+N-FOIL: start with general rule and progressively specialize it, to cover many
+positives and few negatives. Remove positives from training set.
+Assumption: predicate is functional (at most 1 league per athlete).
+
+PRA combines "expert" path types.
+
+(A model could potentially benefit from predicting multiple relations jointly.)
+
+Constrained PRA path generation ("required query support >=
+0.01")\cite{random-walk-inference}
+
+Low-variance sampling: to prevent that with probability 50\% two random walks
+from a node with 2 relations will go the same way. To get $M$ samples, generate
+$x\in[0;M^{-1}]$, then repeatedly add $M^{-1}$.
+
+TODO: random walk with restart, aka personalized page-rank ("Topic-sensitive
+pagerank")
+
+TODO: read again
 
 \section{Embedding methods for KBC}
 
@@ -688,7 +732,8 @@ relation in the knowledge graph.
 The main benefit of distant supervision is that it removes the need to manually
 label sentences as samples of relations.
 
-The features fed into the binary classifier include:
+The features fed into the binary classifier (e.g., logistic regression)
+include:
 \begin{itemize}
 \item The sequence of words between the two entities.
 \item The POS tags of this sequence.
@@ -702,6 +747,13 @@ The features fed into the binary classifier include:
 	\cite{distant-supervision}
 \item Conjunction features.
 \end{itemize}
+
+If we find multiple sentences containing the pair of entities for which we want
+to predict a relation, we can feed the union of all their features into
+the classifier. This lets us combine weak evidence from different sentences.
+("Spilberg's film X" can be "film director" or "film producer", "X, directed by
+Spilberg" can be "organization director" or "film director").
+
 in both cases: Wikipedia is the corpus
 
 TODO: kb-completion-via-search-based-qa
@@ -787,7 +839,16 @@ language-independent in principle).
 
 \subsection{Applied to Freebase}
 
-TODO: [50]: for Freebase
+Article: \cite{distant-supervision}
+
+10000 instances of 102 relations at precision 67.6\%. Tradeoff is uncertain.
+Top 1000 instances: 91\% on place of birth, 63\% on nationality, 81\% on place
+of death, 71\% on film-writer.
+
+Lexical features, as in distant supervision paper. Window size: 0, 1, 2 --
+conjunctive features. POS tagger: max-entropy trained on Penn Treebank,
+simplified into 7 categories (noun, verb, adverb, adjective, number, foreign
+word, anything else).
 
 \section{Neural tensor networks for KBC}
 \label{neural-tensor-networks-for-kbc}
