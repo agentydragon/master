@@ -5,6 +5,9 @@ TODO: How do ontologies look?
 The Linked Data cloud contains roughly 1000 datasets. The majority of links
 connect identical entities between datasets.\cite{kg-refinement-survey}.
 
+TODO: Linked Data
+TODO: Semantic web
+
 \section{Knowledge bases}
 
 TODO
@@ -40,6 +43,11 @@ languages, 25.2M links to images and 29.8M links to external web pages,
 YAGO2 categories.
 DBpedia contains 3 billion RDF triples, of which 580M come from the English
 Wikipedia and 2.46 billion from others.
+
+There are 45M interlinks between DBpedia and external datasets, including
+Freebase, OpenCyc, UMBEL, GeoNames, MusicBrainz, CIA World Fact Book, DBLP,
+Project Gutenerg, DBtune Jamendo, Eurostat, UniProt, Bio2RDF, and US Census
+data.
 
 \paragraph{DBpedia Spotlight}
 DBpedia Spotlight is a tool that locates DBpedia entities in text, including
@@ -406,7 +414,7 @@ The final confidence scores are calculated by \textit{knowledge fusion},
 which combines extractor outputs with prior probabilities.
 Confidence scores from extractors are calibrated to fit the actual probabilities
 with Platt scaling\ref{platt-scaling}.
-(An alternative would be using isotonic regression.)
+(An alternative would be using isotonic regression\ref{isotonic-regression}.)
 
 Priors are probabilities of a relation being true, conditional
 on the prior knowledge graph. They are useful for checking the consistency of
@@ -511,7 +519,10 @@ $A$ and $B$ are parameters trained on a held-out calibration set.
 Platt suggested learning them using Levenberg-Marquardt.
 
 \section{Isotonic regression}
+\label{isotonic-regression}
 TODO
+
+https://en.wikipedia.org/wiki/Isotonic\_regression
 
 \section{$F_1$ score}
 \label{f-1}
@@ -965,3 +976,6 @@ Gender: ~97\%.)
 \item Replicate Knowledge Vault atop Wikidata
 \item 
 \end{itemize}
+
+TODO: TAC-KBP (Text Analysis Conference - Knowledge Base Population)
+slot-filling competition
