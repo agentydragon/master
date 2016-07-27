@@ -433,6 +433,8 @@ facts.
 Knowledge Vault: 1100 entity types, 45M instances, 4469 relation types, 271M
 facts.
 
+\paragraph{Local closed world assumption}
+\label{lcwa}
 To prepare training data including negative samples, Knowledge Vault uses the
 \textit{local closed world assumption}: e.g., if the set of actors in a movie listed
 in Knowledge Graph is non-empty, it is assumed to be complete and all other
@@ -470,7 +472,7 @@ Low-rank decomposition of 3d $E\times P\times E$ matrix. Learn $K$-dimensional
 latent vectors, two for each entity ($u_s$ and $v_o$) and one for each relation
 ($w_p$). $K=60$. (Equivalent to PARAFAC method of tensor decomposition +
 sigmoid.)
-$$\Pr[G(s,p,o)=1] = \sigma(\sum\limits{k=1}^K u_{sk} w_{pk} v_{ok})$$
+$$\Pr[G(s,p,o)=1] = \sigma(\sum\limits_{k=1}^K u_{sk} w_{pk} v_{ok})$$
 
 \paragraph{Neural tensor networks\ref{neural-tensor-networks-for-kbc}}
 Associate a different tensor with each relation.
@@ -562,7 +564,7 @@ The measured metrics are usually recall, precision and F-measure\ref{f-1}.
 Another problem is that most KGs are \textit{open world}, and if the method
 correctly completes a new edge that's missing in the knowledge graph, it would
 count as a negative sample and lower the precision. To obtain better negative
-samples, we can use the \textit{local closed world assumption}.
+samples, we can use the \textit{local closed world assumption}\ref{lcwa}.
 
 \paragraph{Partial gold standard}
 We can also use a \textit{partial gold standard}: take a part of the KG and
