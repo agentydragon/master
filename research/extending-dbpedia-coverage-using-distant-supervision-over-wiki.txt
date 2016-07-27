@@ -1,17 +1,8 @@
-DBpedia: structured data from Wikipedia articles
->50% have no infobox
-
-distant supervision
-evaluate on 7 DBpedia properties
-
 DBpedia, YAGO, FreeBase: KBs exploiting Wikipedia
 
 subject-attribute-value
 
 Airpedia (2013): extending DBpedia coverage with respect to classes
-
-distant supervision (2009) -- deals with limited availability of manually
-	annotated data
 
 1) collect set of sentences starting from DBpedia, extract relevant sentences
 	from Wikipedia

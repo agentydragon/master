@@ -24,13 +24,30 @@ PROSPERA, Knowledge Vault
 
 \subsection{DBpedia}
 
-DBpedia is automatically extracted from the text of Wikipedia articles -- in
-particular, infoboxes.
+DBpedia is automatically extracted from unstructured text of Wikipedia articles
+and from infoboxes, which have a standardized structured format. The process of
+developing and improving mappings is open to public contributions.
 DBpedia maintains an ontology downloadable inthe OWL format.
 DBpedia is created separately for every language edition of Wikipedia.
 A new edition is published every year.
 
+It contains 4.58M entities, of which 4.22M are in a consistent ontology:
+1.4M persons, 700k places, 100k music albums, 87k films, 19k video games, 241k
+organizations, 251k species, 6k diseases.
+The dataset features labels and abstracts for these entities in up to 125
+languages, 25.2M links to images and 29.8M links to external web pages,
+50M links to other RDF datasets, 80.9M links to Wikipedia categories and 41.2M
+YAGO2 categories.
+DBpedia contains 3 billion RDF triples, of which 580M come from the English
+Wikipedia and 2.46 billion from others.
+
+\paragraph{DBpedia Spotlight}
+DBpedia Spotlight is a tool that locates DBpedia entities in text, including
+resolution (disambiguation).
+
 TODO
+
+TODO: Describe extractors
 
 TODO: Airpedia: extending class coverage of DBpedia
 
@@ -59,7 +76,12 @@ Wikidata has no explicit notion of types. Type is just another relation
 TODO: more in-depth comparison: A Comparative Survey of DBpedia, Freebase,
 OpenCyc, Wikidata and YAGO
 
-It's a superset of Freebase.
+\subsection{Commonsense reasoning KBs}
+
+\paragraph{Cyc} For commonsense reasoning, maintained by CyCorp.
+Open version: OpenCyc.
+
+Open Mind Common Sense (OMCS), by MIT Media Lab.
 
 \subsection{Freebase}
 
@@ -168,9 +190,13 @@ Raw number of triples is NOT a good measure of quality.
 
 \subsection{YAGO}
 
+YAGO (Yet Another Great Ontology)
+
 TODO
 
 \subsection{NELL}
+
+NELL stands for Never-ending Language Learning.
 
 NELL starts with an ontology with hundreds of categories (e.g., person, athlete,
 sport) and binary relations (e.g., athletePlaysSport). Each category and
@@ -933,4 +959,9 @@ attributes (e.g., gender, nationality). At least 2\% higher than bilinear model,
 4\% higher than single layer model. (Institution, cause of death: hard, ~77\%.
 Gender: ~97\%.)
 
+\section{Plan}
 
+\begin{itemize}
+\item Replicate Knowledge Vault atop Wikidata
+\item 
+\end{itemize}

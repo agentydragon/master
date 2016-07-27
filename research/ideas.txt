@@ -10,8 +10,6 @@ put mentioning sentence + some small neighborhood into RNN to get
 
 	possibly put X top sentences into RNN to aggregate?
 
-replicate Knowledge Vault atop DBpedia
-
 napriklad neuronky do predpovidani podle vet, misto logisticke regrese
 
 kombinace entity linkage a distant supervision pro slot filling:
