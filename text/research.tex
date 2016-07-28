@@ -1176,6 +1176,7 @@ Gender: ~97\%.)
 \item Replicate Knowledge Vault atop Wikidata
 \item Distant supervision: try training a recursive neural network rather than
 	logistic regression
+\item Experiment with full materialization (e.g., born in Honolulu, Hawaii, USA)
 \end{itemize}
 
 TODO: TAC-KBP (Text Analysis Conference - Knowledge Base Population)
@@ -1234,5 +1235,17 @@ RESCAL can be easily generalized to higher arities. Same generalization possible
 for neural networks.
 
 \paragraph{Hard constraints}
+
+Real-world data often violates hard constraints. Machine learning can be robust
+in the face of contradictory evidence.
+Deterministic dependencies: precompute all true triples that can be derived from
+constraints and add them to KG before learning (e.g., Barack Obama was born in
+Honolulu, Hawaii, USA, Earth -- \textit{materialization}).
+
+RESCAL has been extended to respect type constraints, which reduces the needed
+rank.
+Possible to learn \textit{approximate}, observed type constraints.
+
+Functional constraints, mutual exclusiveness.
 
 
