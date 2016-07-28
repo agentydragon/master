@@ -7,3 +7,5 @@ text/*.lot
 text/*.out
 text/*.toc
 text/thesis.pdf
+
+*.swp
