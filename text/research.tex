@@ -25,6 +25,17 @@ DBpedia, YAGO
 Information extraction from unstructured or semi-structured data: NELL,
 PROSPERA, Knowledge Vault
 
+\paragraph{Closed world assumption}: non-existing triples indicate false
+relationships.
+
+\paragraph{Open world assumption}: non-existing triples are of unknown status.
+More justified as KGs are known to be highly incomplete. For example, 71\% of
+people in Freebase have no place of birth.
+
+Open IE systems are schemaless and represent relations between \textit{surface
+names} without disambiguation: e.g., (Obama, born in, Hawaii), (Barack Obama,
+place of birth, Honolulu).
+
 \subsection{DBpedia}
 
 DBpedia is automatically extracted from unstructured text of Wikipedia articles
@@ -281,6 +292,10 @@ TODO: Look at some relevant article, get numbers.
 
 Good description in \cite{random-walk-inference}.
 
+It was shown to outperform FOIL in NELL link prediction
+\cite{review-of-relational-ml-for-kgs}, comparable to ER-MLP in Knowledge Vault.
+(0.884 AUC vs. 0.882 for ER-MLP)
+
 \subsection{Subgraph Feature Extraction (SFE)}
 
 TODO: This is something we should try.
@@ -387,7 +402,188 @@ relationships.
 
 TODO
 
+\subsection{RESCAL}
+\cite{review-of-relational-ml-for-kgs}
+
+$$f_{ijk}^{RESCAL}=e_i^T W_k e_j$$
+$P(ijk)=\sigma(f)$
+
+Factorization of the actual tensor: $Y_k \simeq E W_k E^T$
+RESCAL is similar to recommendation systems and traditional tensor factorization
+methods.
+
+$W_k$: weight matrix for linear interactions.
+This is a bilinear model.
+"Good actors are likely to receive prestigious rewards."
+Training jointly learns weight matrices and entity embeddings.
+
+\textit{Relational learning via shared representations}:
+entities have the same latent representation as subject or object, and for every
+relation.
+\textit{Semantic embeddings}: can be used to e.g. cluster entities.
+There are smart ways to train RESCAL in \cite{review-of-relational-ml-for-kgs}.
+
+RESCAL is state-of-the-art for some relational learning tasks.
+
+Needs to learn $H_e^2$ parameters per relation.
+
+\subsection{E-MLP (entity-mlp)}
+
+Hidden layer with nonlinearity and fewer neurons.
+Needs to learn $H_a + (H_a \times 2H_e)$ parameters per relation.
+We learn the interactions of latent features via $A_k$, while the tensor product
+in RESCAL considers all possible interactions.
+($H_a$ is the size of the hidden layer.)
+
+\subsection{ER-MLP (+relation embedding)}
+
+Layer 1: embedding of subject, object, relation. Uses one global weight matrix
+for all relations. This model was used in Knowledge Vault\ref{knowledge-vault}.
+"Semantically close" relations (e.g., child, parent, spouse) are close in latent
+space\cite{knowledge-vault}.
+
+NTN\ref{neural-tensor-networks-for-kbc} is even bigger and tends to overfit.
+
+\subsection{Latent distance models}
+
+Also "latent space models" in social network analysis. Entities are likely to be
+in a relationship if their latent representations are close in some distance
+measure.
+
+For uni-relational data, one proposed model: $f(e_i,e_j)=-d(e_i,e_j)$ where $d$
+is arbitrary distance measure (e.g. Euclidean metric).
+
+TODO: How would one train this?
+
+\paragraph{Structured embedding}
+
+$f_{ijk}^{SE}=-\|A_k^s e_i - A_k^o e_j\|_1$ where $A_k=[A_k^s; -A_k^o]$.
+Learned using "ranking loss": entities in existing relationships are closer than
+in non-existing relationships.
+
+Number of parameters: $2N_r H_e H_a + N_e H_e$
+
+\paragraph{TransE}
+
+Reduces number of parameters over SE.
+Latent features are transformed by relation-specific offset:
+$f_{ijk}^{TransE}=-d(e_i+r_k,e_j)$.
+Inspired by \cite{efficient-word-representation-estimation} - "queen - woman
++ man = king" (TODO: read the paper)
+(Can be nicely rewritten under some assumption --
+\cite{review-of-relational-ml-for-kgs}.
+
+\paragraph{Comparing the models}
+
+In \cite{knowledge-vault}, ER-MLP outperformed NTN.
+In \cite{embedding-entities-and-relations}, more extensive experiments showed
+RESCAL to be best.
+So, the best model is dataset-dependent.
+
+TODO: cite
+
+TODO
+
+\subsection{Graph feature models}
+
+\paragraph{Similarity models for uni-relational data}
+
+Local similarity indices: \textit{Common Neighbors}, \textit{Academic-Adar
+index}, \textit{Preferential Attachment}: similarity based on number of common
+neighbors or absolute number of neighbors. Local computation is fast, depends
+only on direct neighbors, but it's too localized to capture long-distance
+relationships.
+
+Global similarity indices: Katz index, Leicht-Holme-Newman indx: similarity from
+ensemble of all paths between. Hitting Time, Commute Time, PageRank: from random
+walks on graph. Often better predictions, but more expensive than local.
+
+Quasi-local: Local Katz index, Local Random Walks (bounded-length): trade-off.
+
+\paragraph{Rule mining, inductive logic programming}
+
+TODO: section V-B of \cite{review-of-relational-ml-for-kgs}
+
+See \ref{path-ranking-algorithm}.
+
+\subsection{Combining the models}
+
+Knowledge Vault shows that neither graph models neither latent feature models
+are strictly superior -- rather, their strengths are complementary.
+
+Knowledge Vault trains them separately and then fits binary classifier
+(\textit{stacking} -- [121] in \cite{review-of-relational-ml-for-kgs}).
+Problem: models don't specialize/cooperate.
+
+\paragraph{Additive relational effects model}
+From \cite{reducing-the-rank}:
+$f_{ijk}^{RESCAL+PRA}=w_k^{(1)T}\phi_{ij}^{RESCAL} +
+w_k^{(2)T}\phi_{ijk}^{PRA}$,
+trained by alternatively optimizing RESCAL parameters with PRA parameters.
+RESCAL only has to model "residual errors" left behind by PRA, which enables
+lower latent dimensionality. The resulting model has better accuracy.
+
+TODO: Get results.
+
+TODO: Other combined models -- see VI-B in
+\cite{review-of-relational-ml-for-kgs}.
+
+\subsection{Training on KGs}
+
+Maximum a posteriori (MAP) (== regularized maximum likelihood) on observed
+triples
+
+Issues with selecting negative samples. Solutions: pertubing (type-constrained),
+LCWA.
+
+\paragraph{Pairwise loss training}
+We want the probability to be higher for positive samples than assumed-negative
+samples:
+$$\min_\Theta \sum_{x^+\in D^+}\sum_{x^-\in
+D^-}L(f(x^+;\Theta),f(x^-;\Theta))+\lambda reg(\Theta)$$
+$L(f,f')$ is margin-based ranking loss function such as: $\max(1+f'-f,0)$
+Easy to optimize by stochastic gradient descent: pick one positive, one negative
+sample. Can take long time to converge.
+
+\paragraph{Model selection} Evaluation criteria: area under ROC (AUC-ROC -- true
+positive rate / false positive rate), area under precision-recall curve (AUC-PR)
+
+\subsection{Markov random fields}
+
+We drop conditional independence, each $y_{ijk}$ can depend on any others.
+To reduce number of potential dependencies, use template-based graphical models.
+
+Each $y_{ijk}$ is a node in a \textit{dependency graph}.
+
+Markov Random Fields (\textit{undirected} graphical models):
+Markov networks are undirected and may be cyclic.
+$P(Y|\Theta) \sim \prod_c \psi(y_c|\Theta)$, $\psi\geq 0$ potential
+function on $c$-th clique in dependency graph. (Local potentials have no
+probabilistic interpretation, unlike directed graphical models.)
+
+Markov logic. Given set of formulae, create edge in dependency graph if
+corresponding facts occur in at least one grounded formula.
+Define $\psi(y_c|\Theta)$ such that $P(Y|\Theta)=\frac{1}{Z}\prod_c
+exp(\Theta_c x_c)$, where $x_c$ is number of true groundings of $F_c$ in $Y$,
+$\Theta_c$ is weight for formula $F_c$. $\Theta_c>0$: prefer $F_c$ to be true,
+$<0$: prefer $F_c$ to be false.
+
+Process of generating MRF graph: \textit{grounding} or \textit{instantiation}.
+
+Inference problem: estimate most probable configuation $y^*$, or posterior
+marginals $p(y_i|\Theta)$. Intractable, so we need to use heuristics.
+Gibbs sampling, MC-SAT ([128]), MPLP (max-product linear programming) to get
+MAP estimate.
+
+Learning problm: specify the potential functions and values of $\Theta$.
+Often: logical rules. (Structure learning is then equivalent to rule learning.)
+Parameter estimation is expensive, since it needs to call inference as a
+subroutine.
+
+TODO
+
 \section{Knowledge Vault}
+\label{knowledge-vault}
 
 \textit{Knowledge Vault}\cite{knowledge-vault} is Google's project of extending
 its proprietary Knowledge Graph with relations extracted by reasoning over
@@ -894,6 +1090,8 @@ word, anything else).
 
 http://www.socher.org/index.php/Main/ReasoningWithNeuralTensorNetworksForKnowledgeBaseCompletion
 
+Reimplementation: https://github.com/dddoss/tensorflow-socher-ntn
+
 Contributions:
 
 \paragraph{Relations as NTNs}
@@ -976,8 +1174,65 @@ Gender: ~97\%.)
 
 \begin{itemize}
 \item Replicate Knowledge Vault atop Wikidata
-\item 
+\item Distant supervision: try training a recursive neural network rather than
+	logistic regression
 \end{itemize}
 
 TODO: TAC-KBP (Text Analysis Conference - Knowledge Base Population)
 slot-filling competition
+
+\section{Review of relational machine learning for KGs}
+\cite{review-of-relational-ml-for-kgs}
+
+Supervised relational learning (SRL): predicting missing edges, predicting
+properties of nodes, clustering nodes based on connectivity patterns. Arises in
+analyzing social netowrks and biological pathways. Can be applied to large-scale
+KGs, hence focus on \textit{scalable} methods.
+
+Statistical relational learning: third-order \textit{adjacency tensor},
+$y_{ijk}=0$ or $1$ (interpretation of $0$ depends on open/closed/local-closed
+world assumption), random variable. We estimate the joint distribution from a
+subset of observed triples.
+
+\paragraph{Statistical properties of KGs}: transitivity (born in Boston, Boston
+is in USA -> born in USA), and also "softer" patterns. Example:
+homophily: entities tend to be related to other entities with similar
+characteristics. Blocks: "science fiction authors", "US movies", ...
+Relational learning tries to exploit global and long-range dependencies:
+citizenship of Leonard Nimoy depends on country of his birthplace.
+
+Three ways to model correlations between $y_{ijk}$'s: 1) assume all are
+conditionally independent given latent features associated with subject, object,
+relation type and additional parameters (\textit{latent feature models}), 2)
+assume all are conditionally independent given observed graph features and
+additional parameters (\textit{graph feature models}), 3) assume local
+interactions (\textit{Markov Random Fields})
+
+Latent models are justified by features not present in observed data (e.g.,
+"Alec Guiness got the Academy Award for being a good actor"). Latent features
+are, however, typically hard to interpret.
+
+\subsection{Extensions and future work}
+
+\paragraph{Non-binary relations}
+
+Unary relations: e.g. height of a person. Naturally represented by matrix.
+[64]: joint tensor-matrix factorization approach -- learns from binary and unary
+relations via shared latent representation. Need to modify likelihood function:
+Bernoulli for binary, Gaussian for numeric, Poisson for count. [134]
+(citations in \cite{review-of-relational-ml-for-kgs})
+
+Higher-arity relations: typically represented by auxilliary node (CVT) saying
+"Spock's acting in Star Trek".
+YAGO2's extension of SPO triple format: (subject, predicate, object, time,
+location) [27]. Some work on extracting higher-arity relations from natural
+language [135].
+
+Knowledge Vault's planned extension: temporarily true facts.
+
+RESCAL can be easily generalized to higher arities. Same generalization possible
+for neural networks.
+
+\paragraph{Hard constraints}
+
+
