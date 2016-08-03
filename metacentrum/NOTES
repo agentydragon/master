@@ -1,0 +1,7 @@
+# -m e: send mail when job terminates
+
+# Download dependencies.
+qsub -l walltime=4:00:00 -l nodes=1:ppn=1,mem=1gb -m e metacentrum-prepare.sh
+
+# Split wiki.
+qsub -l walltime=0:01:00 -l nodes=1:ppn=1,mem=1gb -m e metacentrum_split_wiki.sh

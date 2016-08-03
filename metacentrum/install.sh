@@ -10,6 +10,7 @@ FILES="wiki2text \
 	metacentrum_install_corenlp.sh \
 	metacentrum_corenlp.sh \
 	metacentrum_split_wiki.sh \
+	metacentrum_nlpize_articles.sh \
 	split_wiki.py"
 
-scp $FILES prvak@zuphux.metacentrum.cz:$STORAGE_HOME
+scp $FILES prvak@zuphux.metacentrum.cz:$BIN_ROOT
