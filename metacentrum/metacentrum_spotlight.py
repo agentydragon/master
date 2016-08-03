@@ -5,16 +5,19 @@ Usage:
     ./metacentrum_spotlight.py \
         --article_plaintexts_dir=/mnt/crypto/data/wiki-articles \
         --outputs_dir=... \
-        --max_queries=10
+        --max_queries=10 \
+        --sleep_between_queries=1
 """
 
 import sys
+import time
 
 import argparse
 parser = argparse.ArgumentParser(description='Look up articles in Spotlight')
 parser.add_argument('--article_plaintexts_dir')
 parser.add_argument('--outputs_dir')
 parser.add_argument('--max_queries', type=int)
+parser.add_argument('--sleep_between_queries', type=int)
 args = parser.parse_args()
 
 # TODO: skip if finished
@@ -56,3 +59,5 @@ for root, subdirs, files in os.walk(args.article_plaintexts_dir):
         if args.max_queries >= 0 and queries >= args.max_queries:
             print("max queries exceeded")
             sys.exit(0)
+
+        time.sleep(args.sleep_between_queries)

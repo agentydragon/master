@@ -9,6 +9,7 @@ FILES="\
 	metacentrum_corenlp.sh \
 	metacentrum_install_corenlp.sh \
 	metacentrum_nlpize_articles.sh \
+	metacentrum_nlpize_articles.py \
 	metacentrum_get_sentences_entities.py \
 	metacentrum_get_sentences_entities.sh \
 	article_parse.py \

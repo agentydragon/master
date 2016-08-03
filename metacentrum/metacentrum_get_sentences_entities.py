@@ -25,7 +25,7 @@ import article_parse
 
 import json
 
-for root, subdirs, files in os.walk(args.article_plaintexts_dir):
+for root, subdirs, files in os.walk(args.plaintexts_dir):
     for filename in files:
         plaintext_path = os.path.join(root, filename)
         article_sanename = '.'.join(filename.split('.')[:-1])
@@ -34,15 +34,17 @@ for root, subdirs, files in os.walk(args.article_plaintexts_dir):
         # (spotlight_jsons)/Anarchism_in_France.spotlight.json
         parse_path = os.path.join(args.parse_xmls_dir, article_sanename + ".txt.out")
         if not os.path.isfile(parse_path):
-            print(article_sanename, "skipped, not parsed")
+            # print(article_sanename, "skipped, not parsed")
+            continue
 
         spotlight_path = os.path.join(args.spotlight_jsons_dir, article_sanename + ".spotlight.json")
         if not os.path.isfile(spotlight_path):
-            print(article_sanename, "skipped, parsed but not spotlighted")
+            # print(article_sanename, "skipped, parsed but not spotlighted")
+            continue
 
         print(article_sanename, "processing")
         parse = article_parse.ArticleParse()
-        parse.load(plaintext_path, spotlight_json_path, parse_xml_path)
+        parse.load(plaintext_path, spotlight_path, parse_path)
         parse.annotate_sentences_with_wikidata_ids()
 
         json_data = parse.get_sentences_with_wikidata_ids()
