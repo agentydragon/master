@@ -33,6 +33,8 @@ for root, subdirs, files in os.walk(args.plaintexts_dir):
 
         plaintext_paths.append(plaintext_path)
 
+plaintext_paths.sort()
+
 for i in range(0, len(plaintext_paths), 10):
     path_slice = plaintext_paths[i:i+10]
     commandline = ['./metacentrum_corenlp.sh',
@@ -40,4 +42,5 @@ for i in range(0, len(plaintext_paths), 10):
                    '-annotators', 'tokenize,ssplit,parse,lemma,ner,dcoref']
     for path in path_slice:
         commandline.extend(['-file', path])
+    print(commandline)
     subprocess.check_call(commandline)

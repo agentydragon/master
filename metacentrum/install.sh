@@ -12,6 +12,9 @@ FILES="\
 	metacentrum_nlpize_articles.py \
 	metacentrum_get_sentences_entities.py \
 	metacentrum_get_sentences_entities.sh \
+	metacentrum_get_training_samples.sh \
+	metacentrum_get_training_samples.py \
+	get_training_samples.py \
 	article_parse.py \
 	metacentrum_prepare.sh \
 	metacentrum_split_wiki.sh \

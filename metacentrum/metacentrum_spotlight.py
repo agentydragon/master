@@ -33,31 +33,37 @@ url = server + '/rest/annotate'
 if not os.path.isdir(args.outputs_dir):
     os.makedirs(args.outputs_dir)
 
+filepaths_sanenames = []
+
 for root, subdirs, files in os.walk(args.article_plaintexts_dir):
     for filename in files:
         file_path = os.path.join(root, filename)
 
         article_sanename = '.'.join(filename.split('.')[:-1])
+        filepaths_sanenames.append((file_path, article_sanename))
 
-        output_path = os.path.join(args.outputs_dir, article_sanename + '.spotlight.json')
-        if os.path.isfile(output_path):
-            print(article_sanename, "-- already annotated")
-            continue
-        else:
-            print(article_sanename)
+filepaths_sanenames.sort()
 
-        text = open(file_path).read()
-        r = requests.post(url, data={
-          'text': text,
-          'confidence': '0.35'
-        }, headers={'Accept': 'application/json'})
-        queries += 1
+for file_path, article_sanename in filepaths_sanenames:
+    output_path = os.path.join(args.outputs_dir, article_sanename + '.spotlight.json')
+    if os.path.isfile(output_path):
+        print(article_sanename, "-- already annotated")
+        continue
+    else:
+        print(article_sanename)
 
-        with open(output_path, 'w') as f:
-            f.write(json.dumps(r.json()))
+    text = open(file_path).read()
+    r = requests.post(url, data={
+      'text': text,
+      'confidence': '0.35'
+    }, headers={'Accept': 'application/json'})
+    queries += 1
 
-        if args.max_queries >= 0 and queries >= args.max_queries:
-            print("max queries exceeded")
-            sys.exit(0)
+    with open(output_path, 'w') as f:
+        f.write(json.dumps(r.json()))
 
-        time.sleep(args.sleep_between_queries)
+    if args.max_queries >= 0 and queries >= args.max_queries:
+        print("max queries exceeded")
+        sys.exit(0)
+
+    time.sleep(args.sleep_between_queries)

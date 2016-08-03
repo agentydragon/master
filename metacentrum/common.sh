@@ -32,3 +32,4 @@ WIKI_ARTICLES_PLAINTEXTS_DIR=$WORK_DIR/wiki-articles-plaintexts
 WIKI_ARTICLE_PARSES_DIR=$WORK_DIR/wiki-articles-parses
 SPOTLIGHT_ANNOTATIONS_DIR=$WORK_DIR/spotlight-annotations
 SENTENCES_ENTITIES_DIR=$WORK_DIR/sentences-entities
+TRAINING_SAMPLES_FILE=$WORK_DIR/training-samples.json
