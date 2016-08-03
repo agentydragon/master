@@ -20,6 +20,8 @@ dbpedia_sparql = SPARQLWrapper.SPARQLWrapper("http://dbpedia.org/sparql")
 dbpedia_sparql.setReturnFormat(SPARQLWrapper.JSON)
 
 def load_cache():
+    global dbpedia_to_wikidata_cache
+    global wikidata_relations_cache
     if len(dbpedia_to_wikidata_cache) == 0:
         if os.path.isfile(cache_path):
             with open(cache_path) as f:

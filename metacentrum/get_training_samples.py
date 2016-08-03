@@ -40,7 +40,13 @@ def join_sentences_entities(article_sentences_entities, output_file):
 
     for sentence in sentences:
         for e1 in sentence['wikidata_ids']:
+            if e1 is None:
+                # TODO: HAX SHOULD NOT BE NEEDED
+                continue
             for e2 in sentence['wikidata_ids']:
+                if e2 is None:
+                    # TODO: HAX SHOULD NOT BE NEEDED
+                    continue
                 key = e1 + "--" + e2
                 if key in all_pairs:
                     # TODO: skip sentence if there are multiple candidate relations
