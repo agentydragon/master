@@ -14,6 +14,8 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Split plaintext Wiki into articles')
 parser.add_argument('--max_articles', type=int)
+parser.add_argument('--target_dir', type=str)
+parser.add_argument('--wiki_plaintext_path', type=str)
 args = parser.parse_args()
 
 import re
@@ -23,7 +25,8 @@ import re
 # TARGET_DIR='/mnt/crypto/data/wiki-articles'
 
 import os
-os.makedirs(args.target_dir)
+if not os.path.isdir(args.target_dir):
+    os.makedirs(args.target_dir)
 
 #def get_article_corpus(target_articles):
 #    with open('/mnt/crypto/data/wiki_small.txt', 'w') as out:
@@ -54,7 +57,12 @@ def sanitize_article(article):
 
 def article_title_to_path(title):
     sanitized_articletitle = title.replace(' ', '_')
-    return args.target_dir + '/' + sanitized_articletitle + '.txt'
+    first1 = sanitized_articletitle[:1]
+    first2 = sanitized_articletitle[:2]
+    target_dir = args.target_dir + '/' + first1 + '/' + first2
+    if not os.path.isdir(target_dir):
+        os.makedirs(target_dir)
+    return target_dir + '/' + sanitized_articletitle + '.txt'
 
 def split_corpus(target_articles=None):
     articletext = ""

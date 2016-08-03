@@ -4,7 +4,6 @@ set -e
 
 source common.sh
 
-WORK_DIR=$STORAGE_HOME/data
 WIKIPEDIA_DUMP_DIR=$WORK_DIR/wikipedia_dump
 WIKIPEDIA_DUMP_DATE=20160720
 WIKIPEDIA_DUMP_FILENAME=enwiki-${WIKIPEDIA_DUMP_DATE}-pages-articles.xml.bz2
@@ -12,7 +11,6 @@ WIKIPEDIA_DUMP_FILE=$WIKIPEDIA_DUMP_DIR/${WIKIPEDIA_DUMP_FILENAME}
 WIKIDATA_DUMP_DATE=20160801
 WIKIDATA_DUMP_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all.json.bz2
 WIKIDATA_DUMP_FILE=$WORK_DIR/wikidata/${WIKIDATA_DUMP_FILENAME}
-WIKIPEDIA_PLAINTEXT=$WORK_DIR/wiki-plain.txt
 
 function download_wikipedia_dump() {
 	echo "downloading wikipedia dump"
