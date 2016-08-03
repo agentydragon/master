@@ -13,15 +13,31 @@ cache_path = cache_dir + '/dbpedia_to_wikidata_cache.json'
 wikidata_relations_cache = {}
 wikidata_cache_path = cache_dir + '/wikidata_cache.json'
 
+name_cache = {}
+name_cache_path = cache_dir + '/name_cache.json'
+
 wikidata_entity_prefix = 'http://www.wikidata.org/entity/'
 wikidata_property_prefix = 'http://www.wikidata.org/wiki/Property:'
 
 dbpedia_sparql = SPARQLWrapper.SPARQLWrapper("http://dbpedia.org/sparql")
 dbpedia_sparql.setReturnFormat(SPARQLWrapper.JSON)
 
+"""
+# get entity name
+PREFIX wd: <http://www.wikidata.org/entity/>
+SELECT *
+WHERE { wd:Q1 rdfs:label ?b FILTER (langMatches(lang(?desc),"en")) }
+"""
+
+STANDARD_PREFIXES = """
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+"""
+
 def load_cache():
     global dbpedia_to_wikidata_cache
     global wikidata_relations_cache
+    global name_cache
     if len(dbpedia_to_wikidata_cache) == 0:
         if os.path.isfile(cache_path):
             with open(cache_path) as f:
@@ -30,12 +46,18 @@ def load_cache():
         if os.path.isfile(wikidata_cache_path):
             with open(wikidata_cache_path) as f:
                 wikidata_relations_cache = json.loads(f.read())
+    if len(name_cache) == 0:
+        if os.path.isfile(name_cache_path):
+            with open(name_cache_path) as f:
+                name_cache = json.loads(f.read())
 
 def save_cache():
     with open(cache_path, 'w') as f:
         f.write(json.dumps(dbpedia_to_wikidata_cache))
     with open(wikidata_cache_path, 'w') as f:
         f.write(json.dumps(wikidata_relations_cache))
+    with open(name_cache_path, 'w') as f:
+        f.write(json.dumps(name_cache))
 
 def wikidata_entity_url_to_entity_id(url):
     assert url.startswith(wikidata_entity_prefix)
@@ -81,15 +103,35 @@ def is_statement(url):
 
     return url.startswith('http://www.wikidata.org/entity/') and dashes == 4
 
+def get_results(query):
+    dbpedia_sparql.setQuery(STANDARD_PREFIXES + query)
+    return dbpedia_sparql.query().convert()
+
+def fetch_label(entity_id):
+    results = get_results("""
+        SELECT ?label
+        WHERE { wd:%s rdfs:label ?label . FILTER (langMatches(lang(?label),"en")) }
+    """ % entity_id)
+    if len(results['results']['bindings']) == 0:
+        return None
+    else:
+        return results['results']['bindings'][0]['label']['value']
+
+def get_name(property_id):
+    load_cache()
+    if property_id in name_cache:
+        return name_cache[property_id]
+    name = fetch_label(property_id)
+    name_cache[property_id] = name
+    save_cache()
+    return name
+
 def collect_forward_properties(wikidata_id):
     print('forward for', wikidata_id)
-
-    dbpedia_sparql.setQuery("""
-        PREFIX wd: <http://www.wikidata.org/entity/>
+    results = get_results("""
         SELECT ?rel ?other
         WHERE { wd:%s ?rel ?other . }
     """ % wikidata_id)
-    results = dbpedia_sparql.query().convert()
 
     properties=[]
     for x in results['results']['bindings']:
@@ -116,13 +158,11 @@ def collect_forward_properties(wikidata_id):
 
 # TODO DRY
 def collect_backward_properties(wikidata_id):
-    dbpedia_sparql.setQuery("""
-        PREFIX wd: <http://www.wikidata.org/entity/>
+    print('backward for', wikidata_id)
+    results = get_results("""
         SELECT ?rel ?other
         WHERE { ?other ?rel wd:%s . }
     """ % wikidata_id)
-    print('backward for', wikidata_id)
-    results = dbpedia_sparql.query().convert()
 
     properties=[]
     for x in results['results']['bindings']:
