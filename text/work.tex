@@ -1,0 +1,29 @@
+\chapter{Work}
+
+\section{First attempt}
+
+We want to replicate Knowledge Vault.
+\begin{itemize}
+\item Train distant supervision on Wikipedia, Wikidata
+\item Prepare training data and evaluation; repeatable, comprehensive
+experiments
+\item Implement or steal SFE
+\item Implement some simple latent model
+\item Evaluate and iterate
+\end{itemize}
+Rough yardstick: \~30\% of >=0.9-confident facts in KV were not present in
+Freebase. How close can we get?
+
+\section{Distant supervision on Wikipedia, Wikidata}
+
+\begin{itemize}
+\item Download Wikipedia dump, extract plaintext.
+\item Named entity recognition: DBpedia Spotlight\cite{dbpedia-spotlight}.
+
+	TODO: How to link DBpedia Spotlight to Wikidata?
+
+\item Coreference resolution etc., NLP: CoreNLP from Stanford\cite{stanford-corenlp}
+
+\item TODO: What about coreference? ("Barack Obama is black. He is the
+president of the United States.")
+\end{itemize}
