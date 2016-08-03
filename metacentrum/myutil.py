@@ -20,12 +20,14 @@ dbpedia_sparql = SPARQLWrapper.SPARQLWrapper("http://dbpedia.org/sparql")
 dbpedia_sparql.setReturnFormat(SPARQLWrapper.JSON)
 
 def load_cache():
-    if os.path.isfile(cache_path):
-        with open(cache_path) as f:
-            dbpedia_to_wikidata_cache = json.loads(f.read())
-    if os.path.isfile(wikidata_cache_path):
-        with open(wikidata_cache_path) as f:
-            wikidata_relations_cache = json.loads(f.read())
+    if len(dbpedia_to_wikidata_cache) == 0:
+        if os.path.isfile(cache_path):
+            with open(cache_path) as f:
+                dbpedia_to_wikidata_cache = json.loads(f.read())
+    if len(wikidata_relations_cache) == 0:
+        if os.path.isfile(wikidata_cache_path):
+            with open(wikidata_cache_path) as f:
+                wikidata_relations_cache = json.loads(f.read())
 
 def save_cache():
     with open(cache_path, 'w') as f:
@@ -143,6 +145,8 @@ def collect_backward_properties(wikidata_id):
     return properties
 
 def wikidata_query(wikidata_id):
+    load_cache()
+
     if wikidata_id in wikidata_relations_cache:
         return wikidata_relations_cache[wikidata_id]
 
@@ -151,11 +155,18 @@ def wikidata_query(wikidata_id):
     properties.extend(collect_backward_properties(wikidata_id))
 
     wikidata_relations_cache[wikidata_id] = properties
+
+    # TODO HAX
+    save_cache()
+
     return properties
 
 def dbpedia_uri_to_wikidata_id(uri):
+    load_cache()
+
     if uri in dbpedia_to_wikidata_cache:
         return dbpedia_to_wikidata_cache[uri]
+
     sparql = SPARQLWrapper.SPARQLWrapper("http://dbpedia.org/sparql")
     query = """
         PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -175,5 +186,9 @@ def dbpedia_uri_to_wikidata_id(uri):
     #print(uri, 'wikidata entity:', wikidata_entity)
     #print()
     dbpedia_to_wikidata_cache[uri] = wikidata_entity
+
+    # TODO HAX
+    save_cache()
+
     return wikidata_entity
 

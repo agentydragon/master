@@ -42,6 +42,11 @@ for root, subdirs, files in os.walk(args.plaintexts_dir):
             # print(article_sanename, "skipped, parsed but not spotlighted")
             continue
 
+        output_path = os.path.join(args.outputs_dir, article_sanename + ".sentences_entities.json")
+        if os.path.isfile(output_path):
+            print(article_sanename, "already processed")
+            continue
+
         print(article_sanename, "processing")
         parse = article_parse.ArticleParse()
         parse.load(plaintext_path, spotlight_path, parse_path)
@@ -49,7 +54,6 @@ for root, subdirs, files in os.walk(args.plaintexts_dir):
 
         json_data = parse.get_sentences_with_wikidata_ids()
 
-        output_path = os.path.join(args.outputs_dir, article_sanename + ".sentences_entities.json")
         with open(output_path, 'w') as f:
             f.write(json.dumps(json_data))
 

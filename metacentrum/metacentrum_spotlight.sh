@@ -10,4 +10,4 @@ source common.sh
 	--article_plaintexts_dir=$WIKI_ARTICLES_PLAINTEXTS_DIR \
 	--outputs_dir=$SPOTLIGHT_ANNOTATIONS_DIR \
 	--max_queries=-1 \
-	--sleep_between_queries=5
+	--sleep_between_queries=10

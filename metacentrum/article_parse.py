@@ -152,18 +152,22 @@ class ArticleParse(object):
             if len(full_matches) > 0:
                 # print("found full match:")
                 uris = {resource['uri'] for resource in full_matches}
-                assert len(uris) == 1
-                # print(full_matches[0])
-                best_match = full_matches[0]['uri']
-
+                if len(uris) == 1:
+                    best_match = full_matches[0]['uri']
+                else:
+                    # print(full_matches[0])
+                    print("fail: multiple urls:", uris)
+                    # TODO: count occurrences and find the better one
             results.append({
                 'mentions': mentions,
                 'entity_uri': best_match
             })
 
         self.coreferences = results
+        print('coreferences done')
 
     def annotate_sentences_with_wikidata_ids(self):
+        print('annotating with wikidata ids')
         for sentence_id, sentence in self.sentences.items():
             text = sentence['text']
 
@@ -195,7 +199,9 @@ class ArticleParse(object):
 
             wikidata_ids = set()
             for uri in all_uris:
+                print(uri, '...')
                 wikidata_ids.add(myutil.dbpedia_uri_to_wikidata_id(uri))
+                print(uri, 'done')
 
             sentence['wikidata_ids'] = wikidata_ids
 
