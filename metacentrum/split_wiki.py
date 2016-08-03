@@ -1,17 +1,29 @@
 #!/usr/bin/python
 
+"""
+Splits Wiki plaintext into articles.
+
+Usage:
+    ./split_wiki.py \
+        --max_articles=-1 \
+        --target_dir=/storage/brno3-cerit/home/prvak/data/wiki-articles \
+        --wiki_plaintext_path=/storage/brno3-cerit/home/prvak/data/wiki-plain.txt
+"""
+
+import argparse
+
+parser = argparse.ArgumentParser(description='Split plaintext Wiki into articles')
+parser.add_argument('--max_articles', type=int)
+args = parser.parse_args()
+
 import re
 
 # For workstation:
 # WIKI_PLAINTEXT_FILE='/mnt/crypto/data/wiki.txt'
 # TARGET_DIR='/mnt/crypto/data/wiki-articles'
 
-# For metacentrum:
-WIKI_PLAINTEXT_FILE='/storage/brno3-cerit/home/prvak/data/wiki-plain.txt'
-TARGET_DIR='/storage/brno3-cerit/home/prvak/data/wiki-articles'
-
 import os
-os.makedirs(TARGET_DIR)
+os.makedirs(args.target_dir)
 
 #def get_article_corpus(target_articles):
 #    with open('/mnt/crypto/data/wiki_small.txt', 'w') as out:
@@ -40,17 +52,21 @@ def sanitize_article(article):
 
     return article
 
-def split_corpus(target_articles):
+def article_title_to_path(title):
+    sanitized_articletitle = title.replace(' ', '_')
+    return args.target_dir + '/' + sanitized_articletitle + '.txt'
+
+def split_corpus(target_articles=None):
     articletext = ""
     articletitle = None
-    with open(WIKI_PLAINTEXT_FILE) as f:
+    with open(args.wiki_plaintext_path) as f:
         articles = 0
         regex = re.compile('^= .+ =$')
         for line in f:
             if regex.match(line):
                 if articletitle is not None:
-                    sanitized_articletitle = articletitle.replace(' ', '_')
-                    with open(TARGET_DIR + '/' + sanitized_articletitle + '.txt', 'w') as out:
+                    path = article_title_to_path(articletitle)
+                    with open(path, 'w') as out:
                         print('Writing article: ' + articletitle)
                         articletext = sanitize_article(articletext)
                         out.write(articletext)
@@ -60,9 +76,12 @@ def split_corpus(target_articles):
 
                 #print(line)
                 articles += 1
-                if articles > target_articles:
+                if target_articles is not None and articles > target_articles:
                     break
             #out.write(line)
             articletext += line
 
-split_corpus(target_articles=100)
+if args.max_articles >= 1:
+    split_corpus(target_articles=args.max_articles)
+else:
+    split_corpus()
