@@ -1,4 +1,5 @@
 articles/
+**/__pycache__
 
 text/*.aux
 text/*.log

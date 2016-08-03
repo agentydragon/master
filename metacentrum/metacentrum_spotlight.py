@@ -35,7 +35,13 @@ for root, subdirs, files in os.walk(args.article_plaintexts_dir):
         file_path = os.path.join(root, filename)
 
         article_sanename = '.'.join(filename.split('.')[:-1])
-        print(article_sanename)
+
+        output_path = os.path.join(args.outputs_dir, article_sanename + '.spotlight.json')
+        if os.path.isfile(output_path):
+            print(article_sanename, "-- already annotated")
+            continue
+        else:
+            print(article_sanename)
 
         text = open(file_path).read()
         r = requests.post(url, data={
@@ -44,7 +50,6 @@ for root, subdirs, files in os.walk(args.article_plaintexts_dir):
         }, headers={'Accept': 'application/json'})
         queries += 1
 
-        output_path = os.path.join(args.outputs_dir, article_sanename + '.spotlight.json')
         with open(output_path, 'w') as f:
             f.write(json.dumps(r.json()))
 
