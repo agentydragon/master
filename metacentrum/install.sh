@@ -11,6 +11,9 @@ FILES="wiki2text \
 	metacentrum_corenlp.sh \
 	metacentrum_split_wiki.sh \
 	metacentrum_nlpize_articles.sh \
-	split_wiki.py"
+	split_wiki.py \
+	spotlight.py \
+	metacentrum_spotlight.sh \
+	metacentrum_spotlight.py"
 
 scp $FILES prvak@zuphux.metacentrum.cz:$BIN_ROOT

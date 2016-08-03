@@ -12,3 +12,4 @@ WIKIPEDIA_PLAINTEXT=$WORK_DIR/wiki-plain.txt
 
 WIKI_ARTICLES_PLAINTEXTS_DIR=$WORK_DIR/wiki-articles-plaintexts
 WIKI_ARTICLE_PARSES_DIR=$WORK_DIR/wiki-articles-parses
+SPOTLIGHT_ANNOTATIONS_DIR=$WORK_DIR/spotlight-annotations
