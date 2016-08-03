@@ -1,3 +1,5 @@
+articles/
+
 text/*.aux
 text/*.log
 text/*.bbl
