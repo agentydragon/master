@@ -13,6 +13,16 @@ Graph. Práce prozkoumá různé metody odvozování nových faktů: jak pouze
 z existujících znalostí v databázi, tak jejich získávání s pomocí doplňujícího
 korpusu.
 
+Řešitel připraví prostředí pro měření výkonu doplňujících algoritmů.
+Poté na textu Wikipedie a existujících hranách databáze Wikidata natrénuje
+distant supervision, některý z algoritmů pro doplňování hran podle vlastností
+grafu (například Path Ranking Algorithm nebo Subgraph Feature Extraction) a
+některý z modelů s latentními proměnnými (například RESCAL). Tyto modely pak
+spojí do systému dávající odhad na jistotu přidaných faktů podle informací
+ze všech jednotlivých doplňujících algoritmů a změří výkon systému a
+jednotlivých komponent. Práce může pokračovat návrhem, implementací a
+porovnáváním dalších přístupů.
+
 Seznam odborné literatury:
 ---
 
