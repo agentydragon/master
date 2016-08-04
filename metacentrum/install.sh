@@ -25,6 +25,7 @@ FILES="\
 	split_wiki.py \
 	spotlight.py \
 	sentence_pb2.py \
+	training_samples_pb2.py \
 	metacentrum_parse_xmls_to_protos.py \
 	metacentrum_annotate_coreferences.py \
 	metacentrum_annotate_coreferences.sh \

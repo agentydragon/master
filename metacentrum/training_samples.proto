@@ -1,12 +1,21 @@
 package prvak;
 
+message TrainingSamples {
+	repeated RelationTrainingSamples relation_samples = 1;
+}
+
+message RelationTrainingSamples {
+	optional string relation = 1;
+	repeated TrainingSample samples = 2;
+}
+
 message TrainingSample {
 	// required; wikidata ID
 	optional string relation = 1;
 
 	// required; wikidata IDs
-	optional string subject = 2;
-	optional string object = 3;
+	optional string e1 = 2;
+	optional string e2 = 3;
 
 	optional TrainingSampleParsedSentence sentence = 4;
 
