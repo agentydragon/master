@@ -9,10 +9,8 @@ FILES="\
 	metacentrum_corenlp.sh \
 	metacentrum_download_dumps.sh \
 	metacentrum_install_corenlp.sh \
-	metacentrum_nlpize_articles.sh \
-	metacentrum_nlpize_articles.py \
-	metacentrum_get_sentences_entities.py \
-	metacentrum_get_sentences_entities.sh \
+	nlpize_articles.sh \
+	nlpize_articles.py \
 	metacentrum_get_training_samples.sh \
 	metacentrum_get_training_samples.py \
 	get_training_samples.py \
@@ -27,8 +25,8 @@ FILES="\
 	sentence_pb2.py \
 	training_samples_pb2.py \
 	metacentrum_parse_xmls_to_protos.py \
-	metacentrum_annotate_coreferences.py \
-	metacentrum_annotate_coreferences.sh \
+	annotate_coreferences.py \
+	annotate_coreferences.sh \
 	metacentrum_parse_xmls_to_protos.sh \
 	wiki2text \
 "
