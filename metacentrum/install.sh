@@ -7,6 +7,7 @@ echo "installing own code"
 FILES="\
 	common.sh \
 	metacentrum_corenlp.sh \
+	metacentrum_download_dumps.sh \
 	metacentrum_install_corenlp.sh \
 	metacentrum_nlpize_articles.sh \
 	metacentrum_nlpize_articles.py \
@@ -23,6 +24,11 @@ FILES="\
 	myutil.py \
 	split_wiki.py \
 	spotlight.py \
+	sentence_pb2.py \
+	metacentrum_parse_xmls_to_protos.py \
+	metacentrum_annotate_coreferences.py \
+	metacentrum_annotate_coreferences.sh \
+	metacentrum_parse_xmls_to_protos.sh \
 	wiki2text \
 "
 

@@ -22,7 +22,6 @@ if not os.path.isdir(args.outputs_dir):
 
 import myutil
 import article_parse
-
 import json
 
 for root, subdirs, files in os.walk(args.plaintexts_dir):

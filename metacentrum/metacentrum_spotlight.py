@@ -23,12 +23,10 @@ args = parser.parse_args()
 # TODO: skip if finished
 
 import json
-import requests
 import os.path
+import spotlight
 
 queries = 0
-server = 'http://spotlight.sztaki.hu:2222'
-url = server + '/rest/annotate'
 
 if not os.path.isdir(args.outputs_dir):
     os.makedirs(args.outputs_dir)
@@ -53,14 +51,11 @@ for file_path, article_sanename in filepaths_sanenames:
         print(article_sanename)
 
     text = open(file_path).read()
-    r = requests.post(url, data={
-      'text': text,
-      'confidence': '0.35'
-    }, headers={'Accept': 'application/json'})
+    result = spotlight.annotate_text(text)
     queries += 1
 
     with open(output_path, 'w') as f:
-        f.write(json.dumps(r.json()))
+        f.write(json.dumps(result))
 
     if args.max_queries >= 0 and queries >= args.max_queries:
         print("max queries exceeded")

@@ -1,0 +1,37 @@
+package prvak;
+
+message TrainingSample {
+	// required; wikidata ID
+	optional string relation = 1;
+
+	// required; wikidata IDs
+	optional string subject = 2;
+	optional string object = 3;
+
+	optional TrainingSampleParsedSentence sentence = 4;
+
+	// TODO
+	// sentence tokens referring to subject
+	// repeated int32 subjectTokens = 5;
+
+	// TODO
+	// sentence tokens referring to object
+	// repeated int32 objectTokens = 6;
+}
+
+message TrainingSampleSentenceToken {
+	optional int32 startOffset = 1;
+	optional int32 endOffset = 2;
+
+	optional string lemma = 3;
+	optional string pos = 4;
+	// PERSON, O, SET, DATE, MISC; (TODO: normalized NER)
+	optional string ner = 5;
+}
+
+message TrainingSampleParsedSentence {
+	optional string text = 1;
+	repeated TrainingSampleSentenceToken tokens = 2;
+
+	// TODO: parse tree
+}

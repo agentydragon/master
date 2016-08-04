@@ -1,6 +1,5 @@
 module add python34-modules-gcc
-pip install requests SPARQLWrapper --user
-
+pip install requests SPARQLWrapper protobuf --user
 
 
 # -m e: send mail when job terminates

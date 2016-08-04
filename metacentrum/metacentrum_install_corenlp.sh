@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 source common.sh
 
 CORENLP_FN=stanford-corenlp-full-2015-12-09.zip

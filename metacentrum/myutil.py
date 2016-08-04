@@ -7,14 +7,43 @@ cache_dir = 'cache'
 if not os.path.isdir(cache_dir):
     os.makedirs(cache_dir)
 
-dbpedia_to_wikidata_cache = {}
-cache_path = cache_dir + '/dbpedia_to_wikidata_cache.json'
+class JsonCache(object):
+    def __init__(self, path):
+        self.path = path
+        self.data = {}
 
-wikidata_relations_cache = {}
-wikidata_cache_path = cache_dir + '/wikidata_cache.json'
+    def __getitem__(self, key):
+        return self.data[key]
 
-name_cache = {}
-name_cache_path = cache_dir + '/name_cache.json'
+    def __setitem__(self, key, value):
+        self.data[key] = value
+
+    def __contains__(self, key):
+        return key in self.data
+
+    def load(self):
+        if len(self.data) == 0:
+            if os.path.isfile(self.path):
+                with open(self.path) as f:
+                    self.data = json.loads(f.read())
+
+    def save(self):
+        with open(self.path, 'w') as f:
+            f.write(json.dumps(self.data))
+
+dbpedia_to_wikidata_cache = JsonCache(cache_dir + '/dbpedia_to_wikidata_cache.json')
+wikidata_relations_cache = JsonCache(cache_dir + '/wikidata_cache.json')
+name_cache = JsonCache(cache_dir + '/name_cache.json')
+
+def load_cache():
+    dbpedia_to_wikidata_cache.load()
+    wikidata_relations_cache.load()
+    name_cache.load()
+
+def save_cache():
+    dbpedia_to_wikidata_cache.save()
+    wikidata_relations_cache.save()
+    name_cache.save()
 
 wikidata_entity_prefix = 'http://www.wikidata.org/entity/'
 wikidata_property_prefix = 'http://www.wikidata.org/wiki/Property:'
@@ -24,7 +53,6 @@ dbpedia_sparql.setReturnFormat(SPARQLWrapper.JSON)
 
 """
 # get entity name
-PREFIX wd: <http://www.wikidata.org/entity/>
 SELECT *
 WHERE { wd:Q1 rdfs:label ?b FILTER (langMatches(lang(?desc),"en")) }
 """
@@ -33,31 +61,6 @@ STANDARD_PREFIXES = """
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 """
-
-def load_cache():
-    global dbpedia_to_wikidata_cache
-    global wikidata_relations_cache
-    global name_cache
-    if len(dbpedia_to_wikidata_cache) == 0:
-        if os.path.isfile(cache_path):
-            with open(cache_path) as f:
-                dbpedia_to_wikidata_cache = json.loads(f.read())
-    if len(wikidata_relations_cache) == 0:
-        if os.path.isfile(wikidata_cache_path):
-            with open(wikidata_cache_path) as f:
-                wikidata_relations_cache = json.loads(f.read())
-    if len(name_cache) == 0:
-        if os.path.isfile(name_cache_path):
-            with open(name_cache_path) as f:
-                name_cache = json.loads(f.read())
-
-def save_cache():
-    with open(cache_path, 'w') as f:
-        f.write(json.dumps(dbpedia_to_wikidata_cache))
-    with open(wikidata_cache_path, 'w') as f:
-        f.write(json.dumps(wikidata_relations_cache))
-    with open(name_cache_path, 'w') as f:
-        f.write(json.dumps(name_cache))
 
 def wikidata_entity_url_to_entity_id(url):
     assert url.startswith(wikidata_entity_prefix)
@@ -209,16 +212,11 @@ def dbpedia_uri_to_wikidata_id(uri):
     if uri in dbpedia_to_wikidata_cache:
         return dbpedia_to_wikidata_cache[uri]
 
-    sparql = SPARQLWrapper.SPARQLWrapper("http://dbpedia.org/sparql")
-    query = """
+    results = get_results("""
         PREFIX owl: <http://www.w3.org/2002/07/owl#>
         SELECT ?same
         WHERE { <%s> owl:sameAs ?same . }
-    """ % uri
-    #print(query)
-    sparql.setQuery(query)
-    sparql.setReturnFormat(SPARQLWrapper.JSON)
-    results = sparql.query().convert()
+    """ % uri)
     wikidata_entity = None
     for x in results['results']['bindings']:
         value = x['same']['value']

@@ -12,85 +12,11 @@ class ArticleParse(object):
     def __init__(self):
         self.text = None
         self.document = None
-        self.resources = None
         self.coreferences = None
         self.sentences = None
 
     def load(self, plaintext_path, spotlight_json_path, parse_xml_path):
-        with open(plaintext_path) as f:
-            self.text = f.read()
-
-        tree = ET.parse(parse_xml_path)
-        root = tree.getroot()
-        assert root.tag == 'root'
-        self.document = root[0]
-        assert self.document.tag == 'document'
-
-        self.load_sentences()
-        self.load_spotlight_resources(spotlight_json_path)
         self.load_coreferences()
-
-    def load_sentences(self):
-        sentences = self.document[0]
-        assert sentences.tag == 'sentences'
-        # print('sentences:')
-        result = {}
-        for sentence in sentences:
-            tokens = sentence[0]
-
-            trs = {}
-            sentence_begin = None
-            sentence_end = None
-
-            for token in tokens:
-                token_id = int(token.attrib['id'])
-                token_start = int(token.find('CharacterOffsetBegin').text)
-                token_end = int(token.find('CharacterOffsetEnd').text)
-                word = token.find('word').text
-                trs[token_id] = {
-                    'start': token_start,
-                    'end': token_end,
-                    'word': word
-                }
-
-                if sentence_begin is None:
-                    sentence_begin = token_start
-                sentence_end = token_end
-
-            sentence_text = self.text[sentence_begin:sentence_end]
-            sentence_id = int(sentence.attrib['id'])
-            result[sentence_id] = {
-                'start': sentence_begin,
-                'end': sentence_end,
-                'text': sentence_text,
-                'tokens': trs
-            }
-        self.sentences = result
-
-    def load_spotlight_resources(self, spotlight_json_path):
-        with open(spotlight_json_path) as jsonfile:
-            spotlight = json.loads(jsonfile.read())
-        resources = spotlight['Resources']
-
-        result = []
-
-        for resource in resources:
-            offset = int(resource['@offset'])
-            surface_form = resource['@surfaceForm']
-            end = offset+len(surface_form)
-            actual_sf = self.text[offset:end]
-            assert actual_sf == surface_form
-            uri = resource['@URI']
-            #print(offset, surface_form, uri)
-
-            result.append({
-                'start': offset,
-                'end': end,
-                'uri': uri,
-                'surface_form': surface_form
-            })
-
-        self.resources = result
 
     def find_resources_between(self, start, end):
         for resource in self.resources:
@@ -103,31 +29,6 @@ class ArticleParse(object):
         results = []
         for coreference in coreferences:
             best_resource = None
-
-            mentions = []
-            for mention in coreference.findall('mention'):
-                if 'representative' in mention.attrib:
-                    pass
-                    # print("representative")
-                sentenceid = int(mention.find('sentence').text)
-                sentence = self.sentences[sentenceid]
-                mention_start_id = int(mention.find('start').text)
-                mention_start = sentence['tokens'][mention_start_id]['start']
-                mention_end_id = int(mention.find('end').text) - 1
-                mention_end = sentence['tokens'][mention_end_id]['end']
-                mention_head_id = int(mention.find('head').text)
-                mention_head = sentence['tokens'][mention_head_id]['word']
-
-                mention_text = mention.find('text').text
-
-                mentions.append({
-                    'sentence_id': sentenceid,
-                    'start': mention_start,
-                    'end': mention_end,
-                    'head_id': mention_head_id,
-                    'head_word': mention_head,
-                    'text': mention_text
-                })
 
             full_matches = []
             for mention in mentions:
