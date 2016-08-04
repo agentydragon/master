@@ -98,7 +98,8 @@ class ArticleParse(object):
                 yield resource
 
     def load_coreferences(self):
-        coreferences = self.document.find('coreference')
+        # 'or []': TODO: sometimes there are no coreferences
+        coreferences = self.document.find('coreference') or []
         results = []
         for coreference in coreferences:
             best_resource = None
