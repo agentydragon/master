@@ -21,7 +21,6 @@ parser.add_argument('--article_spotlight_json_path', type=str)
 parser.add_argument('--output_path', type=str)
 args = parser.parse_args()
 
-import myutil
 import article_parse
 
 import json
@@ -34,5 +33,3 @@ json_data = []
 json_data.extend(parse.get_sentences_with_wikidata_ids())
 with open(args.output_path, 'w') as f:
     f.write(json.dumps(json_data))
-
-myutil.save_cache()

@@ -11,7 +11,7 @@ import sentence_pb2
 from google.protobuf import text_format
 import argparse
 import os.path
-import myutil
+import dbpedia
 
 import json
 
@@ -107,7 +107,7 @@ def propagate_entities(document, spotlight):
                     print("fail: multiple urls:", uris)
                     # TODO: count occurrences and find the better one
             if best_match:
-                wikidata_id = myutil.dbpedia_uri_to_wikidata_id(best_match)
+                wikidata_id = dbpedia.dbpedia_uri_to_wikidata_id(best_match)
                 if wikidata_id:
                     coreference.wikidataEntityId = wikidata_id # best_match
                 else:

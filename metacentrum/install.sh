@@ -19,7 +19,10 @@ FILES="\
 	metacentrum_split_wiki.sh \
 	metacentrum_spotlight.py \
 	metacentrum_spotlight.sh \
-	myutil.py \
+	dbpedia.py \
+	wikidata.py \
+	sparql_client.py \
+	json_cache.py \
 	nlpize_articles.py \
 	nlpize_articles.sh \
 	parse_xmls_to_protos.py \

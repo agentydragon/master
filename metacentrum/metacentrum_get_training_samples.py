@@ -10,7 +10,6 @@ Usage:
 import os.path
 import get_training_samples
 import argparse
-import myutil
 
 def main():
     parser = argparse.ArgumentParser(description='TODO')
@@ -26,12 +25,10 @@ def main():
             paths.append(path)
     print("paths:", paths)
 
-    myutil.load_cache()
     sentences = get_training_samples.load_document_files(paths)
     if args.max_sentences > 0:
         sentences = sentences[:args.max_sentences]
     training_data = get_training_samples.join_sentences_entities(sentences)
     training_data.write(args.output_file)
-    myutil.save_cache()
 
 main()

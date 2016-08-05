@@ -74,6 +74,12 @@ def add_single_referenced_entities_to_coreferences(document):
 
             if ner == 'ORDINAL':
                 continue  # 'second', 'thirty-fourth', ...
+            if ner == 'DATE':
+                continue  # TODO
+            if ner == 'NUMBER':
+                continue  # TODO
+            if ner == 'DURATION':
+                continue  # TODO
 
             print(ner)
             #for token in tokens:
