@@ -24,6 +24,7 @@ FILES="\
 	nlpize_articles.sh \
 	parse_xmls_to_protos.py \
 	parse_xmls_to_protos.sh \
+	data_stats.sh \
 	sentence_pb2.py \
 	split_wiki.py \
 	spotlight.py \

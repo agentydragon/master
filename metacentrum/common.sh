@@ -33,7 +33,7 @@ WIKI_ARTICLE_PARSES_DIR=$WORK_DIR/wiki-articles-parses
 SPOTLIGHT_ANNOTATIONS_DIR=$WORK_DIR/spotlight-annotations
 PARSE_PROTOS_DIR=$WORK_DIR/parse-protos
 ANNOTATED_DOCUMENTS_DIR=$WORK_DIR/annotated-document-protos
-SENTENCES_ENTITIES_DIR=$WORK_DIR/sentences-entities
+#SENTENCES_ENTITIES_DIR=$WORK_DIR/sentences-entities
 TRAINING_SAMPLES_FILE=$WORK_DIR/training-samples.pb
 
 # FUSEKI_DIR=$STORAGE_HOME/fuseki
