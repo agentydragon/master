@@ -6,6 +6,8 @@ set -e
 cd; cd bin
 source common.sh
 
+module add python34-modules-gcc
+
 ./annotate_coreferences.py \
 	--input_protos_dir $PARSE_PROTOS_DIR \
 	--spotlight_dir $SPOTLIGHT_ANNOTATIONS_DIR \
