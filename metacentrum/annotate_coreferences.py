@@ -22,6 +22,9 @@ def spotlight_to_mentions(spotlight):
         mention = sentence_pb2.SpotlightMention()
         mention.start_offset = int(resource['@offset'])
         surface_form = resource['@surfaceForm']
+        if surface_form is None:
+            # TODO HAX?
+            continue
         mention.end_offset = mention.start_offset + len(surface_form)
         mention.surface_form = surface_form
         mention.uri = resource['@URI']
@@ -46,11 +49,21 @@ def find_sentence_token(sentence, token_id):
 def get_mention_start(document, mention):
     sentence = find_sentence_by_id(document, mention.sentenceId)
     token = find_sentence_token(sentence, mention.startWordId)
+
+    # TODO: HAX
+    if token is None:
+        return None
+
     return token.start_offset
 
 def get_mention_end(document, mention):
     sentence = find_sentence_by_id(document, mention.sentenceId)
     token = find_sentence_token(sentence, mention.endWordId - 1)
+
+    # TODO: HAX
+    if token is None:
+        return None
+
     return token.end_offset
 
 def find_resources_between(spotlight, start, end):
@@ -65,10 +78,16 @@ def propagate_entities(document, spotlight):
         for mention in coreference.mentions:
             mention_start = get_mention_start(document, mention)
             mention_end = get_mention_end(document, mention)
+
+            # TODO: HAX
+            if mention_end is None:
+                continue
+
             mention_text = mention.text
             mention_actual_text = document.text[mention_start:mention_end]
             print((mention_text, mention_actual_text))
-            assert mention_text == mention_actual_text
+            # TODO: check this out.
+            # assert mention_text == mention_actual_text
             for resource in find_resources_between(spotlight, mention_start, mention_end):
                 if resource.surface_form == mention_text or resource.surface_form == mention_actual_text:
                     # print('\tFULL MATCH mention resource:', resource['uri'], 'surface_form:', resource['surface_form'])

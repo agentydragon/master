@@ -2,6 +2,8 @@
 
 set -e
 
+module add python34-modules-gcc
+
 # TODO: this is a bad hack :(
 cd; cd bin
 source common.sh

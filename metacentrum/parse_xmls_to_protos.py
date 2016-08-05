@@ -13,6 +13,78 @@ from google.protobuf import text_format
 import argparse
 import os.path
 
+def spans(array, y_fn):
+    last_y = None
+    span = []
+    spans = []
+    for x in array:
+        this_y = y_fn(x)
+        assert this_y is not None
+
+        if last_y is None:
+            last_y = this_y
+
+        if this_y == last_y:
+            span.append(x)
+        else:
+            spans.append((last_y, span))
+            span = [x]
+            last_y = this_y
+    if len(span) > 0:
+        spans.append((last_y, span))
+    return spans
+
+def find_token_in_sentence_by_id(sentence, token_id):
+    for token in sentence.tokens:
+        if token.id == token_id:
+            return token
+
+def handle_named_entity(sentence, start, end, document):
+    # named entity is part of a coreference
+    found = False
+    for coreference in document.coreferences:
+        for mention in coreference.mentions:
+            if (mention.sentenceId == sentence.id and
+                    mention.startWordId >= start.id and
+                    (mention.endWordId - 1) <= end.id):
+                found = True
+                break
+    if found:
+        return
+
+    mention_text = document.text[start.start_offset:end.end_offset]
+    print("named entity: [", mention_text, ']')
+    coreferences = document.coreferences.add()
+    mention = coreferences.mentions.add()
+    mention.sentenceId = sentence.id
+    mention.startWordId = start.id
+    mention.endWordId = end.id + 1
+    mention.text = mention_text
+
+def add_single_referenced_entities_to_coreferences(document):
+    for sentence in document.sentences:
+        last_ner = None
+        last_ne_tokens = []
+
+        ners_tokens = spans(sentence.tokens, lambda token: token.ner)
+        #print(ners_tokens)
+        for ner, tokens in ners_tokens:
+            if ner == 'O':
+                continue  # not a named entity
+
+            if ner == 'ORDINAL':
+                continue  # 'second', 'thirty-fourth', ...
+
+            print(ner)
+            #for token in tokens:
+            #    print(token.lemma)
+            #handle_named_entity(tokens[0].start_offset,
+            #                    tokens[-1].end_offset,
+            #                    document)
+            handle_named_entity(sentence,
+                                tokens[0], tokens[-1],
+                                document)
+
 def document_to_proto(document_root, plaintext):
     assert document_root.tag == 'root'
     document = document_root[0]
@@ -70,6 +142,9 @@ def document_to_proto(document_root, plaintext):
             #output_mention.startCharOffset = mention_start
             #output_mention.endCharOffset = mention_end
             # TODO: headword
+
+    add_single_referenced_entities_to_coreferences(output_document)
+
     return output_document
 
 def parse_xml_to_proto(plaintext_path, parse_path):
@@ -81,7 +156,7 @@ def parse_xml_to_proto(plaintext_path, parse_path):
     return document_to_proto(document_root, plaintext)
 
 def main():
-    parser = argparse.argumentparser(description='todo')
+    parser = argparse.ArgumentParser(description='todo')
     parser.add_argument('--plaintexts_dir')
     parser.add_argument('--parse_xmls_dir')
     parser.add_argument('--outputs_dir')

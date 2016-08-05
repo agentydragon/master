@@ -17,3 +17,19 @@ ts = get_training_samples.load_document(document)
 td = get_training_samples.join_sentences_entities(ts)
 samples = td.to_proto()
 print(text_format.MessageToString(samples))
+
+# TODO: check that result refers to Michelle Obama
+
+#document = parse_xmls_to_protos.parse_xml_to_proto('testdata/ASCII_art.txt',
+#                                                   'testdata/ASCII_art.txt.out')
+#print(text_format.MessageToString(document))
+#
+#spotlight = annotate_coreferences.load_spotlight('testdata/ASCII_art.spotlight.json')
+#annotate_coreferences.propagate_entities(document, spotlight)
+#print(text_format.MessageToString(document))
+#
+#ts = get_training_samples.load_document(document)
+#td = get_training_samples.join_sentences_entities(ts)
+#samples = td.to_proto()
+#print(text_format.MessageToString(samples))
+

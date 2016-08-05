@@ -151,6 +151,8 @@ def collect_forward_properties(wikidata_id):
             continue
         if '/P' not in rel:
             continue
+        if not is_wikidata_entity_url(other):
+            continue
         other = wikidata_entity_url_to_entity_id(other)
         rel = wikidata_property_url_to_property_id(rel)
 

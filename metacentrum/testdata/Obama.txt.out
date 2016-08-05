@@ -751,6 +751,122 @@
           </dep>
         </dependencies>
       </sentence>
+      <sentence id="4">
+        <tokens>
+          <token id="1">
+            <word>Barack</word>
+            <lemma>Barack</lemma>
+            <CharacterOffsetBegin>169</CharacterOffsetBegin>
+            <CharacterOffsetEnd>175</CharacterOffsetEnd>
+            <POS>NNP</POS>
+            <NER>PERSON</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="2">
+            <word>married</word>
+            <lemma>marry</lemma>
+            <CharacterOffsetBegin>176</CharacterOffsetBegin>
+            <CharacterOffsetEnd>183</CharacterOffsetEnd>
+            <POS>VBD</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="3">
+            <word>Michelle</word>
+            <lemma>Michelle</lemma>
+            <CharacterOffsetBegin>184</CharacterOffsetBegin>
+            <CharacterOffsetEnd>192</CharacterOffsetEnd>
+            <POS>NNP</POS>
+            <NER>PERSON</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="4">
+            <word>Obama</word>
+            <lemma>Obama</lemma>
+            <CharacterOffsetBegin>193</CharacterOffsetBegin>
+            <CharacterOffsetEnd>198</CharacterOffsetEnd>
+            <POS>NNP</POS>
+            <NER>PERSON</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="5">
+            <word>.</word>
+            <lemma>.</lemma>
+            <CharacterOffsetBegin>198</CharacterOffsetBegin>
+            <CharacterOffsetEnd>199</CharacterOffsetEnd>
+            <POS>.</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+        </tokens>
+        <parse>(ROOT (S (NP (NNP Barack)) (VP (VBD married) (NP (NNP Michelle) (NNP Obama))) (. .))) </parse>
+        <dependencies type="basic-dependencies">
+          <dep type="root">
+            <governor idx="0">ROOT</governor>
+            <dependent idx="2">married</dependent>
+          </dep>
+          <dep type="nsubj">
+            <governor idx="2">married</governor>
+            <dependent idx="1">Barack</dependent>
+          </dep>
+          <dep type="compound">
+            <governor idx="4">Obama</governor>
+            <dependent idx="3">Michelle</dependent>
+          </dep>
+          <dep type="dobj">
+            <governor idx="2">married</governor>
+            <dependent idx="4">Obama</dependent>
+          </dep>
+          <dep type="punct">
+            <governor idx="2">married</governor>
+            <dependent idx="5">.</dependent>
+          </dep>
+        </dependencies>
+        <dependencies type="collapsed-dependencies">
+          <dep type="root">
+            <governor idx="0">ROOT</governor>
+            <dependent idx="2">married</dependent>
+          </dep>
+          <dep type="nsubj">
+            <governor idx="2">married</governor>
+            <dependent idx="1">Barack</dependent>
+          </dep>
+          <dep type="compound">
+            <governor idx="4">Obama</governor>
+            <dependent idx="3">Michelle</dependent>
+          </dep>
+          <dep type="dobj">
+            <governor idx="2">married</governor>
+            <dependent idx="4">Obama</dependent>
+          </dep>
+          <dep type="punct">
+            <governor idx="2">married</governor>
+            <dependent idx="5">.</dependent>
+          </dep>
+        </dependencies>
+        <dependencies type="collapsed-ccprocessed-dependencies">
+          <dep type="root">
+            <governor idx="0">ROOT</governor>
+            <dependent idx="2">married</dependent>
+          </dep>
+          <dep type="nsubj">
+            <governor idx="2">married</governor>
+            <dependent idx="1">Barack</dependent>
+          </dep>
+          <dep type="compound">
+            <governor idx="4">Obama</governor>
+            <dependent idx="3">Michelle</dependent>
+          </dep>
+          <dep type="dobj">
+            <governor idx="2">married</governor>
+            <dependent idx="4">Obama</dependent>
+          </dep>
+          <dep type="punct">
+            <governor idx="2">married</governor>
+            <dependent idx="5">.</dependent>
+          </dep>
+        </dependencies>
+      </sentence>
     </sentences>
     <coreference>
       <coreference>
@@ -787,6 +903,13 @@
           <start>6</start>
           <end>7</end>
           <head>6</head>
+          <text>Barack</text>
+        </mention>
+        <mention>
+          <sentence>4</sentence>
+          <start>1</start>
+          <end>2</end>
+          <head>1</head>
           <text>Barack</text>
         </mention>
       </coreference>
