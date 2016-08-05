@@ -2,8 +2,8 @@ package prvak;
 
 message SentenceToken {
 	optional int32 id = 6;
-	optional int32 startOffset = 1;
-	optional int32 endOffset = 2;
+	optional int32 start_offset = 1;
+	optional int32 end_offset = 2;
 
 	optional string lemma = 3;
 	optional string pos = 4;
@@ -12,9 +12,9 @@ message SentenceToken {
 }
 
 message Mention {
-	optional int32 sentenceIndex = 1;
-	optional int32 startWordIndex = 2;
-	optional int32 endWordIndex = 3;
+	optional int32 sentenceId = 1;
+	optional int32 startWordId = 2;
+	optional int32 endWordId = 3;
 	//optional int32 startCharOffset = 4;
 	//optional int32 endCharOffset = 5;
 
@@ -47,9 +47,9 @@ message Sentence {
 }
 
 message SpotlightMention {
-	optional int32 startOffset = 1;
-	optional int32 endOffset = 2;
+	optional int32 start_offset = 1;
+	optional int32 end_offset = 2;
 	optional string uri = 3;
-	optional string surfaceForm = 4;
+	optional string surface_form = 4;
 	// TODO: confidence
 }

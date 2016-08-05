@@ -18,15 +18,25 @@ import argparse
 import json
 import myutil
 
+class MentionInSentence(object):
+    def __init__(self, start_token_id, end_token_id, wikidata_id):
+        self.start_token_id = start_token_id
+        self.end_token_id = end_token_id
+        self.wikidata_id = wikidata_id
+
 class SentenceInDocument(object):
     def __init__(self, document, sentence_id):
+        self.mentions = []
         wikidata_ids = set()
         for coreference in document.coreferences:
             if not coreference.wikidataEntityId:
                 # entity not detected
                 continue
             for mention in coreference.mentions:
-                if mention.sentenceIndex == sentence_id:
+                if mention.sentenceId == sentence_id:
+                    self.mentions.append(MentionInSentence(mention.startWordId,
+                                                           mention.endWordId,
+                                                           coreference.wikidataEntityId))
                     wikidata_ids.add(coreference.wikidataEntityId)
         self.wikidata_ids = list(wikidata_ids)
         self.document = document
@@ -35,6 +45,7 @@ class SentenceInDocument(object):
         print(self.get_text(), self.wikidata_ids)
 
     def all_entity_pairs(self):
+        pairs = []
         for e1 in self.wikidata_ids:
             if e1 is None:
                 # TODO: HAX SHOULD NOT BE NEEDED
@@ -43,7 +54,8 @@ class SentenceInDocument(object):
                 if e2 is None:
                     # TODO: HAX SHOULD NOT BE NEEDED
                     continue
-                yield (e1, e2)
+                pairs.append((e1, e2))
+        return pairs
 
     def get_sentence(self):
         for sentence in self.document.sentences:
@@ -54,7 +66,6 @@ class SentenceInDocument(object):
         return self.get_sentence().text
 
     def to_sample(self, relation, e1, e2):
-        print('to_sample ->')
         sample = training_samples_pb2.TrainingSample()
         sample.relation = relation
         sample.e1 = e1
@@ -62,17 +73,23 @@ class SentenceInDocument(object):
 
         sentence = self.get_sentence()
 
+        for mention in self.mentions:
+            for token_index in range(mention.start_token_id - 1, mention.end_token_id - 1):
+                if mention.wikidata_id == e1:
+                    sample.e1_token_indices.append(token_index)
+                if mention.wikidata_id == e2:
+                    sample.e2_token_indices.append(token_index)
+
         s = sample.sentence
         s.text = sentence.text
-        sentence_start = sentence.tokens[0].startOffset
+        sentence_start = sentence.tokens[0].start_offset
         for token in sentence.tokens:
             out_token = s.tokens.add()
-            out_token.startOffset = token.startOffset - sentence_start
-            out_token.endOffset = token.endOffset - sentence_start
+            out_token.start_offset = token.start_offset - sentence_start
+            out_token.end_offset = token.end_offset - sentence_start
             out_token.lemma = token.lemma
             out_token.pos = token.pos
             out_token.ner = token.ner
-        print(text_format.MessageToString(sample))
 
         return sample
 
@@ -87,6 +104,7 @@ def sentence_to_training_data(sentence):
 
     all_pairs = {}
     print(mentioned_wikidata_ids)
+    print(sentence_entity_pairs)
     for wikidata_id in mentioned_wikidata_ids:
         for e1, rel, e2 in myutil.wikidata_query(wikidata_id):
             print('(', e1, rel, e2, ')')
@@ -108,12 +126,17 @@ def sentence_to_training_data(sentence):
     for entity_pair, true_relations in all_pairs.items():
         e1, e2 = entity_pair
         for relation in all_pairs[entity_pair]:
-            # TODO: training data should also say where is the
-            # relevant mention
             sample = sentence.to_sample(relation, e1, e2)
             training_data.add_sample(sample)
 
     return training_data
+
+def load_document(document):
+    sentences = []
+    for sentence in document.sentences:
+        # TODO: create more complex samples
+        sentences.append(SentenceInDocument(document, sentence.id))
+    return sentences
 
 def load_document_files(files):
     """
@@ -125,10 +148,7 @@ def load_document_files(files):
         document = sentence_pb2.Document()
         with open(path, 'rb') as f:
             document.ParseFromString(f.read())
-
-        for sentence in document.sentences:
-            # TODO: create more complex samples
-            sentences.append(SentenceInDocument(document, sentence.id))
+        sentences.extend(load_document(document))
     return sentences
 
 def join_sentences_entities(sentences):
@@ -161,28 +181,17 @@ class TrainingData(object):
                 self.training_data[relation] = []
             self.training_data[relation].extend(samples)
 
-    def write(self, output_file):
+    def to_proto(self):
         samples = training_samples_pb2.TrainingSamples()
-
         for relation, rs in self.training_data.items():
             rels = samples.relation_samples.add()
             rels.relation = relation
-            rels.samples.extend(rs)
+            rels.positive_samples.extend(rs)
+        return samples
 
+    def write(self, output_file):
+        samples = self.to_proto()
         print(text_format.MessageToString(samples))
         with open(output_file, 'wb') as f:
             #f.write(json.dumps(self.training_data))
             f.write(samples.SerializeToString())
-
-#def main():
-#    parser = argparse.ArgumentParser(description='Prepare distant supervision positive training samples')
-#    parser.add_argument('--article_sentences_entities', action='append',
-#                        help='Output from get_sentences_entities.')
-#    parser.add_argument('--output_file')
-#    args = parser.parse_args()
-#
-#    myutil.load_cache()
-#    sentences = load_sentence_files(args.article_sentences_entities)
-#    training_data = join_sentences_entities(sentences)
-#    training_data.write(output_file)
-#    myutil.save_cache()

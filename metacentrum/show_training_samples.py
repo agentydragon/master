@@ -12,7 +12,7 @@ with open('training-samples.pb', 'rb') as f:
 for relation_samples in training_samples.relation_samples:
     relation = relation_samples.relation
     print(relation, myutil.get_name(relation))
-    for sample in relation_samples.samples:
+    for sample in relation_samples.positive_samples:
         e1, e2 = sample.e1, sample.e2
         text = sample.sentence.text
         sane_text = text[:100].replace('\n', ' ')

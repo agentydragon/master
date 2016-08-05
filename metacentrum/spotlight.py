@@ -23,11 +23,14 @@ def annotate_text(text):
 
 def main():
     parser = argparse.ArgumentParser(description='Get DBpedia entity mentions using Spotlight')
-    parser.add_argument('--article_plaintext_path')
-    parser.add_argument('--output_path')
+    parser.add_argument('--article_plaintext_path', required=True)
+    parser.add_argument('--output_path', required=True)
     args = parser.parse_args()
 
     text = open(args.article_plaintext_path).read()
     result = annotate_text(text)
     with open(args.output_path, 'w') as f:
         f.write(json.dumps(result))
+
+if __name__ == '__main__':
+    main()

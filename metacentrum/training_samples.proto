@@ -6,7 +6,7 @@ message TrainingSamples {
 
 message RelationTrainingSamples {
 	optional string relation = 1;
-	repeated TrainingSample samples = 2;
+	repeated TrainingSample positive_samples = 2;
 }
 
 message TrainingSample {
@@ -19,18 +19,18 @@ message TrainingSample {
 
 	optional TrainingSampleParsedSentence sentence = 4;
 
-	// TODO
 	// sentence tokens referring to subject
-	// repeated int32 subjectTokens = 5;
+	// zero-based index
+	repeated int32 e1_token_indices = 5;
 
-	// TODO
 	// sentence tokens referring to object
-	// repeated int32 objectTokens = 6;
+	// zero-based index
+	repeated int32 e2_token_indices = 6;
 }
 
 message TrainingSampleSentenceToken {
-	optional int32 startOffset = 1;
-	optional int32 endOffset = 2;
+	optional int32 start_offset = 1;
+	optional int32 end_offset = 2;
 
 	optional string lemma = 3;
 	optional string pos = 4;
