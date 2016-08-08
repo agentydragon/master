@@ -7,8 +7,9 @@ set -e
 
 source common.sh
 
-./get_training_samples_main \
+./add_negative_samples_main \
 	--annotated_documents_dir $ANNOTATED_DOCUMENTS_DIR \
-	--output_file $TRAINING_SAMPLES_FILE \
+	--input_training_data $TRAINING_SAMPLES_FILE \
+	--output_training_data $FULL_TRAINING_SAMPLES_FILE \
 	--max_sentences=1000
 	# --max_sentences=-1

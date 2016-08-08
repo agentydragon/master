@@ -38,7 +38,7 @@ class WikidataClient(object):
 
             triple = wikidata_util.transform_relation(subject, rel, other)
             if triple:
-                print(triple)
+                # print(triple)
                 properties.append(triple)
         return properties
 
@@ -48,7 +48,9 @@ class WikidataClient(object):
         results = self.wikidata_client.get_results("""
             SELECT ?rel ?other
             WHERE { ?other ?rel wd:%s . }
+            LIMIT 500
         """ % wikidata_id)
+        # TODO: remove limit 500
 
         properties=[]
         for x in results['results']['bindings']:
@@ -58,7 +60,7 @@ class WikidataClient(object):
 
             triple = wikidata_util.transform_relation(other, rel, subject)
             if triple:
-                print(triple)
+                # print(triple)
                 properties.append(triple)
         return properties
 

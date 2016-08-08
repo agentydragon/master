@@ -10,9 +10,9 @@ Usage:
 """
 
 from google.protobuf import text_format
+import file_util
 import sentence_pb2
 import training_samples_pb2
-import json
 import wikidata
 
 class MentionInSentence(object):
@@ -39,7 +39,7 @@ class SentenceInDocument(object):
         self.document = document
         self.sentence_id = sentence_id
 
-        print(self.get_text(), self.wikidata_ids)
+        # print(self.get_text(), self.wikidata_ids)
 
     def all_entity_pairs(self):
         pairs = []
@@ -93,23 +93,21 @@ class SentenceInDocument(object):
 
         return sample
 
-def sentence_to_training_data(sentence):
+def get_true_triples_expressed_by_sentence(sentence):
     """
-    Args:
-      sentence (SentenceInDocument)
+    Returns:
+        dict (key: "Rxxx", value: ("Q123", "Q456"))
     """
-    print('sentence_to_training_data(', sentence.get_text(), ')')
     mentioned_wikidata_ids = sentence.wikidata_ids
     sentence_entity_pairs = sentence.all_entity_pairs()
-
     wikidata_client = wikidata.WikidataClient()
 
     all_pairs = {}
-    print(mentioned_wikidata_ids)
-    print(sentence_entity_pairs)
+    # print(mentioned_wikidata_ids)
+    # print(sentence_entity_pairs)
     for wikidata_id in mentioned_wikidata_ids:
         for e1, rel, e2 in wikidata_client.get_all_triples_of_entity(wikidata_id):
-            print('(', e1, rel, e2, ')')
+            # print('(', e1, rel, e2, ')')
             key = (e1, e2)
             if key not in sentence_entity_pairs:
                 # The relation holds, but the entity pair is in no sentences.
@@ -118,6 +116,15 @@ def sentence_to_training_data(sentence):
                 # TODO: FIXME: relations are returned twice -- forward and backward
                 all_pairs[key] = set()
             all_pairs[key].add(rel)
+    return all_pairs
+
+def sentence_to_training_data(sentence):
+    """
+    Args:
+      sentence (SentenceInDocument)
+    """
+    print('sentence_to_training_data(', sentence.get_text(), ')')
+    all_pairs = get_true_triples_expressed_by_sentence(sentence)
 
     print(sentence, all_pairs)
     #if len(all_pairs) > 0:
@@ -134,6 +141,7 @@ def sentence_to_training_data(sentence):
     return training_data
 
 def load_document(document):
+    print('Loading document:', document.article_sanename, '...')
     sentences = []
     for sentence in document.sentences:
         # TODO: create more complex samples
@@ -147,9 +155,7 @@ def load_document_files(files):
     """
     sentences = []
     for path in files:
-        document = sentence_pb2.Document()
-        with open(path, 'rb') as f:
-            document.ParseFromString(f.read())
+        document = file_util.parse_proto_file(sentence_pb2.Document, path)
         sentences.extend(load_document(document))
     return sentences
 
@@ -195,5 +201,4 @@ class TrainingData(object):
         samples = self.to_proto()
         print(text_format.MessageToString(samples))
         with open(output_file, 'wb') as f:
-            #f.write(json.dumps(self.training_data))
             f.write(samples.SerializeToString())
