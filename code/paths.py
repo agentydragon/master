@@ -17,6 +17,4 @@ PARSE_PROTOS_DIR=WORK_DIR + "/parse-protos"
 ANNOTATED_DOCUMENTS_DIR=WORK_DIR + "/annotated-document-protos"
 TRAINING_SAMPLES_FILE=WORK_DIR + "/training-samples.pb"
 
-FULL_TRAINING_SAMPLES_FILE=WORK_DIR + "/full-training-samples.pb"
-
 JSON_CACHE_DIR = WORK_DIR + '/json-caches'

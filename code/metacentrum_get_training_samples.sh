@@ -11,6 +11,5 @@ source common.sh
 	--annotated_documents_dir $ANNOTATED_DOCUMENTS_DIR \
 	--output_file $TRAINING_SAMPLES_FILE \
 	--intermediate_dir $TRAINING_SAMPLES_INTERMEDIATE_DIR \
-	--max_documents=10
-#	--max_documents=100
+	--max_documents=100
 	# --max_sentences=-1

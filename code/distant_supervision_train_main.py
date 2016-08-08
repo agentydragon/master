@@ -41,8 +41,13 @@ def main():
         train = samples[:split]
         test = samples[split:]
 
-        print(len(train), "train samples, positive:",
-              len([x for x in train if x.positive]))
+        train_positive = len([x for x in train if x.positive])
+        train_negative = len(train) - train_positive
+        if train_positive <= 1 or len(train) <= 5 or train_negative <= 1:
+            print("too small")
+            continue
+        print(len(train), "train samples, positive:", train_positive,
+              "negative:", train_negative)
         print(len(test), "test samples, positive:",
               len([x for x in test if x.positive]))
 

@@ -36,6 +36,4 @@ ANNOTATED_DOCUMENTS_DIR=$WORK_DIR/annotated-document-protos
 TRAINING_SAMPLES_FILE=$WORK_DIR/training-samples.pb
 TRAINING_SAMPLES_INTERMEDIATE_DIR=$WORK_DIR/training-samples-intermediate
 
-FULL_TRAINING_SAMPLES_FILE=$WORK_DIR/full-training-samples.pb
-
 # FUSEKI_DIR=$STORAGE_HOME/fuseki
