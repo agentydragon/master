@@ -105,11 +105,13 @@ def sentence_to_training_data(sentence):
     mentioned_wikidata_ids = sentence.wikidata_ids
     sentence_entity_pairs = sentence.all_entity_pairs()
 
+    wikidata_client = wikidata.WikidataClient()
+
     all_pairs = {}
     print(mentioned_wikidata_ids)
     print(sentence_entity_pairs)
     for wikidata_id in mentioned_wikidata_ids:
-        for e1, rel, e2 in wikidata.get_all_triples_of_entity(wikidata_id):
+        for e1, rel, e2 in wikidata_client.get_all_triples_of_entity(wikidata_id):
             print('(', e1, rel, e2, ')')
             key = (e1, e2)
             if key not in sentence_entity_pairs:
