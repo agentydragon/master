@@ -7,7 +7,8 @@ if not os.path.isdir(cache_dir):
     os.makedirs(cache_dir)
 
 class JsonCache(object):
-    def __init__(self, path):
+    def __init__(self, name):
+        path = cache_dir + '/' + name + '.json'
         self.path = path
         self.data = {}
 

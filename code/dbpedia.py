@@ -1,4 +1,6 @@
-dbpedia_to_wikidata_cache = JsonCache(cache_dir + '/dbpedia_to_wikidata_cache.json')
+dbpedia_client = sparql_client.SPARQLClient('http://dbpedia.org/sparql')
+
+dbpedia_to_wikidata_cache = json_cache.JsonCache('dbpedia_to_wikidata_cache')
 
 def load_cache():
     dbpedia_to_wikidata_cache.load()

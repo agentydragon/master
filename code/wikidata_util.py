@@ -1,5 +1,6 @@
 wikidata_entity_prefix = 'http://www.wikidata.org/entity/'
-wikidata_property_prefix = 'http://www.wikidata.org/wiki/Property:'
+# wikidata_property_prefix = 'http://www.wikidata.org/wiki/Property:'
+wikidata_property_prefix = 'http://www.wikidata.org/prop/direct/'
 
 def is_wikidata_entity_url(url):
     return url.startswith(wikidata_entity_prefix)
@@ -34,16 +35,7 @@ def relation_interesting(relation):
     return True
 
 def is_statement(url):
-    # uuid-like stuff (statements)
-    dashes = 0
-    for c in url:
-        if c == '-':
-            dashes += 1
-#        if other.startswith('http://www.wikidata.org/entity/') and dashes == 4:
-#            other = other.replace('http://www.wikidata.org/entity/Q',
-#                              'http://www.wikidata.org/entity/statement/Q')
-
-    return url.startswith('http://www.wikidata.org/entity/') and dashes == 4
+    return url.startswith('http://www.wikidata.org/entity/statement/')
 
 def transform_relation(subject, rel, other):
     if not relation_interesting(rel):
@@ -63,6 +55,8 @@ def transform_relation(subject, rel, other):
         return None
     if not is_wikidata_entity_url(subject):
         return None
+
+    # print(subject, rel, other)
     subject = wikidata_entity_url_to_entity_id(subject)
     other = wikidata_entity_url_to_entity_id(other)
     rel = wikidata_property_url_to_property_id(rel)
