@@ -13,6 +13,8 @@ message TrainingSample {
 	// required; wikidata ID
 	optional string relation = 1;
 
+	optional bool positive = 7;
+
 	// required; wikidata IDs
 	optional string e1 = 2;
 	optional string e2 = 3;

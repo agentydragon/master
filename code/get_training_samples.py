@@ -65,8 +65,11 @@ class SentenceInDocument(object):
     def get_text(self):
         return self.get_sentence().text
 
-    def to_sample(self, relation, e1, e2):
+    def to_sample(self, relation, e1, e2, positive):
+        assert (e1 in self.wikidata_ids) and (e2 in self.wikidata_ids)
+
         sample = training_samples_pb2.TrainingSample()
+        sample.positive = positive
         sample.relation = relation
         sample.e1 = e1
         sample.e2 = e2
@@ -126,7 +129,7 @@ def sentence_to_training_data(sentence):
     for entity_pair, true_relations in all_pairs.items():
         e1, e2 = entity_pair
         for relation in all_pairs[entity_pair]:
-            sample = sentence.to_sample(relation, e1, e2)
+            sample = sentence.to_sample(relation, e1, e2, positive=True)
             training_data.add_sample(sample)
 
     return training_data
@@ -165,7 +168,7 @@ def join_sentences_entities(sentences):
 
 class TrainingData(object):
     def __init__(self):
-        # key: relation id, value: list of sentences
+        # key: relation id, value: list of sentences - positive samples
         self.training_data = {}
 
     def add_sample(self, sample):

@@ -1,4 +1,3 @@
-
 dbpedia_to_wikidata_cache = JsonCache(cache_dir + '/dbpedia_to_wikidata_cache.json')
 
 def load_cache():
