@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 """
 Creates positive training samples for distant supervision.
 
@@ -14,7 +12,6 @@ Usage:
 from google.protobuf import text_format
 import sentence_pb2
 import training_samples_pb2
-import argparse
 import json
 import wikidata
 

@@ -30,8 +30,8 @@ class WikidataClient(object):
         """ % wikidata_id)
 
         properties=[]
-        print(results)
         for x in results['results']['bindings']:
+            # print(x)
             subject = wikidata_util.wikidata_entity_prefix + wikidata_id
             rel = x['rel']['value']
             other = x['other']['value']
