@@ -1,5 +1,8 @@
-dbpedia_client = sparql_client.SPARQLClient('http://dbpedia.org/sparql')
+import json_cache
+import sparql_client
+import wikidata_util
 
+dbpedia_client = sparql_client.SPARQLClient('http://dbpedia.org/sparql')
 dbpedia_to_wikidata_cache = json_cache.JsonCache('dbpedia_to_wikidata_cache')
 
 def load_cache():
@@ -14,7 +17,7 @@ def dbpedia_uri_to_wikidata_id(uri):
     if uri in dbpedia_to_wikidata_cache:
         return dbpedia_to_wikidata_cache[uri]
 
-    results = sparql_client.get_results("""
+    results = dbpedia_client.get_results("""
         PREFIX owl: <http://www.w3.org/2002/07/owl#>
         SELECT ?same
         WHERE { <%s> owl:sameAs ?same . }

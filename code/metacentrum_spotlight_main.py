@@ -12,12 +12,18 @@ Usage:
 import sys
 import time
 
+import paths
+
 import argparse
 parser = argparse.ArgumentParser(description='Look up articles in Spotlight')
-parser.add_argument('--article_plaintexts_dir')
-parser.add_argument('--outputs_dir')
-parser.add_argument('--max_queries', type=int)
-parser.add_argument('--sleep_between_queries', type=int)
+parser.add_argument('--article_plaintexts_dir',
+                    default=paths.WIKI_ARTICLES_PLAINTEXTS_DIR)
+parser.add_argument('--outputs_dir',
+                    default=paths.SPOTLIGHT_ANNOTATIONS_DIR)
+parser.add_argument('--max_queries', type=int,
+                    default=-1)
+parser.add_argument('--sleep_between_queries', type=int,
+                    default=10)
 args = parser.parse_args()
 
 # TODO: skip if finished
@@ -51,11 +57,16 @@ for file_path, article_sanename in filepaths_sanenames:
         print(article_sanename)
 
     text = open(file_path).read()
-    result = spotlight.annotate_text(text)
-    queries += 1
+    try:
+        result = spotlight.annotate_text(text)
+        queries += 1
 
-    with open(output_path, 'w') as f:
-        f.write(json.dumps(result))
+        with open(output_path, 'w') as f:
+            f.write(json.dumps(result))
+    except ValueError as e:
+        # TODO: BAD!
+        print('cannot process!')
+        print(e)
 
     if args.max_queries >= 0 and queries >= args.max_queries:
         print("max queries exceeded")

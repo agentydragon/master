@@ -10,6 +10,7 @@ Usage:
 """
 
 from google.protobuf import text_format
+import relations
 import file_util
 import sentence_pb2
 import training_samples_pb2
@@ -126,17 +127,30 @@ def sentence_to_training_data(sentence):
     print('sentence_to_training_data(', sentence.get_text(), ')')
     all_pairs = get_true_triples_expressed_by_sentence(sentence)
 
-    print(sentence, all_pairs)
+    print(sentence) #, all_pairs)
     #if len(all_pairs) > 0:
         #raise
 
+    # Add positive samples for represented relations.
     # TODO: skip sentence if there are multiple candidate relations
     training_data = TrainingData()
     for entity_pair, true_relations in all_pairs.items():
         e1, e2 = entity_pair
         for relation in all_pairs[entity_pair]:
+            print('\tpositive:', (e1, relation, e2))
             sample = sentence.to_sample(relation, e1, e2, positive=True)
             training_data.add_sample(sample)
+
+    # TODO: add negative samples
+    # Add negative samples for unrepresented relations.
+    if len(sentence.wikidata_ids) >= 2:
+        e1, e2 = sentence.wikidata_ids[:2]
+        key = (e1, e2)
+        for relation in relations.IMPORTANT_RELATIONS:
+            if (key not in all_pairs) or (relation not in all_pairs[key]):
+                print('\tnegative:', (e1, relation, e2))
+                sample = sentence.to_sample(relation, e1, e2, positive=False)
+                training_data.add_sample(sample)
 
     return training_data
 
@@ -167,14 +181,23 @@ def join_sentences_entities(sentences):
     training_data = TrainingData()
     for sentence in sentences:
         sentence_training_data = sentence_to_training_data(sentence)
-
         training_data.add_training_data(sentence_training_data)
     return training_data
 
 class TrainingData(object):
     def __init__(self):
-        # key: relation id, value: list of sentences - positive samples
+        # key: relation id, value: list of samples, both positive and negative
         self.training_data = {}
+
+    def load(self, path):
+        td = file_util.parse_proto_file(
+            training_samples_pb2.TrainingSamples,
+            path)
+        # TODO
+        self.training_data = {}
+        for relation_training_samples in td.relation_samples:
+            self.training_data[relation_training_samples.relation] = (
+                [sample for sample in relation_training_samples.samples])
 
     def add_sample(self, sample):
         if sample.relation not in self.training_data:
@@ -194,7 +217,7 @@ class TrainingData(object):
         for relation, rs in self.training_data.items():
             rels = samples.relation_samples.add()
             rels.relation = relation
-            rels.positive_samples.extend(rs)
+            rels.samples.extend(rs)
         return samples
 
     def write(self, output_file):

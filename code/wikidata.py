@@ -94,7 +94,7 @@ class WikidataClient(object):
         self.load_cache()
         if property_id in self.name_cache:
             return self.name_cache[property_id]
-        name = fetch_label(property_id)
+        name = self.fetch_label(property_id)
         self.name_cache[property_id] = name
         self.save_cache()
         return name

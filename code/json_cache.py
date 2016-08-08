@@ -1,14 +1,12 @@
 import os
 import os.path
 import json
-
-cache_dir = 'cache'
-if not os.path.isdir(cache_dir):
-    os.makedirs(cache_dir)
+import paths
+import file_util
 
 class JsonCache(object):
     def __init__(self, name):
-        path = cache_dir + '/' + name + '.json'
+        path = paths.JSON_CACHE_DIR + '/' + name + '.json'
         self.path = path
         self.data = {}
 
@@ -28,5 +26,6 @@ class JsonCache(object):
                     self.data = json.loads(f.read())
 
     def save(self):
+        file_util.ensure_dir(paths.JSON_CACHE_DIR)
         with open(self.path, 'w') as f:
             f.write(json.dumps(self.data))

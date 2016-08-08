@@ -34,6 +34,7 @@ SPOTLIGHT_ANNOTATIONS_DIR=$WORK_DIR/spotlight-annotations
 PARSE_PROTOS_DIR=$WORK_DIR/parse-protos
 ANNOTATED_DOCUMENTS_DIR=$WORK_DIR/annotated-document-protos
 TRAINING_SAMPLES_FILE=$WORK_DIR/training-samples.pb
+TRAINING_SAMPLES_INTERMEDIATE_DIR=$WORK_DIR/training-samples-intermediate
 
 FULL_TRAINING_SAMPLES_FILE=$WORK_DIR/full-training-samples.pb
 

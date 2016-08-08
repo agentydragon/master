@@ -15,10 +15,11 @@ import requests
 def annotate_text(text):
     server = 'http://spotlight.sztaki.hu:2222'
     url = server + '/rest/annotate'
-    r = requests.get(url, params={
+    r = requests.post(url, data={
       'text': text,
       'confidence': '0.35'
     }, headers={'Accept': 'application/json'})
+    print(r.text)
     return r.json()
 
 def main():

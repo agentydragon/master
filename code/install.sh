@@ -1,32 +1,36 @@
 #!/bin/bash
 
+set -e
+
 source common.sh
 
 echo "installing own code"
 
-bazel build :metacentrum_get_training_samples
-scp -r bazel-bin/metacentrum_get_training_samples* prvak@zuphux.metacentrum.cz:$BIN_ROOT
+function install_binary() {
+	BINARY=$1
+	ssh-metacentrum rm -rf bin/$1 bin/$1.runfiles bin/$1.runfiles_manifest
+	bazel build :$1
+	scp -r bazel-bin/$1 bazel-bin/$1.runfiles bazel-bin/$1.runfiles_manifest prvak@zuphux.metacentrum.cz:$BIN_ROOT
+}
 
-bazel build :metacentrum_add_negative_samples
-scp -r bazel-bin/metacentrum_add_negative_samples* prvak@zuphux.metacentrum.cz:$BIN_ROOT
+install_binary annotate_coreferences
+install_binary metacentrum_get_training_samples
+install_binary metacentrum_add_negative_samples
+install_binary metacentrum_distant_supervision_train
+install_binary metacentrum_spotlight_main
 
-bazel build :metacentrum_distant_supervision_train
-scp -r bazel-bin/metacentrum_distant_supervision_train* prvak@zuphux.metacentrum.cz:$BIN_ROOT
-
-#FILES="\
+FILES="\
+	common.sh \
+	data_stats.sh \
+"
 #	annotate_coreferences.py \
 #	annotate_coreferences.sh \
 #	article_parse.py \
-#	common.sh \
-#	get_training_samples.py \
 #	metacentrum_corenlp.sh \
 #	metacentrum_download_dumps.sh \
-#	metacentrum_get_training_samples.sh \
 #	metacentrum_install_corenlp.sh \
 #	metacentrum_prepare.sh \
 #	metacentrum_split_wiki.sh \
-#	metacentrum_spotlight.py \
-#	metacentrum_spotlight.sh \
 #	dbpedia.py \
 #	wikidata.py \
 #	sparql_client.py \
@@ -35,10 +39,8 @@ scp -r bazel-bin/metacentrum_distant_supervision_train* prvak@zuphux.metacentrum
 #	nlpize_articles.sh \
 #	parse_xmls_to_protos.py \
 #	parse_xmls_to_protos.sh \
-#	data_stats.sh \
 #	split_wiki.py \
 #	spotlight.py \
 #	wiki2text \
-#"
 
-#scp $FILES prvak@zuphux.metacentrum.cz:$BIN_ROOT
+scp $FILES prvak@zuphux.metacentrum.cz:$BIN_ROOT

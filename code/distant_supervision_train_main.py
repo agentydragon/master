@@ -30,8 +30,9 @@ def main():
         relation = relation_training_samples.relation
         print("Training relation:", relation)
 
-        positives = list(relation_training_samples.positive_samples)
-        negatives = list(relation_training_samples.negative_samples)
+        samples = list(relation_training_samples.samples)
+        positives = [sample for sample in samples if sample.positive]
+        negatives = [sample for sample in samples if not sample.positive]
         print("Positives:", len(positives), "negatives:", len(negatives))
         samples = positives + negatives
         random.shuffle(samples)
@@ -53,6 +54,8 @@ def main():
 
         classifier = nltk.NaiveBayesClassifier.train(train_features_labels)
         print('Accuracy:', nltk.classify.accuracy(classifier, test_features_labels))
+        classifier.show_most_informative_features(5)
+        print()
 
 if __name__ == '__main__':
     main()
