@@ -222,6 +222,6 @@ class TrainingData(object):
 
     def write(self, output_file):
         samples = self.to_proto()
-        print(text_format.MessageToString(samples))
+        # print(text_format.MessageToString(samples))
         with open(output_file, 'wb') as f:
             f.write(samples.SerializeToString())

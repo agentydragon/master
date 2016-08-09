@@ -12,15 +12,21 @@ import argparse
 import json
 import requests
 
+# SPOTLIGHT_SERVER = 'http://spotlight.sztaki.hu:2222'
+# SPOTLIGHT_SERVER = 'http://localhost:2222'
+SPOTLIGHT_SERVER = 'http://zebra12b:2222'
+
 def annotate_text(text):
-    server = 'http://spotlight.sztaki.hu:2222'
-    url = server + '/rest/annotate'
+    url = SPOTLIGHT_SERVER + '/rest/annotate'
     r = requests.post(url, data={
       'text': text,
       'confidence': '0.35'
     }, headers={'Accept': 'application/json'})
-    print(r.text)
-    return r.json()
+    try:
+        return r.json()
+    except:
+        print(r.text)
+        raise
 
 def main():
     parser = argparse.ArgumentParser(description='Get DBpedia entity mentions using Spotlight')

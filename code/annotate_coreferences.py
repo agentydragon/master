@@ -9,7 +9,6 @@ Usage:
 
 import sentence_pb2
 from google.protobuf import text_format
-import argparse
 import os.path
 import dbpedia
 
@@ -91,7 +90,8 @@ def propagate_entities(document, spotlight):
 
             mention_text = mention.text
             mention_actual_text = document.text[mention_start:mention_end]
-            print((mention_text, mention_actual_text))
+            if mention_text != mention_actual_text:
+                print((mention_text, mention_actual_text))
             # TODO: check this out.
             # assert mention_text == mention_actual_text
             for resource in find_resources_between(spotlight, mention_start, mention_end):
@@ -118,43 +118,3 @@ def propagate_entities(document, spotlight):
                     coreference.wikidataEntityId = wikidata_id # best_match
                 else:
                     print("cannot get wikidata id:", best_match)
-
-def main():
-    parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--input_protos_dir', required=True)
-    parser.add_argument('--spotlight_dir', required=True)
-    parser.add_argument('--output_protos_dir', required=True)
-    args = parser.parse_args()
-
-    if not os.path.isdir(args.output_protos_dir):
-        os.makedirs(args.output_protos_dir)
-
-    for root, subdirs, files in os.walk(args.input_protos_dir):
-        for filename in files:
-            input_proto_path = os.path.join(root, filename)
-            document = sentence_pb2.Document()
-            with open(input_proto_path, 'rb') as f:
-                document.ParseFromString(f.read())
-
-            article_sanename = document.article_sanename
-            spotlight_path = os.path.join(args.spotlight_dir, article_sanename + ".spotlight.json")
-            if not os.path.isfile(spotlight_path):
-                print(article_sanename, "skipped, parsed but not spotlighted")
-                continue
-
-            output_path = os.path.join(args.output_protos_dir, article_sanename + ".propagated.pb")
-            if os.path.isfile(output_path):
-                print(article_sanename, "already processed")
-                continue
-
-            print(article_sanename, "processing")
-
-            spotlight = load_spotlight(spotlight_path)
-            propagate_entities(document, spotlight)
-
-            print(text_format.MessageToString(document))
-            with open(output_path, 'wb') as f:
-                f.write(document.SerializeToString())
-
-if __name__ == '__main__':
-    main()

@@ -7,7 +7,11 @@ Usage:
     TODO
 """
 
+import argparse
 import annotate_coreferences
+import file_util
+from google.protobuf import text_format
+import os.path
 
 def main():
     parser = argparse.ArgumentParser(description='TODO')
@@ -16,7 +20,7 @@ def main():
     parser.add_argument('--output_protos_dir', required=True)
     args = parser.parse_args()
 
-    file_util.ensure_dir(args.output_protos_dir):
+    file_util.ensure_dir(args.output_protos_dir)
 
     for root, subdirs, files in os.walk(args.input_protos_dir):
         for filename in files:
@@ -39,7 +43,7 @@ def main():
             spotlight = annotate_coreferences.load_spotlight(spotlight_path)
             annotate_coreferences.propagate_entities(document, spotlight)
 
-            print(text_format.MessageToString(document))
+            #print(text_format.MessageToString(document))
             with open(output_path, 'wb') as f:
                 f.write(document.SerializeToString())
 

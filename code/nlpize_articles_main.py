@@ -18,7 +18,7 @@ parser.add_argument('--output_parse_xmls_dir')
 parser.add_argument('--parallel_runs', type=int)
 args = parser.parse_args()
 
-file_util.ensure_dir(args.output_parse_xmls_dir):
+file_util.ensure_dir(args.output_parse_xmls_dir)
 
 plaintext_paths = []
 for root, subdirs, files in os.walk(args.plaintexts_dir):

@@ -26,6 +26,7 @@ FILES="\
 	common.sh \
 	data_stats.sh \
 	metacentrum_install_dbpedia_spotlight.sh \
+	metacentrum_run_spotlight.sh \
 "
 #	annotate_coreferences.py \
 #	annotate_coreferences.sh \
