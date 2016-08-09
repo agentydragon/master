@@ -9,12 +9,8 @@ WIKIPEDIA_DUMP_DATE=20160720
 WIKIPEDIA_DUMP_FILENAME=enwiki-${WIKIPEDIA_DUMP_DATE}-pages-articles.xml.bz2
 WIKIPEDIA_DUMP_FILE=$WIKIPEDIA_DUMP_DIR/${WIKIPEDIA_DUMP_FILENAME}
 
-WIKIDATA_DUMP_DIR=$WORK_DIR/wikidata
-WIKIDATA_DUMP_DATE=20160801
 WIKIDATA_JSON_DUMP_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all.json.bz2
 WIKIDATA_JSON_DUMP_FILE=$WIKIDATA_DUMP_DIR/${WIKIDATA_JSON_DUMP_FILENAME}
-WIKIDATA_TTL_DUMP_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all-BETA.ttl.bz2
-WIKIDATA_TTL_DUMP_FILE=$WIKIDATA_DUMP_DIR/${WIKIDATA_TTL_DUMP_FILENAME}
 
 function download_wikipedia_dump() {
 	echo "downloading wikipedia dump"
@@ -33,6 +29,11 @@ function download_wikidata_dump() {
 	echo "downloading ttl dump"
 	WIKIDATA_TTL_DUMP_URL=https://dumps.wikimedia.org/wikidatawiki/entities/$WIKIDATA_DUMP_DATE/$WIKIDATA_TTL_DUMP_FILENAME
 	wget $WIKIDATA_TTL_DUMP_URL -O$WIKIDATA_TTL_DUMP_FILE --no-verbose --show-progress --continue
+
+	# TODO: bzcat only if needed
+
+	echo "bunzipping ttl dump (this will take a long time, 67 gigs incoming)"
+	bunzip2 $WIKIDATA_TTL_DUMP_FILE # XXX: > $WIKIDATA_TTL_DUMP_UNPACKED_FILE
 }
 
 function main() {

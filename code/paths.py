@@ -1,4 +1,4 @@
-STORAGE_NODE="brno3-cerit"
+STORAGE_NODE="brno7-cerit"
 STORAGE_ROOT="/storage/" + STORAGE_NODE
 STORAGE_HOME=STORAGE_ROOT + "/home/prvak"
 BIN_ROOT=STORAGE_HOME + "/bin"
