@@ -9,6 +9,7 @@ Usage:
 
 import argparse
 import subprocess
+import file_util
 import os.path
 
 parser = argparse.ArgumentParser(description='TODO')
@@ -17,8 +18,7 @@ parser.add_argument('--output_parse_xmls_dir')
 parser.add_argument('--parallel_runs', type=int)
 args = parser.parse_args()
 
-if not os.path.isdir(args.output_parse_xmls_dir):
-    os.makedirs(args.output_parse_xmls_dir)
+file_util.ensure_dir(args.output_parse_xmls_dir):
 
 plaintext_paths = []
 for root, subdirs, files in os.walk(args.plaintexts_dir):

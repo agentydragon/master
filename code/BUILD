@@ -135,14 +135,24 @@ sh_binary(
     ],
 )
 
-py_binary(
-    name = "annotate_coreferences_main",
+py_library(
+    name = "annotate_coreferences_lib",
     srcs = [
-        "annotate_coreferences_main.py",
+        "annotate_coreferences.py",
         "sentence_pb2.py",
     ],
     deps = [
         ":dbpedia_lib",
+    ],
+)
+
+py_binary(
+    name = "annotate_coreferences_main",
+    srcs = [
+        "annotate_coreferences_main.py",
+    ],
+    deps = [
+        ":annotate_coreferences_lib",
     ],
 )
 
@@ -251,4 +261,57 @@ genrule(
         "training_samples_pb2.py",
     ],
     cmd = "protoc -I=. --python_out=$(GENDIR)/ $(location :training_samples.proto)"
+)
+
+sh_binary(
+    name = "nlpize_articles",
+    srcs = [
+        "nlpize_articles.sh",
+    ],
+    deps = [
+        ":common",
+    ],
+    data = [
+        ":nlpize_articles_main",
+    ],
+)
+
+py_binary(
+    name = "nlpize_articles_main",
+    srcs = [
+        "nlpize_articles_main.py",
+    ],
+    deps = [
+        ":file_util_lib",
+    ],
+)
+
+py_test(
+    name = "annotate_coreferences_test",
+    srcs = [
+        "annotate_coreferences_test.py",
+    ],
+    deps = [
+        ":get_training_samples_lib",
+        ":annotate_coreferences_lib",
+        ":parse_xmls_to_protos_lib",
+    ],
+)
+
+py_library(
+    name = "parse_xmls_to_protos_lib",
+    srcs = [
+        "parse_xmls_to_protos.py",
+        "sentence_pb2.py",
+    ],
+)
+
+py_binary(
+    name = "parse_xmls_to_protos_main",
+    srcs = [
+        "parse_xmls_to_protos_main.py",
+    ],
+    deps = [
+        ":parse_xmls_to_protos_lib",
+    ],
 )

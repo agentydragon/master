@@ -37,3 +37,5 @@ TRAINING_SAMPLES_FILE=$WORK_DIR/training-samples.pb
 TRAINING_SAMPLES_INTERMEDIATE_DIR=$WORK_DIR/training-samples-intermediate
 
 # FUSEKI_DIR=$STORAGE_HOME/fuseki
+
+DBPEDIA_SPOTLIGHT_DIR=$STORAGE_HOME/dbpedia-spotlight

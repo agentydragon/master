@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This script should run on a developer machine.
+
 set -e
 
 source common.sh
@@ -18,10 +20,12 @@ install_binary metacentrum_get_training_samples
 install_binary metacentrum_add_negative_samples
 install_binary metacentrum_distant_supervision_train
 install_binary metacentrum_spotlight_main
+install_binary nlpize_articles
 
 FILES="\
 	common.sh \
 	data_stats.sh \
+	metacentrum_install_dbpedia_spotlight.sh \
 "
 #	annotate_coreferences.py \
 #	annotate_coreferences.sh \

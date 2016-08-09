@@ -1,5 +1,5 @@
 module add python34-modules-gcc
-pip install requests SPARQLWrapper protobuf nltk --user
+pip install requests SPARQLWrapper protobuf nltk gflags --user
 
 
 # -m e: send mail when job terminates

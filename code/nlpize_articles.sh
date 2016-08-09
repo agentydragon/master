@@ -8,13 +8,11 @@
 
 set -e
 
-# TODO: this is a bad hack :(
-cd; cd bin
 source common.sh
 
 module add jdk-8
 
-./nlpize_articles.py \
+./nlpize_articles_main \
 	--plaintexts_dir=$WIKI_ARTICLES_PLAINTEXTS_DIR \
 	--output_parse_xmls_dir=$WIKI_ARTICLE_PARSES_DIR \
 	--parallel_runs=16
