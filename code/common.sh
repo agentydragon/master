@@ -19,7 +19,7 @@ export LC_ALL=
 STORAGE_NODE=brno7-cerit
 STORAGE_ROOT=/storage/$STORAGE_NODE
 STORAGE_HOME=$STORAGE_ROOT/home/prvak
-BIN_ROOT=$STORAGE_HOME/bin
+BIN_ROOT=/storage/brno3-cerit/home/prvak/bin
 WIKI2TEXT_BINARY=$BIN_ROOT/wiki2text
 
 CORENLP_DIR=$STORAGE_HOME/corenlp
