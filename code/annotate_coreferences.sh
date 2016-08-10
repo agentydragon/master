@@ -2,6 +2,7 @@
 
 set -e
 
+cd $PBS_O_WORKDIR
 # TODO: this is a bad hack :(
 source common.sh
 

@@ -153,6 +153,8 @@ py_binary(
     ],
     deps = [
         ":annotate_coreferences_lib",
+        ":paths_lib",
+        ":file_util_lib",
     ],
 )
 
@@ -165,6 +167,16 @@ py_library(
         ":json_cache_lib",
         ":sparql_client_lib",
         ":wikidata_util_lib",
+    ],
+)
+
+py_test(
+    name = "dbpedia_test",
+    srcs = [
+        "dbpedia_test.py",
+    ],
+    deps = [
+        ":dbpedia_lib",
     ],
 )
 

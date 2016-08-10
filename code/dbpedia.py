@@ -5,11 +5,15 @@ import wikidata_util
 dbpedia_client = sparql_client.SPARQLClient('http://dbpedia.org/sparql')
 dbpedia_to_wikidata_cache = json_cache.JsonCache('dbpedia_to_wikidata_cache')
 
+# TODO: hack
+persist_cache = True
+
 def load_cache():
     dbpedia_to_wikidata_cache.load()
 
 def save_cache():
-    dbpedia_to_wikidata_cache.save()
+    if persist_cache:
+        dbpedia_to_wikidata_cache.save()
 
 def dbpedia_uri_to_wikidata_id(uri):
     load_cache()

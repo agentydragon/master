@@ -12,12 +12,16 @@ import annotate_coreferences
 import file_util
 from google.protobuf import text_format
 import os.path
+import paths
 
 def main():
     parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--input_protos_dir', required=True)
-    parser.add_argument('--spotlight_dir', required=True)
-    parser.add_argument('--output_protos_dir', required=True)
+    parser.add_argument('--input_protos_dir',
+                        default=paths.PARSE_PROTOS_DIR)
+    parser.add_argument('--spotlight_dir',
+                        default=paths.SPOTLIGHT_ANNOTATIONS_DIR)
+    parser.add_argument('--output_protos_dir',
+                        default=paths.ANNOTATED_DOCUMENTS_DIR)
     args = parser.parse_args()
 
     file_util.ensure_dir(args.output_protos_dir)
