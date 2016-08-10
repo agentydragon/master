@@ -21,6 +21,7 @@ install_binary metacentrum_add_negative_samples
 install_binary metacentrum_distant_supervision_train
 install_binary metacentrum_spotlight_main
 install_binary nlpize_articles
+install_binary launch_nlpize_articles_main
 
 FILES="\
 	common.sh \

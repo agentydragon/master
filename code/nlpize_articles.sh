@@ -8,6 +8,7 @@
 
 set -e
 
+cd $PBS_O_WORKDIR
 source common.sh
 
 module add jdk-8
@@ -15,7 +16,8 @@ module add jdk-8
 ./nlpize_articles_main \
 	--plaintexts_dir=$WIKI_ARTICLES_PLAINTEXTS_DIR \
 	--output_parse_xmls_dir=$WIKI_ARTICLE_PARSES_DIR \
-	--parallel_runs=16
+	--parallel_runs=64
+#	--parallel_runs=16
 
 #for ARTICLE_FILE in $WIKI_ARTICLES_PLAINTEXTS_DIR/*/*/*.txt; do
 #	echo `date +%Y%m%d-%H%M`: "$ARTICLE_FILE"

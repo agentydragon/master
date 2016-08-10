@@ -283,6 +283,19 @@ py_binary(
     ],
     deps = [
         ":file_util_lib",
+        ":paths_lib",
+    ],
+)
+
+py_binary(
+    name = "launch_nlpize_articles_main",
+    srcs = [
+        "launch_nlpize_articles_main.py",
+    ],
+    deps = [
+        ":file_util_lib",
+        ":paths_lib",
+        ":nlpize_articles_main",
     ],
 )
 
