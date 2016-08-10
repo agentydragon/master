@@ -19,7 +19,7 @@ qsub -l walltime=48h -l nodes=1:brno:mem=4gb -m abe wikidata_into_fuseki.sh
 qsub -l walltime=4:00:00 -l nodes=1:ppn=1,mem=1gb -m e metacentrum-prepare.sh
 
 # Split wiki.
-qsub -l walltime=4:00:00 -l nodes=1:ppn=1,mem=1gb -m abe metacentrum_split_wiki.sh
+qsub -l walltime=24:00:00 -l nodes=1:brno:ppn=1,mem=1gb -m abe metacentrum_split_wiki.sh
 
 # NLPize articles.
 # qsub -l walltime=1:00:00 -l nodes=1:ppn=4,mem=8gb -m e nlpize_articles.sh
@@ -53,3 +53,13 @@ qsub -W depend=afterok:$FIRSTJOBID
 
 544253967G
 
+
+Broken line: 544253967 (wtd:P487 "\a" ;)
+	smazat sedem
+
+English wikipedia: 5,213,378 articles
+	to NLPize 1 article: 3 minutes
+
+	parallelized in 100 jobs: takes 2606 hours
+	parallelized in 1000 jobs: takes 260 hours, ~10 days
+	parallelized in 10000 jobs: takes ~1 day

@@ -30,6 +30,8 @@ FILES="\
 	metacentrum_run_spotlight.sh \
 	metacentrum_install_fuseki.sh \
 	wikidata_into_fuseki.sh \
+	metacentrum_split_wiki.sh \
+	split_wiki.py \
 "
 #	annotate_coreferences.py \
 #	annotate_coreferences.sh \
