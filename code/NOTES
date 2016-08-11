@@ -63,3 +63,10 @@ English wikipedia: 5,213,378 articles
 	parallelized in 100 jobs: takes 2606 hours
 	parallelized in 1000 jobs: takes 260 hours, ~10 days
 	parallelized in 10000 jobs: takes ~1 day
+
+bazel run //src/tools/generate_workspace -- \
+	--artifact=org.apache.hadoop:hadoop-common:2.6.2 \
+	--artifact=org.apache.hadoop:hadoop-mapreduce-client-core:2.6.2 \
+	--artifact=edu.stanford.nlp:stanford-corenlp:3.6.0 \
+	--artifact=edu.stanford.nlp:stanford-corenlp:models:3.6.0 \
+

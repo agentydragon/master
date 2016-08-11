@@ -341,9 +341,12 @@ py_binary(
     ],
 )
 
+
 # The following dependencies were calculated from:
-# org.apache.hadoop:hadoop-common:2.5.0
-# org.apache.hadoop:hadoop-mapreduce-client-core:2.5.0
+# org.apache.hadoop:hadoop-common:2.7.2
+# org.apache.hadoop:hadoop-mapreduce-client-core:2.7.2
+# edu.stanford.nlp:stanford-corenlp:3.6.0
+# edu.stanford.nlp:stanford-corenlp:models:3.6.0
 
 
 java_library(
@@ -387,6 +390,14 @@ java_library(
 )
 
 java_library(
+    name = "javax_json_javax_json_api",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@javax_json_javax_json_api//jar",
+    ],
+)
+
+java_library(
     name = "commons_configuration_commons_configuration",
     visibility = ["//visibility:public"],
     exports = [
@@ -407,13 +418,21 @@ java_library(
     visibility = ["//visibility:public"],
     exports = [
         "@org_apache_hadoop_hadoop_auth//jar",
+        "@com_google_guava_guava//jar",
         "@commons_codec_commons_codec//jar",
+        "@io_netty_netty//jar",
+        "@jline_jline//jar",
+        "@log4j_log4j//jar",
+        "@org_apache_curator_curator_client//jar",
+        "@org_apache_curator_curator_framework//jar",
         "@org_apache_directory_api_api_asn1_api//jar",
         "@org_apache_directory_api_api_util//jar",
         "@org_apache_directory_server_apacheds_i18n//jar",
         "@org_apache_directory_server_apacheds_kerberos_codec//jar",
         "@org_apache_httpcomponents_httpclient//jar",
+        "@org_apache_zookeeper_zookeeper//jar",
         "@org_slf4j_slf4j_api//jar",
+        "@org_slf4j_slf4j_log4j12//jar",
     ],
 )
 
@@ -422,6 +441,14 @@ java_library(
     visibility = ["//visibility:public"],
     exports = [
         "@com_sun_jersey_jersey_core//jar",
+    ],
+)
+
+java_library(
+    name = "xml_apis_xml_apis",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@xml_apis_xml_apis//jar",
     ],
 )
 
@@ -466,6 +493,20 @@ java_library(
     visibility = ["//visibility:public"],
     exports = [
         "@org_xerial_snappy_snappy_java//jar",
+    ],
+)
+
+java_library(
+    name = "edu_stanford_nlp_stanford_corenlp",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@edu_stanford_nlp_stanford_corenlp//jar",
+        "@com_googlecode_efficient_java_matrix_library_ejml//jar",
+        "@com_io7m_xom_xom//jar",
+        "@de_jollyday_jollyday//jar",
+        "@javax_json_javax_json_api//jar",
+        "@joda_time_joda_time//jar",
+        "@org_slf4j_slf4j_api//jar",
     ],
 )
 
@@ -527,6 +568,14 @@ java_library(
 )
 
 java_library(
+    name = "com_googlecode_efficient_java_matrix_library_ejml",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@com_googlecode_efficient_java_matrix_library_ejml//jar",
+    ],
+)
+
+java_library(
     name = "org_apache_directory_server_apacheds_i18n",
     visibility = ["//visibility:public"],
     exports = [
@@ -548,6 +597,15 @@ java_library(
     visibility = ["//visibility:public"],
     exports = [
         "@javax_inject_javax_inject//jar",
+    ],
+)
+
+java_library(
+    name = "xalan_xalan",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@xalan_xalan//jar",
+        "@xml_apis_xml_apis//jar",
     ],
 )
 
@@ -600,6 +658,36 @@ java_library(
 )
 
 java_library(
+    name = "org_apache_curator_curator_client",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_apache_curator_curator_client//jar",
+        "@com_google_guava_guava//jar",
+        "@org_apache_zookeeper_zookeeper//jar",
+        "@org_slf4j_slf4j_api//jar",
+    ],
+)
+
+java_library(
+    name = "org_apache_curator_curator_recipes",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_apache_curator_curator_recipes//jar",
+        "@com_google_guava_guava//jar",
+        "@org_apache_curator_curator_framework//jar",
+        "@org_apache_zookeeper_zookeeper//jar",
+    ],
+)
+
+java_library(
+    name = "joda_time_joda_time",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@joda_time_joda_time//jar",
+    ],
+)
+
+java_library(
     name = "org_apache_httpcomponents_httpcore",
     visibility = ["//visibility:public"],
     exports = [
@@ -632,6 +720,14 @@ java_library(
 )
 
 java_library(
+    name = "jline_jline",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@jline_jline//jar",
+    ],
+)
+
+java_library(
     name = "org_sonatype_sisu_inject_cglib",
     visibility = ["//visibility:public"],
     exports = [
@@ -641,11 +737,22 @@ java_library(
 )
 
 java_library(
+    name = "de_jollyday_jollyday",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@de_jollyday_jollyday//jar",
+        "@javax_xml_bind_jaxb_api//jar",
+        "@joda_time_joda_time//jar",
+    ],
+)
+
+java_library(
     name = "org_apache_zookeeper_zookeeper",
     visibility = ["//visibility:public"],
     exports = [
         "@org_apache_zookeeper_zookeeper//jar",
         "@io_netty_netty//jar",
+        "@jline_jline//jar",
         "@log4j_log4j//jar",
         "@org_slf4j_slf4j_api//jar",
         "@org_slf4j_slf4j_log4j12//jar",
@@ -659,6 +766,15 @@ java_library(
         "@org_slf4j_slf4j_log4j12//jar",
         "@log4j_log4j//jar",
         "@org_slf4j_slf4j_api//jar",
+    ],
+)
+
+java_library(
+    name = "com_sun_jersey_jersey_client",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@com_sun_jersey_jersey_client//jar",
+        "@com_sun_jersey_jersey_core//jar",
     ],
 )
 
@@ -680,6 +796,15 @@ java_library(
         "@com_google_inject_guice//jar",
         "@javax_inject_javax_inject//jar",
         "@org_sonatype_sisu_inject_cglib//jar",
+    ],
+)
+
+java_library(
+    name = "xerces_xercesImpl",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@xerces_xercesImpl//jar",
+        "@xml_apis_xml_apis//jar",
     ],
 )
 
@@ -736,6 +861,7 @@ java_library(
         "@org_apache_hadoop_hadoop_common//jar",
         "@asm_asm//jar",
         "@com_google_code_findbugs_jsr305//jar",
+        "@com_google_code_gson_gson//jar",
         "@com_google_guava_guava//jar",
         "@com_google_protobuf_protobuf_java//jar",
         "@com_jamesmurty_utils_java_xmlbuilder//jar",
@@ -759,17 +885,22 @@ java_library(
         "@javax_servlet_servlet_api//jar",
         "@javax_xml_bind_jaxb_api//jar",
         "@javax_xml_stream_stax_api//jar",
+        "@jline_jline//jar",
         "@log4j_log4j//jar",
         "@net_java_dev_jets3t_jets3t//jar",
         "@org_apache_avro_avro//jar",
         "@org_apache_commons_commons_compress//jar",
         "@org_apache_commons_commons_math3//jar",
+        "@org_apache_curator_curator_client//jar",
+        "@org_apache_curator_curator_framework//jar",
+        "@org_apache_curator_curator_recipes//jar",
         "@org_apache_directory_api_api_asn1_api//jar",
         "@org_apache_directory_api_api_util//jar",
         "@org_apache_directory_server_apacheds_i18n//jar",
         "@org_apache_directory_server_apacheds_kerberos_codec//jar",
         "@org_apache_hadoop_hadoop_annotations//jar",
         "@org_apache_hadoop_hadoop_auth//jar",
+        "@org_apache_htrace_htrace_core//jar",
         "@org_apache_httpcomponents_httpclient//jar",
         "@org_apache_httpcomponents_httpcore//jar",
         "@org_apache_zookeeper_zookeeper//jar",
@@ -838,11 +969,27 @@ java_library(
 )
 
 java_library(
+    name = "org_apache_htrace_htrace_core",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_apache_htrace_htrace_core//jar",
+    ],
+)
+
+java_library(
     name = "org_mortbay_jetty_jetty",
     visibility = ["//visibility:public"],
     exports = [
         "@org_mortbay_jetty_jetty//jar",
         "@org_mortbay_jetty_jetty_util//jar",
+    ],
+)
+
+java_library(
+    name = "com_google_code_gson_gson",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@com_google_code_gson_gson//jar",
     ],
 )
 
@@ -867,6 +1014,7 @@ java_library(
         "@com_google_inject_guice//jar",
         "@com_google_protobuf_protobuf_java//jar",
         "@com_sun_jersey_contribs_jersey_guice//jar",
+        "@com_sun_jersey_jersey_client//jar",
         "@com_sun_jersey_jersey_core//jar",
         "@com_sun_jersey_jersey_json//jar",
         "@com_sun_jersey_jersey_server//jar",
@@ -889,6 +1037,7 @@ java_library(
         "@org_codehaus_jackson_jackson_jaxrs//jar",
         "@org_codehaus_jackson_jackson_mapper_asl//jar",
         "@org_codehaus_jackson_jackson_xc//jar",
+        "@org_mortbay_jetty_jetty_util//jar",
         "@org_slf4j_slf4j_api//jar",
         "@org_slf4j_slf4j_log4j12//jar",
         "@org_sonatype_sisu_inject_cglib//jar",
@@ -929,6 +1078,17 @@ java_library(
     exports = [
         "@org_apache_directory_api_api_asn1_api//jar",
         "@org_slf4j_slf4j_api//jar",
+    ],
+)
+
+java_library(
+    name = "com_io7m_xom_xom",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@com_io7m_xom_xom//jar",
+        "@xalan_xalan//jar",
+        "@xerces_xercesImpl//jar",
+        "@xml_apis_xml_apis//jar",
     ],
 )
 
@@ -987,6 +1147,18 @@ java_library(
 )
 
 java_library(
+    name = "org_apache_curator_curator_framework",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_apache_curator_curator_framework//jar",
+        "@com_google_guava_guava//jar",
+        "@org_apache_curator_curator_client//jar",
+        "@org_apache_zookeeper_zookeeper//jar",
+        "@org_slf4j_slf4j_api//jar",
+    ],
+)
+
+java_library(
     name = "org_apache_hadoop_hadoop_yarn_common",
     visibility = ["//visibility:public"],
     exports = [
@@ -998,6 +1170,7 @@ java_library(
         "@com_google_inject_guice//jar",
         "@com_google_protobuf_protobuf_java//jar",
         "@com_sun_jersey_contribs_jersey_guice//jar",
+        "@com_sun_jersey_jersey_client//jar",
         "@com_sun_jersey_jersey_core//jar",
         "@com_sun_jersey_jersey_json//jar",
         "@com_sun_jersey_jersey_server//jar",
@@ -1017,6 +1190,7 @@ java_library(
         "@org_codehaus_jackson_jackson_jaxrs//jar",
         "@org_codehaus_jackson_jackson_mapper_asl//jar",
         "@org_codehaus_jackson_jackson_xc//jar",
+        "@org_mortbay_jetty_jetty_util//jar",
         "@org_slf4j_slf4j_api//jar",
         "@org_sonatype_sisu_inject_cglib//jar",
     ],

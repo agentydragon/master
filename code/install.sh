@@ -23,6 +23,10 @@ install_binary metacentrum_spotlight_main
 install_binary nlpize_articles
 install_binary launch_nlpize_articles_main
 
+ssh-metacentrum rm -rf bin/WordCount_deploy.jar
+bazel build hadoop:WordCount_deploy.jar
+scp -r bazel-bin/hadoop/WordCount_deploy.jar prvak@zuphux.metacentrum.cz:$BIN_ROOT
+
 FILES="\
 	common.sh \
 	data_stats.sh \

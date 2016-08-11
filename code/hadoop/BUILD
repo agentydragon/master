@@ -1,9 +1,9 @@
 java_binary(
-    name = "WordCount",
+    name = "WikiSplit",
     srcs = [
-        "WordCount.java",
+        "WikiSplit.java",
     ],
-    main_class = "WordCount",
+    main_class = "WikiSplit",
     deps = [
         "//:org_apache_hadoop_hadoop_common",
         "//:org_apache_hadoop_hadoop_mapreduce_client_core",
