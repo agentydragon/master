@@ -35,6 +35,56 @@ sh_binary(
     ],
 )
 
+py_library(
+    name = "split_wiki_lib",
+    srcs = [
+        "split_wiki.py",
+    ],
+    deps = [
+        ":file_util_lib",
+    ],
+)
+
+py_binary(
+    name = "split_wiki_main",
+    srcs = [
+        "split_wiki_main.py",
+    ],
+    deps = [
+        ":split_wiki_lib",
+    ],
+)
+
+py_test(
+    name = "split_wiki_test",
+    srcs = [
+        "split_wiki_test.py",
+    ],
+    deps = [
+        ":split_wiki_lib",
+    ],
+)
+
+py_binary(
+    name = "launch_split_wiki_main",
+    srcs = [
+        "launch_split_wiki_main.py",
+    ],
+    deps = [
+        ":split_wiki_main",
+        ":file_util_lib",
+        ":pbs_util_lib",
+        ":paths_lib",
+    ],
+)
+
+py_library(
+    name = "pbs_util_lib",
+    srcs = [
+        "pbs_util.py",
+    ],
+)
+
 sh_binary(
     name = "metacentrum_add_negative_samples",
     srcs = [
@@ -307,6 +357,7 @@ py_binary(
     deps = [
         ":file_util_lib",
         ":paths_lib",
+        ":pbs_util_lib",
         ":nlpize_articles_main",
     ],
 )
@@ -343,8 +394,8 @@ py_binary(
 
 
 # The following dependencies were calculated from:
-# org.apache.hadoop:hadoop-common:2.7.2
-# org.apache.hadoop:hadoop-mapreduce-client-core:2.7.2
+# org.apache.hadoop:hadoop-common:2.6.0
+# org.apache.hadoop:hadoop-mapreduce-client-core:2.6.0
 # edu.stanford.nlp:stanford-corenlp:3.6.0
 # edu.stanford.nlp:stanford-corenlp:models:3.6.0
 
@@ -900,7 +951,6 @@ java_library(
         "@org_apache_directory_server_apacheds_kerberos_codec//jar",
         "@org_apache_hadoop_hadoop_annotations//jar",
         "@org_apache_hadoop_hadoop_auth//jar",
-        "@org_apache_htrace_htrace_core//jar",
         "@org_apache_httpcomponents_httpclient//jar",
         "@org_apache_httpcomponents_httpcore//jar",
         "@org_apache_zookeeper_zookeeper//jar",
@@ -909,6 +959,7 @@ java_library(
         "@org_codehaus_jackson_jackson_mapper_asl//jar",
         "@org_codehaus_jackson_jackson_xc//jar",
         "@org_codehaus_jettison_jettison//jar",
+        "@org_htrace_htrace_core//jar",
         "@org_mortbay_jetty_jetty//jar",
         "@org_mortbay_jetty_jetty_util//jar",
         "@org_slf4j_slf4j_api//jar",
@@ -965,14 +1016,6 @@ java_library(
     exports = [
         "@org_apache_commons_commons_compress//jar",
         "@org_tukaani_xz//jar",
-    ],
-)
-
-java_library(
-    name = "org_apache_htrace_htrace_core",
-    visibility = ["//visibility:public"],
-    exports = [
-        "@org_apache_htrace_htrace_core//jar",
     ],
 )
 
@@ -1078,6 +1121,17 @@ java_library(
     exports = [
         "@org_apache_directory_api_api_asn1_api//jar",
         "@org_slf4j_slf4j_api//jar",
+    ],
+)
+
+java_library(
+    name = "org_htrace_htrace_core",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_htrace_htrace_core//jar",
+        "@com_google_guava_guava//jar",
+        "@commons_logging_commons_logging//jar",
+        "@org_mortbay_jetty_jetty_util//jar",
     ],
 )
 

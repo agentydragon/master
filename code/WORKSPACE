@@ -1,12 +1,11 @@
-
 # The following dependencies were calculated from:
-# org.apache.hadoop:hadoop-common:2.7.2
-# org.apache.hadoop:hadoop-mapreduce-client-core:2.7.2
+# org.apache.hadoop:hadoop-common:2.6.0
+# org.apache.hadoop:hadoop-mapreduce-client-core:2.6.0
 # edu.stanford.nlp:stanford-corenlp:3.6.0
 # edu.stanford.nlp:stanford-corenlp:models:3.6.0
 
 
-# org.apache.hadoop:hadoop-common:jar:2.7.2 wanted version 3.0.0
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 # com.google.guava:guava:jar:11.0.2
 maven_jar(
     name = "com_google_code_findbugs_jsr305",
@@ -29,15 +28,15 @@ maven_jar(
 )
 
 # org.apache.zookeeper:zookeeper:pom:3.4.6
-# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.7.2 wanted version 3.6.2.Final
+# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.6.0 wanted version 3.6.2.Final
 maven_jar(
     name = "io_netty_netty",
     artifact = "io.netty:netty:3.7.0.Final",
     sha1 = "07a8c35599c68c0bf383df74469aa3e03d9aca87",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 maven_jar(
     name = "commons_io_commons_io",
     artifact = "commons-io:commons-io:2.4",
@@ -51,34 +50,34 @@ maven_jar(
     sha1 = "0a74939ecbf7294b40accb4048929577f5ddcee2",
 )
 
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 maven_jar(
     name = "commons_configuration_commons_configuration",
     artifact = "commons-configuration:commons-configuration:1.6",
     sha1 = "32cadde23955d7681b0d94a2715846d20b425235",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.hadoop:hadoop-auth:jar:2.6.0
 # net.java.dev.jets3t:jets3t:jar:0.9.0
-# org.apache.hadoop:hadoop-auth:jar:2.7.2
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 maven_jar(
     name = "commons_codec_commons_codec",
     artifact = "commons-codec:commons-codec:1.4",
     sha1 = "4216af16d38465bbab0f3dff8efa14204f7a399a",
 )
 
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 maven_jar(
     name = "org_apache_hadoop_hadoop_auth",
-    artifact = "org.apache.hadoop:hadoop-auth:2.7.2",
-    sha1 = "bf613cfec06a1f3d3a91d7f82f9e4af75bc01f72",
+    artifact = "org.apache.hadoop:hadoop-auth:2.6.0",
+    sha1 = "b0b8dec23a84ac8a0d00fbd69a87d320724ae34a",
 )
 
 # com.sun.jersey:jersey-server:bundle:1.9
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.apache.hadoop:hadoop-common:jar:2.7.2
 # com.sun.jersey:jersey-client:bundle:1.9
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 # com.sun.jersey:jersey-json:bundle:1.9
 maven_jar(
     name = "com_sun_jersey_jersey_core",
@@ -110,8 +109,8 @@ maven_jar(
     sha1 = "4a85963a752c0a2f715c3924bfc686865e7e1bc6",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
 # com.google.inject.extensions:guice-servlet:jar:3.0
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 # com.sun.jersey.contribs:jersey-guice:jar:1.9
 maven_jar(
     name = "com_google_inject_guice",
@@ -138,43 +137,43 @@ maven_jar(
     artifact = "edu.stanford.nlp:stanford-corenlp:3.6.0",
 )
 
-# org.apache.hadoop:hadoop-common:jar:2.7.2
-# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.7.2
+# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.6.0
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 maven_jar(
     name = "org_apache_avro_avro",
     artifact = "org.apache.avro:avro:1.7.4",
     sha1 = "416e7030879814f52845b97f04bb50ecd1cef372",
 )
 
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 maven_jar(
     name = "net_java_dev_jets3t_jets3t",
     artifact = "net.java.dev.jets3t:jets3t:0.9.0",
     sha1 = "792bc96ee7e57b89f472aa0cb5a31015b9f59c96",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 maven_jar(
     name = "org_apache_hadoop_hadoop_yarn_api",
-    artifact = "org.apache.hadoop:hadoop-yarn-api:2.7.2",
-    sha1 = "373d35254d9e292a36c35f48f8a797359b86e1f7",
+    artifact = "org.apache.hadoop:hadoop-yarn-api:2.6.0",
+    sha1 = "c3bcbcd82cd61b55dc5d523f26a259f8d27fc237",
 )
 
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 maven_jar(
     name = "org_apache_commons_commons_math3",
     artifact = "org.apache.commons:commons-math3:3.1.1",
     sha1 = "6719d757a98ff24a83d9d727bef9cec83f59b6e1",
 )
 
-# org.apache.hadoop:hadoop-yarn-api:jar:2.7.2
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.apache.hadoop:hadoop-common:jar:2.7.2
-# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.7.2
+# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.6.0
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-api:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 maven_jar(
     name = "org_apache_hadoop_hadoop_annotations",
-    artifact = "org.apache.hadoop:hadoop-annotations:2.7.2",
-    sha1 = "80693ef2884927ee3c5464a7539fcfa4af382e14",
+    artifact = "org.apache.hadoop:hadoop-annotations:2.6.0",
+    sha1 = "8cd40a4cde2b77e6edc1ab3bb55706d626ae8b2d",
 )
 
 # edu.stanford.nlp:stanford-corenlp:jar:3.6.0
@@ -214,10 +213,10 @@ maven_jar(
 )
 
 # org.codehaus.jackson:jackson-mapper-asl:jar:1.8.3
-# org.apache.hadoop:hadoop-common:jar:2.7.2 wanted version 1.9.13
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0 wanted version 1.9.13
+# org.apache.hadoop:hadoop-common:jar:2.6.0 wanted version 1.9.13
 # org.codehaus.jackson:jackson-xc:jar:1.8.3
 # org.codehaus.jackson:jackson-jaxrs:jar:1.8.3
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2 wanted version 1.9.13
 # org.apache.avro:avro:jar:1.7.4 wanted version 1.8.8
 # com.sun.jersey:jersey-json:bundle:1.9
 maven_jar(
@@ -226,7 +225,7 @@ maven_jar(
     sha1 = "3130e71a7d929347c5b112e43fe29428dfc070e0",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 maven_jar(
     name = "com_sun_jersey_contribs_jersey_guice",
     artifact = "com.sun.jersey.contribs:jersey-guice:1.9",
@@ -242,14 +241,14 @@ maven_jar(
 
 # de.jollyday:jollyday:jar:0.4.7 wanted version 2.2.7
 # com.sun.xml.bind:jaxb-impl:jar:2.2.3-1
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 maven_jar(
     name = "javax_xml_bind_jaxb_api",
     artifact = "javax.xml.bind:jaxb-api:2.2.2",
     sha1 = "aeb3021ca93dde265796d82015beecdcff95bf09",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2 wanted version 1.9.13
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0 wanted version 1.9.13
 # com.sun.jersey:jersey-json:bundle:1.9
 maven_jar(
     name = "org_codehaus_jackson_jackson_xc",
@@ -257,19 +256,19 @@ maven_jar(
     sha1 = "1226667dcdb7c259b3ee07e112ed83446554516e",
 )
 
-# org.apache.curator:curator-framework:bundle:2.7.1
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.curator:curator-framework:bundle:2.6.0
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 maven_jar(
     name = "org_apache_curator_curator_client",
-    artifact = "org.apache.curator:curator-client:2.7.1",
-    sha1 = "a591dfc085db3e9d4d480381cc7e6ae8a26b34af",
+    artifact = "org.apache.curator:curator-client:2.6.0",
+    sha1 = "b9007c357ad1a78066fc6004e8b1feaa2318f6f3",
 )
 
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 maven_jar(
     name = "org_apache_curator_curator_recipes",
-    artifact = "org.apache.curator:curator-recipes:2.7.1",
-    sha1 = "a2c180efc6a38a4f8c9197eb35bb4eb5716cd2fa",
+    artifact = "org.apache.curator:curator-recipes:2.6.0",
+    sha1 = "8736b0fc42e6bf006d585fe85c90aaa4ade5cbef",
 )
 
 # edu.stanford.nlp:stanford-corenlp:jar:3.6.0
@@ -288,28 +287,28 @@ maven_jar(
     sha1 = "39e30fb2ddfcf32b9dd663039ca6e847b698aa6f",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.slf4j:slf4j-log4j12:jar:1.7.10
-# org.apache.hadoop:hadoop-common:jar:2.7.2
 # org.apache.zookeeper:zookeeper:pom:3.4.6 wanted version 1.2.16
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
+# org.slf4j:slf4j-log4j12:jar:1.7.5
 maven_jar(
     name = "log4j_log4j",
     artifact = "log4j:log4j:1.2.17",
     sha1 = "5af35056b4d257e4b64b9e8069c0746e8b08629f",
 )
 
-# org.apache.hadoop:hadoop-yarn-api:jar:2.7.2
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.apache.hadoop:hadoop-common:jar:2.7.2
-# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.7.2
+# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.6.0
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-api:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 maven_jar(
     name = "com_google_protobuf_protobuf_java",
     artifact = "com.google.protobuf:protobuf-java:2.5.0",
     sha1 = "a10732c76bfacdbd633a7eb0f7968b1059a65dfa",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 maven_jar(
     name = "javax_servlet_servlet_api",
     artifact = "javax.servlet:servlet-api:2.5",
@@ -337,11 +336,11 @@ maven_jar(
     sha1 = "aa1c57aa11494985854b8ec8d39574754db67f22",
 )
 
-# org.apache.curator:curator-recipes:bundle:2.7.1
-# org.apache.curator:curator-framework:bundle:2.7.1
-# org.apache.hadoop:hadoop-common:jar:2.7.2
-# org.apache.curator:curator-client:bundle:2.7.1
-# org.apache.hadoop:hadoop-auth:jar:2.7.2
+# org.apache.curator:curator-framework:bundle:2.6.0
+# org.apache.curator:curator-recipes:bundle:2.6.0
+# org.apache.curator:curator-client:bundle:2.6.0
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.hadoop:hadoop-auth:jar:2.6.0
 maven_jar(
     name = "org_apache_zookeeper_zookeeper",
     artifact = "org.apache.zookeeper:zookeeper:3.4.6",
@@ -349,30 +348,30 @@ maven_jar(
 )
 
 # org.apache.zookeeper:zookeeper:pom:3.4.6
-# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.7.2 wanted version 1.7.10
+# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.6.0 wanted version 1.7.5
 maven_jar(
     name = "org_slf4j_slf4j_log4j12",
     artifact = "org.slf4j:slf4j-log4j12:1.6.1",
     sha1 = "bd245d6746cdd4e6203e976e21d597a46f115802",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 maven_jar(
     name = "com_sun_jersey_jersey_client",
     artifact = "com.sun.jersey:jersey-client:1.9",
     sha1 = "d3c4b2b5f89db32c96ceddcb863684821910a7bb",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 maven_jar(
     name = "commons_cli_commons_cli",
     artifact = "commons-cli:commons-cli:1.2",
     sha1 = "2bf96b7aa8b611c177d329452af1dc933e14501c",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.7.2
+# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 # com.sun.jersey.contribs:jersey-guice:jar:1.9
 maven_jar(
     name = "com_google_inject_extensions_guice_servlet",
@@ -387,15 +386,15 @@ maven_jar(
     sha1 = "cfd3ebe2f8034e660344f9108c3e2daf78c29cc3",
 )
 
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 maven_jar(
     name = "commons_net_commons_net",
     artifact = "commons-net:commons-net:3.1",
     sha1 = "2298164a7c2484406f2aa5ac85b205d39019896f",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 # com.sun.jersey.contribs:jersey-guice:jar:1.9
 maven_jar(
     name = "com_sun_jersey_jersey_server",
@@ -403,23 +402,24 @@ maven_jar(
     sha1 = "3a6ea7cc5e15c824953f9f3ece2201b634d90d18",
 )
 
-# org.apache.hadoop:hadoop-auth:jar:2.7.2
+# org.apache.hadoop:hadoop-auth:jar:2.6.0
 maven_jar(
     name = "org_apache_directory_server_apacheds_kerberos_codec",
     artifact = "org.apache.directory.server:apacheds-kerberos-codec:2.0.0-M15",
     sha1 = "1c16e4e477183641c5f0dd5cdecd27ec331bacb5",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.htrace:htrace-core:jar:3.0.4
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 # org.mortbay.jetty:jetty:jar:6.1.26
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 maven_jar(
     name = "org_mortbay_jetty_jetty_util",
     artifact = "org.mortbay.jetty:jetty-util:6.1.26",
     sha1 = "e5642fe0399814e1687d55a3862aa5a3417226a9",
 )
 
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 maven_jar(
     name = "xmlenc_xmlenc",
     artifact = "xmlenc:xmlenc:0.52",
@@ -428,14 +428,14 @@ maven_jar(
 
 maven_jar(
     name = "org_apache_hadoop_hadoop_common",
-    artifact = "org.apache.hadoop:hadoop-common:2.7.2",
+    artifact = "org.apache.hadoop:hadoop-common:2.6.0",
 )
 
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 maven_jar(
     name = "commons_collections_commons_collections",
-    artifact = "commons-collections:commons-collections:3.2.2",
-    sha1 = "8ad72fe39fa8c91eaaf12aadb21e0c3661fe26d5",
+    artifact = "commons-collections:commons-collections:3.2.1",
+    sha1 = "761ea405b9b37ced573d2df0d1e3a4e0f9edc668",
 )
 
 # org.apache.commons:commons-compress:jar:1.4.1
@@ -445,66 +445,60 @@ maven_jar(
     sha1 = "ecff5cb8b1189514c9d1d8d68eb77ac372e000c9",
 )
 
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 maven_jar(
     name = "com_jcraft_jsch",
     artifact = "com.jcraft:jsch:0.1.42",
     sha1 = "a86104b0f2e0c0bab5b0df836065823a99b5e334",
 )
 
-# org.apache.hadoop:hadoop-yarn-api:jar:2.7.2
 # net.java.dev.jets3t:jets3t:jar:0.9.0 wanted version 1.1.1
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.htrace:htrace-core:jar:3.0.4 wanted version 1.1.1
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-api:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 maven_jar(
     name = "commons_logging_commons_logging",
     artifact = "commons-logging:commons-logging:1.1.3",
     sha1 = "f6f66e966c70a83ffbdb6f17a0919eaf7c8aca7f",
 )
 
-# org.apache.directory.server:apacheds-i18n:bundle:2.0.0-M15 wanted version 1.7.5
-# org.slf4j:slf4j-log4j12:jar:1.7.10
-# org.apache.hadoop:hadoop-common:jar:2.7.2
-# org.apache.directory.api:api-util:bundle:1.0.0-M20 wanted version 1.7.5
-# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.7.2
+# org.apache.directory.api:api-util:bundle:1.0.0-M20
+# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.6.0
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.hadoop:hadoop-auth:jar:2.6.0
 # edu.stanford.nlp:stanford-corenlp:jar:3.6.0 wanted version 1.7.12
-# org.apache.hadoop:hadoop-auth:jar:2.7.2
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
+# org.apache.curator:curator-client:bundle:2.6.0 wanted version 1.7.6
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 # org.apache.avro:avro:jar:1.7.4 wanted version 1.6.4
-# org.apache.directory.server:apacheds-kerberos-codec:bundle:2.0.0-M15 wanted version 1.7.5
-# org.apache.curator:curator-client:bundle:2.7.1 wanted version 1.7.6
-# org.apache.directory.api:api-asn1-api:bundle:1.0.0-M20 wanted version 1.7.5
+# org.apache.directory.api:api-asn1-api:bundle:1.0.0-M20
+# org.apache.directory.server:apacheds-kerberos-codec:bundle:2.0.0-M15
+# org.apache.directory.server:apacheds-i18n:bundle:2.0.0-M15
 # org.apache.zookeeper:zookeeper:pom:3.4.6 wanted version 1.6.1
+# org.slf4j:slf4j-log4j12:jar:1.7.5
 maven_jar(
     name = "org_slf4j_slf4j_api",
-    artifact = "org.slf4j:slf4j-api:1.7.10",
-    sha1 = "5b338f206827d88acd890739f400a9b7664e5984",
+    artifact = "org.slf4j:slf4j-api:1.7.5",
+    sha1 = "6b262da268f8ad9eff941b25503a9198f0a0ac93",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.apache.hadoop:hadoop-common:jar:2.7.2
 # org.apache.avro:avro:jar:1.7.4
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 maven_jar(
     name = "org_apache_commons_commons_compress",
     artifact = "org.apache.commons:commons-compress:1.4.1",
     sha1 = "b02e84a993d88568417536240e970c4b809126fd",
 )
 
-# org.apache.hadoop:hadoop-common:jar:2.7.2
-maven_jar(
-    name = "org_apache_htrace_htrace_core",
-    artifact = "org.apache.htrace:htrace-core:3.1.0-incubating",
-    sha1 = "f73606e7c9ede5802335c290bf47490ad6d51df3",
-)
-
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 maven_jar(
     name = "org_mortbay_jetty_jetty",
     artifact = "org.mortbay.jetty:jetty:6.1.26",
     sha1 = "2f546e289fddd5b1fab1d4199fbb6e9ef43ee4b0",
 )
 
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 maven_jar(
     name = "com_google_code_gson_gson",
     artifact = "com.google.code.gson:gson:2.2.4",
@@ -520,10 +514,10 @@ maven_jar(
 
 maven_jar(
     name = "org_apache_hadoop_hadoop_mapreduce_client_core",
-    artifact = "org.apache.hadoop:hadoop-mapreduce-client-core:2.7.2",
+    artifact = "org.apache.hadoop:hadoop-mapreduce-client-core:2.6.0",
 )
 
-# org.apache.hadoop:hadoop-auth:jar:2.7.2 wanted version 4.2.5
+# org.apache.hadoop:hadoop-auth:jar:2.6.0 wanted version 4.2.5
 # net.java.dev.jets3t:jets3t:jar:0.9.0
 maven_jar(
     name = "org_apache_httpcomponents_httpclient",
@@ -538,7 +532,7 @@ maven_jar(
     sha1 = "56baae106392040a45a06d4a41099173425da1e6",
 )
 
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
 maven_jar(
     name = "commons_httpclient_commons_httpclient",
     artifact = "commons-httpclient:commons-httpclient:3.1",
@@ -552,6 +546,13 @@ maven_jar(
     sha1 = "5e6486ffa3125ba44dc410ead166e1d6ba8ac76d",
 )
 
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+maven_jar(
+    name = "org_htrace_htrace_core",
+    artifact = "org.htrace:htrace-core:3.0.4",
+    sha1 = "d7461828faf28411f37f8570d896292db277d838",
+)
+
 # edu.stanford.nlp:stanford-corenlp:jar:3.6.0
 maven_jar(
     name = "com_io7m_xom_xom",
@@ -559,22 +560,23 @@ maven_jar(
     sha1 = "4165e25bef19aad134f6498cc277110b9bc5e52b",
 )
 
-# org.apache.hadoop:hadoop-yarn-api:jar:2.7.2
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.apache.hadoop:hadoop-common:jar:2.7.2
-# org.apache.curator:curator-recipes:bundle:2.7.1 wanted version 16.0.1
-# org.apache.curator:curator-client:bundle:2.7.1 wanted version 16.0.1
-# org.apache.curator:curator-framework:bundle:2.7.1 wanted version 16.0.1
+# org.apache.curator:curator-client:bundle:2.6.0 wanted version 16.0.1
+# org.apache.curator:curator-framework:bundle:2.6.0 wanted version 16.0.1
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.curator:curator-recipes:bundle:2.6.0 wanted version 16.0.1
+# org.apache.hadoop:hadoop-yarn-api:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
+# org.htrace:htrace-core:jar:3.0.4 wanted version 12.0.1
 maven_jar(
     name = "com_google_guava_guava",
     artifact = "com.google.guava:guava:11.0.2",
     sha1 = "35a3c69e19d72743cac83778aecbee68680f63eb",
 )
 
-# org.apache.hadoop:hadoop-common:jar:2.7.2 wanted version 1.9.13
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0 wanted version 1.9.13
+# org.apache.hadoop:hadoop-common:jar:2.6.0 wanted version 1.9.13
 # org.codehaus.jackson:jackson-xc:jar:1.8.3
 # org.codehaus.jackson:jackson-jaxrs:jar:1.8.3
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2 wanted version 1.9.13
 # org.apache.avro:avro:jar:1.7.4 wanted version 1.8.8
 # com.sun.jersey:jersey-json:bundle:1.9
 maven_jar(
@@ -583,15 +585,15 @@ maven_jar(
     sha1 = "e684dfaa93b95a507779099cf100804dd1b0378c",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 maven_jar(
     name = "com_sun_jersey_jersey_json",
     artifact = "com.sun.jersey:jersey-json:1.9",
     sha1 = "1aa73e1896bcc7013fed247157d7f676226eb432",
 )
 
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2 wanted version 1.9.13
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0 wanted version 1.9.13
 # com.sun.jersey:jersey-json:bundle:1.9
 maven_jar(
     name = "org_codehaus_jackson_jackson_jaxrs",
@@ -599,27 +601,27 @@ maven_jar(
     sha1 = "3604ca9f572170e2ef5813141ec1f0e0100efd19",
 )
 
-# org.apache.hadoop:hadoop-yarn-api:jar:2.7.2
-# org.apache.hadoop:hadoop-yarn-common:jar:2.7.2
-# org.apache.hadoop:hadoop-common:jar:2.7.2
+# org.apache.hadoop:hadoop-common:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-api:jar:2.6.0
+# org.apache.hadoop:hadoop-yarn-common:jar:2.6.0
 maven_jar(
     name = "commons_lang_commons_lang",
     artifact = "commons-lang:commons-lang:2.6",
     sha1 = "0ce1edb914c94ebc388f086c6827e8bdeec71ac2",
 )
 
-# org.apache.curator:curator-recipes:bundle:2.7.1
-# org.apache.hadoop:hadoop-auth:jar:2.7.2
+# org.apache.curator:curator-recipes:bundle:2.6.0
+# org.apache.hadoop:hadoop-auth:jar:2.6.0
 maven_jar(
     name = "org_apache_curator_curator_framework",
-    artifact = "org.apache.curator:curator-framework:2.7.1",
-    sha1 = "8c7b1eeb78e43bb91ea737111ba3dec0512be876",
+    artifact = "org.apache.curator:curator-framework:2.6.0",
+    sha1 = "81a699c39d127b5b4ff97cc77da7650b53e5b5ed",
 )
 
-# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.7.2
+# org.apache.hadoop:hadoop-mapreduce-client-core:jar:2.6.0
 maven_jar(
     name = "org_apache_hadoop_hadoop_yarn_common",
-    artifact = "org.apache.hadoop:hadoop-yarn-common:2.7.2",
-    sha1 = "ab16767c5c34cfee6ac2780c7fea56207762d2c7",
+    artifact = "org.apache.hadoop:hadoop-yarn-common:2.6.0",
+    sha1 = "9dd33fb5183f8faac731868eff69ac2b7678b75b",
 )
 
