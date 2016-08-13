@@ -20,11 +20,10 @@ function install_binary() {
 }
 
 install_binary annotate_coreferences
-install_binary metacentrum_get_training_samples
 install_binary metacentrum_add_negative_samples
 install_binary metacentrum_distant_supervision_train
 install_binary metacentrum_spotlight_main
-install_binary nlpize_articles
+install_binary launch_get_training_samples_main
 install_binary launch_nlpize_articles_main
 install_binary launch_split_wiki_main
 
@@ -34,7 +33,8 @@ function install_jar() {
 	scp -r bazel-bin/hadoop/${1}_deploy.jar prvak@zuphux.metacentrum.cz:$BIN_ROOT
 }
 
-#install_jar WikiSplit
+install_jar WikiSplit
+install_jar CoreNLP
 
 FILES="\
 	common.sh \
@@ -44,22 +44,14 @@ FILES="\
 	metacentrum_install_fuseki.sh \
 	wikidata_into_fuseki.sh \
 "
-#	annotate_coreferences.py \
-#	annotate_coreferences.sh \
-#	article_parse.py \
 #	metacentrum_corenlp.sh \
 #	metacentrum_download_dumps.sh \
 #	metacentrum_install_corenlp.sh \
 #	metacentrum_prepare.sh \
-#	metacentrum_split_wiki.sh \
 #	dbpedia.py \
 #	wikidata.py \
-#	nlpize_articles.py \
-#	nlpize_articles.sh \
 #	parse_xmls_to_protos.py \
 #	parse_xmls_to_protos.sh \
-#	split_wiki.py \
-#	spotlight.py \
 #	wiki2text \
 
 scp $FILES prvak@zuphux.metacentrum.cz:$BIN_ROOT

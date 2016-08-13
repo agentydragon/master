@@ -6,6 +6,7 @@ Splits Wiki plaintext into articles.
 Usage: TODO
 """
 
+import io
 import locale
 locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
@@ -18,8 +19,8 @@ import file_util
 
 
 #def get_article_corpus(target_articles):
-#    with open('/mnt/crypto/data/wiki_small.txt', 'w') as out:
-#        with open(WIKI_PLAINTEXT_FILE) as f:
+#    with io.open('/mnt/crypto/data/wiki_small.txt', 'w') as out:
+#        with io.open(WIKI_PLAINTEXT_FILE) as f:
 #            articles = 0
 #            regex = re.compile('^= .+ =$')
 #            for line in f:
@@ -54,21 +55,20 @@ def article_title_to_path(target_dir, title):
     first1 = sanitized_articletitle[:1]
     first2 = sanitized_articletitle[:2]
     target_dir = target_dir + '/' + first1 + '/' + first2
-    if not os.path.isdir(target_dir):
-        os.makedirs(target_dir)
+    file_util.ensure_dir(target_dir)
     return target_dir + '/' + sanitized_articletitle + '.txt'
 
 def split_corpus(wiki_plaintext_path, target_dir, target_articles=None):
     articletext = ""
     articletitle = None
-    with open(wiki_plaintext_path) as f:
+    with io.open(wiki_plaintext_path, encoding='utf8') as f:
         articles = 0
         regex = re.compile('^= .+ =$')
         for line in f:
             if regex.match(line):
                 if articletitle is not None:
                     path = article_title_to_path(target_dir, articletitle)
-                    with open(path, 'w') as out:
+                    with io.open(path, 'w', encoding='utf8') as out:
                         print('Writing article: ' + articletitle)
                         articletext = sanitize_article(articletext)
                         out.write(articletext)

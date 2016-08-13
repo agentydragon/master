@@ -1,0 +1,3 @@
+hadoop jar /storage/brno7-cerit/home/prvak/bin/WikiSplit_deploy.jar /user/prvak/wiki-plain /user/prvak/wiki-splits
+
+hadoop jar /storage/brno7-cerit/home/prvak/bin/CoreNLP_deploy.jar /user/prvak/wiki-splits /user/prvak/article-parse-xmls

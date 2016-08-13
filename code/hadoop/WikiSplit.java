@@ -19,6 +19,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 
 public class WikiSplit {
 	// implement custom InputFormat that processes entire file in blocks
@@ -30,8 +31,7 @@ public class WikiSplit {
 		}
 	}
 
-	/*
-	public static class ArticleSplitterMapper extends Mapper<LongWritable, Text, LongWritable, Text>{
+	public static class ArticleSplitterMapper extends Mapper<LongWritable, Text, Text, Text>{
 		private Text word = new Text();
 		private String articleName = null;
 		private String articleText = "";
@@ -39,15 +39,25 @@ public class WikiSplit {
 		private void flushArticle(Context context) throws IOException, InterruptedException {
 			// flush article
 			if (articleName != null) {
-				context.write(new Text(articleName),
+				context.write(new Text(/*"FLUSH - " + */articleName),
 						new Text(articleText));
 			}
 			articleText = "";
 		}
 
-		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
-			System.out.println(key);
-			System.out.println(value);
+		private String titleFromLine(String line) {
+			if (line.length() > 4 && line.charAt(0) == '=' && line.charAt(1) == ' ' &&
+					line.charAt(line.length() - 1) == '=' && line.charAt(line.length() - 2) == ' ') {
+					/*line.substring(0, 2) == "= "*//* &&
+					line.substring(line.length() - 2, line.length()) == " ="*///) {
+				return line.substring(2, line.length() - 2);
+			} else {
+				return null;
+			}
+		}
+
+		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+
 			// key = line offset
 			// value = line
 			String line = value.toString();
@@ -57,11 +67,12 @@ public class WikiSplit {
 			//	context.write(word, one);
 			//}
 
-			if (line.length() > 2 &&
-					line.substring(0, 2) == "= " &&
-					line.substring(line.length() - 2, line.length()) == " =") {
+			//context.write(new Text("AName=" + (articleName == null ? "NULL" : articleName) + " Line " + key.toString()),
+			//		new Text(line));
+			String title = titleFromLine(line);
+			if (title != null) {
 				flushArticle(context);
-				articleName = line.substring(2, line.length() - 2);
+				articleName = title;
 			} else {
 				articleText += line + "\n";
 			}
@@ -71,7 +82,6 @@ public class WikiSplit {
 		       flushArticle(context);
 	       }
 	}
-	*/
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
@@ -83,16 +93,19 @@ public class WikiSplit {
 		MyFIF.addInputPath(job, new Path(args[0]));
 
 		// Set mapper and input/output classes.
-	//	job.setMapperClass(ArticleSplitterMapper.class);
-		job.setMapperClass(IdentityMapper.class);
-		//job.setMapOutputKeyClass(Text.class);
-		//job.setMapOutputValueClass(Text.class);
+		job.setMapperClass(ArticleSplitterMapper.class);
+	//	job.setMapperClass(IdentityMapper.class);
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(Text.class);
 
-		//job.setOutputKeyClass(Text.class);
-		//job.setOutputValueClass(Text.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(Text.class);
 
 		// Set output.
-		job.setOutputFormatClass(TextOutputFormat.class);
+		// job.setOutputFormatClass(TextOutputFormat.class);
+		// TextOutputFormat.setOutputPath(job, new Path(args[1]));
+
+		job.setOutputFormatClass(SequenceFileOutputFormat.class);
 		TextOutputFormat.setOutputPath(job, new Path(args[1]));
 
 	//	job.setCombinerClass(IntSumReducer.class);

@@ -60,7 +60,9 @@ for i in range(0, len(plaintext_paths), slice_size):
     if launched < args.max_launched_jobs:
         pbs_util.launch_job(
             walltime=str(slice_time),
-            node_spec='nodes=1:ppn=1,mem=6gb',
+    #        node_spec='nodes=1:ppn=1,mem=6gb',
+            # 1 core is not enough
+            node_spec='nodes=1:ppn=2,mem=6gb',
             job_name=job_name,
             job_command=job_command
         )

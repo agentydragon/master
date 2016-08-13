@@ -22,15 +22,14 @@ py_binary(
     ]
 )
 
-sh_binary(
-    name = "metacentrum_get_training_samples",
+py_binary(
+    name = "launch_get_training_samples_main",
     srcs = [
-        "metacentrum_get_training_samples.sh",
+        "launch_get_training_samples_main.py",
     ],
     deps = [
-        ":common",
-    ],
-    data = [
+        ":pbs_util_lib",
+        ":paths_lib",
         ":get_training_samples_main",
     ],
 )
@@ -323,19 +322,6 @@ genrule(
         "training_samples_pb2.py",
     ],
     cmd = "protoc -I=. --python_out=$(GENDIR)/ $(location :training_samples.proto)"
-)
-
-sh_binary(
-    name = "nlpize_articles",
-    srcs = [
-        "nlpize_articles.sh",
-    ],
-    deps = [
-        ":common",
-    ],
-    data = [
-        ":nlpize_articles_main",
-    ],
 )
 
 py_binary(

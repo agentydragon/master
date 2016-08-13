@@ -1,3 +1,11 @@
+http_jar(
+    name = "corenlp_models",
+    url = "http://nlp.stanford.edu/software/stanford-english-corenlp-2016-01-10-models.jar",
+    sha256 = "8ad16bb419044a8c3efc2d14b9072c56b300e6f462183c62ff1f6470c11389c0"
+)
+
+
+
 # The following dependencies were calculated from:
 # org.apache.hadoop:hadoop-common:2.6.0
 # org.apache.hadoop:hadoop-mapreduce-client-core:2.6.0
