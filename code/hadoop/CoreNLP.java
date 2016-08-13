@@ -51,9 +51,11 @@ public class CoreNLP {
 			String articleTitle = key.toString();
 			String articleText = value.toString();
 
+			context.write(key, new Text("HELLO WORLD"));
 			StringWriter xmlOut = new StringWriter();
 
 			Annotation annotation = new Annotation(articleText);
+			pipeline.annotate(annotation);
 			pipeline.xmlPrint(annotation, xmlOut);
 
 			context.write(key, new Text(xmlOut.toString()));

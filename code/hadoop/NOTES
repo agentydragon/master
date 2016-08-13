@@ -1,3 +1,8 @@
 hadoop jar /storage/brno7-cerit/home/prvak/bin/WikiSplit_deploy.jar /user/prvak/wiki-plain /user/prvak/wiki-splits
 
 hadoop jar /storage/brno7-cerit/home/prvak/bin/CoreNLP_deploy.jar /user/prvak/wiki-splits /user/prvak/article-parse-xmls
+	-> "disk quota exceeded" :(
+
+to run so that it actually works:
+	export HADOOP_CLASSPATH=(CoreNLP_deploy.jar)
+	hadoop jar (CoreNLP.jar) CoreNLP /user/prvak/wiki-splits /user/prvak/article-parse-xmls
