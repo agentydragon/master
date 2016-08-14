@@ -6,3 +6,11 @@ hadoop jar /storage/brno7-cerit/home/prvak/bin/CoreNLP_deploy.jar /user/prvak/wi
 to run so that it actually works:
 	export HADOOP_CLASSPATH=(CoreNLP_deploy.jar)
 	hadoop jar (CoreNLP.jar) CoreNLP /user/prvak/wiki-splits /user/prvak/article-parse-xmls
+
+/storage/brno7-cerit/home/prvak/bin/bazel build hadoop:CoreNLP_deploy.jar
+=> same thing
+
+export HADOOP_CLASSPATH=/storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP_deploy.jar
+hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.jar CoreNLP /user/prvak/wiki-splits /user/prvak/article-parse-xmls
+
+

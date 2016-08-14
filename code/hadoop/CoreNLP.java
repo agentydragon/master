@@ -35,7 +35,7 @@ import edu.stanford.nlp.ling.*;
 //   Value: article parse from CoreNLP as XML (Text)
 
 public class CoreNLP {
-	public static class CoreNLPAnnotateMapper extends Mapper<LongWritable, Text, Text, Text>{
+	public static class CoreNLPAnnotateMapper extends Mapper<Text, Text, Text, Text>{
 		private StanfordCoreNLP pipeline;
 
 		public void setup(Context context) {
@@ -51,7 +51,7 @@ public class CoreNLP {
 			String articleTitle = key.toString();
 			String articleText = value.toString();
 
-			context.write(key, new Text("HELLO WORLD"));
+			//context.write(key, new Text("HELLO WORLD"));
 			StringWriter xmlOut = new StringWriter();
 
 			Annotation annotation = new Annotation(articleText);
