@@ -1,3 +1,5 @@
+hador.ics.muni.cz: Hadoop frontend
+
 module add python34-modules-gcc
 module add jdk-8
 pip install requests SPARQLWrapper protobuf nltk gflags --user
