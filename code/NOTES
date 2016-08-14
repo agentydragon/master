@@ -1,5 +1,8 @@
 hador.ics.muni.cz: Hadoop frontend
 
+export HADOOP_CLASSPATH=/storage/brno7-cerit/home/prvak/bin/stanford-english-corenlp-2016-01-10-models.jar
+hadoop jar /storage/brno7-cerit/home/prvak/bin/CoreNLP_deploy.jar /user/prvak/wiki-splits /user/prvak/article-parse-xmls-200 200
+
 module add python34-modules-gcc
 module add jdk-8
 pip install requests SPARQLWrapper protobuf nltk gflags --user

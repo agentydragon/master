@@ -36,7 +36,7 @@ function install_jar() {
 
 install_jar WikiSplit_deploy
 # XXX
-# install_jar CoreNLP_deploy
+install_jar CoreNLP_deploy
 install_jar CoreNLP
 
 FILES="\

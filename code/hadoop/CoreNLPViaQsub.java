@@ -61,14 +61,17 @@ public class CoreNLPViaQsub extends Configured implements Tool {
 			// TODO: queue this!
 
 			String code = RandomStringUtils.randomAlphanumeric(8);
-			String outputDir = "/storage/brno7-cerit/home/prvak/corenlp-via-qsub-tmp/output-" + code;
-			String inputPath = "/storage/brno7-cerit/home/prvak/corenlp-via-qsub-tmp/in-" + code + ".txt";
+			String workDir = "/storage/brno7-cerit/home/prvak/corenlp-via-qsub-tmp";
+			//String workDir = "/storage/brno7-cerit/home/prvak";
+			String outputDir = workDir + "/output-" + code;
+			String inputPath = workDir + "/in-" + code + ".txt";
 			String outputPath = outputDir + "/in-" + code + ".txt.out";
+			String binDir = "/storage/brno7-cerit/home/prvak/bin";
 
 			String jobName = "corenlp-via-qsub-" + code;
-			String jobscriptPath = "/storage/brno7-cerit/home/prvak/corenlp-via-qsub-tmp/" + jobName + ".sh";
+			String jobscriptPath = workDir + "/" + jobName + ".sh";
 			File jobscript = new File(jobscriptPath);
-			FileWriter writer = new FileWriter(jobscript, false);
+			FileWriter writer = new FileWriter(jobscript);
 			writer.write(
 				"#!/bin/bash\n" +
 				"export LANG=en_US.UTF-8\n" +
@@ -83,7 +86,7 @@ public class CoreNLPViaQsub extends Configured implements Tool {
 				"module add python34-modules-gcc\n" +
 				"\n" +
 				"cd $PBS_O_WORKDIR\n" +
-				"cd /storage/brno7-cerit/home/prvak/bin/launch_nlpize_articles_main.runfiles/__main__/\n" +
+				"cd " + binDir + "/launch_nlpize_articles_main.runfiles/__main__/\n" +
 				"./nlpize_articles_main " +
 					"--output_parse_xml_dirs " + outputDir + " " +
 					"--parallel_runs 1 " +

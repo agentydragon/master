@@ -34,13 +34,19 @@ import edu.stanford.nlp.ling.*;
 // Output:
 //   Key:   article name (Text)
 //   Value: article parse from CoreNLP as XML (Text)
+//
+// Arguments: (input) (output) -Dprefix_length=200
 
 public class CoreNLP extends Configured implements Tool {
 	public static class CoreNLPAnnotateMapper extends Mapper<Text, Text, Text, Text>{
 		private StanfordCoreNLP pipeline;
+		private int prefixLength;
 
 		@Override
 		public void setup(Context context) {
+			Configuration conf = context.getConfiguration();
+			prefixLength = conf.getInt("prefix_length", 10);
+
 			Properties props = new Properties();
 			// TODO: MODEL
 			props.put("annotators",
@@ -57,8 +63,8 @@ public class CoreNLP extends Configured implements Tool {
 			// Reduce the length of the text.
 			// XXX: HAX
 			int length = articleText.length();
-			if (length > 100) {
-				length = 100;
+			if (length > prefixLength) {
+				length = prefixLength;
 			}
 			articleText = articleText.substring(0, length);
 			// articleText = "Jackdaws love my big sphinx on quartz.";
@@ -76,6 +82,13 @@ public class CoreNLP extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
 		// Configuration processed by ToolRunner
 		Configuration conf = getConf();
+		for (int i = 0; i < args.length; i++) {
+			System.out.println("args[" + i + "]=" + args[i]);
+		}
+		if (conf.get("prefix_length") == null) {
+			System.out.println("No prefix_length given");
+			return 1;
+		}
 
 		// Create a JobConf using the processed conf
 		Job job = Job.getInstance(conf, "corenlp-annotate");
@@ -99,7 +112,7 @@ public class CoreNLP extends Configured implements Tool {
 
 	public static void main(String[] args) throws Exception {
 		// Let ToolRunner handle generic command-line options
-		int res = ToolRunner.run(new Configuration(), new CoreNLP(), args);
+		int res = ToolRunner.run(null, new CoreNLP(), args);
 		System.exit(res);
 	}
 }

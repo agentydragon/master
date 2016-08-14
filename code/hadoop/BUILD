@@ -20,6 +20,7 @@ java_binary(
         "//:org_apache_hadoop_hadoop_common",
         "//:org_apache_hadoop_hadoop_mapreduce_client_core",
         "//:edu_stanford_nlp_stanford_corenlp",
+        # TODO: must be installed separately
         "@corenlp_models//jar",
         # TODO: what about models?
         # "//:org_apache_hadoop_hadoop_mapreduce_client_core",
