@@ -58,17 +58,7 @@ public class WikiSplit {
 
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
-			// key = line offset
-			// value = line
 			String line = value.toString();
-			// StringTokenizer itr = new StringTokenizer(value.toString());
-			// while (itr.hasMoreTokens()) {
-			//	word.set(itr.nextToken());
-			//	context.write(word, one);
-			//}
-
-			//context.write(new Text("AName=" + (articleName == null ? "NULL" : articleName) + " Line " + key.toString()),
-			//		new Text(line));
 			String title = titleFromLine(line);
 			if (title != null) {
 				flushArticle(context);
@@ -94,7 +84,6 @@ public class WikiSplit {
 
 		// Set mapper and input/output classes.
 		job.setMapperClass(ArticleSplitterMapper.class);
-	//	job.setMapperClass(IdentityMapper.class);
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(Text.class);
 
@@ -102,16 +91,9 @@ public class WikiSplit {
 		job.setOutputValueClass(Text.class);
 
 		// Set output.
-		// job.setOutputFormatClass(TextOutputFormat.class);
-		// TextOutputFormat.setOutputPath(job, new Path(args[1]));
-
 		job.setOutputFormatClass(SequenceFileOutputFormat.class);
 		TextOutputFormat.setOutputPath(job, new Path(args[1]));
 
-	//	job.setCombinerClass(IntSumReducer.class);
-	//	job.setNumReduceTasks(0);
-	//	job.setInputFormatClass(TextInputFormat.class);
-	//	TextInputFormat.addInputPath(job, new Path(args[0]));
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
 	}
 }

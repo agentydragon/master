@@ -57,10 +57,11 @@ public class CoreNLP extends Configured implements Tool {
 			// Reduce the length of the text.
 			// XXX: HAX
 			int length = articleText.length();
-			if (length > 1000) {
-				length = 1000;
+			if (length > 100) {
+				length = 100;
 			}
 			articleText = articleText.substring(0, length);
+			// articleText = "Jackdaws love my big sphinx on quartz.";
 
 			StringWriter xmlOut = new StringWriter();
 
@@ -69,7 +70,7 @@ public class CoreNLP extends Configured implements Tool {
 			pipeline.xmlPrint(annotation, xmlOut);
 
 			context.write(key, new Text(xmlOut.toString()));
-	       }
+		}
 	}
 
 	public int run(String[] args) throws Exception {
@@ -79,9 +80,6 @@ public class CoreNLP extends Configured implements Tool {
 		// Create a JobConf using the processed conf
 		Job job = Job.getInstance(conf, "corenlp-annotate");
 		job.setJarByClass(CoreNLP.class);
-
-		// Specify various job-specific parameters
-		job.setJobName("corenlp-annotate");
 
 		job.setInputFormatClass(SequenceFileInputFormat.class);
 		SequenceFileInputFormat.addInputPath(job, new Path(args[0]));
@@ -104,15 +102,4 @@ public class CoreNLP extends Configured implements Tool {
 		int res = ToolRunner.run(new Configuration(), new CoreNLP(), args);
 		System.exit(res);
 	}
-
-	/*
-	public static void main(String[] args) throws Exception {
-		Configuration conf = new Configuration();
-		Job job = Job.getInstance(conf, "corenlp annotate");
-		job.setJarByClass(CoreNLP.class);
-
-		// Set input.
-		System.exit(job.waitForCompletion(true) ? 0 : 1);
-	}
-	*/
 }
