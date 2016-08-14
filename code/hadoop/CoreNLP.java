@@ -54,7 +54,14 @@ public class CoreNLP extends Configured implements Tool {
 			String articleTitle = key.toString();
 			String articleText = value.toString();
 
-			//context.write(key, new Text("HELLO WORLD"));
+			// Reduce the length of the text.
+			// XXX: HAX
+			int length = articleText.length();
+			if (length > 1000) {
+				length = 1000;
+			}
+			articleText = articleText.substring(0, length);
+
 			StringWriter xmlOut = new StringWriter();
 
 			Annotation annotation = new Annotation(articleText);
