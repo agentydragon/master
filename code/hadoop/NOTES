@@ -11,6 +11,12 @@ to run so that it actually works:
 => same thing
 
 export HADOOP_CLASSPATH=/storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP_deploy.jar
+export HADOOP_DATANODE_OPTS="-Xmx10g"
 hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.jar CoreNLP /user/prvak/wiki-splits /user/prvak/article-parse-xmls
 
 
+-Dmapred.job.map.memory.mb=5300
+-Dmapred.child.java.opts="-Xmx5g"
+
+
+hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.jar CoreNLP /user/prvak/wiki-splits /user/prvak/article-parse-xmls -Dmapred.job.map.memory.mb=5300 -Dmapred.child.java.opts="-Xmx5g"
