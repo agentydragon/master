@@ -52,6 +52,8 @@ public class CoreNLP extends Configured implements Tool {
 			props.put("annotators",
 					"tokenize,ssplit,parse," +
 					"lemma,ner,dcoref");
+			props.put("parser.maxlen", "100");
+			props.put("pos.maxlen", "100");
 			pipeline = new StanfordCoreNLP(props);
 		}
 
