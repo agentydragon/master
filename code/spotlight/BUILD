@@ -6,24 +6,56 @@ java_binary(
     main_class = "Spotlight",
     deps = [
         "@dbpedia_spotlight//jar",
-        ":spotlight_extracted_model",
+        # ":spotlight_extracted_model",
+    ],
+    data = [
+        ":spotlight_models",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+java_binary(
+    name = "SpotlightAnnotator",
+    srcs = [
+        "SpotlightAnnotator.java",
+    ],
+    main_class = "SpotlightAnnotator",
+    deps = [
+        "//:org_apache_hadoop_hadoop_common",
+        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
+        ":SpotlightServer",
+    ],
+    data = [
+        ":spotlight_models",
+    ],
+)
+
+java_library(
+    name = "SpotlightServer",
+    srcs = [
+        "SpotlightServer.java",
+    ],
+    deps = [
+        "@dbpedia_spotlight//jar",
     ],
 )
 
 filegroup(
     name = "spotlight_extracted_model",
     srcs = [
-        "en/fsa_dict.mem",
         "en/model.properties",
         "en/spotter_thresholds.txt",
         "en/stopwords.list",
-        "en/README.txt",
         "en/model/candmap.mem",
         "en/model/context.mem",
-        "en/model/quantized_counts.mem",
         "en/model/res.mem",
+        "en/model/res.mem_",
         "en/model/sf.mem",
         "en/model/tokens.mem",
+        "en/opennlp/chunker.bin",
+        "en/opennlp/pos-maxent.bin",
+        "en/opennlp/sent.bin",
+        "en/opennlp/token.bin",
     ],
 )
 
@@ -32,18 +64,20 @@ genrule(
     srcs = [
         "@dbpedia_spotlight_model_en//file",
     ],
-    cmd = "tar xpf $(location @dbpedia_spotlight_model_en//file) -C $(GENDIR)",
+    cmd = "tar xpf $(location @dbpedia_spotlight_model_en//file) -C $(GENDIR)/spotlight",
     outs = [
-        "en/fsa_dict.mem",
         "en/model.properties",
         "en/spotter_thresholds.txt",
         "en/stopwords.list",
-        "en/README.txt",
         "en/model/candmap.mem",
         "en/model/context.mem",
-        "en/model/quantized_counts.mem",
         "en/model/res.mem",
+        "en/model/res.mem_",
         "en/model/sf.mem",
         "en/model/tokens.mem",
+        "en/opennlp/chunker.bin",
+        "en/opennlp/pos-maxent.bin",
+        "en/opennlp/sent.bin",
+        "en/opennlp/token.bin",
     ],
 )

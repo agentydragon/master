@@ -29,6 +29,33 @@ java_binary(
 )
 
 java_binary(
+    name = "SpotlightAnnotator",
+    srcs = [
+        "SpotlightAnnotator.java",
+    ],
+    main_class = "SpotlightAnnotator",
+    deps = [
+        ":SpotlightServer",
+        #"//:org_apache_hadoop_hadoop_common",
+        #"//:org_apache_hadoop_hadoop_mapreduce_client_core",
+    ],
+)
+
+java_library(
+    name = "SpotlightServer",
+    srcs = [
+        "SpotlightServer.java",
+    ],
+    deps = [
+    #    "@org_apache_httpcomponents_httpclient//jar",
+    #    "@org_apache_httpcomponents_httpcore//jar",
+    ],
+    data = [
+        "//spotlight:Spotlight",  # this binary is launched
+    ],
+)
+
+java_binary(
     name = "CoreNLPViaQsub",
     srcs = [
         "CoreNLPViaQsub.java",

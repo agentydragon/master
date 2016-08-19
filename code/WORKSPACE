@@ -1,3 +1,8 @@
+# bazel run //src/tools/generate_workspace -- \
+#    --artifact=org.apache.hadoop:hadoop-common:2.6.0 \
+#    --artifact=org.apache.hadoop:hadoop-mapreduce-client-core:2.6.0 \
+#    --artifact=edu.stanford.nlp:stanford-corenlp:3.6.0
+
 http_jar(
     name = "corenlp_models",
     url = "http://nlp.stanford.edu/software/stanford-english-corenlp-2016-01-10-models.jar",

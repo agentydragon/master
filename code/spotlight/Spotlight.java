@@ -128,6 +128,6 @@ public class CoreNLP extends Configured implements Tool {
 
 public class Spotlight {
 	public static void main(String[] args) throws Exception {
-		Server.main(new String[]{"en", "http://localhost:2222/rest"});
+		Server.main(new String[]{"spotlight/en", "http://localhost:2222/rest"});
 	}
 }
