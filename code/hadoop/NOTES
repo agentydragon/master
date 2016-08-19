@@ -20,3 +20,7 @@ hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.
 
 
 hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.jar CoreNLP /user/prvak/wiki-splits /user/prvak/article-parse-xmls -Dmapred.job.map.memory.mb=5300 -Dmapred.child.java.opts="-Xmx5g"
+
+with shift-reduce model:
+	hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.jar CoreNLP -D prefix_length=1000 -D mapreduce.map.memory.mb=9000 -D mapreduce.map.java.opts=-Xmx8000m -D mapreduce.task.timeout=6000000 -D mapreduce.input.fileinputformat.split.maxsize=1000000 /user/prvak/wiki-splits /user/prvak/article-parse-xmls-1000
+

@@ -50,7 +50,7 @@ public class CoreNLP extends Configured implements Tool {
 			Properties props = new Properties();
 			// TODO: MODEL
 			props.put("annotators",
-					"tokenize,ssplit,parse," +
+					"tokenize,ssplit,pos,parse," +
 					"lemma,ner,dcoref");
 			props.put("parser.maxlen", "100");
 			props.put("pos.maxlen", "100");
