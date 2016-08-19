@@ -90,3 +90,10 @@ bazel run //src/tools/generate_workspace -- \
 tdbloader: more RAM improves speed!
 	I want an in-memory TDB database...!
 	exceeded limit 4096 MB
+
+# Parse
+hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.jar CoreNLP -D prefix_length=1000 -D mapreduce.map.memory.mb=9000 -D mapreduce.map.java.opts=-Xmx8000m -D mapreduce.task.timeout=6000000 -D mapreduce.input.fileinputformat.split.maxsize=1000000 /user/prvak/wiki-splits /user/prvak/article-parse-xmls-1000
+	=>
+
+# Spotlight
+hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/SpotlightAnnotator_deploy.jar -D prefix_length=1000 -D spotlight_server=http://hador:2222/rest/annotate -D mapreduce.input.fileinputformat.split.maxsize=1000000 /user/prvak/wiki-splits /user/prvak/article-spotlights-separate-1000

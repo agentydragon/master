@@ -75,8 +75,12 @@ public class SpotlightAnnotator extends Configured implements Tool {
 			}
 			articleText = articleText.substring(0, length);
 
-			String jsonOut = connection.getAnnotationJSON(articleText);
-			context.write(key, new Text(jsonOut.toString()));
+			try {
+				String jsonOut = connection.getAnnotationJSON(articleText);
+				context.write(key, new Text(jsonOut.toString()));
+			} catch (IOException e) {
+				// nothing -- TODO (response code 400 sometimes)
+			}
 		}
 	}
 
