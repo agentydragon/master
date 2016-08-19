@@ -35,7 +35,7 @@ java_binary(
     ],
     main_class = "SpotlightAnnotator",
     deps = [
-        ":SpotlightServer",
+        ":SpotlightConnection",
         "//:org_apache_hadoop_hadoop_common",
         "//:org_apache_hadoop_hadoop_mapreduce_client_core",
     ],
@@ -58,6 +58,13 @@ java_library(
     ],
     data = [
         "//spotlight:Spotlight",  # this binary is launched
+    ],
+)
+
+java_library(
+    name = "SpotlightConnection",
+    srcs = [
+        "SpotlightConnection.java",
     ],
 )
 

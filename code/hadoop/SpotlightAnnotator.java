@@ -39,24 +39,27 @@ import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 public class SpotlightAnnotator extends Configured implements Tool {
 	public static class SpotlightAnnotatorMapper extends Mapper<Text, Text, Text, Text>{
 		private int prefixLength;
-		private SpotlightServer server;
+		//private SpotlightServer server;
+		private SpotlightConnection connection;
 
 		@Override
 		public void setup(Context context) {
 			Configuration conf = context.getConfiguration();
 			prefixLength = conf.getInt("prefix_length", 10);
 
-			server = new SpotlightServer();
+			connection = new SpotlightConnection(conf.get("spotlight_server"));
+			/*
 			try {
-				server.start();
+				//server.start();
 			} catch (IOException e) {
 				System.exit(1);
 			}
+			*/
 		}
 
 		@Override
 		public void cleanup(Context context) {
-			server.stop();
+			//server.stop();
 		}
 
 		@Override
@@ -72,7 +75,7 @@ public class SpotlightAnnotator extends Configured implements Tool {
 			}
 			articleText = articleText.substring(0, length);
 
-			String jsonOut = server.getAnnotationJSON(articleText);
+			String jsonOut = connection.getAnnotationJSON(articleText);
 			context.write(key, new Text(jsonOut.toString()));
 		}
 	}
@@ -85,6 +88,10 @@ public class SpotlightAnnotator extends Configured implements Tool {
 		}
 		if (conf.get("prefix_length") == null) {
 			System.out.println("No prefix_length given");
+			return 1;
+		}
+		if (conf.get("spotlight_server") == null) {
+			System.out.println("No spotlight_server given");
 			return 1;
 		}
 
