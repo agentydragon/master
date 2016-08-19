@@ -49,7 +49,6 @@ FILES="\
 "
 #	metacentrum_corenlp.sh \
 #	metacentrum_download_dumps.sh \
-#	metacentrum_install_corenlp.sh \
 #	metacentrum_prepare.sh \
 #	dbpedia.py \
 #	wikidata.py \
