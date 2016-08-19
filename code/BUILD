@@ -395,7 +395,6 @@ py_binary(
 # org.apache.hadoop:hadoop-common:2.6.0
 # org.apache.hadoop:hadoop-mapreduce-client-core:2.6.0
 # edu.stanford.nlp:stanford-corenlp:3.6.0
-# edu.stanford.nlp:stanford-corenlp:models:3.6.0
 
 
 java_library(
