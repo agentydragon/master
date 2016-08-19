@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 import java.util.Properties;
 import java.io.StringWriter;
 import java.lang.System;
+/*
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.io.IntWritable;
@@ -25,6 +26,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
+*/
 
 // Input:
 //   Key:   article name (Text)
