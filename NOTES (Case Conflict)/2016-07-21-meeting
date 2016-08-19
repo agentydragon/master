@@ -1,0 +1,29 @@
+* survey knowledge graph CONSTRUCTION
+* existuje open-source knowledge graph completion?
+
+doplnovani Wikidata
+reimplementace Knowledge Vault
+
+DBpedia < Freebase
+
+COMMITMENT: udělám to
+
+zacnu s kopii Knowledge Vaultu
+
+>= 3 dny v tydnu, 8 hodin, 4 tydny ==> 8000 Kc mesicne
+
+* open-source nastroje -> rozchodit
+
+* zmerit/ocenit vysledek (# edgu)
+
+Honza Pichl: QA nad strukturovanymi databazemi
+Tomas Vesely: neuronove modely pro paraphrasing
+Tomas Vyskocil: ?
+Jirka Verner: Parsey McParseface
+Martin Matulik: semantic parsing, rozebira YodaQA
+Simon Pavlik: Kerasova vec
+
+reserse: ze clanku text => prezentace
+pondeli 1.8.: ~20-25min prezentace o researchi
+	(do Google filu)
+prezentace: min nez reserse

@@ -1,0 +1,9 @@
+SPARQL to get date of birth of someone:
+
+
+
+	PREFIX dbpedia: <http://dbpedia.org/resource/>
+	PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
+	select ?value where {
+	  dbpedia:Luciano_Ligabue dbpedia-owl:birthDate ?value
+	}

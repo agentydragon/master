@@ -1,0 +1,97 @@
+* predikce DBPedie z Wikipedie --> do some research on this
+* research o automatickem budovani ontologii
+
+* rekurzivni neuronova sit: parsovani bottom-up
+
+
+#brmson na Freenode
+https://www.mpi-inf.mpg.de/departments/databases-and-information-systems/research/yago-naga/yago/
+
+
+Masters: https://web.stanford.edu/group/cslipublications/cslipublications/site/1575864282.shtml
+
+
+Stash:
+	http://live.ailao.eu/?feedback=false#mainPage
+	https://github.com/brmson/yodaqa
+	https://en.wikipedia.org/wiki/Never-Ending_Language_Learning
+	https://en.wikipedia.org/wiki/Resource_Description_Framework
+	http://dbpedia.org/Downloads2015-04
+	https://www.google.cz/search?q=wikipedia+dump&ie=utf-8&oe=utf-8&gws_rd=cr&ei=venOVqKsBaPnyQOSrJeADA
+	http://wiki.dbpedia.org/about/about-dbpedia/architecture
+	https://www.mpi-inf.mpg.de/departments/databases-and-information-systems/research/yago-naga/yago/
+
+2016-03-19:
+	https://eclubcvut.slack.com
+	diplomka: dokoncit stahovani a extrakci
+	ctvrtky: pravidelne asi kazdy druhy ctvrtek progress reporty (asi tak za mesic a pul)
+
+2016-03-09
+	DBpedia Spotlight: annotates mentions of DBpedia resources in text
+
+	mvn clean install
+	cd dump
+	../run download config=download.10000.properties
+
+	downloaded into /mnt/crypto/data/wikidump-10k
+
+	OQA: WikiAnswers question paraphrase data
+		https://github.com/afader/oqa
+
+	TODO: Keras
+
+	https://github.com/knowitall
+	https://github.com/knowitall/reverb
+	http://reverb.cs.washington.edu/
+
+2016-04-07:
+	linky od Paskyho:
+	http://www.mitpressjournals.org/doi/abs/10.1162/COLI_a_00239#.Vu6kfexifbA
+	https://edersantana.github.io/articles/keras_rl/
+	http://www.lab41.org/taking-keras-to-the-zoo/
+
+2016-04-27
+	AUC score: "area under ROC curve"
+		(probability classifier ranks random positive > random negative)
+
+	/mnt/crypto/data/wikidump-10k
+
+2016-04-28
+	running extraction: ../run extraction extraction-config-file
+		(extraction.default.properties)
+
+	closed tabs z 2016-03-19:
+		https://github.com/afader/oqa
+		https://github.com/dbpedia-spotlight/dbpedia-spotlight
+		http://wiki.dbpedia.org/about
+		https://github.com/dbpedia-spotlight/
+		https://github.com/dbpedia/extraction-framework/wiki/New-Extractor
+		https://github.com/dbpedia/extraction-framework/wiki/Extraction-Instructions
+		https://github.com/dbpedia/extraction-framework/wiki
+		http://wiki.dbpedia.org/
+		https://github.com/dbpedia/extraction-framework
+		https://github.com/dbpedia/
+		http://dbpedia.org/about/about-dbpedia/architecture
+		http://dbpedia.org/Downloads2015-04
+
+2016-05-12
+	https://github.com/dbpedia/extraction-framework/wiki/Extraction-Instructions
+	https://github.com/dbpedia/extraction-framework/wiki
+	https://github.com/fchollet/keras
+	http://keras.io/#installation
+
+	Domluveny postup ze vcera:
+	(1) najit na Google Scholar citace na Knowledge Vault a zjistit, jestli neexistuje open implementace
+	(2) moje prace bude zreprodukovat Knowledge Vault a kdyztak vyzkouset
+	nove algoritmy v nem
+
+2016-05-30
+	precteny clanek o distant supervision na DBpedii
+
+	../run download config=download.minimal.properties
+	downloaded into /mnt/crypto/data/wikidump-en
+
+	to run Dropbox/master/reproductions/pra: sbt 'run ./examples/ sfe_bfs_pra_anyrel'
+
+2016-06-06
+	../run download config=download.minimal.properties
