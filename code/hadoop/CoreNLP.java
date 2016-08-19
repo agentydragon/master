@@ -54,6 +54,10 @@ public class CoreNLP extends Configured implements Tool {
 					"lemma,ner,dcoref");
 			props.put("parser.maxlen", "100");
 			props.put("pos.maxlen", "100");
+
+			// Use shift-reduce model to parse faster.
+			props.put("parse.model", "edu/stanford/nlp/models/srparser/englishSR.ser.gz");
+
 			pipeline = new StanfordCoreNLP(props);
 		}
 

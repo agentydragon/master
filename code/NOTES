@@ -21,7 +21,11 @@ qsub -l walltime=24h -l nodes=1:mem=2gb -m abe annotate_coreferences
 # load Wikidata into Fuseki
 # TODO: more CPUs?
 # 4 GB is not enough.
-qsub -l walltime=48h -l nodes=1:ppn=4,mem=16gb:brno -m abe wikidata_into_fuseki.sh
+
+# qsub -l walltime=48h -l nodes=1:ppn=4,mem=16gb:brno -m abe wikidata_into_fuseki.sh
+#	=> 48h is not enough
+qsub -l walltime=96h -l nodes=1:ppn=4,mem=16gb:brno -m abe wikidata_into_fuseki.sh
+	=> 12192098.arien.ics.muni.cz
 
 # -m e: send mail when job terminates
 
