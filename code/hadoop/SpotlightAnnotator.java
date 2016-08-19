@@ -7,7 +7,6 @@ import java.util.StringTokenizer;
 import java.util.Properties;
 import java.io.StringWriter;
 import java.lang.System;
-/*
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.io.IntWritable;
@@ -26,7 +25,6 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
-*/
 
 // Input:
 //   Key:   article name (Text)
@@ -38,7 +36,6 @@ import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 //
 // Arguments: (input) (output) -Dprefix_length=200
 
-/*
 public class SpotlightAnnotator extends Configured implements Tool {
 	public static class SpotlightAnnotatorMapper extends Mapper<Text, Text, Text, Text>{
 		private int prefixLength;
@@ -50,7 +47,11 @@ public class SpotlightAnnotator extends Configured implements Tool {
 			prefixLength = conf.getInt("prefix_length", 10);
 
 			server = new SpotlightServer();
-			server.run();
+			try {
+				server.start();
+			} catch (IOException e) {
+				System.exit(1);
+			}
 		}
 
 		@Override
@@ -110,19 +111,5 @@ public class SpotlightAnnotator extends Configured implements Tool {
 	public static void main(String[] args) throws Exception {
 		int res = ToolRunner.run(null, new SpotlightAnnotator(), args);
 		System.exit(res);
-	}
-}
-*/
-public class SpotlightAnnotator {
-	public static void main(String[] args) throws Exception {
-		SpotlightServer server = new SpotlightServer();
-		server.start();
-		try {
-			String text = "Hello World! Barack Obama is a black man and he is the president of USA, and his wife is named Michelle Obama.";
-			System.out.println(text);
-			System.out.println(server.getAnnotationJSON(text));
-		} finally {
-			server.stop();
-		}
 	}
 }
