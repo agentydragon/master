@@ -98,5 +98,4 @@ hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.
 # Spotlight
 hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/SpotlightAnnotator_deploy.jar -D prefix_length=1000 -D spotlight_server=http://hador:2222/rest/annotate -D mapreduce.input.fileinputformat.split.maxsize=1000000 /user/prvak/wiki-splits /user/prvak/article-spotlights-separate-1000
 
-
-hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/RandomSelector_deploy.jar -D prefix_length=1000 -D spotlight_server=http://hador:2222/rest/annotate -D mapreduce.input.fileinputformat.split.maxsize=1000000 /user/prvak/wiki-splits /user/prvak/article-spotlights-separate-1000
+hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/RandomSelector_deploy.jar -D selection_probability=0.001 /user/prvak/wiki-splits /user/prvak/wiki-splits-sub-0.001
