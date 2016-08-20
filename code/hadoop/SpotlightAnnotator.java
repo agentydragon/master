@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 import java.util.Properties;
 import java.io.StringWriter;
 import java.lang.System;
+import org.apache.log4j.Logger;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.io.IntWritable;
@@ -38,28 +39,41 @@ import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 
 public class SpotlightAnnotator extends Configured implements Tool {
 	public static class SpotlightAnnotatorMapper extends Mapper<Text, Text, Text, Text>{
+		private Logger logger = Logger.getLogger(SpotlightAnnotatorMapper.class);
 		private int prefixLength;
-		//private SpotlightServer server;
+		// private SpotlightServer server;
 		private SpotlightConnection connection;
+
+		// public static boolean startOwnSpotlight = true;
 
 		@Override
 		public void setup(Context context) {
+			logger.info("mapper setup");
 			Configuration conf = context.getConfiguration();
 			prefixLength = conf.getInt("prefix_length", 10);
 
-			connection = new SpotlightConnection(conf.get("spotlight_server"));
 			/*
-			try {
-				//server.start();
-			} catch (IOException e) {
-				System.exit(1);
-			}
+			if (startOwnSpotlight) {
+				try {
+					server.start();
+				} catch (IOException e) {
+					logger.error("failed to start Spotlight server", e);
+					System.exit(1);
+				}
+				connection = new SpotlightConnection("http://localhost:2222/rest/annotate");
+			} else {
 			*/
+				connection = new SpotlightConnection(conf.get("spotlight_server"));
+			//}
 		}
 
 		@Override
 		public void cleanup(Context context) {
-			//server.stop();
+			/*
+			if (startOwnSpotlight) {
+				server.stop();
+			}
+			*/
 		}
 
 		@Override
@@ -94,10 +108,14 @@ public class SpotlightAnnotator extends Configured implements Tool {
 			System.out.println("No prefix_length given");
 			return 1;
 		}
-		if (conf.get("spotlight_server") == null) {
-			System.out.println("No spotlight_server given");
-			return 1;
+		/*
+		if (!SpotlightAnnotatorMapper.startOwnSpotlight) {
+			if (conf.get("spotlight_server") == null) {
+				System.out.println("No spotlight_server given");
+				return 1;
+			}
 		}
+		*/
 
 		// Create a JobConf using the processed conf
 		Job job = Job.getInstance(conf, "spotlight-annotate");
