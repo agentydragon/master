@@ -65,6 +65,23 @@ java_binary(
     ],
 )
 
+java_binary(
+    name = "DocumentProcessor",
+    srcs = [
+        "DocumentProcessor.java",
+    ],
+    main_class = "DocumentProcessor",
+    deps = [
+        ":DocumentProcessorMapper",
+        "//:org_apache_hadoop_hadoop_common",
+        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
+        "//:edu_stanford_nlp_stanford_corenlp",
+        # TODO: must be installed separately
+        "@corenlp_models//jar",
+        "@corenlp_srparser_model//jar",
+    ],
+)
+
 java_library(
     name = "DocumentProcessorMapper",
     srcs = [
