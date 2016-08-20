@@ -67,15 +67,3 @@ java_library(
         "SpotlightConnection.java",
     ],
 )
-
-java_binary(
-    name = "CoreNLPViaQsub",
-    srcs = [
-        "CoreNLPViaQsub.java",
-    ],
-    main_class = "CoreNLPViaQsub",
-    deps = [
-        "//:org_apache_hadoop_hadoop_common",
-        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
-    ],
-)
