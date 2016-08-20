@@ -10,6 +10,19 @@ java_binary(
     ],
 )
 
+# genrule(
+#     name = "processed_document_proto",
+#     srcs = [
+#         "processed_document.proto",
+#     ],
+#     outs = [
+#         "ProcessedDocument.java",
+#     ],
+#     cmd = "protoc -I=. " +
+#         "--java_out=$(GENDIR)/ " +
+#         "$(location :processed_document.proto)"
+# )
+
 java_binary(
     name = "CoreNLP",
     srcs = [
@@ -49,6 +62,23 @@ java_binary(
         ":RandomSelectorMapper",
         "//:org_apache_hadoop_hadoop_common",
         "//:org_apache_hadoop_hadoop_mapreduce_client_core",
+    ],
+)
+
+java_library(
+    name = "DocumentProcessorMapper",
+    srcs = [
+        "DocumentProcessorMapper.java",
+    ],
+    deps = [
+        ":SpotlightConnection",
+        "//:org_apache_hadoop_hadoop_common",
+        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
+        "//:edu_stanford_nlp_stanford_corenlp",
+        # TODO: must be installed separately
+        "@corenlp_models//jar",
+        "@corenlp_srparser_model//jar",
+        "//:org_json_json",
     ],
 )
 

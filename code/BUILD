@@ -390,11 +390,11 @@ py_binary(
     ],
 )
 
-
 # The following dependencies were calculated from:
 # org.apache.hadoop:hadoop-common:2.6.0
 # org.apache.hadoop:hadoop-mapreduce-client-core:2.6.0
 # edu.stanford.nlp:stanford-corenlp:3.6.0
+# org.json:json:20160810
 
 
 java_library(
@@ -553,8 +553,12 @@ java_library(
         "@com_io7m_xom_xom//jar",
         "@de_jollyday_jollyday//jar",
         "@javax_json_javax_json_api//jar",
+        "@javax_xml_bind_jaxb_api//jar",
         "@joda_time_joda_time//jar",
         "@org_slf4j_slf4j_api//jar",
+        "@xalan_xalan//jar",
+        "@xerces_xercesImpl//jar",
+        "@xml_apis_xml_apis//jar",
     ],
 )
 
@@ -1017,6 +1021,14 @@ java_library(
 )
 
 java_library(
+    name = "org_json_json",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_json_json//jar",
+    ],
+)
+
+java_library(
     name = "org_mortbay_jetty_jetty",
     visibility = ["//visibility:public"],
     exports = [
@@ -1246,3 +1258,4 @@ java_library(
         "@org_sonatype_sisu_inject_cglib//jar",
     ],
 )
+
