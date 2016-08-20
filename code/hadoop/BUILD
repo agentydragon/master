@@ -28,6 +28,30 @@ java_binary(
     ],
 )
 
+java_library(
+    name = "RandomSelectorMapper",
+    srcs = [
+        "RandomSelectorMapper.java",
+    ],
+    deps = [
+        "//:org_apache_hadoop_hadoop_common",
+        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
+    ],
+)
+
+java_binary(
+    name = "RandomSelector",
+    srcs = [
+        "RandomSelector.java",
+    ],
+    main_class = "RandomSelector",
+    deps = [
+        ":RandomSelectorMapper",
+        "//:org_apache_hadoop_hadoop_common",
+        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
+    ],
+)
+
 java_binary(
     name = "SpotlightAnnotator",
     srcs = [
