@@ -20,7 +20,7 @@ import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 
-public static class RandomSelectorMapper extends Mapper<Text, Text, Text, Text>{
+public class RandomSelectorMapper extends Mapper<Text, Text, Text, Text>{
 	private Logger logger = Logger.getLogger(RandomSelectorMapper.class);
 	private double probability;
 	private Random random = new Random();
@@ -29,16 +29,16 @@ public static class RandomSelectorMapper extends Mapper<Text, Text, Text, Text>{
 	public void setup(Context context) {
 		logger.info("mapper setup");
 		Configuration conf = context.getConfiguration();
-		prefixLength = conf.getDouble("selection_probability", -1);
-		if (selectionProbability < 0 || selectionProbability > 1) {
+		probability = conf.getDouble("selection_probability", -1);
+		if (probability < 0 || probability > 1) {
 			logger.error("Invalid selection probability");
 			System.exit(1);
 		}
 	}
 
 	@Override
-	public void map(Text key, Text value, Context context) throws IOException {
-		if (random.nextDouble() < selectionProbability) {
+	public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
+		if (random.nextDouble() < probability) {
 			context.write(key, value);
 		}
 	}

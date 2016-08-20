@@ -43,7 +43,7 @@ public class RandomSelector extends Configured implements Tool {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(null, new SpotlightAnnotator(), args);
+		int res = ToolRunner.run(null, new RandomSelector(), args);
 		System.exit(res);
 	}
 }
