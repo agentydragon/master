@@ -95,3 +95,6 @@ Stash:
 
 2016-06-06
 	../run download config=download.minimal.properties
+
+job monitoring: pbsmon
+	http://metavo.metacentrum.cz/pbsmon2/person

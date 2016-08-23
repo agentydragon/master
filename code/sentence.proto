@@ -25,6 +25,9 @@ message Mention {
 
 message Coreference {
 	repeated Mention mentions = 1;
+
+	// added by us
+	optional string wikidataEntityId = 2;
 }
 
 message Document {
@@ -43,13 +46,17 @@ message Document {
 }
 
 message SpotlightMention {
-	// Extracted by us
-	optional string wikidata_entity_id = 1;
-
-	// Returned by Spotlight
-	optional string dbpedia_url = 2;
+	optional int32 start_offset = 1;
+	optional int32 end_offset = 2;
 	optional string surface_form = 3;
-	optional int32 offset = 4;
+	optional string uri = 4;
+	//// Extracted by us
+	//optional string wikidata_entity_id = 1;
+
+	//// Returned by Spotlight
+	//optional string dbpedia_url = 2;
+	//optional string surface_form = 3;
+	//optional int32 offset = 4;
 }
 
 message DocumentSentence {

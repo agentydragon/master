@@ -31,9 +31,9 @@ class SentenceInDocument(object):
                 # entity not detected
                 continue
             for mention in coreference.mentions:
-                if mention.sentenceId == sentence_id:
-                    self.mentions.append(MentionInSentence(mention.startWordId,
-                                                           mention.endWordId,
+                if mention.sentence_id == sentence_id:
+                    self.mentions.append(MentionInSentence(mention.start_word_id,
+                                                           mention.end_word_id,
                                                            coreference.wikidataEntityId))
                     wikidata_ids.add(coreference.wikidataEntityId)
         self.wikidata_ids = list(wikidata_ids)
@@ -102,6 +102,7 @@ def get_true_triples_expressed_by_sentence(sentence):
     mentioned_wikidata_ids = sentence.wikidata_ids
     sentence_entity_pairs = sentence.all_entity_pairs()
     wikidata_client = wikidata.WikidataClient()
+    wikidata_client.persist_caches = False
 
     all_pairs = {}
     # print(mentioned_wikidata_ids)
@@ -124,10 +125,10 @@ def sentence_to_training_data(sentence):
     Args:
       sentence (SentenceInDocument)
     """
-    print('sentence_to_training_data(', sentence.get_text(), ')')
+    #print('sentence_to_training_data(', sentence.get_text(), ')')
     all_pairs = get_true_triples_expressed_by_sentence(sentence)
 
-    print(sentence) #, all_pairs)
+    #print(sentence) #, all_pairs)
     #if len(all_pairs) > 0:
         #raise
 
@@ -137,7 +138,7 @@ def sentence_to_training_data(sentence):
     for entity_pair, true_relations in all_pairs.items():
         e1, e2 = entity_pair
         for relation in all_pairs[entity_pair]:
-            print('\tpositive:', (e1, relation, e2))
+            #print('\tpositive:', (e1, relation, e2))
             sample = sentence.to_sample(relation, e1, e2, positive=True)
             training_data.add_sample(sample)
 
@@ -148,14 +149,14 @@ def sentence_to_training_data(sentence):
         key = (e1, e2)
         for relation in relations.IMPORTANT_RELATIONS:
             if (key not in all_pairs) or (relation not in all_pairs[key]):
-                print('\tnegative:', (e1, relation, e2))
+                #print('\tnegative:', (e1, relation, e2))
                 sample = sentence.to_sample(relation, e1, e2, positive=False)
                 training_data.add_sample(sample)
 
     return training_data
 
 def load_document(document):
-    print('Loading document:', document.article_sanename, '...')
+    # print('Loading document:', document.title, '...')
     sentences = []
     for sentence in document.sentences:
         # TODO: create more complex samples

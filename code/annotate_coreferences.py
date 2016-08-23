@@ -52,8 +52,8 @@ def find_sentence_token(sentence, token_id):
             return token
 
 def get_mention_start(document, mention):
-    sentence = find_sentence_by_id(document, mention.sentenceId)
-    token = find_sentence_token(sentence, mention.startWordId)
+    sentence = find_sentence_by_id(document, mention.sentence_id)
+    token = find_sentence_token(sentence, mention.start_word_id)
 
     # TODO: HAX
     if token is None:
@@ -62,8 +62,8 @@ def get_mention_start(document, mention):
     return token.start_offset
 
 def get_mention_end(document, mention):
-    sentence = find_sentence_by_id(document, mention.sentenceId)
-    token = find_sentence_token(sentence, mention.endWordId - 1)
+    sentence = find_sentence_by_id(document, mention.sentence_id)
+    token = find_sentence_token(sentence, mention.end_word_id - 1)
 
     # TODO: HAX
     if token is None:
@@ -91,7 +91,8 @@ def propagate_entities(document, spotlight):
             mention_text = mention.text
             mention_actual_text = document.text[mention_start:mention_end]
             if mention_text != mention_actual_text:
-                print((mention_text, mention_actual_text))
+                # print((mention_text, mention_actual_text))
+                pass
             # TODO: check this out.
             # assert mention_text == mention_actual_text
             for resource in find_resources_between(spotlight, mention_start, mention_end):
@@ -117,4 +118,5 @@ def propagate_entities(document, spotlight):
                 if wikidata_id:
                     coreference.wikidataEntityId = wikidata_id # best_match
                 else:
-                    print("cannot get wikidata id:", best_match)
+                    pass
+                    # print("cannot get wikidata id:", best_match)

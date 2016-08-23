@@ -23,6 +23,18 @@ py_binary(
 )
 
 py_binary(
+    name = "mr_generate_training_samples",
+    srcs = [
+        "mr_generate_training_samples.py",
+    ],
+    deps = [
+        ":parse_xmls_to_protos_lib",
+        ":annotate_coreferences_lib",
+        ":get_training_samples_lib",
+    ],
+)
+
+py_binary(
     name = "launch_get_training_samples_main",
     srcs = [
         "launch_get_training_samples_main.py",
@@ -314,6 +326,14 @@ py_test(
 #     cmd = "nim c -d:release --app:console $(location @wiki2text//:wiki2text.nim) && mv wiki2text $(GENDIR)"
 # )
 
+java_library(
+    name = "DocumentAnnotator",
+    srcs = [
+        "DocumentAnnotator.java",
+        "Sentence.java",
+    ],
+)
+
 genrule(
     name = "sentence_proto",
     srcs = [
@@ -321,8 +341,12 @@ genrule(
     ],
     outs = [
         "sentence_pb2.py",
+        "Sentence.java",
     ],
-    cmd = "protoc -I=. --python_out=$(GENDIR)/ $(location :sentence.proto)"
+    cmd = "protoc -I=. " +
+        "--python_out=$(GENDIR)/ " +
+        "--java_out=$(GENDIR)/ " +
+        "$(location :sentence.proto)"
 )
 
 genrule(

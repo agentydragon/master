@@ -26,6 +26,11 @@ qsub -l walltime=24h -l nodes=1:mem=2gb -m abe annotate_coreferences
 #	=> 48h is not enough
 qsub -l walltime=96h -l nodes=1:ppn=4,mem=16gb:brno -m abe wikidata_into_fuseki.sh
 	=> 12192098.arien.ics.muni.cz
+	# data phase finished
+	# index phase ran out of memory
+
+qsub -l walltime=24h -l nodes=1:ppn=4,mem=32gb:brno -m abe wikidata_into_fuseki.sh
+	=> 12216763.arien.ics.muni.cz
 
 # -m e: send mail when job terminates
 
@@ -99,3 +104,10 @@ hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.
 hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/SpotlightAnnotator_deploy.jar -D prefix_length=1000 -D spotlight_server=http://hador:2222/rest/annotate -D mapreduce.input.fileinputformat.split.maxsize=1000000 /user/prvak/wiki-splits /user/prvak/article-spotlights-separate-1000
 
 hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/RandomSelector_deploy.jar -D selection_probability=0.001 /user/prvak/wiki-splits /user/prvak/wiki-splits-sub-0.001
+
+# launch on hador
+export HADOOP_CLASSPATH=/storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/DocumentProcessor_deploy.jar
+hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/DocumentProcessor.jar DocumentProcessor -D spotlight_server=http://hador:2222/rest/annotate -D mapreduce.input.fileinputformat.split.maxsize=1000000 -D mapreduce.map.java.opts=-Xmx8000m -D mapreduce.map.memory.mb=9000 -D mapreduce.task.timeout=6000000 /user/prvak/wiki-splits-sub-0.001 /user/prvak/wiki-processed-sub-0.001
+# has very long bootup
+
+14..19 minut na 1/1000 Wikipedie

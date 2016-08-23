@@ -43,21 +43,21 @@ def handle_named_entity(sentence, start, end, document):
     found = False
     for coreference in document.coreferences:
         for mention in coreference.mentions:
-            if (mention.sentenceId == sentence.id and
-                    mention.startWordId >= start.id and
-                    (mention.endWordId - 1) <= end.id):
+            if (mention.sentence_id == sentence.id and
+                    mention.start_word_id >= start.id and
+                    (mention.end_word_id - 1) <= end.id):
                 found = True
                 break
     if found:
         return
 
     mention_text = document.text[start.start_offset:end.end_offset]
-    print("named entity: [", mention_text, ']')
+    # print("named entity: [", mention_text, ']')
     coreferences = document.coreferences.add()
     mention = coreferences.mentions.add()
-    mention.sentenceId = sentence.id
-    mention.startWordId = start.id
-    mention.endWordId = end.id + 1
+    mention.sentence_id = sentence.id
+    mention.start_word_id = start.id
+    mention.end_word_id = end.id + 1
     mention.text = mention_text
 
 def add_single_referenced_entities_to_coreferences(document):
@@ -80,7 +80,7 @@ def add_single_referenced_entities_to_coreferences(document):
             if ner == 'DURATION':
                 continue  # TODO
 
-            print(ner)
+            # print(ner)
             #for token in tokens:
             #    print(token.lemma)
             #handle_named_entity(tokens[0].start_offset,
@@ -140,9 +140,9 @@ def document_to_proto(document_root, plaintext):
             #mention_head = sentence['tokens'][mention_head_id]['word']
 
             output_mention = output_coreference.mentions.add()
-            output_mention.sentenceId = sentenceid
-            output_mention.startWordId = mention_start_id
-            output_mention.endWordId = mention_end_id
+            output_mention.sentence_id = sentenceid
+            output_mention.start_word_id = mention_start_id
+            output_mention.end_word_id = mention_end_id
             output_mention.text = mention_tag.find('text').text
             #output_mention.startCharOffset = mention_start
             #output_mention.endCharOffset = mention_end

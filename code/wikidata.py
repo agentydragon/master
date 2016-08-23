@@ -23,7 +23,7 @@ class WikidataClient(object):
             self.name_cache.save()
 
     def collect_forward_properties(self, wikidata_id):
-        print('forward for', wikidata_id)
+        # print('forward for', wikidata_id)
         results = self.wikidata_client.get_results("""
             SELECT ?rel ?other
             WHERE { wd:%s ?rel ?other . }
@@ -44,7 +44,7 @@ class WikidataClient(object):
 
     # TODO DRY
     def collect_backward_properties(self, wikidata_id):
-        print('backward for', wikidata_id)
+        #print('backward for', wikidata_id)
         results = self.wikidata_client.get_results("""
             SELECT ?rel ?other
             WHERE { ?other ?rel wd:%s . }
