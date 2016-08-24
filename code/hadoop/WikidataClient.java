@@ -164,10 +164,16 @@ public class WikidataClient {
 		return resultsx;
 	}
 
+	private static Map<String, List<Triple>> cache = new HashMap<>();
+
 	public static List<Triple> getAllTriplesOfEntity(String wikidataId) {
+		if (cache.containsKey(wikidataId)) {
+			return cache.get(wikidataId);
+		}
 		ArrayList<Triple> triples = new ArrayList<Triple>();
 		triples.addAll(collectForwardProperties(wikidataId));
 		triples.addAll(collectBackwardProperties(wikidataId));
+		cache.put(wikidataId, triples);
 		return triples;
 	}
 }
