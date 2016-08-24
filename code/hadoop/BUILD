@@ -115,6 +115,19 @@ java_library(
     ],
 )
 
+java_library(
+    name = "GetTrainingSamples",
+    srcs = [
+        "GetTrainingSamples.java",
+        "//:Sentence.java",
+        "//:TrainingSamples.java",
+    ],
+    deps = [
+        "//:com_google_protobuf_protobuf_java",
+        "//:org_json_json",
+    ],
+)
+
 java_test(
     name = "ParseXmlsToProtosTest",
     srcs = [

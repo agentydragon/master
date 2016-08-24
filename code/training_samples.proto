@@ -1,6 +1,6 @@
-package prvak;
+//package prvak;
 
-message TrainingSamples {
+message TrainingSamplesSet {
 	repeated RelationTrainingSamples relation_samples = 1;
 }
 

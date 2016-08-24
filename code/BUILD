@@ -357,8 +357,13 @@ genrule(
     ],
     outs = [
         "training_samples_pb2.py",
+        "TrainingSamples.java",
     ],
-    cmd = "protoc -I=. --python_out=$(GENDIR)/ $(location :training_samples.proto)"
+    visibility = ["//visibility:public"],
+    cmd = "protoc -I=. " +
+        "--python_out=$(GENDIR)/ " +
+        "--java_out=$(GENDIR)/ " +
+        "$(location :training_samples.proto)"
 )
 
 py_binary(
