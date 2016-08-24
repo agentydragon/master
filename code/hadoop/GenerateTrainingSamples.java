@@ -23,21 +23,17 @@ import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 
-public class DocumentProcessor extends Configured implements Tool {
+public class GenerateTrainingSamples extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
 		// Configuration processed by ToolRunner
 		Configuration conf = getConf();
 		for (int i = 0; i < args.length; i++) {
 			System.out.println("args[" + i + "]=" + args[i]);
 		}
-		if (conf.get("spotlight_server") == null) {
-			System.out.println("No spotlight_server given");
-			return 1;
-		}
 
 		// Create a JobConf using the processed conf
-		Job job = Job.getInstance(conf, "document-process");
-		job.setJarByClass(DocumentProcessor.class);
+		Job job = Job.getInstance(conf, "generate-training-samples");
+		job.setJarByClass(GenerateTrainingSamples.class);
 
 		job.setInputFormatClass(SequenceFileInputFormat.class);
 		SequenceFileInputFormat.addInputPath(job, new Path(args[0]));
@@ -45,7 +41,7 @@ public class DocumentProcessor extends Configured implements Tool {
 		job.setOutputFormatClass(SequenceFileOutputFormat.class);
 		SequenceFileOutputFormat.setOutputPath(job, new Path(args[1]));
 
-		job.setMapperClass(DocumentProcessorMapper.class);
+		job.setMapperClass(GenerateTrainingSamplesMapper.class);
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(Text.class);
 		job.setOutputKeyClass(Text.class);
@@ -56,7 +52,7 @@ public class DocumentProcessor extends Configured implements Tool {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(null, new DocumentProcessor(), args);
+		int res = ToolRunner.run(null, new GenerateTrainingSamples(), args);
 		System.exit(res);
 	}
 }

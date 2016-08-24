@@ -200,6 +200,19 @@ java_library(
 )
 
 java_binary(
+    name = "GenerateTrainingSamples",
+    srcs = [
+        "GenerateTrainingSamples.java",
+    ],
+    main_class = "GenerateTrainingSamples",
+    deps = [
+        ":GenerateTrainingSamplesMapper",
+        "//:org_apache_hadoop_hadoop_common",
+        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
+    ],
+)
+
+java_binary(
     name = "DocumentProcessor",
     srcs = [
         "DocumentProcessor.java",
