@@ -174,6 +174,15 @@ public class GetTrainingSamples {
 		return allPairs;
 	}
 
+	public static List<TrainingSamples.TrainingSample> documentToSamples(Sentence.Document document) {
+		ArrayList<TrainingSamples.TrainingSample> samples = new ArrayList<>();
+		for (Sentence.DocumentSentence sentence : document.getSentencesList()) {
+			SentenceInDocument sid = new SentenceInDocument(document, sentence.getId());
+			samples.addAll(sentenceToTrainingSamples(sid));
+		}
+		return samples;
+	}
+
 	public static List<TrainingSamples.TrainingSample> sentenceToTrainingSamples(SentenceInDocument sentence) {
 		Map<EntityPair, List<String>> allPairs = getTrueTriplesExpressedBySentence(sentence);
 

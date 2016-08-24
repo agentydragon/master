@@ -167,11 +167,15 @@ java_library(
     srcs = [
         "GenerateTrainingSamplesMapper.java",
         "//:Sentence.java",
+        "//:TrainingSamples.java",
     ],
     deps = [
         "//:org_apache_hadoop_hadoop_common",
         "//:org_apache_hadoop_hadoop_mapreduce_client_core",
         "//:org_json_json",
+        ":GetTrainingSamples",
+        ":AnnotateCoreferences",
+        ":ParseXmlsToProtos",
     ]
 )
 

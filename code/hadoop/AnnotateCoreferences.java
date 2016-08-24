@@ -5,7 +5,7 @@ import java.util.HashSet;
 import org.json.*;
 
 public class AnnotateCoreferences {
-	public List<Sentence.SpotlightMention> SpotlightToMentions(JSONObject spotlightJson) {
+	public static List<Sentence.SpotlightMention> SpotlightToMentions(JSONObject spotlightJson) {
 		List<Sentence.SpotlightMention> mentions = new ArrayList<>();
 
 		JSONArray mentionsList = (JSONArray) spotlightJson.get("Resources");
@@ -27,7 +27,7 @@ public class AnnotateCoreferences {
 		return mentions;
 	}
 
-	private Sentence.DocumentSentence findSentenceById(Sentence.Document document, int id) {
+	private static Sentence.DocumentSentence findSentenceById(Sentence.Document document, int id) {
 		for (Sentence.DocumentSentence sentence : document.getSentencesList()) {
 			if (sentence.getId() == id) {
 				return sentence;
@@ -36,7 +36,7 @@ public class AnnotateCoreferences {
 		return null;
 	}
 
-	private Sentence.SentenceToken findSentenceToken(Sentence.DocumentSentence sentence, int id) {
+	private static Sentence.SentenceToken findSentenceToken(Sentence.DocumentSentence sentence, int id) {
 		for (Sentence.SentenceToken token : sentence.getTokensList()) {
 			if (token.getId() == id) {
 				return token;
@@ -45,7 +45,7 @@ public class AnnotateCoreferences {
 		return null;
 	}
 
-	private int getMentionStart(Sentence.Document document, Sentence.Mention mention) {
+	private static int getMentionStart(Sentence.Document document, Sentence.Mention mention) {
 		Sentence.DocumentSentence sentence = findSentenceById(document, mention.getSentenceId());
 		Sentence.SentenceToken token = findSentenceToken(sentence, mention.getStartWordId());
 		if (token == null) {
@@ -65,7 +65,7 @@ public class AnnotateCoreferences {
 		return token.getEndOffset();
 	}
 
-	private List<Sentence.SpotlightMention> findResourcesBetween(List<Sentence.SpotlightMention> spotlight, int start, int end) {
+	private static List<Sentence.SpotlightMention> findResourcesBetween(List<Sentence.SpotlightMention> spotlight, int start, int end) {
 		List<Sentence.SpotlightMention> result = new ArrayList<>();
 		for (Sentence.SpotlightMention mention : spotlight) {
 			if (mention.getStartOffset() >= start && mention.getEndOffset() <= end) {
@@ -75,7 +75,7 @@ public class AnnotateCoreferences {
 		return result;
 	}
 
-	public Sentence.Document PropagateEntities(Sentence.Document documentProto, List<Sentence.SpotlightMention> spotlightMentions) {
+	public static Sentence.Document PropagateEntities(Sentence.Document documentProto, List<Sentence.SpotlightMention> spotlightMentions) {
 		Sentence.Document.Builder builder = Sentence.Document.newBuilder();
 		builder.mergeFrom(documentProto);
 
