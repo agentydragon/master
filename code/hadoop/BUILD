@@ -116,6 +116,13 @@ java_library(
 )
 
 java_library(
+    name = "Relations",
+    srcs = [
+        "Relations.java",
+    ],
+)
+
+java_library(
     name = "GetTrainingSamples",
     srcs = [
         "GetTrainingSamples.java",
@@ -125,6 +132,15 @@ java_library(
     deps = [
         "//:com_google_protobuf_protobuf_java",
         "//:org_json_json",
+        ":WikidataClient",
+        ":Relations",
+    ],
+)
+
+java_library(
+    name = "WikidataClient",
+    srcs = [
+        "WikidataClient.java",
     ],
 )
 

@@ -2,6 +2,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
 
 public class GetTrainingSamples {
 	public static class MentionInSentence {
@@ -24,6 +26,20 @@ public class GetTrainingSamples {
 			this.e1 = e1;
 			this.e2 = e2;
 		}
+
+		@Override
+		public boolean equals(Object other) {
+			if (!(other instanceof EntityPair)) {
+				return false;
+			}
+			EntityPair o = (EntityPair) other;
+			return (e1 == o.e1) && (e2 == o.e2);
+		}
+
+		@Override
+		public int hashCode() {
+			return e1.hashCode() ^ e2.hashCode();
+		}
 	}
 
 	public static class SentenceInDocument {
@@ -31,6 +47,10 @@ public class GetTrainingSamples {
 		private List<String> wikidataIds;
 		private Sentence.Document document;
 		private int sentenceId;
+
+		public List<String> getWikidataIds() {
+			return wikidataIds;
+		}
 
 		public SentenceInDocument(Sentence.Document document, int sentenceId) {
 			this.document = document;
@@ -129,5 +149,59 @@ public class GetTrainingSamples {
 			sample.setSentence(bldr);
 			return sample.build();
 		}
+	}
+
+	public static Map<EntityPair, List<String>> getTrueTriplesExpressedBySentence(SentenceInDocument sentence) {
+		List<String> mentionedWikidataIds = sentence.getWikidataIds();
+		List<EntityPair> sentenceEntityPairs = sentence.getAllEntityPairs();
+		WikidataClient wikidataClient = new WikidataClient();
+
+		Map<EntityPair, List<String>> allPairs = new HashMap<>();
+		for (String wikidataId : mentionedWikidataIds) {
+			for (WikidataClient.Triple triple : wikidataClient.getAllTriplesOfEntity(wikidataId)) {
+				EntityPair pair = new EntityPair(triple.subject, triple.object);
+				if (!sentenceEntityPairs.contains(pair)) {
+					// relation holds, but not expressed by sentence
+					continue;
+				}
+				if (!allPairs.containsKey(pair)) {
+					// TODO: fixme: relations returned twice -- forward and backward
+					allPairs.put(pair, new ArrayList<>());
+				}
+				allPairs.get(pair).add(triple.predicate);
+			}
+		}
+		return allPairs;
+	}
+
+	public static List<TrainingSamples.TrainingSample> sentenceToTrainingSamples(SentenceInDocument sentence) {
+		Map<EntityPair, List<String>> allPairs = getTrueTriplesExpressedBySentence(sentence);
+
+		List<TrainingSamples.TrainingSample> samples = new ArrayList<>();
+		// Add positive samples.
+		for (EntityPair pair : allPairs.keySet()) {
+			for (String relation : allPairs.get(pair)) {
+				TrainingSamples.TrainingSample sample = sentence.toSample(relation, pair.e1, pair.e2, true);
+				samples.add(sample);
+			}
+		}
+
+		// Add negative samples.
+		// TODO
+		if (sentence.getWikidataIds().size() >= 2) {
+			String e1 = sentence.getWikidataIds().get(0);
+			String e2 = sentence.getWikidataIds().get(1);
+
+			EntityPair key = new EntityPair(e1, e2);
+
+			for (String relation : Relations.IMPORTANT_RELATIONS) {
+				if ((!allPairs.containsKey(key)) || (!allPairs.get(key).contains(relation))) {
+					TrainingSamples.TrainingSample sample = sentence.toSample(relation, e1, e2, false);
+					samples.add(sample);
+				}
+			}
+		}
+
+		return samples;
 	}
 }
