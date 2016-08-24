@@ -419,6 +419,8 @@ py_binary(
 # org.apache.hadoop:hadoop-mapreduce-client-core:2.6.0
 # edu.stanford.nlp:stanford-corenlp:3.6.0
 # org.json:json:20160810
+# org.apache.jena:apache-jena-libs:3.1.0
+# org.apache.httpcomponents:httpclient:4.2.6
 
 
 java_library(
@@ -466,6 +468,23 @@ java_library(
     visibility = ["//visibility:public"],
     exports = [
         "@javax_json_javax_json_api//jar",
+    ],
+)
+
+java_library(
+    name = "org_apache_jena_jena_core",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_apache_jena_jena_core//jar",
+        "@com_github_andrewoma_dexx_collection//jar",
+        "@commons_cli_commons_cli//jar",
+        "@org_apache_commons_commons_csv//jar",
+        "@org_apache_commons_commons_lang3//jar",
+        "@org_apache_jena_jena_base//jar",
+        "@org_apache_jena_jena_iri//jar",
+        "@org_apache_jena_jena_shaded_guava//jar",
+        "@org_slf4j_slf4j_api//jar",
+        "@xerces_xercesImpl//jar",
     ],
 )
 
@@ -541,6 +560,35 @@ java_library(
 )
 
 java_library(
+    name = "org_apache_jena_apache_jena_libs",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_apache_jena_apache_jena_libs//jar",
+        "@com_fasterxml_jackson_core_jackson_annotations//jar",
+        "@com_fasterxml_jackson_core_jackson_core//jar",
+        "@com_fasterxml_jackson_core_jackson_databind//jar",
+        "@com_github_andrewoma_dexx_collection//jar",
+        "@com_github_jsonld_java_jsonld_java//jar",
+        "@commons_cli_commons_cli//jar",
+        "@commons_io_commons_io//jar",
+        "@org_apache_commons_commons_csv//jar",
+        "@org_apache_commons_commons_lang3//jar",
+        "@org_apache_httpcomponents_httpclient//jar",
+        "@org_apache_httpcomponents_httpclient_cache//jar",
+        "@org_apache_jena_jena_arq//jar",
+        "@org_apache_jena_jena_base//jar",
+        "@org_apache_jena_jena_core//jar",
+        "@org_apache_jena_jena_iri//jar",
+        "@org_apache_jena_jena_shaded_guava//jar",
+        "@org_apache_jena_jena_tdb//jar",
+        "@org_apache_thrift_libthrift//jar",
+        "@org_slf4j_jcl_over_slf4j//jar",
+        "@org_slf4j_slf4j_api//jar",
+        "@xerces_xercesImpl//jar",
+    ],
+)
+
+java_library(
     name = "com_google_inject_guice",
     visibility = ["//visibility:public"],
     exports = [
@@ -583,6 +631,14 @@ java_library(
         "@xalan_xalan//jar",
         "@xerces_xercesImpl//jar",
         "@xml_apis_xml_apis//jar",
+    ],
+)
+
+java_library(
+    name = "org_apache_commons_commons_csv",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_apache_commons_commons_csv//jar",
     ],
 )
 
@@ -686,6 +742,18 @@ java_library(
 )
 
 java_library(
+    name = "com_github_jsonld_java_jsonld_java",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@com_github_jsonld_java_jsonld_java//jar",
+        "@com_fasterxml_jackson_core_jackson_annotations//jar",
+        "@com_fasterxml_jackson_core_jackson_core//jar",
+        "@com_fasterxml_jackson_core_jackson_databind//jar",
+        "@commons_io_commons_io//jar",
+    ],
+)
+
+java_library(
     name = "org_codehaus_jackson_jackson_core_asl",
     visibility = ["//visibility:public"],
     exports = [
@@ -706,10 +774,36 @@ java_library(
 )
 
 java_library(
+    name = "com_fasterxml_jackson_core_jackson_databind",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@com_fasterxml_jackson_core_jackson_databind//jar",
+        "@com_fasterxml_jackson_core_jackson_annotations//jar",
+        "@com_fasterxml_jackson_core_jackson_core//jar",
+    ],
+)
+
+java_library(
+    name = "com_github_andrewoma_dexx_collection",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@com_github_andrewoma_dexx_collection//jar",
+    ],
+)
+
+java_library(
     name = "com_jamesmurty_utils_java_xmlbuilder",
     visibility = ["//visibility:public"],
     exports = [
         "@com_jamesmurty_utils_java_xmlbuilder//jar",
+    ],
+)
+
+java_library(
+    name = "com_fasterxml_jackson_core_jackson_core",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@com_fasterxml_jackson_core_jackson_core//jar",
     ],
 )
 
@@ -915,6 +1009,16 @@ java_library(
 )
 
 java_library(
+    name = "org_apache_thrift_libthrift",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_apache_thrift_libthrift//jar",
+        "@org_apache_httpcomponents_httpclient//jar",
+        "@org_slf4j_slf4j_api//jar",
+    ],
+)
+
+java_library(
     name = "org_mortbay_jetty_jetty_util",
     visibility = ["//visibility:public"],
     exports = [
@@ -927,6 +1031,19 @@ java_library(
     visibility = ["//visibility:public"],
     exports = [
         "@xmlenc_xmlenc//jar",
+    ],
+)
+
+java_library(
+    name = "org_apache_jena_jena_base",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_apache_jena_jena_base//jar",
+        "@com_github_andrewoma_dexx_collection//jar",
+        "@org_apache_commons_commons_csv//jar",
+        "@org_apache_commons_commons_lang3//jar",
+        "@org_apache_jena_jena_shaded_guava//jar",
+        "@org_slf4j_slf4j_api//jar",
     ],
 )
 
@@ -1036,6 +1153,42 @@ java_library(
 )
 
 java_library(
+    name = "org_apache_jena_jena_arq",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_apache_jena_jena_arq//jar",
+        "@com_fasterxml_jackson_core_jackson_annotations//jar",
+        "@com_fasterxml_jackson_core_jackson_core//jar",
+        "@com_fasterxml_jackson_core_jackson_databind//jar",
+        "@com_github_andrewoma_dexx_collection//jar",
+        "@com_github_jsonld_java_jsonld_java//jar",
+        "@commons_cli_commons_cli//jar",
+        "@commons_io_commons_io//jar",
+        "@org_apache_commons_commons_csv//jar",
+        "@org_apache_commons_commons_lang3//jar",
+        "@org_apache_httpcomponents_httpclient//jar",
+        "@org_apache_httpcomponents_httpclient_cache//jar",
+        "@org_apache_jena_jena_base//jar",
+        "@org_apache_jena_jena_core//jar",
+        "@org_apache_jena_jena_iri//jar",
+        "@org_apache_jena_jena_shaded_guava//jar",
+        "@org_apache_thrift_libthrift//jar",
+        "@org_slf4j_jcl_over_slf4j//jar",
+        "@org_slf4j_slf4j_api//jar",
+        "@xerces_xercesImpl//jar",
+    ],
+)
+
+java_library(
+    name = "org_apache_jena_jena_iri",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_apache_jena_jena_iri//jar",
+        "@org_slf4j_slf4j_api//jar",
+    ],
+)
+
+java_library(
     name = "org_apache_commons_commons_compress",
     visibility = ["//visibility:public"],
     exports = [
@@ -1075,6 +1228,23 @@ java_library(
     exports = [
         "@org_apache_directory_api_api_util//jar",
         "@org_slf4j_slf4j_api//jar",
+    ],
+)
+
+java_library(
+    name = "org_slf4j_jcl_over_slf4j",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_slf4j_jcl_over_slf4j//jar",
+        "@org_slf4j_slf4j_api//jar",
+    ],
+)
+
+java_library(
+    name = "com_fasterxml_jackson_core_jackson_annotations",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@com_fasterxml_jackson_core_jackson_annotations//jar",
     ],
 )
 
@@ -1125,6 +1295,8 @@ java_library(
     visibility = ["//visibility:public"],
     exports = [
         "@org_apache_httpcomponents_httpclient//jar",
+        "@commons_codec_commons_codec//jar",
+        "@commons_logging_commons_logging//jar",
         "@org_apache_httpcomponents_httpcore//jar",
     ],
 )
@@ -1141,10 +1313,26 @@ java_library(
 )
 
 java_library(
+    name = "org_apache_httpcomponents_httpclient_cache",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_apache_httpcomponents_httpclient_cache//jar",
+    ],
+)
+
+java_library(
     name = "commons_httpclient_commons_httpclient",
     visibility = ["//visibility:public"],
     exports = [
         "@commons_httpclient_commons_httpclient//jar",
+    ],
+)
+
+java_library(
+    name = "org_apache_commons_commons_lang3",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_apache_commons_commons_lang3//jar",
     ],
 )
 
@@ -1176,6 +1364,34 @@ java_library(
         "@xalan_xalan//jar",
         "@xerces_xercesImpl//jar",
         "@xml_apis_xml_apis//jar",
+    ],
+)
+
+java_library(
+    name = "org_apache_jena_jena_tdb",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_apache_jena_jena_tdb//jar",
+        "@com_fasterxml_jackson_core_jackson_annotations//jar",
+        "@com_fasterxml_jackson_core_jackson_core//jar",
+        "@com_fasterxml_jackson_core_jackson_databind//jar",
+        "@com_github_andrewoma_dexx_collection//jar",
+        "@com_github_jsonld_java_jsonld_java//jar",
+        "@commons_cli_commons_cli//jar",
+        "@commons_io_commons_io//jar",
+        "@org_apache_commons_commons_csv//jar",
+        "@org_apache_commons_commons_lang3//jar",
+        "@org_apache_httpcomponents_httpclient//jar",
+        "@org_apache_httpcomponents_httpclient_cache//jar",
+        "@org_apache_jena_jena_arq//jar",
+        "@org_apache_jena_jena_base//jar",
+        "@org_apache_jena_jena_core//jar",
+        "@org_apache_jena_jena_iri//jar",
+        "@org_apache_jena_jena_shaded_guava//jar",
+        "@org_apache_thrift_libthrift//jar",
+        "@org_slf4j_jcl_over_slf4j//jar",
+        "@org_slf4j_slf4j_api//jar",
+        "@xerces_xercesImpl//jar",
     ],
 )
 
@@ -1280,6 +1496,15 @@ java_library(
         "@org_mortbay_jetty_jetty_util//jar",
         "@org_slf4j_slf4j_api//jar",
         "@org_sonatype_sisu_inject_cglib//jar",
+    ],
+)
+
+java_library(
+    name = "org_apache_jena_jena_shaded_guava",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@org_apache_jena_jena_shaded_guava//jar",
+        "@org_slf4j_slf4j_api//jar",
     ],
 )
 

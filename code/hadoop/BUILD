@@ -65,6 +65,31 @@ java_binary(
     ],
 )
 
+java_library(
+    name = "DBpediaClient",
+    srcs = [
+        "DBpediaClient.java",
+    ],
+    deps = [
+        "//:org_apache_jena_jena_core",
+        "//:org_apache_jena_jena_base",
+        "//:org_apache_jena_jena_arq",
+        "//:org_apache_httpcomponents_httpcore",
+        "//:org_apache_httpcomponents_httpclient",
+    ],
+)
+
+java_test(
+    name = "DBpediaClientTest",
+    srcs = [
+        "DBpediaClientTest.java",
+    ],
+    deps = [
+        ":DBpediaClient",
+    ],
+    test_class = "DBpediaClientTest",
+)
+
 java_binary(
     name = "DocumentProcessor",
     srcs = [
