@@ -74,9 +74,21 @@ java_library(
         "//:org_apache_jena_jena_core",
         "//:org_apache_jena_jena_base",
         "//:org_apache_jena_jena_arq",
+        # NOTE: undeclared deps >[
         "//:org_apache_httpcomponents_httpcore",
         "//:org_apache_httpcomponents_httpclient",
     ],
+)
+
+java_test(
+    name = "WikidataClientTest",
+    srcs = [
+        "WikidataClientTest.java",
+    ],
+    deps = [
+        ":WikidataClient",
+    ],
+    test_class = "WikidataClientTest",
 )
 
 java_test(
@@ -141,6 +153,14 @@ java_library(
     name = "WikidataClient",
     srcs = [
         "WikidataClient.java",
+    ],
+    deps = [
+        "//:org_apache_jena_jena_core",
+        "//:org_apache_jena_jena_base",
+        "//:org_apache_jena_jena_arq",
+        # NOTE: undeclared deps >[
+        "//:org_apache_httpcomponents_httpcore",
+        "//:org_apache_httpcomponents_httpclient",
     ],
 )
 

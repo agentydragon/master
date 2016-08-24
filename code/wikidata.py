@@ -3,7 +3,6 @@ import wikidata_util
 import sparql_client
 
 wikidata_url = 'https://query.wikidata.org/sparql'
-# wikidata_url = 'http://dbpedia.org/sparql'
 
 class WikidataClient(object):
     def __init__(self):
