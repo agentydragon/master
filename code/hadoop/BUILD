@@ -109,6 +109,7 @@ java_library(
         "//:Sentence.java",
     ],
     deps = [
+        ":DBpediaClient",
         "//:com_google_protobuf_protobuf_java",
         "//:org_json_json",
     ],

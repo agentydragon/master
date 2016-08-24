@@ -78,7 +78,6 @@ def find_resources_between(spotlight, start, end):
 
 def propagate_entities(document, spotlight):
     for coreference in document.coreferences:
-        best_resource = None
         full_matches = []
         for mention in coreference.mentions:
             mention_start = get_mention_start(document, mention)
