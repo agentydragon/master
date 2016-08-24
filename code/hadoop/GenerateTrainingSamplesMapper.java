@@ -27,10 +27,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 
 public class GenerateTrainingSamplesMapper extends Mapper<Text, Text, Text, Text> {
-	@Override
-	public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
-		String articleTitle = key.toString();
-		JSONObject inputJson = new JSONObject(value.toString());
+	public static List<TrainingSamples.TrainingSample> makeTrainingSamples(String value) throws IOException {
+		JSONObject inputJson = new JSONObject(value);
 
 		String plaintext = (String) inputJson.get("text");
 		String corenlpXml = (String) inputJson.get("corenlp_xml");
@@ -49,10 +47,17 @@ public class GenerateTrainingSamplesMapper extends Mapper<Text, Text, Text, Text
 			// TODO
 			System.exit(1);
 		}
+
 		JSONObject spotlightJson = new JSONObject((String) inputJson.get("spotlight_json"));
 		List<Sentence.SpotlightMention> spotlightMentions = AnnotateCoreferences.SpotlightToMentions(spotlightJson);
 		documentProto = AnnotateCoreferences.PropagateEntities(documentProto, spotlightMentions);
-		List<TrainingSamples.TrainingSample> samples = GetTrainingSamples.documentToSamples(documentProto);
+		return GetTrainingSamples.documentToSamples(documentProto);
+	}
+
+	@Override
+	public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
+		String articleTitle = key.toString();
+		List<TrainingSamples.TrainingSample> samples = makeTrainingSamples(value.toString());
 
 		for (TrainingSamples.TrainingSample sample : samples) {
 			String relation = sample.getRelation();

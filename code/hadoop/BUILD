@@ -199,6 +199,21 @@ java_library(
     ]
 )
 
+java_test(
+    name = "GenerateTrainingSamplesMapperTest",
+    srcs = [
+        "GenerateTrainingSamplesMapperTest.java",
+    ],
+    deps = [
+        ":GenerateTrainingSamplesMapper",
+        ":ParseXmlsToProtos",
+    ],
+    data = [
+        "//testdata:tharde.json",
+    ],
+    test_class = "GenerateTrainingSamplesMapperTest",
+)
+
 java_binary(
     name = "GenerateTrainingSamples",
     srcs = [
