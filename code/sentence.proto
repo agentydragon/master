@@ -7,6 +7,7 @@ message SentenceToken {
 
 	optional string lemma = 3;
 	optional string pos = 4;
+	optional string word = 7;
 	// PERSON, O, SET, DATE, MISC; (TODO: normalized NER)
 	optional string ner = 5;
 }

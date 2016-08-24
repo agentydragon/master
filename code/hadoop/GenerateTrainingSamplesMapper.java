@@ -1,8 +1,6 @@
 // Input: from DocumentProcessorMapper
 // Output: Relation => Sentence expressing the relation
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
 import org.json.*;
 
 public class GenerateTrainingSamplesMapper extends Mapper<Text, Text, Text, Text> {
@@ -14,11 +12,7 @@ public class GenerateTrainingSamplesMapper extends Mapper<Text, Text, Text, Text
 		String plaintext = (String) inputJson.get("text")
 		String corenlpXml = (String) inputJson.get("corenlp_xml");
 
-		var corenlpParse = TODO parse;
-
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db = dbf.newDocumentBuilder();
-		org.w3c.dom.Document corenlpParse = db.parse(new InputSource(new StringReader(corenlpXml)));
+		org.w3c.dom.Document corenlpParse = ParseXmlsToProtos.parseXmlFromString(corenlpXml);
 		Sentence.Document documentProto = ParseXmlsToProtos.documentToProto(corenlpParse, plaintext);
 		JSONObject spotlightJson = new JSONObject((String) inputJson.get("spotlight_json"));
 		List<AnnotateCoreferences.SpotlightMention> spotlightMentions = AnnotateCoreferences.SpotlightToMentions(spotlightJson);

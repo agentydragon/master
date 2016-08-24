@@ -102,6 +102,24 @@ java_library(
     ],
 )
 
+java_test(
+    name = "ParseXmlsToProtosTest",
+    srcs = [
+        "ParseXmlsToProtosTest.java",
+        "//:Sentence.java",
+    ],
+    deps = [
+        ":ParseXmlsToProtos",
+        "//:com_google_protobuf_protobuf_java",
+        "@javax_xml_parsers_jaxp_api//jar",
+    ],
+    data = [
+        "//testdata:Obama.txt.out",
+        "//testdata:Obama.txt",
+    ],
+    test_class = "ParseXmlsToProtosTest",
+)
+
 java_library(
     name = "GenerateTrainingSamplesMapper",
     srcs = [
