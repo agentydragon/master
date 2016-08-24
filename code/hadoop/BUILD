@@ -90,6 +90,31 @@ java_test(
     test_class = "DBpediaClientTest",
 )
 
+java_library(
+    name = "ParseXmlsToProtos",
+    srcs = [
+        "ParseXmlsToProtos.java",
+        "//:Sentence.java",
+    ],
+    deps = [
+        "//:com_google_protobuf_protobuf_java",
+        "@javax_xml_parsers_jaxp_api//jar",
+    ],
+)
+
+java_library(
+    name = "GenerateTrainingSamplesMapper",
+    srcs = [
+        "GenerateTrainingSamplesMapper.java",
+        "//:Sentence.java",
+    ],
+    deps = [
+        "//:org_apache_hadoop_hadoop_common",
+        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
+        "//:org_json_json",
+    ]
+)
+
 java_binary(
     name = "DocumentProcessor",
     srcs = [

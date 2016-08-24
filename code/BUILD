@@ -343,6 +343,7 @@ genrule(
         "sentence_pb2.py",
         "Sentence.java",
     ],
+    visibility = ["//visibility:public"],
     cmd = "protoc -I=. " +
         "--python_out=$(GENDIR)/ " +
         "--java_out=$(GENDIR)/ " +
@@ -421,6 +422,9 @@ py_binary(
 # org.json:json:20160810
 # org.apache.jena:apache-jena-libs:3.1.0
 # org.apache.httpcomponents:httpclient:4.2.6
+# org.apache.httpcomponents:httpcore:4.2.5
+# com.google.protobuf:protobuf-java:3.0.0
+# javax.xml.parsers:jaxp-api:1.4
 
 
 java_library(
@@ -540,6 +544,14 @@ java_library(
     visibility = ["//visibility:public"],
     exports = [
         "@xml_apis_xml_apis//jar",
+    ],
+)
+
+java_library(
+    name = "javax_xml_parsers_jaxp_api",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@javax_xml_parsers_jaxp_api//jar",
     ],
 )
 
