@@ -1,5 +1,7 @@
 import java.util.List;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
 import java.lang.System;
 import org.apache.jena.query.Query;
