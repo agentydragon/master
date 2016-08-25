@@ -1,4 +1,5 @@
 import java.io.IOException;
+import org.apache.commons.io.IOUtils;
 
 import java.util.Properties;
 import java.io.StringWriter;
@@ -27,12 +28,24 @@ public class DocumentProcessor extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
 		// Configuration processed by ToolRunner
 		Configuration conf = getConf();
-		for (int i = 0; i < args.length; i++) {
-			System.out.println("args[" + i + "]=" + args[i]);
-		}
 		if (conf.get("spotlight_server") == null) {
 			System.out.println("No spotlight_server given");
 			return 1;
+		}
+
+		if (args.length > 0 && args[0].equals("--stdin")) {
+			// String myString = IOUtils.toString(System.in, "UTF-8");
+			String myString = conf.get("text");
+
+			DocumentProcessorMapper dpm = new DocumentProcessorMapper();
+			dpm.setSpotlightServer(conf.get("spotlight_server"));
+			dpm.setNLPPipeline();
+			System.out.println(dpm.articleToJson("STDIN", myString));
+			return 0;
+		}
+
+		for (int i = 0; i < args.length; i++) {
+			System.out.println("args[" + i + "]=" + args[i]);
 		}
 
 		// Create a JobConf using the processed conf

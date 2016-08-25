@@ -7,7 +7,8 @@ public class WikidataClientTest {
 	@Test
 	public void testTripleFetch() throws Exception {
 		String id = "Q76";  // Obama
-		List<WikidataClient.Triple> triples = WikidataClient.getAllTriplesOfEntity(id);
+		WikidataClient client = new WikidataClient(WikidataClient.WIKIDATA_PUBLIC_ENDPOINT);
+		List<WikidataClient.Triple> triples = client.getAllTriplesOfEntity(id);
 		for (WikidataClient.Triple triple : triples) {
 			System.out.println(triple.subject + "\t" + triple.predicate + "\t" + triple.object);
 		}

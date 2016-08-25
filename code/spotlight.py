@@ -12,9 +12,9 @@ import argparse
 import json
 import requests
 
-# SPOTLIGHT_SERVER = 'http://spotlight.sztaki.hu:2222'
+SPOTLIGHT_SERVER = 'http://spotlight.sztaki.hu:2222'
 # SPOTLIGHT_SERVER = 'http://localhost:2222'
-SPOTLIGHT_SERVER = 'http://zebra6a:2222'
+# SPOTLIGHT_SERVER = 'http://zebra6a:2222'
 
 def annotate_text(text):
     url = SPOTLIGHT_SERVER + '/rest/annotate'

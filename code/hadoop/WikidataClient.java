@@ -16,9 +16,6 @@ import org.apache.jena.query.QueryExecutionFactory;
 // TODO test
 
 public class WikidataClient {
-	private static final String sparqlUrl = "https://query.wikidata.org/sparql";
-	// http://localhost:3030/wikidata/query
-
 	public static class Triple {
 		public String subject;
 		public String predicate;
@@ -29,7 +26,24 @@ public class WikidataClient {
 			this.predicate = predicate;
 			this.object = object;
 		}
+
+		@Override
+		public String toString() {
+			return "Triple{" + subject + " " + predicate + " " + object + "}";
+		}
 	}
+
+	public static final String WIKIDATA_PUBLIC_ENDPOINT = "https://query.wikidata.org/sparql";
+	private String sparqlUrl;
+
+	public WikidataClient(String sparqlUrl) {
+		this.sparqlUrl = sparqlUrl;
+	}
+
+	public static WikidataClient newPublicEndpointClient() {
+		return new WikidataClient(WIKIDATA_PUBLIC_ENDPOINT);
+	}
+	// http://localhost:3030/wikidata/query
 
 	// TODO: cache
 
@@ -104,9 +118,9 @@ public class WikidataClient {
 		return new Triple(subject, predicate, object);
 	}
 
-	public static List<Triple> collectForwardProperties(String wikidataId) {
+	public List<Triple> collectForwardProperties(String wikidataId) {
 		String queryString = PREFIXES + "\n" +
-			"SELECT ?rel ?other WHERE { wd:" + wikidataId + " ?rel ?other . }";
+			"SELECT ?rel ?other WHERE { wd:" + wikidataId + " ?rel ?other . } LIMIT 500";  // TODO: remove limit 500
 
 		String subject = wikidataEntityPrefix + wikidataId;
 		List<Triple> resultsx = new ArrayList<>();
@@ -135,9 +149,9 @@ public class WikidataClient {
 		return resultsx;
 	}
 
-	public static List<Triple> collectBackwardProperties(String wikidataId) {
+	public List<Triple> collectBackwardProperties(String wikidataId) {
 		String queryString = PREFIXES + "\n" +
-			"SELECT ?rel ?other WHERE { ?other ?rel wd:" + wikidataId + " . }";
+			"SELECT ?rel ?other WHERE { ?other ?rel wd:" + wikidataId + " . } LIMIT 500";  // TODO: remove limit 500
 
 		String object = wikidataEntityPrefix + wikidataId;
 		List<Triple> resultsx = new ArrayList<>();
@@ -166,9 +180,9 @@ public class WikidataClient {
 		return resultsx;
 	}
 
-	private static Map<String, List<Triple>> cache = new HashMap<>();
+	private Map<String, List<Triple>> cache = new HashMap<>();
 
-	public static List<Triple> getAllTriplesOfEntity(String wikidataId) {
+	public List<Triple> getAllTriplesOfEntity(String wikidataId) {
 		if (cache.containsKey(wikidataId)) {
 			return cache.get(wikidataId);
 		}

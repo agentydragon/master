@@ -4,8 +4,11 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
+import org.apache.log4j.Logger;
 
 public class GetTrainingSamples {
+	static Logger log = Logger.getLogger(GetTrainingSamples.class);
+
 	public static class MentionInSentence {
 		public int startTokenId;
 		public int endTokenId;
@@ -33,18 +36,23 @@ public class GetTrainingSamples {
 				return false;
 			}
 			EntityPair o = (EntityPair) other;
-			return (e1 == o.e1) && (e2 == o.e2);
+			return e1.equals(o.e1) && e2.equals(o.e2);
 		}
 
 		@Override
 		public int hashCode() {
 			return e1.hashCode() ^ e2.hashCode();
 		}
+
+		@Override
+		public String toString() {
+			return "EntityPair{" + e1 + " " + e2 + "}";
+		}
 	}
 
 	public static class SentenceInDocument {
-		private List<MentionInSentence> mentions;
-		private List<String> wikidataIds;
+		private List<MentionInSentence> mentions = new ArrayList<>();
+		private List<String> wikidataIds = new ArrayList<>();
 		private Sentence.Document document;
 		private int sentenceId;
 
@@ -121,10 +129,10 @@ public class GetTrainingSamples {
 				for (int tokenIndex = mention.startTokenId - 1;
 						tokenIndex < mention.endTokenId - 1;
 						tokenIndex++) {
-					if (mention.wikidataId == e1 && !e1Indices.contains(tokenIndex)) {
+					if (mention.wikidataId.equals(e1) && !e1Indices.contains(tokenIndex)) {
 						e1Indices.add(tokenIndex);
 					}
-					if (mention.wikidataId == e2 && !e2Indices.contains(tokenIndex)) {
+					if (mention.wikidataId.equals(e2) && !e2Indices.contains(tokenIndex)) {
 						e2Indices.add(tokenIndex);
 					}
 				}
@@ -151,10 +159,15 @@ public class GetTrainingSamples {
 		}
 	}
 
-	public static Map<EntityPair, List<String>> getTrueTriplesExpressedBySentence(SentenceInDocument sentence) {
+	private WikidataClient wikidataClient;
+
+	public GetTrainingSamples(WikidataClient wikidataClient) {
+		this.wikidataClient = wikidataClient;
+	}
+
+	public Map<EntityPair, List<String>> getTrueTriplesExpressedBySentence(SentenceInDocument sentence) {
 		List<String> mentionedWikidataIds = sentence.getWikidataIds();
 		List<EntityPair> sentenceEntityPairs = sentence.getAllEntityPairs();
-		WikidataClient wikidataClient = new WikidataClient();
 
 		Map<EntityPair, List<String>> allPairs = new HashMap<>();
 		for (String wikidataId : mentionedWikidataIds) {
@@ -174,7 +187,7 @@ public class GetTrainingSamples {
 		return allPairs;
 	}
 
-	public static List<TrainingSamples.TrainingSample> documentToSamples(Sentence.Document document) {
+	public List<TrainingSamples.TrainingSample> documentToSamples(Sentence.Document document) {
 		ArrayList<TrainingSamples.TrainingSample> samples = new ArrayList<>();
 		for (Sentence.DocumentSentence sentence : document.getSentencesList()) {
 			SentenceInDocument sid = new SentenceInDocument(document, sentence.getId());
@@ -183,7 +196,8 @@ public class GetTrainingSamples {
 		return samples;
 	}
 
-	public static List<TrainingSamples.TrainingSample> sentenceToTrainingSamples(SentenceInDocument sentence) {
+	public List<TrainingSamples.TrainingSample> sentenceToTrainingSamples(SentenceInDocument sentence) {
+		log.info("Sentence to training samples: " + sentence.getText());
 		Map<EntityPair, List<String>> allPairs = getTrueTriplesExpressedBySentence(sentence);
 
 		List<TrainingSamples.TrainingSample> samples = new ArrayList<>();
@@ -195,6 +209,9 @@ public class GetTrainingSamples {
 			}
 		}
 
+		// TODO: add exactly as many positive samples as negative ones
+
+		/*
 		// Add negative samples.
 		// TODO
 		if (sentence.getWikidataIds().size() >= 2) {
@@ -210,6 +227,7 @@ public class GetTrainingSamples {
 				}
 			}
 		}
+		*/
 
 		return samples;
 	}

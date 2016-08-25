@@ -25,9 +25,18 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
+import org.apache.log4j.Logger;
 
 public class GenerateTrainingSamplesMapper extends Mapper<Text, Text, Text, Text> {
-	public static List<TrainingSamples.TrainingSample> makeTrainingSamples(String value) throws IOException {
+	static Logger log = Logger.getLogger(GetTrainingSamples.class);
+
+	private WikidataClient wikidataClient;
+
+	public void setWikidataClient(WikidataClient wikidataClient) {
+		this.wikidataClient = wikidataClient;
+	}
+
+	public List<TrainingSamples.TrainingSample> makeTrainingSamples(String value) throws IOException {
 		JSONObject inputJson = new JSONObject(value);
 
 		String plaintext = (String) inputJson.get("text");
@@ -47,11 +56,21 @@ public class GenerateTrainingSamplesMapper extends Mapper<Text, Text, Text, Text
 			// TODO
 			System.exit(1);
 		}
+		// log.info(documentProto.toString());
 
 		JSONObject spotlightJson = new JSONObject((String) inputJson.get("spotlight_json"));
 		List<Sentence.SpotlightMention> spotlightMentions = AnnotateCoreferences.SpotlightToMentions(spotlightJson);
 		documentProto = AnnotateCoreferences.PropagateEntities(documentProto, spotlightMentions);
-		return GetTrainingSamples.documentToSamples(documentProto);
+		// log.info(documentProto.toString());
+
+		GetTrainingSamples getTrainingSamples = new GetTrainingSamples(wikidataClient);
+		return getTrainingSamples.documentToSamples(documentProto);
+	}
+
+	@Override
+	public void setup(Context context) {
+		Configuration conf = context.getConfiguration();
+		setWikidataClient(new WikidataClient(conf.get("wikidata_server")));
 	}
 
 	@Override

@@ -41,8 +41,15 @@ public class DocumentProcessorMapper extends Mapper<Text, Text, Text, Text> {
 	@Override
 	public void setup(Context context) {
 		Configuration conf = context.getConfiguration();
-		spotlightConnection = new SpotlightConnection(conf.get("spotlight_server"));
+		setSpotlightServer(conf.get("spotlight_server"));
+		setNLPPipeline();
+	}
 
+	public void setSpotlightServer(String server) {
+		spotlightConnection = new SpotlightConnection(server);
+	}
+
+	public void setNLPPipeline() {
 		Properties props = new Properties();
 		// TODO: MODEL
 		props.put("annotators",
@@ -57,11 +64,7 @@ public class DocumentProcessorMapper extends Mapper<Text, Text, Text, Text> {
 		nlpPipeline = new StanfordCoreNLP(props);
 	}
 
-	@Override
-	public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
-		String articleTitle = key.toString();
-		String articleText = value.toString();
-
+	public String articleToJson(String articleTitle, String articleText) throws IOException {
 		// Reduce the length of the text.
 		// XXX: HAX
 		/*
@@ -73,13 +76,10 @@ public class DocumentProcessorMapper extends Mapper<Text, Text, Text, Text> {
 		*/
 
 		String spotlightJsonOut;
-		try {
-			spotlightJsonOut = spotlightConnection.getAnnotationJSON(articleText);
+		spotlightJsonOut = spotlightConnection.getAnnotationJSON(articleText);
+		// nothing -- TODO (response code 400 sometimes)
+
 		//	context.write(key, new Text(jsonOut.toString()));
-		} catch (IOException e) {
-			// nothing -- TODO (response code 400 sometimes)
-			return;
-		}
 
 		StringWriter xmlOut = new StringWriter();
 
@@ -92,6 +92,21 @@ public class DocumentProcessorMapper extends Mapper<Text, Text, Text, Text> {
 			.put("spotlight_json", spotlightJsonOut)
 			.put("text", articleText)
 			.put("title", articleTitle).toString();
+		return jsonOut;
+	}
+
+	@Override
+	public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
+		String articleTitle = key.toString();
+		String articleText = value.toString();
+
+		String jsonOut = null;
+		try {
+			jsonOut = articleToJson(articleTitle, articleText);
+		} catch (IOException e) {
+			// TODO
+			return;
+		}
 		context.write(key, new Text(jsonOut));
 	}
 }

@@ -24,3 +24,4 @@ hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.
 with shift-reduce model:
 	hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.jar CoreNLP -D prefix_length=1000 -D mapreduce.map.memory.mb=9000 -D mapreduce.map.java.opts=-Xmx8000m -D mapreduce.task.timeout=6000000 -D mapreduce.input.fileinputformat.split.maxsize=1000000 /user/prvak/wiki-splits /user/prvak/article-parse-xmls-1000
 
+bazel run :DocumentProcessor -- --jvm_flags=-Xmx6000m -D 'text=Barack Obama is the president of the United States. Barack married Michelle Obama and he was born in Hawaii. His father was named Lolo Soetoro.' -D spotlight_server=http://spotlight.sztaki.hu:2222/rest/annotate --stdin

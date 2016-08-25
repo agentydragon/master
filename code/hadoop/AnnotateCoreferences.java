@@ -3,8 +3,11 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 import org.json.*;
+import org.apache.log4j.Logger;
 
 public class AnnotateCoreferences {
+	static Logger log = Logger.getLogger(AnnotateCoreferences.class);
+
 	public static List<Sentence.SpotlightMention> SpotlightToMentions(JSONObject spotlightJson) {
 		List<Sentence.SpotlightMention> mentions = new ArrayList<>();
 
@@ -55,7 +58,7 @@ public class AnnotateCoreferences {
 		return token.getStartOffset();
 	}
 
-	private int getMentionEnd(Sentence.Document document, Sentence.Mention mention) {
+	private static int getMentionEnd(Sentence.Document document, Sentence.Mention mention) {
 		Sentence.DocumentSentence sentence = findSentenceById(document, mention.getSentenceId());
 		Sentence.SentenceToken token = findSentenceToken(sentence, mention.getEndWordId() - 1);
 		if (token == null) {
@@ -84,7 +87,7 @@ public class AnnotateCoreferences {
 
 			for (Sentence.Mention mention : coref.getMentionsList()) {
 				int mentionStart = getMentionStart(documentProto, mention);
-				int mentionEnd = getMentionStart(documentProto, mention);
+				int mentionEnd = getMentionEnd(documentProto, mention);
 				if (mentionEnd == -1) {
 					// TODO hax
 					continue;

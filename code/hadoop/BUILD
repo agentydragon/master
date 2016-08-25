@@ -124,6 +124,7 @@ java_library(
         ":DBpediaClient",
         "//:com_google_protobuf_protobuf_java",
         "//:org_json_json",
+        "//:log4j_log4j",
     ],
 )
 
@@ -146,6 +147,7 @@ java_library(
         "//:org_json_json",
         ":WikidataClient",
         ":Relations",
+        "//:log4j_log4j",
     ],
 )
 
@@ -193,6 +195,7 @@ java_library(
         "//:org_apache_hadoop_hadoop_common",
         "//:org_apache_hadoop_hadoop_mapreduce_client_core",
         "//:org_json_json",
+        ":WikidataClient",
         ":GetTrainingSamples",
         ":AnnotateCoreferences",
         ":ParseXmlsToProtos",
@@ -206,12 +209,17 @@ java_test(
     ],
     deps = [
         ":GenerateTrainingSamplesMapper",
+        ":WikidataClient",
+        ":DocumentProcessorMapper",
         ":ParseXmlsToProtos",
+        "//:log4j_log4j",
     ],
     data = [
         "//testdata:tharde.json",
+        "//testdata:obama-short.json",
     ],
     test_class = "GenerateTrainingSamplesMapperTest",
+    timeout = "eternal",
 )
 
 java_binary(
@@ -238,6 +246,7 @@ java_binary(
         "//:org_apache_hadoop_hadoop_common",
         "//:org_apache_hadoop_hadoop_mapreduce_client_core",
         "//:edu_stanford_nlp_stanford_corenlp",
+        "//:commons_io_commons_io",
         # TODO: must be installed separately
         "@corenlp_models//jar",
         "@corenlp_srparser_model//jar",
@@ -274,15 +283,15 @@ java_binary(
     ],
 )
 
-java_test(
-    name = "SpotlightServerTest",
-    srcs = [
-        "SpotlightServerTest.java",
-    ],
-    deps = [
-        ":SpotlightServer",
-    ],
-)
+# java_test(
+#     name = "SpotlightServerTest",
+#     srcs = [
+#         "SpotlightServerTest.java",
+#     ],
+#     deps = [
+#         ":SpotlightServer",
+#     ],
+# )
 
 java_library(
     name = "SpotlightServer",
