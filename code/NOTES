@@ -77,6 +77,7 @@ Fuseki:
 	then: 544253980G
 		removed entire fact
 
+	qsub -I -l walltime=24h -l nodes=1:ppn=4,mem=16gb:brno -m abe
 	./fuseki-server --loc /storage/brno7-cerit/home/prvak/data/fuseki-datasets/wikidata /wikidata
 
 English wikipedia: 5,213,378 articles
@@ -125,3 +126,17 @@ hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -files annotate_corefe
 hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -input /user/prvak/wiki-processed-sub-0.001 -output /user/prvak/wiki-samples-sub-0.001 -mapper mr_generate_training_samples.py -file annotate_coreferences.py -file dbpedia.py -file file_util.py -file get_training_samples.py -file json_cache.py -file parse_xmls_to_protos.py -file paths.py -file relations.py -file sentence_pb2.py -file sparql_client.py -file training_samples_pb2.py -file wikidata_util.py -file mr_generate_training_samples.py
 
 chmod +x hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -input /user/prvak/wiki-processed-sub-0.001 -output /user/prvak/wiki-samples-sub-0.001 -mapper mr_generate_training_samples.py -file annotate_coreferences.py -file dbpedia.py -file file_util.py -file get_training_samples.py -file json_cache.py -file parse_xmls_to_protos.py -file paths.py -file relations.py -file bazel-genfiles/sentence_pb2.py -file sparql_client.py -file bazel-genfiles/training_samples_pb2.py -file wikidata_util.py -file mr_generate_training_samples.py
+
+
+# TODO:
+	# (launch Spotlight)
+	# 1/100 Wikipedie
+	# launch on hador
+	export HADOOP_CLASSPATH=/storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/DocumentProcessor_deploy.jar
+	hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/DocumentProcessor.jar DocumentProcessor -D spotlight_server=http://hador:2222/rest/annotate -D mapreduce.input.fileinputformat.split.maxsize=1000000 -D mapreduce.map.java.opts=-Xmx8000m -D mapreduce.map.memory.mb=9000 -D mapreduce.task.timeout=6000000 /user/prvak/wiki-splits-sub-0.001 /user/prvak/wiki-processed-sub-0.001
+	# has very long bootup
+
+	TODO: is Spotlight the bottleneck?
+	TODO: can I parallelize Spotlight?
+
+
