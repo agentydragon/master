@@ -102,13 +102,13 @@ public class WikiSplit extends Configured implements Tool {
 
 		// Set mapper and input/output classes.
 		job.setMapperClass(ArticleSplitterMapper.class);
-		job.setMapOutputKeyClass(Text.class);
-		job.setMapOutputValueClass(Text.class);
+		job.setMapOutputKeyClass(ImmutableBytesWritable.class);
+		job.setMapOutputValueClass(Mutation.class);
 
 		//job.setOutputKeyClass(Text.class);
 		//job.setOutputValueClass(Text.class);
 		job.setOutputKeyClass(ImmutableBytesWritable.class);
-		job.setOutputValueClass(Writable.class);
+		job.setOutputValueClass(Mutation.class);
 
 		// Set output.
 		//job.setOutputFormatClass(SequenceFileOutputFormat.class);
