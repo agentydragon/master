@@ -13,18 +13,19 @@ java_binary(
     ],
 )
 
-# genrule(
-#     name = "processed_document_proto",
-#     srcs = [
-#         "processed_document.proto",
-#     ],
-#     outs = [
-#         "ProcessedDocument.java",
-#     ],
-#     cmd = "protoc -I=. " +
-#         "--java_out=$(GENDIR)/ " +
-#         "$(location :processed_document.proto)"
-# )
+java_binary(
+    name = "TestHBase",
+    srcs = [
+        "TestHBase.java",
+    ],
+    main_class = "TestHBase",
+    deps = [
+        "//:org_apache_hadoop_hadoop_common",
+        "//:org_apache_hbase_hbase_common",
+        "//:org_apache_hbase_hbase_client",
+        "//:org_apache_hbase_hbase_server",
+    ],
+)
 
 java_binary(
     name = "CoreNLP",

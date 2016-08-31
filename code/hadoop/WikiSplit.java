@@ -1,3 +1,6 @@
+// export HADOOP_CLASSPATH=`hbase mapredcp`:/storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/WikiSplit_deploy.jar
+// hadoop jar (...)
+
 import java.io.IOException;
 import java.util.StringTokenizer;
 
