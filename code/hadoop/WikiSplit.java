@@ -110,6 +110,8 @@ public class WikiSplit extends Configured implements Tool {
 		job.setOutputKeyClass(ImmutableBytesWritable.class);
 		job.setOutputValueClass(Mutation.class);
 
+		job.setNumReduceTasks(0);
+
 		// Set output.
 		//job.setOutputFormatClass(SequenceFileOutputFormat.class);
 		//TextOutputFormat.setOutputPath(job, new Path(args[1]));
