@@ -183,42 +183,6 @@ py_binary(
     ],
 )
 
-sh_binary(
-    name = "annotate_coreferences",
-    srcs = [
-        "annotate_coreferences.sh",
-    ],
-    data = [
-        ":annotate_coreferences_main",
-    ],
-    deps = [
-        ":common",
-    ],
-)
-
-py_library(
-    name = "annotate_coreferences_lib",
-    srcs = [
-        "annotate_coreferences.py",
-        "sentence_pb2.py",
-    ],
-    deps = [
-        ":dbpedia_lib",
-    ],
-)
-
-py_binary(
-    name = "annotate_coreferences_main",
-    srcs = [
-        "annotate_coreferences_main.py",
-    ],
-    deps = [
-        ":annotate_coreferences_lib",
-        ":paths_lib",
-        ":file_util_lib",
-    ],
-)
-
 py_library(
     name = "dbpedia_lib",
     srcs = [
