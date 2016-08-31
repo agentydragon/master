@@ -32,6 +32,9 @@ qsub -l walltime=96h -l nodes=1:ppn=4,mem=16gb:brno -m abe wikidata_into_fuseki.
 qsub -l walltime=24h -l nodes=1:ppn=4,mem=32gb:brno -m abe wikidata_into_fuseki.sh
 	=> 12216763.arien.ics.muni.cz
 
+export TMPDIR=$SCRATCHDIR
+./wikidata_into_fuseki.sh (or split into load / index phase)
+
 # -m e: send mail when job terminates
 
 # Download dependencies.
@@ -61,6 +64,8 @@ TODO: will need to rerun:
 ~/bin/sbt 'run examples sfe_bfs_pra_anyrel'  # select 1
 ~/bin/sbt 'run examples sfe_bfs_pra_anyrel'  # select 2
 
+~/bin/sbt 'run prvak'
+
 # kill PBS job:
 qstat -u prvak
 qdel 1309042.wagap.cerit-sc.cz
@@ -79,6 +84,19 @@ Fuseki:
 
 	qsub -I -l walltime=24h -l nodes=1:ppn=4,mem=16gb:brno -m abe
 	./fuseki-server --loc /storage/brno7-cerit/home/prvak/data/fuseki-datasets/wikidata /wikidata
+
+	### ./s-query --service=http://hador:3030/wikidata/query 'SELECT ?a ?b ?c WHERE { ?a ?b ?c } LIMIT 10'
+	## ./s-query --service=http://hador:3030/wikidata/query '
+	## PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+	## SELECT ?a ?b ?c
+	## WHERE { ?a ?b ?c . { ?a wdt:P21 ?c UNION ?a wdt:P22 ?c } } LIMIT 10'
+
+	./s-query --service=http://hador:3030/wikidata/query '
+	PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+	SELECT ?a ?b ?c
+	WHERE { { ?a wdt:P21 ?c } UNION { ?a wdt:P22 ?c } UNION { ?a wdt:P25 ?c } UNION { ?a wdt:P27 ?c } UNION { ?a wdt:P7 ?c } UNION { ?a wdt:P9 ?c } UNION { ?a wdt:P26 ?c } UNION { ?a wdt:P451 ?c } UNION { ?a wdt:P40 ?c } UNION { ?a wdt:P43 ?c } UNION { ?a wdt:P44 ?c } UNION { ?a wdt:P1038 ?c } UNION { ?a wdt:P1290 ?c } . ?a ?b ?c } LIMIT 100000'
+	# TODO: and replace for smaller names.
+	# TODO: and remove UUIDs
 
 English wikipedia: 5,213,378 articles
 	to NLPize 1 article: 3 minutes
