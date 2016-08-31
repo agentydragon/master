@@ -1,10 +1,13 @@
 import org.apache.hadoop.conf.Configuration;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.*;
 
 public class TestHBase {
 	public static void main(String[] args) throws Exception {
+		BasicConfigurator.configure();
+
 		Configuration conf = HBaseConfiguration.create();
 		HBaseAdmin admin = new HBaseAdmin(conf);
 		try {
