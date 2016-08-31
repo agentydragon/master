@@ -4,6 +4,7 @@ import java.util.StringTokenizer;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import java.lang.System;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -40,7 +41,7 @@ public class WikiSplit extends Configured implements Tool {
 	public enum Counters { PROCESSED_ARTICLES };
 
 	//public static class ArticleSplitterMapper extends Mapper<LongWritable, Text, Text, Text>{
-	public static class ArticleSplitterMapper extends Mapper<LongWritable, Text, ImmutableBytesWritable, /*Writable*/Put>{
+	public static class ArticleSplitterMapper<K> extends Mapper<LongWritable, Text, K, /*Writable*/Put>{
 		private Text word = new Text();
 		private String articleName = null;
 		private String articleText = "";
@@ -56,8 +57,9 @@ public class WikiSplit extends Configured implements Tool {
 				Put put = new Put(rowkey);
 				put.add("wiki".getBytes(), "plaintext".getBytes(), articleText.getBytes());
 				// (key ignored)
-				context.write(new ImmutableBytesWritable(rowkey), put);
-				context.getCounter(Counters.PROCESSED_ARTICLES).increment(1);
+				context.write(null, put);
+
+				//context.getCounter(Counters.PROCESSED_ARTICLES).increment(1);
 			}
 			articleText = "";
 		}
@@ -101,27 +103,28 @@ public class WikiSplit extends Configured implements Tool {
 
 		// Set mapper and input/output classes.
 		job.setMapperClass(ArticleSplitterMapper.class);
-		job.setMapOutputKeyClass(ImmutableBytesWritable.class);
-		job.setMapOutputValueClass(Put.class);
+		//job.setMapOutputKeyClass(ImmutableBytesWritable.class);
+		//job.setMapOutputValueClass(Put.class);
+		job.setNumReduceTasks(0);
 
 		//job.setOutputKeyClass(Text.class);
 		//job.setOutputValueClass(Text.class);
-		job.setOutputKeyClass(ImmutableBytesWritable.class);
-		job.setOutputValueClass(Put.class);
+		//job.setOutputKeyClass(ImmutableBytesWritable.class);
+		//job.setOutputValueClass(Put.class);
 
-		job.setNumReduceTasks(0);
+		//job.setNumReduceTasks(0);
 
 		// Set output.
 		//job.setOutputFormatClass(SequenceFileOutputFormat.class);
 		//TextOutputFormat.setOutputPath(job, new Path(args[1]));
-		job.setOutputFormatClass(TableOutputFormat.class);
 		job.getConfiguration().set(TableOutputFormat.OUTPUT_TABLE, "prvak:wiki_articles");
+		job.setOutputFormatClass(TableOutputFormat.class);
 
 		return job.waitForCompletion(true) ? 0 : 1;
 	}
 
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(null, new WikiSplit(), args);
+		int res = ToolRunner.run(HBaseConfiguration.create(), new WikiSplit(), args);
 		System.exit(res);
 	}
 }
