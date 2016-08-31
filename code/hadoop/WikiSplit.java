@@ -1,27 +1,34 @@
 import java.io.IOException;
 import java.util.StringTokenizer;
 
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Mutation;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
 import java.lang.System;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapred.lib.IdentityMapper;
 import org.apache.hadoop.mapreduce.InputFormat;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.hbase.mapreduce.TableOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 
-public class WikiSplit {
+public class WikiSplit extends Configured implements Tool {
 	// implement custom InputFormat that processes entire file in blocks
 	public static class MyFIF extends TextInputFormat {
 		@Override
@@ -31,7 +38,10 @@ public class WikiSplit {
 		}
 	}
 
-	public static class ArticleSplitterMapper extends Mapper<LongWritable, Text, Text, Text>{
+	public enum Counters { PROCESSED_ARTICLES };
+
+	//public static class ArticleSplitterMapper extends Mapper<LongWritable, Text, Text, Text>{
+	public static class ArticleSplitterMapper extends Mapper<LongWritable, Text, ImmutableBytesWritable, /*Writable*/Mutation>{
 		private Text word = new Text();
 		private String articleName = null;
 		private String articleText = "";
@@ -39,8 +49,16 @@ public class WikiSplit {
 		private void flushArticle(Context context) throws IOException, InterruptedException {
 			// flush article
 			if (articleName != null) {
-				context.write(new Text(/*"FLUSH - " + */articleName),
+				/*
+				context.write(new Text(articleName),
 						new Text(articleText));
+				*/
+				byte[] rowkey = articleName.getBytes();
+				Put put = new Put(rowkey);
+				put.add("wiki".getBytes(), "plaintext".getBytes(), articleText.getBytes());
+				// (key ignored)
+				context.write(new ImmutableBytesWritable(rowkey), put);
+				context.getCounter(Counters.PROCESSED_ARTICLES).increment(1);
 			}
 			articleText = "";
 		}
@@ -73,8 +91,8 @@ public class WikiSplit {
 	       }
 	}
 
-	public static void main(String[] args) throws Exception {
-		Configuration conf = new Configuration();
+	public int run(String[] args) throws Exception {
+		Configuration conf = getConf();
 		Job job = Job.getInstance(conf, "wiki split");
 		job.setJarByClass(WikiSplit.class);
 
@@ -87,13 +105,22 @@ public class WikiSplit {
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(Text.class);
 
-		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(Text.class);
+		//job.setOutputKeyClass(Text.class);
+		//job.setOutputValueClass(Text.class);
+		job.setOutputKeyClass(ImmutableBytesWritable.class);
+		job.setOutputValueClass(Writable.class);
 
 		// Set output.
-		job.setOutputFormatClass(SequenceFileOutputFormat.class);
-		TextOutputFormat.setOutputPath(job, new Path(args[1]));
+		//job.setOutputFormatClass(SequenceFileOutputFormat.class);
+		//TextOutputFormat.setOutputPath(job, new Path(args[1]));
+		job.setOutputFormatClass(TableOutputFormat.class);
+		job.getConfiguration().set(TableOutputFormat.OUTPUT_TABLE, "prvak:wiki_articles");
 
-		System.exit(job.waitForCompletion(true) ? 0 : 1);
+		return job.waitForCompletion(true) ? 0 : 1;
+	}
+
+	public static void main(String[] args) throws Exception {
+		int res = ToolRunner.run(null, new WikiSplit(), args);
+		System.exit(res);
 	}
 }
