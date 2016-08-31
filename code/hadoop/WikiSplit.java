@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.client.Mutation;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import java.lang.System;
@@ -41,7 +40,7 @@ public class WikiSplit extends Configured implements Tool {
 	public enum Counters { PROCESSED_ARTICLES };
 
 	//public static class ArticleSplitterMapper extends Mapper<LongWritable, Text, Text, Text>{
-	public static class ArticleSplitterMapper extends Mapper<LongWritable, Text, ImmutableBytesWritable, /*Writable*/Mutation>{
+	public static class ArticleSplitterMapper extends Mapper<LongWritable, Text, ImmutableBytesWritable, /*Writable*/Put>{
 		private Text word = new Text();
 		private String articleName = null;
 		private String articleText = "";
@@ -103,12 +102,12 @@ public class WikiSplit extends Configured implements Tool {
 		// Set mapper and input/output classes.
 		job.setMapperClass(ArticleSplitterMapper.class);
 		job.setMapOutputKeyClass(ImmutableBytesWritable.class);
-		job.setMapOutputValueClass(Mutation.class);
+		job.setMapOutputValueClass(Put.class);
 
 		//job.setOutputKeyClass(Text.class);
 		//job.setOutputValueClass(Text.class);
 		job.setOutputKeyClass(ImmutableBytesWritable.class);
-		job.setOutputValueClass(Mutation.class);
+		job.setOutputValueClass(Put.class);
 
 		job.setNumReduceTasks(0);
 
