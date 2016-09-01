@@ -158,3 +158,6 @@ chmod +x hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -input /user/
 	TODO: can I parallelize Spotlight?
 
 
+
+to run Spotlight annotator:
+	bazel run spotlight:Spotlight

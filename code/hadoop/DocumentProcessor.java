@@ -1,3 +1,16 @@
+/*
+export HADOOP_CLASSPATH=`pwd`/bazel-bin/hadoop/DocumentProcessor_deploy.jar
+hadoop jar \
+	/storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/DocumentProcessor.jar \
+	DocumentProcessor \
+	-D spotlight_server=http://hador:2222/rest/annotate \
+	-D mapreduce.input.fileinputformat.split.maxsize=1000000 \
+	-D mapreduce.map.java.opts=-Xmx8000m \
+	-D mapreduce.map.memory.mb=9000 \
+	-D mapreduce.task.timeout=6000000 \
+	/user/prvak/wiki-splits-sub-0.01 /user/prvak/wiki-processed-sub-0.01
+*/
+
 import java.io.IOException;
 import org.apache.commons.io.IOUtils;
 

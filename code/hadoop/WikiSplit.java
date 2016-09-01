@@ -34,6 +34,7 @@ import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 /*
 # Needed for MyFIF
 export HADOOP_CLASSPATH=`hbase classpath`:`pwd`/WikiSplit_deploy.jar
+# mapredcp -> taky nefunguje :(
 
 hadoop jar WikiSplit_deploy.jar /user/prvak/wiki-plain-small/wiki-split-small.txt
 */
@@ -88,7 +89,6 @@ public class WikiSplit extends Configured implements Tool {
 		}
 
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-
 			String line = value.toString();
 			String title = titleFromLine(line);
 			if (title != null) {
