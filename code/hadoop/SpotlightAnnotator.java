@@ -4,6 +4,7 @@
 import java.io.IOException;
 import java.util.StringTokenizer;
 
+import java.util.Random;
 import java.util.Properties;
 import java.io.StringWriter;
 import java.lang.System;
@@ -35,13 +36,14 @@ import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 //   Key:   article name (Text)
 //   Value: article spotting from Spotlight as JSON (Text)
 //
-// Arguments: (input) (output)
+// Arguments: -D spotlight_server=http://(...),http://(...),http://(...) (input) (output)
 
 public class SpotlightAnnotator extends Configured implements Tool {
 	public static class SpotlightAnnotatorMapper extends Mapper<Text, Text, Text, Text>{
 		private Logger logger = Logger.getLogger(SpotlightAnnotatorMapper.class);
 		// private SpotlightServer server;
-		private SpotlightConnection connection;
+		private SpotlightConnection[] connections;
+		private Random random = new Random();
 
 		// public static boolean startOwnSpotlight = true;
 
@@ -61,7 +63,12 @@ public class SpotlightAnnotator extends Configured implements Tool {
 				connection = new SpotlightConnection("http://localhost:2222/rest/annotate");
 			} else {
 			*/
-				connection = new SpotlightConnection(conf.get("spotlight_server"));
+
+			String[] connectionUrls = conf.get("spotlight_server").split(",");
+			connections = new SpotlightConnection[connectionUrls.length];
+			for (int i = 0; i < connections.length; i++) {
+				connections[i] = new SpotlightConnection(connectionUrls[i]);
+			}
 			//}
 		}
 
@@ -80,6 +87,7 @@ public class SpotlightAnnotator extends Configured implements Tool {
 			String articleText = value.toString();
 
 			try {
+				SpotlightConnection connection = connections[random.nextInt(connections.length)];
 				String jsonOut = connection.getAnnotationJSON(articleText);
 				context.write(key, new Text(jsonOut.toString()));
 			} catch (IOException e) {

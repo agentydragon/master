@@ -8,6 +8,6 @@ import org.dbpedia.spotlight.web.rest.Server;
 
 public class Spotlight {
 	public static void main(String[] args) throws Exception {
-		Server.main(new String[]{"spotlight/en", "http://localhost:2222/rest"});
+		Server.main(new String[]{"spotlight/en", "http://localhost:" + args[0] + "/rest"});
 	}
 }
