@@ -35,12 +35,11 @@ import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 //   Key:   article name (Text)
 //   Value: article spotting from Spotlight as JSON (Text)
 //
-// Arguments: (input) (output) -Dprefix_length=200
+// Arguments: (input) (output)
 
 public class SpotlightAnnotator extends Configured implements Tool {
 	public static class SpotlightAnnotatorMapper extends Mapper<Text, Text, Text, Text>{
 		private Logger logger = Logger.getLogger(SpotlightAnnotatorMapper.class);
-		private int prefixLength;
 		// private SpotlightServer server;
 		private SpotlightConnection connection;
 
@@ -50,7 +49,6 @@ public class SpotlightAnnotator extends Configured implements Tool {
 		public void setup(Context context) {
 			logger.info("mapper setup");
 			Configuration conf = context.getConfiguration();
-			prefixLength = conf.getInt("prefix_length", 10);
 
 			/*
 			if (startOwnSpotlight) {
@@ -81,14 +79,6 @@ public class SpotlightAnnotator extends Configured implements Tool {
 			String articleTitle = key.toString();
 			String articleText = value.toString();
 
-			// Reduce the length of the text.
-			// XXX: HAX
-			int length = articleText.length();
-			if (length > prefixLength) {
-				length = prefixLength;
-			}
-			articleText = articleText.substring(0, length);
-
 			try {
 				String jsonOut = connection.getAnnotationJSON(articleText);
 				context.write(key, new Text(jsonOut.toString()));
@@ -103,10 +93,6 @@ public class SpotlightAnnotator extends Configured implements Tool {
 		Configuration conf = getConf();
 		for (int i = 0; i < args.length; i++) {
 			System.out.println("args[" + i + "]=" + args[i]);
-		}
-		if (conf.get("prefix_length") == null) {
-			System.out.println("No prefix_length given");
-			return 1;
 		}
 		/*
 		if (!SpotlightAnnotatorMapper.startOwnSpotlight) {
