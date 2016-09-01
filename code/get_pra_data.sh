@@ -16,4 +16,4 @@ WHERE { { ?a wdt:P21 ?c } UNION
 	{ ?a wdt:P43 ?c } UNION
 	{ ?a wdt:P44 ?c } UNION
 	{ ?a wdt:P1038 ?c } UNION
-	{ ?a wdt:P1290 ?c } . ?a ?b ?c } LIMIT 10000' | sed 's#<http://www.wikidata.org/entity/##g; s#<http://www.wikidata.org/prop/direct/##g; s#>##g' > result
+	{ ?a wdt:P1290 ?c } . ?a ?b ?c } LIMIT 10000' | sed 's#<http://www.wikidata.org/entity/##g; s#<http://www.wikidata.org/prop/direct/##g; s#>##g' | tail -n +1 > result
