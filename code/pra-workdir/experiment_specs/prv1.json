@@ -1,0 +1,19 @@
+{
+	"graph": {
+		"name": "minified wikidata",
+		"relation sets": [
+			{
+				"relation file": "/storage/brno7-cerit/home/prvak/data/pra-data",
+				"is kb": false
+			}
+		]
+	},
+	"split": {
+		"name": "prv1splitauto",
+		"relations": ["P21", "P22", "P25", "P26", "P27", "P451", "P7", "P9", "P40", "P43", "P44", "P1038", "P1290"],
+		"percent training": 0.8,
+		"relation metadata": "no-such-file",
+		"graph": "minified wikidata",
+	}
+}
+
