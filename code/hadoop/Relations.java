@@ -2,6 +2,20 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Relations {
+// P21 sex or gender
+// P27 country of citizenship
+// P22 father
+// P25 mother
+// P7 brother
+// P9 sister
+// P26 spouse
+// P451 partner
+// P40 child
+// P43 stepfather
+// P44 stepmother
+// P1038 relative
+// P1290 godparent
+
 	public static final List<String> IMPORTANT_RELATIONS = Arrays.asList(
 			"P527",	// has part
 			"P6",	// head of government

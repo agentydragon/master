@@ -31,6 +31,13 @@ import org.apache.hadoop.hbase.mapreduce.TableOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 
+/*
+# Needed for MyFIF
+export HADOOP_CLASSPATH=`hbase classpath`:`pwd`/WikiSplit_deploy.jar
+
+hadoop jar WikiSplit_deploy.jar /user/prvak/wiki-plain-small/wiki-split-small.txt
+*/
+
 public class WikiSplit extends Configured implements Tool {
 	// implement custom InputFormat that processes entire file in blocks
 	public static class MyFIF extends TextInputFormat {
@@ -45,24 +52,26 @@ public class WikiSplit extends Configured implements Tool {
 
 	//public static class ArticleSplitterMapper extends Mapper<LongWritable, Text, Text, Text>{
 	public static class ArticleSplitterMapper<K> extends Mapper<LongWritable, Text, K, /*Writable*/Put>{
-		private Text word = new Text();
 		private String articleName = null;
 		private String articleText = "";
+
+		private void writeArticle(Context context) throws IOException, InterruptedException {
+			/*
+			context.write(new Text(articleName),
+					new Text(articleText));
+			*/
+			byte[] rowkey = articleName.getBytes();
+			Put put = new Put(rowkey);
+			put.add("wiki".getBytes(), "plaintext".getBytes(), articleText.getBytes());
+			// (key ignored)
+			context.write(null, put);
+			//context.getCounter(Counters.PROCESSED_ARTICLES).increment(1);
+		}
 
 		private void flushArticle(Context context) throws IOException, InterruptedException {
 			// flush article
 			if (articleName != null) {
-				/*
-				context.write(new Text(articleName),
-						new Text(articleText));
-				*/
-				byte[] rowkey = articleName.getBytes();
-				Put put = new Put(rowkey);
-				put.add("wiki".getBytes(), "plaintext".getBytes(), articleText.getBytes());
-				// (key ignored)
-				context.write(null, put);
-
-				//context.getCounter(Counters.PROCESSED_ARTICLES).increment(1);
+				writeArticle(context);
 			}
 			articleText = "";
 		}
