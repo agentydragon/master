@@ -66,8 +66,10 @@ while True:
                                     spotlight_endpoint=job['address'])
         except:
             print(job['address'], 'not yet OK:', sys.exc_info()[0])
+            print(sys.exc_info()[1])
             sys.stdout.flush()
             all_ok = False
+            break
     if all_ok:
         break
     time.sleep(30)
