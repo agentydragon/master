@@ -54,7 +54,8 @@ def article_title_to_path(target_dir, title):
     sanitized_articletitle = sanitize_articletitle(title)
     first1 = sanitized_articletitle[:1]
     first2 = sanitized_articletitle[:2]
-    target_dir = target_dir + '/' + first1 + '/' + first2
+    first2 = sanitized_articletitle[:3]
+    target_dir = target_dir + '/' + first1 + '/' + first2 + '/' + first3
     file_util.ensure_dir(target_dir)
     return target_dir + '/' + sanitized_articletitle + '.txt'
 

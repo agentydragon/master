@@ -1,54 +1,12 @@
-#py_library(
-#    name = "split_wiki_lib",
-#    srcs = [
-#        "split_wiki.py",
-#    ],
-#    deps = [
-#        ":file_util_lib",
-#    ],
-#)
-#
-#py_binary(
-#    name = "split_wiki_main",
-#    srcs = [
-#        "split_wiki_main.py",
-#    ],
-#    deps = [
-#        ":split_wiki_lib",
-#    ],
-#)
-#
-#py_test(
-#    name = "split_wiki_test",
-#    srcs = [
-#        "split_wiki_test.py",
-#    ],
-#    deps = [
-#        ":split_wiki_lib",
-#    ],
-#)
-#
-#py_binary(
-#    name = "launch_split_wiki_main",
-#    srcs = [
-#        "launch_split_wiki_main.py",
-#    ],
-#    deps = [
-#        ":split_wiki_main",
-#        ":file_util_lib",
-#        ":pbs_util_lib",
-#        ":paths_lib",
-#    ],
-#    srcs_version = "PY3",
-#)
-#
-#py_library(
-#    name = "file_util_lib",
-#    srcs = [
-#        "file_util.py",
-#    ],
-#)
-#
+package(default_visibility = ["//visibility:public"])
+
+py_library(
+    name = "file_util_lib",
+    srcs = [
+        "file_util.py",
+    ],
+)
+
 #py_binary(
 #    name = "add_negative_samples_main",
 #    srcs = [
@@ -307,7 +265,6 @@ py_library(
         "pbs_util.py",
     ],
 )
-
 
 py_library(
     name = "paths_lib",

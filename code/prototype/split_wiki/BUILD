@@ -1,0 +1,44 @@
+py_library(
+    name = "split_wiki_lib",
+    srcs = [
+        "split_wiki.py",
+    ],
+    deps = [
+        "//py:file_util_lib",
+    ],
+)
+
+py_binary(
+    name = "split_wiki_main",
+    srcs = [
+        "split_wiki_main.py",
+    ],
+    deps = [
+        ":split_wiki_lib",
+    ],
+)
+
+py_test(
+    name = "split_wiki_test",
+    srcs = [
+        "split_wiki_test.py",
+    ],
+    deps = [
+        ":split_wiki_lib",
+    ],
+)
+
+py_binary(
+    name = "launch_split_wiki_main",
+    srcs = [
+        "launch_split_wiki_main.py",
+    ],
+    deps = [
+        ":split_wiki_main",
+        "//py:file_util_lib",
+        "//py:pbs_util_lib",
+        "//py:paths_lib",
+    ],
+    default_python_version = "PY3",
+    srcs_version = "PY3",
+)
