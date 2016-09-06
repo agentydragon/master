@@ -69,12 +69,14 @@ while True:
             print(job.job_id, "still queued, waiting 30 seconds")
             sys.stdout.flush()
             waiting = True
+            continue
 
         if job.state['job_state'] == 'C':
             print(job.job_id, "completed. replacing by new job in 30 seconds.")
             sys.stdout.flush()
             job.start_new()
             waiting = True
+            continue
 
         assert job.state['job_state'] == 'R'
 
@@ -86,7 +88,7 @@ while True:
             print(job.job_id, 'not yet OK:', sys.exc_info()[0], 'waiting 30 seconds')
             print(sys.exc_info()[1])
             sys.stdout.flush()
-            break
+            continue
         else:
             print(job.job_id, "running OK.")
 
