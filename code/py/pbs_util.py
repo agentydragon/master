@@ -33,7 +33,7 @@ def get_job_state(job):
     Args:
         job (str) PBS job id
     """
-    output = subprocess.check_output(["qstat", "-f", "-1", job])
+    output = subprocess.check_output(["qstat", "-f", "-1", job]).decode('utf-8')
     lines = output.split("\n")
     state = {}
     for line in lines:
@@ -71,13 +71,17 @@ def launch(walltime, node_spec, job_name, script):
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
     stdoutdata, stderrdata = popen.communicate()
-    if popen.returncode != 0:
+    stdoutdata = stdoutdata.decode('utf-8')
+    stderrdata = stderrdata.decode('utf-8')
+    if popen.returncode != 0 or stderrdata != '':
         print('stdout:', stdoutdata)
         print('stderr:', stderrdata)
         print(popen.returncode)
         sys.exit(1)
-    assert stderrdata == ''
     return stdoutdata.strip()
+
+def kill_job(job_id):
+    subprocess.check_output(['qdel', job_id])
 
 def launch_job(walltime, node_spec, job_name, job_command):
     launch(walltime, node_spec, job_name, ' '.join(job_command))

@@ -278,6 +278,8 @@ py_binary(
 
 py_binary(
     name = "launch_spotlights_main",
+    default_python_version = "PY3",
+    srcs_version = "PY3",
     srcs = [
         "launch_spotlights_main.py",
     ],

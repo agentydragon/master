@@ -79,3 +79,5 @@ print("All Spotlight servers running.")
 
 print("Addresses:", ','.join(addresses))
 sys.stdout.flush()
+
+# TODO: pbs_util.kill_job(job_id)
