@@ -2,6 +2,9 @@
 
 import pbs_util
 import paths
+import time
+
+jobs = []
 
 for i in range(3):
     port = i + 2222
@@ -16,3 +19,24 @@ for i in range(3):
                              script=SCRIPT)
     print("port:", port)
     print(pbs_util.get_job_state(job_id))
+
+    jobs.append({
+        'port': port,
+        'job_id': job_id
+    })
+
+while True:
+    for job in jobs:
+        job['state'] = pbs_util.get_job_state(job['job_id'])
+
+    waiting = False
+    for job in jobs:
+        if job['state']['job_state'] == 'Q':
+            print("job", job['job_id'], "still queued")
+            waiting = True
+            break
+    if not waiting:
+        break
+    time.sleep(5)
+
+print(jobs)
