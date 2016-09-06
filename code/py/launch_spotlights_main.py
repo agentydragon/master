@@ -45,7 +45,7 @@ print(jobs)
 addresses = []
 for job in jobs:
     exec_host = job['state']['exec_host'].split('+')[0].split('/')[0]
-    address = 'http://' + exec_host + ':' + job['port'] + '/rest/annotate'
+    address = ('http://%s:%d/rest/annotate' % (exec_host, job['port']))
     addresses.append(address)
 
-print("Addresses:", addresses)
+print("Addresses:", ','.join(addresses))
