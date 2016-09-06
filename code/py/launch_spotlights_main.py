@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import spotlight
 import pbs_util
 import paths
 import sys
