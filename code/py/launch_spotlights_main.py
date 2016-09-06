@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import atexit
+#import atexit
 import spotlight
 import pbs_util
 import paths
@@ -55,11 +55,11 @@ for i in range(args.num_servers):
     job.start_new()
     jobs.append(job)
 
-def kill_jobs():
-    print("Killing remaining jobs")
-    for job in jobs:
-        job.kill()
-atexit.register(kill_jobs)
+#def kill_jobs():
+#    print("Killing remaining jobs")
+#    for job in jobs:
+#        job.kill()
+#atexit.register(kill_jobs)
 
 while True:
     waiting = False
