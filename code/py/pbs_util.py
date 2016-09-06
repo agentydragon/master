@@ -28,7 +28,31 @@ module add python34-modules-gcc
 cd $PBS_O_WORKDIR
 """
 
+def get_job_state(job):
+    """
+    Args:
+        job (str) PBS job id
+    """
+    output = subprocess.check_output(["qstat", "-f", "-1", job])
+    lines = output.split("\n")
+    state = {}
+    for line in lines:
+        line = line.strip()
+        if ' = ' in line:
+            parts = line.split(" = ")
+            if parts[0] == 'job_state':
+                state['job_state'] = parts[1]
+            if parts[0] == 'exec_host':
+                state['exec_host'] = parts[1]
+            if parts[0] == 'sched_nodespec':
+                state['sched_nodespec'] = parts[1]
+    return state
+
 def launch(walltime, node_spec, job_name, script):
+    """
+    Returns:
+        PBS job ID (str)
+    """
     qsub_command = ['qsub',
                     '-l', 'walltime=' + walltime,
                     '-l', node_spec,
@@ -47,11 +71,13 @@ def launch(walltime, node_spec, job_name, script):
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
     stdoutdata, stderrdata = popen.communicate()
-    print('stdout:', stdoutdata)
-    print('stderr:', stderrdata)
     if popen.returncode != 0:
+        print('stdout:', stdoutdata)
+        print('stderr:', stderrdata)
         print(popen.returncode)
         sys.exit(1)
+    assert stderrdata == ''
+    return stdoutdata.strip()
 
 def launch_job(walltime, node_spec, job_name, job_command):
     launch(walltime, node_spec, job_name, ' '.join(job_command))
