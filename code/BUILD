@@ -5,17 +5,6 @@ sh_library(
     ],
 )
 
-py_binary(
-    name = "metacentrum_spotlight_main",
-    srcs = [
-        "metacentrum_spotlight_main.py",
-    ],
-    deps = [
-        ":spotlight_lib",
-        ":paths_lib",
-    ]
-)
-
 genrule(
     name = "sentence_proto",
     srcs = [
