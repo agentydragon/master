@@ -17,8 +17,10 @@ for i in range(NUM_SERVERS):
     /storage/brno7-cerit/home/prvak/bin/bazel run --script_path $SCRATCHDIR/script.sh spotlight:Spotlight
     $SCRATCHDIR/script.sh %d
     """ % port
+    # 4: not enough
+    # 10: not enough
     job_id = pbs_util.launch(walltime="24:00:00",
-                             node_spec="nodes=1:brno:ppn=10,mem=16gb",
+                             node_spec="nodes=1:brno:ppn=12,mem=16gb",
                              job_name="spotlight_%d" % (i + 1),
                              script=SCRIPT)
     print("port:", port)
