@@ -6,6 +6,7 @@ Splits Wiki plaintext into articles.
 Usage: TODO
 """
 
+import json
 import io
 import locale
 locale.setlocale(locale.LC_ALL, 'en_US.utf8')
@@ -57,7 +58,7 @@ def article_title_to_path(target_dir, title):
     first2 = sanitized_articletitle[:3]
     target_dir = target_dir + '/' + first1 + '/' + first2 + '/' + first3
     file_util.ensure_dir(target_dir)
-    return target_dir + '/' + sanitized_articletitle + '.txt'
+    return target_dir + '/' + sanitized_articletitle + '.json'
 
 def split_corpus(wiki_plaintext_path, target_dir, target_articles=None):
     articletext = ""
@@ -72,7 +73,8 @@ def split_corpus(wiki_plaintext_path, target_dir, target_articles=None):
                     with io.open(path, 'w', encoding='utf8') as out:
                         print('Writing article: ' + articletitle)
                         articletext = sanitize_article(articletext)
-                        out.write(articletext)
+                        json.dump({'title': articletitle, 'plaintext':
+                                   articletext}, out)
 
                 articletext = ""
                 articletitle = line.strip().replace('= ', '').replace(' =', '')
