@@ -85,4 +85,4 @@ def kill_job(job_id):
     subprocess.check_output(['qdel', job_id])
 
 def launch_job(walltime, node_spec, job_name, job_command):
-    launch(walltime, node_spec, job_name, ' '.join(job_command))
+    return launch(walltime, node_spec, job_name, ' '.join(job_command))

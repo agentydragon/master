@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
-import pbs_util
+from py import pbs_util
+from py import file_util
+from py import paths
 import argparse
-import file_util
-import paths
 
 parser = argparse.ArgumentParser(description='TODO')
 parser.add_argument('--max_articles', type=int, required=True)

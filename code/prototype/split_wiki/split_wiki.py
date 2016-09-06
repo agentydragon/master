@@ -11,7 +11,7 @@ import locale
 locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
 import re
-import file_util
+from py import file_util
 
 # For workstation:
 # WIKI_PLAINTEXT_FILE='/mnt/crypto/data/wiki.txt'
