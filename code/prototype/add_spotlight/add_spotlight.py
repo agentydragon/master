@@ -9,6 +9,8 @@ Usage:
 
 import sys
 import time
+import locale
+locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
 from py import paths
 
