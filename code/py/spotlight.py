@@ -12,13 +12,15 @@ import argparse
 import json
 import requests
 
-SPOTLIGHT_SERVER = 'http://spotlight.sztaki.hu:2222'
-# SPOTLIGHT_SERVER = 'http://localhost:2222'
-# SPOTLIGHT_SERVER = 'http://zebra6a:2222'
+SPOTLIGHT_SERVER = 'http://spotlight.sztaki.hu:2222/rest/annotate'
+# SPOTLIGHT_SERVER = 'http://localhost:2222/rest/annotate'
+# SPOTLIGHT_SERVER = 'http://zebra6a:2222/rest/annotate'
 
-def annotate_text(text):
-    url = SPOTLIGHT_SERVER + '/rest/annotate'
-    r = requests.post(url, data={
+def annotate_text(text, spotlight_server=None):
+    if spotlight_endpoint is None:
+        spotlight_endpoint = SPOTLIGHT_SERVER
+
+    r = requests.post(spotlight_endpoint, data={
       'text': text,
       'confidence': '0.35'
     }, headers={'Accept': 'application/json'})

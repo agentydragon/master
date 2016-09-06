@@ -282,6 +282,7 @@ py_binary(
         "launch_spotlights_main.py",
     ],
     deps = [
+        ":spotlight_lib",
         ":pbs_util_lib",
         ":paths_lib",
     ],
