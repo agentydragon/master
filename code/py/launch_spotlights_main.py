@@ -62,7 +62,7 @@ while True:
     for job in jobs:
         try:
             spotlight.annotate_text("Barack Obama is the president of the United States.",
-                                    spotlight_server=job['address'])
+                                    spotlight_endpoint=job['address'])
         except:
             print(job['address'], 'not yet OK:', sys.exc_info()[0])
             sys.stdout.flush()
