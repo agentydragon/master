@@ -40,3 +40,11 @@ while True:
     time.sleep(5)
 
 print(jobs)
+
+addresses = []
+for job in jobs:
+    exec_host = job['state']['exec_host'].split('+')[0].split('/')[0]
+    address = 'http://' + exec_host + ':' + job['port'] + '/rest/annotate'
+    addresses.append(address)
+
+print("Addresses:", addresses)
