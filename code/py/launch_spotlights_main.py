@@ -35,6 +35,7 @@ while True:
             print("job", job['job_id'], "still queued")
             waiting = True
             break
+        assert job['state']['job_state'] == 'R'
     if not waiting:
         break
     time.sleep(5)
