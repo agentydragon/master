@@ -13,6 +13,7 @@ locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
 import re
 from py import file_util
+from prototype import article_repo
 
 # For workstation:
 # WIKI_PLAINTEXT_FILE='/mnt/crypto/data/wiki.txt'
@@ -46,19 +47,6 @@ def sanitize_article(article):
 
     return article
 
-import unicodedata
-def sanitize_articletitle(title):
-    sanitized_articletitle = title.replace(' ', '_').replace('/', '_')
-    return sanitized_articletitle
-
-def article_title_to_path(target_dir, title):
-    sanitized_articletitle = sanitize_articletitle(title)
-    first1 = sanitized_articletitle[:1]
-    first2 = sanitized_articletitle[:2]
-    first3 = sanitized_articletitle[:3]
-    target_dir = target_dir + '/' + first1 + '/' + first2 + '/' + first3
-    file_util.ensure_dir(target_dir)
-    return target_dir + '/' + sanitized_articletitle + '.json'
 
 def split_corpus(wiki_plaintext_path, target_dir, target_articles=None):
     articletext = ""
@@ -69,12 +57,11 @@ def split_corpus(wiki_plaintext_path, target_dir, target_articles=None):
         for line in f:
             if regex.match(line):
                 if articletitle is not None:
-                    path = article_title_to_path(target_dir, articletitle)
-                    with io.open(path, 'w', encoding='utf8') as out:
-                        print('#%d' % articles, 'writing article:', articletitle)
-                        articletext = sanitize_article(articletext)
-                        json.dump({'title': articletitle, 'plaintext':
-                                   articletext}, out)
+                    print('#%d' % articles, 'writing article:', articletitle)
+                    articletext = sanitize_article(articletext)
+                    article_repo.write_article(target_dir, articletitle,
+                                               {'title': articletitle, 'plaintext':
+                                                articletext})
 
                 articletext = ""
                 articletitle = line.strip().replace('= ', '').replace(' =', '')

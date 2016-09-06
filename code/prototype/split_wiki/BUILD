@@ -5,6 +5,7 @@ py_library(
     ],
     deps = [
         "//py:file_util_lib",
+        "//prototype:article_repo_lib",
     ],
 )
 

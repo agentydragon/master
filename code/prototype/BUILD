@@ -1,3 +1,5 @@
+package(default_visibility = ["//visibility:public"])
+
 py_binary(
     name = "find_persons",
     srcs = [
@@ -8,4 +10,11 @@ py_binary(
     ],
     default_python_version = "PY3",
     srcs_version = "PY3",
+)
+
+py_library(
+    name = "article_repo_lib",
+    srcs = [
+        "article_repo.py",
+    ],
 )
