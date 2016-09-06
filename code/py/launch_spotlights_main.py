@@ -6,11 +6,14 @@ import paths
 import sys
 import time
 
-NUM_SERVERS = 2
+import argparse
+parser = argparse.ArgumentParser(description='TODO')
+parser.add_argument('--num_servers', type=int, required=True)
+args = parser.parse_args()
 
 jobs = []
 
-for i in range(NUM_SERVERS):
+for i in range(args.num_servers):
     port = i + 2222
     SCRIPT="""
     cd /storage/brno7-cerit/home/prvak/master/code

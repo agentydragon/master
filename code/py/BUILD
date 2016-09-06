@@ -295,6 +295,7 @@ py_library(
     srcs = [
         "pbs_util.py",
     ],
+    srcs_version = "PY3",
 )
 
 sh_binary(
