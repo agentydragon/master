@@ -70,6 +70,6 @@ while True:
             all_ok = False
     if all_ok:
         break
-    time.sleep(10)
+    time.sleep(30)
 
 print("All Spotlight servers running.")
