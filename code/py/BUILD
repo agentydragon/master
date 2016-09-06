@@ -276,6 +276,17 @@ py_binary(
     ],
 )
 
+py_binary(
+    name = "launch_spotlights_main",
+    srcs = [
+        "launch_spotlights_main.py",
+    ],
+    deps = [
+        ":pbs_util_lib",
+        ":paths_lib",
+    ],
+)
+
 py_library(
     name = "pbs_util_lib",
     srcs = [

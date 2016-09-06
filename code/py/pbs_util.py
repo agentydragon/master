@@ -1,7 +1,7 @@
 import subprocess
 import sys
 
-def launch_job(walltime, node_spec, job_name, job_command):
+def launch(walltime, node_spec, job_name, script):
     qsub_command = ['qsub',
                     '-l', 'walltime=' + walltime,
                     '-l', node_spec,
@@ -33,7 +33,7 @@ module add jdk-8
 module add python34-modules-gcc
 
 cd $PBS_O_WORKDIR
-""" + (' '.join(job_command)))
+""" + script)
 
     js_path = job_name + '.sh'
     with open(js_path, 'w') as jobscript_file:
@@ -51,3 +51,6 @@ cd $PBS_O_WORKDIR
     if popen.returncode != 0:
         print(popen.returncode)
         sys.exit(1)
+
+def launch_job(walltime, node_spec, job_name, job_command):
+    launch(walltime, node_spec, job_name, ' '.join(job_command))

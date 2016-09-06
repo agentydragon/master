@@ -151,5 +151,10 @@ to run Spotlight annotator:
 
 	cd bazel-bin/spotlight/Spotlight.runfiles/__main__
 	# -d: set working directory
-	qsub -d `pwd` -m abe -l walltime=24:00:00 -l nodes=1:brno:ppn=4,mem=16gb spotlight/Spotlight
-	qsub -d `pwd` -m abe -l walltime=24:00:00 -l nodes=1:brno:ppn=4,mem=16gb run.sh
+	# 
+	qsub -d `pwd` -m abe -l walltime=24:00:00 -l nodes=1:brno:ppn=12,mem=16gb spotlight/Spotlight
+	qsub -d `pwd` -m abe -l walltime=24:00:00 -l nodes=1:brno:ppn=12,mem=16gb run.sh
+
+	qstat -f (task ID): shows host also
+
+	host exclusion: ^krux2.ncbr.muni.cz (not ICS)
