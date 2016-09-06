@@ -19,6 +19,7 @@ parser = argparse.ArgumentParser(description='Look up articles in Spotlight')
 parser.add_argument('--article_plaintexts_dir',
                     default=paths.WIKI_ARTICLES_PLAINTEXTS_DIR)
 parser.add_argument('--articles', action='append')
+parser.add_argument('--spotlight_endpoint')
 args = parser.parse_args()
 
 # TODO: skip if finished
@@ -27,6 +28,9 @@ import json
 import os.path
 from py import spotlight
 from prototype import article_repo
+
+if args.spotlight_endpoint:
+    spotlight.SPOTLIGHT_SERVER = args.spotlight_endpoint
 
 #queries = 0
 
