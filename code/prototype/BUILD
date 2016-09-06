@@ -17,4 +17,7 @@ py_library(
     srcs = [
         "article_repo.py",
     ],
+    deps = [
+        "//py:file_util_lib",
+    ],
 )

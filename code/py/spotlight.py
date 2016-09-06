@@ -27,6 +27,7 @@ def annotate_text(text, spotlight_endpoint=None):
     try:
         return r.json()
     except:
+        print(r)
         print(r.text)
         raise
 
