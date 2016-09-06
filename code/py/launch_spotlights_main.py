@@ -6,9 +6,11 @@ import paths
 import sys
 import time
 
+NUM_SERVERS = 2
+
 jobs = []
 
-for i in range(3):
+for i in range(NUM_SERVERS):
     port = i + 2222
     SCRIPT="""
     cd /storage/brno7-cerit/home/prvak/master/code
@@ -55,9 +57,6 @@ for i, job in enumerate(jobs):
 
     addresses.append(address)
 
-print("Addresses:", ','.join(addresses))
-sys.stdout.flush()
-
 while True:
     all_ok = True
     for job in jobs:
@@ -75,3 +74,6 @@ while True:
     time.sleep(30)
 
 print("All Spotlight servers running.")
+
+print("Addresses:", ','.join(addresses))
+sys.stdout.flush()
