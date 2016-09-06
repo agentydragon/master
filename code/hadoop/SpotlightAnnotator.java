@@ -42,8 +42,7 @@ public class SpotlightAnnotator extends Configured implements Tool {
 	public static class SpotlightAnnotatorMapper extends Mapper<Text, Text, Text, Text>{
 		private Logger logger = Logger.getLogger(SpotlightAnnotatorMapper.class);
 		// private SpotlightServer server;
-		private SpotlightConnection[] connections;
-		private Random random = new Random();
+		private SpotlightConnection connection;
 
 		// public static boolean startOwnSpotlight = true;
 
@@ -64,11 +63,8 @@ public class SpotlightAnnotator extends Configured implements Tool {
 			} else {
 			*/
 
-			String[] connectionUrls = conf.get("spotlight_server").split(",");
-			connections = new SpotlightConnection[connectionUrls.length];
-			for (int i = 0; i < connections.length; i++) {
-				connections[i] = new SpotlightConnection(connectionUrls[i]);
-			}
+			String[] connectionUrls = SpotlightPooledConnection.splitEndpointList(conf.get("spotlight_server"));
+			connection = new SpotlightPooledConnection(connectionUrls);
 			//}
 		}
 
@@ -87,7 +83,6 @@ public class SpotlightAnnotator extends Configured implements Tool {
 			String articleText = value.toString();
 
 			try {
-				SpotlightConnection connection = connections[random.nextInt(connections.length)];
 				String jsonOut = connection.getAnnotationJSON(articleText);
 				context.write(key, new Text(jsonOut.toString()));
 			} catch (IOException e) {

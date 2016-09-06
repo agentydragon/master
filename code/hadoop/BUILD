@@ -291,5 +291,7 @@ java_library(
     name = "SpotlightConnection",
     srcs = [
         "SpotlightConnection.java",
+        "SpotlightSingleConnection.java",
+        "SpotlightPooledConnection.java",
     ],
 )

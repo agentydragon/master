@@ -46,7 +46,8 @@ public class DocumentProcessorMapper extends Mapper<Text, Text, Text, Text> {
 	}
 
 	public void setSpotlightServer(String server) {
-		spotlightConnection = new SpotlightConnection(server);
+		String[] servers = SpotlightPooledConnection.splitEndpointList(server);
+		spotlightConnection = new SpotlightPooledConnection(servers);
 	}
 
 	public void setNLPPipeline() {
