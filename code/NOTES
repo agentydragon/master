@@ -148,3 +148,6 @@ chmod +x hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -input /user/
 
 to run Spotlight annotator:
 	bazel run spotlight:Spotlight
+
+	cd bazel-bin/spotlight/Spotlight.runfiles/__main__
+	qsub -m abe -l walltime=24:00:00 -l nodes=1:brno:ppn=4,mem=16gb spotlight/Spotlight
