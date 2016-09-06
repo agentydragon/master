@@ -154,47 +154,48 @@ py_library(
 #        ":file_util_lib",
 #    ],
 #)
-#
-#py_library(
-#    name = "json_cache_lib",
-#    srcs = [
-#        "json_cache.py",
-#    ],
-#    deps = [
-#        ":paths_lib",
-#        ":file_util_lib",
-#    ],
-#    srcs_version = "PY3",
-#)
-#
-#py_library(
-#    name = "sparql_client_lib",
-#    srcs = [
-#        "sparql_client.py",
-#    ],
-#    srcs_version = "PY3",
-#)
-#
-#py_library(
-#    name = "wikidata_util_lib",
-#    srcs = [
-#        "wikidata_util.py",
-#    ],
-#    srcs_version = "PY3",
-#)
-#
-#py_library(
-#    name = "wikidata_lib",
-#    srcs = [
-#        "wikidata.py",
-#    ],
-#    deps = [
-#        ":json_cache_lib",
-#        ":sparql_client_lib",
-#        ":wikidata_util_lib",
-#    ],
-#    srcs_version = "PY3",
-#)
+
+py_library(
+    name = "json_cache_lib",
+    srcs = [
+        "json_cache.py",
+    ],
+    deps = [
+        ":paths_lib",
+        ":file_util_lib",
+    ],
+    #srcs_version = "PY3",
+)
+
+py_library(
+    name = "sparql_client_lib",
+    srcs = [
+        "sparql_client.py",
+    ],
+    #srcs_version = "PY3",
+)
+
+py_library(
+    name = "wikidata_util_lib",
+    srcs = [
+        "wikidata_util.py",
+    ],
+    #srcs_version = "PY3",
+)
+
+py_library(
+    name = "wikidata_lib",
+    srcs = [
+        "wikidata.py",
+    ],
+    deps = [
+        ":json_cache_lib",
+        ":sparql_client_lib",
+        ":wikidata_util_lib",
+    ],
+    #srcs_version = "PY3",
+)
+
 #
 #py_test(
 #    name = "wikidata_test",
@@ -243,20 +244,6 @@ py_library(
 #        ":add_negative_samples_main",
 #    ],
 #)
-
-py_binary(
-    name = "launch_spotlights_main",
-    default_python_version = "PY3",
-    srcs_version = "PY3",
-    srcs = [
-        "launch_spotlights_main.py",
-    ],
-    deps = [
-        ":spotlight_lib",
-        ":pbs_util_lib",
-        ":paths_lib",
-    ],
-)
 
 py_library(
     name = "pbs_util_lib",

@@ -23,7 +23,7 @@ job_command = [
     args.wiki_plaintext_path
 ]
 job_id = pbs_util.launch_job(
-    walltime="00:01:00",
+    walltime="48:00:00",
     node_spec="nodes=1:brno:ppn=1,mem=4gb",
     job_name="wiki-split",
     job_command=job_command

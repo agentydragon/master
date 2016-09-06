@@ -1,3 +1,17 @@
+py_binary(
+    name = "launch_spotlights_main",
+    default_python_version = "PY3",
+    srcs_version = "PY3",
+    srcs = [
+        "launch_spotlights_main.py",
+    ],
+    deps = [
+        "//py:spotlight_lib",
+        "//py:pbs_util_lib",
+        "//py:paths_lib",
+    ],
+)
+
 java_binary(
     name = "Spotlight",
     srcs = [

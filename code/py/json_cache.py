@@ -1,8 +1,8 @@
 import os
 import os.path
 import json
-import paths
-import file_util
+from py import paths
+from py import file_util
 
 class JsonCache(object):
     def __init__(self, name):

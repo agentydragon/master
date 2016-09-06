@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 
+# TODO: declare as dependency!
+
 #import atexit
-import spotlight
-import pbs_util
-import paths
+from py import spotlight
+from py import pbs_util
+from py import paths
 import sys
 import time
 

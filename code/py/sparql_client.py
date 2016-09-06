@@ -2,6 +2,7 @@ import SPARQLWrapper
 
 STANDARD_PREFIXES = """
 PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdp: <http://www.wikidata.org/prop/direct/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 """
 

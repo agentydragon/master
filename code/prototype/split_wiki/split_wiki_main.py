@@ -6,8 +6,8 @@ Splits Wiki plaintext into articles.
 Usage: TODO
 """
 
-import file_util
-import split_wiki
+from py import file_util
+from prototype.split_wiki import split_wiki
 import argparse
 
 def main():

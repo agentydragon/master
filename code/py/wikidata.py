@@ -1,6 +1,6 @@
-import json_cache
-import wikidata_util
-import sparql_client
+from py import json_cache
+from py import wikidata_util
+from py import sparql_client
 
 wikidata_url = 'https://query.wikidata.org/sparql'
 
@@ -88,6 +88,15 @@ class WikidataClient(object):
             return None
         else:
             return results['results']['bindings'][0]['label']['value']
+
+    def get_entity_name(self, entity_id):
+        self.load_cache()
+        if entity_id in self.name_cache:
+            return self.name_cache[entity_id]
+        name = self.fetch_label(entity_id)
+        self.name_cache[entity_id] = name
+        self.save_cache()
+        return name
 
     def get_name(self, property_id):
         self.load_cache()
