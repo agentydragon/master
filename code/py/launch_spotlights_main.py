@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import atexit
 import spotlight
 import pbs_util
 import paths
@@ -52,6 +53,12 @@ while True:
 
 print(jobs)
 
+def kill_jobs():
+    print("Killing remaining jobs")
+    for job in jobs:
+        pbs_util.kill_job(job['job_id'])
+atexit.register(kill_jobs)
+
 addresses = []
 for i, job in enumerate(jobs):
     exec_host = job['state']['exec_host'].split('+')[0].split('/')[0]
@@ -82,5 +89,3 @@ print("All Spotlight servers running.")
 
 print("Addresses:", ','.join(addresses))
 sys.stdout.flush()
-
-# TODO: pbs_util.kill_job(job_id)

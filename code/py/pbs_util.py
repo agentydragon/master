@@ -81,6 +81,7 @@ def launch(walltime, node_spec, job_name, script):
     return stdoutdata.strip()
 
 def kill_job(job_id):
+    print("Killing", job_id)
     subprocess.check_output(['qdel', job_id])
 
 def launch_job(walltime, node_spec, job_name, job_command):
