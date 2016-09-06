@@ -13,13 +13,14 @@ parser.add_argument('--num_servers', type=int, required=True)
 args = parser.parse_args()
 
 class Job(object):
-    def __init__(self):
+    def __init__(self, i):
+        self.i = i
         self.port = None
         self.job_id = None
         self.state = None
 
-    def start_new(self, i):
-        port = i + 2222
+    def start_new(self):
+        port = self.i + 2222
         SCRIPT="""
         cd /storage/brno7-cerit/home/prvak/master/code
         /storage/brno7-cerit/home/prvak/bin/bazel run --script_path $SCRATCHDIR/script.sh spotlight:Spotlight
@@ -29,7 +30,7 @@ class Job(object):
         # 10: not enough
         job_id = pbs_util.launch(walltime="24:00:00",
                                  node_spec="nodes=1:brno:ppn=12,mem=16gb",
-                                 job_name="spotlight_%d" % (i + 1),
+                                 job_name="spotlight_%d" % (self.i + 1),
                                  script=SCRIPT)
         print("port:", port)
 
@@ -49,8 +50,8 @@ class Job(object):
 
 jobs = []
 for i in range(args.num_servers):
-    job = Job()
-    job.start_new(i)
+    job = Job(i)
+    job.start_new()
     jobs.append(job)
 
 def kill_jobs():
@@ -61,22 +62,19 @@ atexit.register(kill_jobs)
 
 while True:
     waiting = False
-    for job in jobs:
+    for i, job in enumerate(jobs):
         job.refresh_state()
 
         if job.state['job_state'] == 'Q':
-            print("job", job.job_id, "still queued, waiting 30 seconds")
-            time.sleep(30)
+            print(job.job_id, "still queued, waiting 30 seconds")
             sys.stdout.flush()
             waiting = True
-            break
 
         if job.state['job_state'] == 'C':
-            print("job", job.job_id, "completed. replacing by new job in 30 seconds.")
-            time.sleep(30)
-            job.start_new(i)
+            print(job.job_id, "completed. replacing by new job in 30 seconds.")
+            sys.stdout.flush()
+            job.start_new()
             waiting = True
-            break
 
         assert job.state['job_state'] == 'R'
 
@@ -85,11 +83,12 @@ while True:
                                     spotlight_endpoint=job.get_address())
         except:
             waiting = True
-            print(job.get_address(), 'not yet OK:', sys.exc_info()[0], 'waiting 30 seconds')
+            print(job.job_id, 'not yet OK:', sys.exc_info()[0], 'waiting 30 seconds')
             print(sys.exc_info()[1])
-            time.sleep(30)
             sys.stdout.flush()
             break
+        else:
+            print(job.job_id, "running OK.")
 
     if not waiting:
         break
