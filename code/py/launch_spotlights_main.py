@@ -12,80 +12,96 @@ parser = argparse.ArgumentParser(description='TODO')
 parser.add_argument('--num_servers', type=int, required=True)
 args = parser.parse_args()
 
+class Job(object):
+    def __init__(self):
+        self.port = None
+        self.job_id = None
+        self.state = None
+
+    def start_new(self, i):
+        port = i + 2222
+        SCRIPT="""
+        cd /storage/brno7-cerit/home/prvak/master/code
+        /storage/brno7-cerit/home/prvak/bin/bazel run --script_path $SCRATCHDIR/script.sh spotlight:Spotlight
+        $SCRATCHDIR/script.sh %d
+        """ % port
+        # 4: not enough
+        # 10: not enough
+        job_id = pbs_util.launch(walltime="24:00:00",
+                                 node_spec="nodes=1:brno:ppn=12,mem=16gb",
+                                 job_name="spotlight_%d" % (i + 1),
+                                 script=SCRIPT)
+        print("port:", port)
+
+        self.port = port
+        self.job_id = job_id
+
+    def refresh_state(self):
+        self.state = pbs_util.get_job_state(self.job_id)
+
+    def get_address(self):
+        exec_host = self.state['exec_host'].split('+')[0].split('/')[0]
+        address = ('http://%s:%d/rest/annotate' % (exec_host, self.port))
+        return address
+
+    def kill(self):
+        pbs_util.kill_job(self.job_id)
+
 jobs = []
-
 for i in range(args.num_servers):
-    port = i + 2222
-    SCRIPT="""
-    cd /storage/brno7-cerit/home/prvak/master/code
-    /storage/brno7-cerit/home/prvak/bin/bazel run --script_path $SCRATCHDIR/script.sh spotlight:Spotlight
-    $SCRATCHDIR/script.sh %d
-    """ % port
-    # 4: not enough
-    # 10: not enough
-    job_id = pbs_util.launch(walltime="24:00:00",
-                             node_spec="nodes=1:brno:ppn=12,mem=16gb",
-                             job_name="spotlight_%d" % (i + 1),
-                             script=SCRIPT)
-    print("port:", port)
-    print(pbs_util.get_job_state(job_id))
-
-    jobs.append({
-        'port': port,
-        'job_id': job_id
-    })
-
-while True:
-    for job in jobs:
-        job['state'] = pbs_util.get_job_state(job['job_id'])
-
-    waiting = False
-    for job in jobs:
-        if job['state']['job_state'] == 'Q':
-            print("job", job['job_id'], "still queued")
-            sys.stdout.flush()
-            waiting = True
-            break
-        assert job['state']['job_state'] == 'R'
-    if not waiting:
-        break
-    time.sleep(5)
-
-print(jobs)
+    job = Job()
+    job.start_new(i)
+    jobs.append(job)
 
 def kill_jobs():
     print("Killing remaining jobs")
     for job in jobs:
-        pbs_util.kill_job(job['job_id'])
+        job.kill()
 atexit.register(kill_jobs)
 
-addresses = []
-for i, job in enumerate(jobs):
-    exec_host = job['state']['exec_host'].split('+')[0].split('/')[0]
-    address = ('http://%s:%d/rest/annotate' % (exec_host, job['port']))
-
-    print('Address:', address, 'job_id:', job['job_id'], 'i:', i)
-    job['address'] = address
-
-    addresses.append(address)
-
 while True:
-    all_ok = True
+    waiting = False
     for job in jobs:
+        job.refresh_state()
+
+        if job.state['job_state'] == 'Q':
+            print("job", job.job_id, "still queued, waiting 30 seconds")
+            time.sleep(30)
+            sys.stdout.flush()
+            waiting = True
+            break
+
+        if job.state['job_state'] == 'C':
+            print("job", job.job_id, "completed. replacing by new job in 30 seconds.")
+            time.sleep(30)
+            job.start_new(i)
+            waiting = True
+            break
+
+        assert job.state['job_state'] == 'R'
+
         try:
             spotlight.annotate_text("Barack Obama is the president of the United States.",
-                                    spotlight_endpoint=job['address'])
+                                    spotlight_endpoint=job.get_address())
         except:
-            print(job['address'], 'not yet OK:', sys.exc_info()[0])
+            waiting = True
+            print(job.get_address(), 'not yet OK:', sys.exc_info()[0], 'waiting 30 seconds')
             print(sys.exc_info()[1])
+            time.sleep(30)
             sys.stdout.flush()
-            all_ok = False
             break
-    if all_ok:
+
+    if not waiting:
         break
     time.sleep(30)
 
 print("All Spotlight servers running.")
+
+addresses = []
+for i, job in enumerate(jobs):
+    address = job.get_address()
+    print('Address:', address, 'job_id:', job.job_id, 'i:', i)
+    addresses.append(address)
 
 print("Addresses:", ','.join(addresses))
 sys.stdout.flush()
