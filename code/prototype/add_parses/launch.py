@@ -24,7 +24,7 @@ job_command = [
 job_id = pbs_util.launch_job(
     # TODO: calculate walltime; parallelize
     walltime="01:00:00",
-    node_spec="nodes=1:brno:ppn=1,mem=8gb",
+    node_spec="nodes=1:brno:ppn=4,mem=8gb",
     job_name="add-parses",
     job_command=job_command
 )
