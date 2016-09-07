@@ -28,7 +28,7 @@ public class ParseXmlsToProtos {
 		return db.parse(new InputSource(new StringReader(str)));
 	}
 
-	private Map<String, XPathExpression> tagContentXpaths = new HashMap<>();
+	private static Map<String, XPathExpression> tagContentXpaths = new HashMap<>();
 
 	private static String findTagContent(Node parent, String tag) throws XPathExpressionException {
 		String xp = "string(" + tag + ")";
