@@ -11,10 +11,12 @@ import java.io.*;
 import javax.xml.xpath.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Map;
+import java.util.HashMap;
 
 public class ParseXmlsToProtos {
 	private static XPathFactory xPathFactory = XPathFactory.newInstance();
-	private XPath xPath = xPathFactory.newXPath();
+	private static XPath xPath = xPathFactory.newXPath();
 
 	public static String readFile(String path) throws IOException, UnsupportedEncodingException {
 		return new String(Files.readAllBytes(Paths.get(path)), "UTF-8");
@@ -26,8 +28,14 @@ public class ParseXmlsToProtos {
 		return db.parse(new InputSource(new StringReader(str)));
 	}
 
+	private Map<String, XPathExpression> tagContentXpaths = new HashMap<>();
+
 	private static String findTagContent(Node parent, String tag) throws XPathExpressionException {
-		XPathExpression expr = xPath.compile("string(" + tag + ")");
+		String xp = "string(" + tag + ")";
+		if (!tagContentXpaths.containsKey(xp)) {
+			tagContentXpaths.put(xp, xPath.compile(xp));
+		}
+		XPathExpression expr = tagContentXpaths.get(xp);
 		return expr.evaluate(parent);
 	}
 
@@ -40,7 +48,10 @@ public class ParseXmlsToProtos {
 	}
 
 	private static NodeList queryXPathNodes(String xPathstr, Object tag) throws XPathExpressionException {
-		XPathExpression e2 = xPath.compile(xPathstr);
+		if (!tagContentXpaths.containsKey(xPathstr)) {
+			tagContentXpaths.put(xPathstr, xPath.compile(xPathstr));
+		}
+		XPathExpression e2 = tagContentXpaths.get(xPathstr);
 		return (NodeList) e2.evaluate(tag, XPathConstants.NODESET);
 	}
 
