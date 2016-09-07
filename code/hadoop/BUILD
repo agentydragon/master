@@ -201,20 +201,34 @@ java_test(
 )
 
 java_library(
-    name = "GenerateTrainingSamplesMapper",
+    name = "GenerateTrainingSamples",
     srcs = [
-        "GenerateTrainingSamplesMapper.java",
+        "GenerateTrainingSamples.java",
         "//:Sentence.java",
         "//:TrainingSamples.java",
     ],
     deps = [
-        "//:org_apache_hadoop_hadoop_common",
-        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
         "//:org_json_json",
         ":WikidataClient",
         ":GetTrainingSamples",
         ":AnnotateCoreferences",
         ":ParseXmlsToProtos",
+        "//:log4j_log4j",
+        "//:com_google_protobuf_protobuf_java",
+    ],
+)
+
+java_library(
+    name = "GenerateTrainingSamplesMapper",
+    srcs = [
+        "GenerateTrainingSamplesMapper.java",
+        "//:TrainingSamples.java",
+    ],
+    deps = [
+        ":GenerateTrainingSamples",
+        "//:org_apache_hadoop_hadoop_common",
+        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
+        "//:org_json_json",
     ]
 )
 
@@ -239,11 +253,11 @@ java_test(
 )
 
 java_binary(
-    name = "GenerateTrainingSamples",
+    name = "GenerateTrainingSamplesMain",
     srcs = [
-        "GenerateTrainingSamples.java",
+        "GenerateTrainingSamplesMain.java",
     ],
-    main_class = "GenerateTrainingSamples",
+    main_class = "GenerateTrainingSamplesMain",
     deps = [
         ":GenerateTrainingSamplesMapper",
         "//:org_apache_hadoop_hadoop_common",

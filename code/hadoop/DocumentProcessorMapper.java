@@ -26,7 +26,7 @@ import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 
 // Input: Article title (Text) => Article text (Text)
 // Output: Article title (Text) => JSON:
-//	{"text": "...", "corenlp_xml": "<...>", "spotlight_json": "..."}
+//	{"plaintext": "...", "corenlp_xml": "<...>", "spotlight_json": "..."}
 
 public class DocumentProcessorMapper extends Mapper<Text, Text, Text, Text> {
 	private CoreNLPInterface corenlpInterface = new CoreNLPInterface();
@@ -70,7 +70,7 @@ public class DocumentProcessorMapper extends Mapper<Text, Text, Text, Text> {
 		String jsonOut = new JSONObject()
 			.put("corenlp_xml", corenlpInterface.getXML(articleText))
 			.put("spotlight_json", spotlightJsonOut)
-			.put("text", articleText)
+			.put("plaintext", articleText)
 			.put("title", articleTitle).toString();
 		return jsonOut;
 	}

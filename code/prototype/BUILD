@@ -21,3 +21,14 @@ py_library(
         "//py:file_util_lib",
     ],
 )
+
+java_library(
+    name = "ArticleRepository",
+    srcs = [
+        "ArticleRepository.java",
+    ],
+    deps = [
+        "//:commons_io_commons_io",
+        "//:org_json_json",
+    ],
+)

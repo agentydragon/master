@@ -29,54 +29,18 @@ import org.apache.log4j.Logger;
 
 public class GenerateTrainingSamplesMapper extends Mapper<Text, Text, Text, Text> {
 	static Logger log = Logger.getLogger(GetTrainingSamples.class);
-
-	private WikidataClient wikidataClient;
-
-	public void setWikidataClient(WikidataClient wikidataClient) {
-		this.wikidataClient = wikidataClient;
-	}
-
-	public List<TrainingSamples.TrainingSample> makeTrainingSamples(String value) throws IOException {
-		JSONObject inputJson = new JSONObject(value);
-
-		String plaintext = (String) inputJson.get("text");
-		String corenlpXml = (String) inputJson.get("corenlp_xml");
-
-		Sentence.Document documentProto = null;
-		try {
-			org.w3c.dom.Document corenlpParse = ParseXmlsToProtos.parseXmlFromString(corenlpXml);
-			documentProto = ParseXmlsToProtos.documentToProto(corenlpParse, plaintext);
-		} catch (ParserConfigurationException e) {
-			// TODO
-			System.exit(1);
-		} catch (SAXException e) {
-			// TODO
-			System.exit(1);
-		} catch (XPathExpressionException e) {
-			// TODO
-			System.exit(1);
-		}
-		// log.info(documentProto.toString());
-
-		JSONObject spotlightJson = new JSONObject((String) inputJson.get("spotlight_json"));
-		List<Sentence.SpotlightMention> spotlightMentions = AnnotateCoreferences.SpotlightToMentions(spotlightJson);
-		documentProto = AnnotateCoreferences.PropagateEntities(documentProto, spotlightMentions);
-		// log.info(documentProto.toString());
-
-		GetTrainingSamples getTrainingSamples = new GetTrainingSamples(wikidataClient);
-		return getTrainingSamples.documentToSamples(documentProto);
-	}
+	private GenerateTrainingSamples generateTrainingSamples = new GenerateTrainingSamples();
 
 	@Override
 	public void setup(Context context) {
 		Configuration conf = context.getConfiguration();
-		setWikidataClient(new WikidataClient(conf.get("wikidata_server")));
+		generateTrainingSamples.setWikidataClient(new WikidataClient(conf.get("wikidata_server")));
 	}
 
 	@Override
 	public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
 		String articleTitle = key.toString();
-		List<TrainingSamples.TrainingSample> samples = makeTrainingSamples(value.toString());
+		List<TrainingSamples.TrainingSample> samples = generateTrainingSamples.makeTrainingSamples(value.toString());
 
 		for (TrainingSamples.TrainingSample sample : samples) {
 			String relation = sample.getRelation();
