@@ -2,6 +2,7 @@ import unicodedata
 import json
 from py import file_util
 import io
+import os.path
 
 def sanitize_articletitle(title):
     sanitized_articletitle = title.replace(' ', '_').replace('/', '_').replace('.', '_')
@@ -22,6 +23,10 @@ def write_article(target_dir, title, data):
     path = article_title_to_path(target_dir, title)
     with io.open(path, 'w', encoding='utf8') as f:
         json.dump(data, f)
+
+def article_exists(target_dir, title):
+    path = article_title_to_path(target_dir, title)
+    return os.path.isfile(path)
 
 def load_article(target_dir, title):
     path = article_title_to_path(target_dir, title)

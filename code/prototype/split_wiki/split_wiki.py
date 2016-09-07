@@ -57,11 +57,16 @@ def split_corpus(wiki_plaintext_path, target_dir, target_articles=None):
         for line in f:
             if regex.match(line):
                 if articletitle is not None:
-                    print('#%d' % articles, 'writing article:', articletitle)
-                    articletext = sanitize_article(articletext)
-                    article_repo.write_article(target_dir, articletitle,
-                                               {'title': articletitle, 'plaintext':
-                                                articletext})
+                    if article_repo.article_exists(target_dir, articletitle):
+                        print('#%d' % articles, 'article', articletitle,
+                              'already exists')
+                        pass
+                    else
+                        print('#%d' % articles, 'writing article:', articletitle)
+                        articletext = sanitize_article(articletext)
+                        article_repo.write_article(target_dir, articletitle,
+                                                   {'title': articletitle, 'plaintext':
+                                                    articletext})
 
                 articletext = ""
                 articletitle = line.strip().replace('= ', '').replace(' =', '')

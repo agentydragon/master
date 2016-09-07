@@ -14,6 +14,8 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.HashMap;
 
+// TODO: This is slow. Why?
+
 public class ParseXmlsToProtos {
 	private static XPathFactory xPathFactory = XPathFactory.newInstance();
 	private static XPath xPath = xPathFactory.newXPath();
