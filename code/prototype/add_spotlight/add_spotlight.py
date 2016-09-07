@@ -34,6 +34,11 @@ if args.spotlight_endpoint:
 
 for title in args.articles:
     article_data = article_repo.load_article(args.article_plaintexts_dir, title)
+
+    # Skip if already done.
+    if 'plaintext' in article_data:
+        continue
+
     spotlight_json = spotlight.annotate_text(article_data['plaintext'])
     article_data['spotlight_json'] = spotlight_json
     article_repo.write_article(args.article_plaintexts_dir, title, article_data)

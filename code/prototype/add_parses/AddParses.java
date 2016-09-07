@@ -10,6 +10,12 @@ public class AddParses {
 			System.out.println(title);
 
 			JSONObject json = ArticleRepository.readArticle(title);
+
+			// Skip if already processed.
+			if (json.has("corenlp_xml")) {
+				return;
+			}
+
 			String articleText = (String) json.get("plaintext");
 			json.put("corenlp_xml", corenlpInterface.getXML(articleText));
 			ArticleRepository.writeArticle(title, json);
