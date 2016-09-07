@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 
 public class ParseXmlsToProtos {
 	private static XPathFactory xPathFactory = XPathFactory.newInstance();
+	private XPath xPath = xPathFactory.newXPath();
 
 	public static String readFile(String path) throws IOException, UnsupportedEncodingException {
 		return new String(Files.readAllBytes(Paths.get(path)), "UTF-8");
@@ -26,7 +27,6 @@ public class ParseXmlsToProtos {
 	}
 
 	private static String findTagContent(Node parent, String tag) throws XPathExpressionException {
-		XPath xPath = xPathFactory.newXPath();
 		XPathExpression expr = xPath.compile("string(" + tag + ")");
 		return expr.evaluate(parent);
 	}
@@ -40,7 +40,6 @@ public class ParseXmlsToProtos {
 	}
 
 	private static NodeList queryXPathNodes(String xPathstr, Object tag) throws XPathExpressionException {
-		XPath xPath = xPathFactory.newXPath();
 		XPathExpression e2 = xPath.compile(xPathstr);
 		return (NodeList) e2.evaluate(tag, XPathConstants.NODESET);
 	}
