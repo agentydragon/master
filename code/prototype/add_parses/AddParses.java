@@ -18,6 +18,7 @@ public class AddParses {
 	private static String articleTitleToPath(String title) {
 		title = title.replace(" ", "_");
 		title = title.replace("/", "_");
+		title = title.replace(".", "_");
 		if (title.codePointCount(0, title.length()) > 100) {
 			title = prefix(title, 100);
 		}

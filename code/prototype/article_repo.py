@@ -4,7 +4,7 @@ from py import file_util
 import io
 
 def sanitize_articletitle(title):
-    sanitized_articletitle = title.replace(' ', '_').replace('/', '_')
+    sanitized_articletitle = title.replace(' ', '_').replace('/', '_').replace('.', '_')
     if len(sanitized_articletitle) > 100:
         sanitized_articletitle = sanitized_articletitle[:100]
     return sanitized_articletitle
