@@ -3,11 +3,15 @@ import argparse
 
 parser = argparse.ArgumentParser(description='TODO')
 parser.add_argument('--article_list_file', type=str, required=True)
+parser.add_argument('--max_articles', type=int)
 parser.add_argument('--spotlight_endpoint')
 args = parser.parse_args()
 
 with open(args.article_list_file) as f:
     article_names = list(f)
+
+if args.max_articles:
+    article_names = article_names[:args.max_articles]
 
 job_command = [
     'prototype/add_spotlight/add_spotlight',

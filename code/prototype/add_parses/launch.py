@@ -3,10 +3,14 @@ import argparse
 
 parser = argparse.ArgumentParser(description='TODO')
 parser.add_argument('--article_list_file', type=str, required=True)
+parser.add_argument('--max_articles', type=int)
 args = parser.parse_args()
 
 with open(args.article_list_file) as f:
     article_names = list(f)
+
+if args.max_articles:
+    article_names = article_names[:args.max_articles]
 
 job_command = [
     'prototype/add_parses/add_parses',
