@@ -8,7 +8,7 @@ parser.add_argument('--spotlight_endpoint')
 args = parser.parse_args()
 
 with open(args.article_list_file) as f:
-    article_names = list(f)
+    article_names = list(map(lambda line: line.strip(), list(f)))
 
 if args.max_articles:
     article_names = article_names[:args.max_articles]
@@ -20,6 +20,7 @@ job_command = [
 if args.spotlight_endpoint:
     job_command.extend(['--spotlight_endpoint', args.spotlight_endpoint])
 
+print(article_names)
 for name in article_names:
     job_command.append('--articles')
     job_command.append(name)
@@ -31,4 +32,4 @@ job_id = pbs_util.launch_job(
     job_name="add-spotlight",
     job_command=job_command
 )
-print("Launched add-parses:", job_id)
+print("Launched add-spotlight:", job_id)

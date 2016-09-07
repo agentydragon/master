@@ -7,7 +7,7 @@ parser.add_argument('--max_articles', type=int)
 args = parser.parse_args()
 
 with open(args.article_list_file) as f:
-    article_names = list(f)
+    article_names = list(map(lambda line: line.strip(), list(f)))
 
 if args.max_articles:
     article_names = article_names[:args.max_articles]

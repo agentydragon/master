@@ -5,7 +5,7 @@
 	bazel run //prototype/split_wiki:launch
 
 2. Add Spotlight to relevant articles
-	bazel run //prototype/add_spotlight:launch -- --article_list_file=persons
+	bazel run //prototype/add_spotlight:launch -- --article_list_file=persons --max_articles=5
 
 3. Add parses to relevant articles (add_parses)
-	bazel run //prototype/add_parses:launch -- --article_list_file=persons
+	bazel run //prototype/add_parses:launch -- --article_list_file=persons --max_articles=5
