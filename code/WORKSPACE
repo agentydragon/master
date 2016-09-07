@@ -1,3 +1,5 @@
+# TODO: want commons_cli_commons_cli
+
 http_jar(
     name = "corenlp_models",
     url = "http://nlp.stanford.edu/software/stanford-english-corenlp-2016-01-10-models.jar",

@@ -29,17 +29,22 @@ public class AddParses {
 		corenlpInterface.setup();
 
 		for (String title : args) {
-			String path = articleTitleToPath(title);
-			System.out.println(path);
+			try {
+				String path = articleTitleToPath(title);
+				System.out.println(path);
 
-			File file = new File(path);
+				File file = new File(path);
 
-			String jsonContent = FileUtils.readFileToString(file);
-			JSONObject json = new JSONObject(jsonContent);
-			String articleText = (String) json.get("plaintext");
-			json.put("corenlp_xml", corenlpInterface.getXML(articleText));
+				String jsonContent = FileUtils.readFileToString(file);
+				JSONObject json = new JSONObject(jsonContent);
+				String articleText = (String) json.get("plaintext");
+				json.put("corenlp_xml", corenlpInterface.getXML(articleText));
 
-			FileUtils.writeStringToFile(file, json.toString());
+				FileUtils.writeStringToFile(file, json.toString());
+			} catch (IOException e) {
+				System.out.println("Failed: " + title);
+				System.out.println(e);
+			}
 		}
 	}
 }
