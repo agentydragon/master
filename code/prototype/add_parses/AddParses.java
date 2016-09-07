@@ -5,7 +5,8 @@ import org.apache.commons.io.FileUtils;
 
 public class AddParses {
 	// TODO: SWIG?
-	private static String basePath = "/storage/brno7-cerit/home/prvak/wiki-articles-plaintexts";
+	private static String basePath = "/storage/brno7-cerit/home/prvak/data/wiki-articles-plaintexts";
+	private CoreNLPInterface corenlpInterface = new CoreNLPInterface();
 
 	private static String prefix(String str, int len) {
 		if (str.codePointCount(0, str.length()) < len) {
@@ -23,7 +24,7 @@ public class AddParses {
 		String sub = prefix(title, 1) + "/" + prefix(title, 2) + "/" + prefix(title, 3) + "/" + title + ".json";
 		return basePath + "/" + sub;
 	}
-	private static void processArticle(String title) {
+	private void processArticle(String title) {
 		try {
 			String path = articleTitleToPath(title);
 			System.out.println(path);
@@ -42,12 +43,15 @@ public class AddParses {
 		}
 	}
 
-	public static void main(String[] args) {
-		CoreNLPInterface corenlpInterface = new CoreNLPInterface();
+	public void run(String[] args) {
 		corenlpInterface.setup();
 
 		for (String title : args) {
 			processArticle(title);
 		}
+	}
+
+	public static void main(String[] args) {
+		new AddParses().run(args);
 	}
 }

@@ -20,11 +20,13 @@ public class CoreNLPInterface {
 
 		// Use shift-reduce model to parse faster.
 		props.put("parse.model", "edu/stanford/nlp/models/srparser/englishSR.ser.gz");
-
 		pipeline = new StanfordCoreNLP(props);
 	}
 
 	public String getXML(String text) throws IOException {
+		assert pipeline != null;
+		assert text != null;
+
 		Annotation annotation = new Annotation(text);
 		StringWriter xmlOut = new StringWriter();
 		pipeline.annotate(annotation);
