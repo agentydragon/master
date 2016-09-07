@@ -10,3 +10,14 @@ java_binary(
         "//:org_json_json",
     ],
 )
+
+py_binary(
+    name = "launch",
+    srcs = [
+        "launch.py",
+    ],
+    data = [
+        ":add_parses",
+        "//py:pbs_util_lib",
+    ],
+)

@@ -36,7 +36,6 @@ py_binary(
     ],
     deps = [
         ":split_wiki_main",
-        "//py:file_util_lib",
         "//py:pbs_util_lib",
         "//py:paths_lib",
     ],
