@@ -1,8 +1,6 @@
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import java.util.Properties;
-import java.io.StringWriter;
 import java.lang.System;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -22,10 +20,6 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
-import edu.stanford.nlp.io.*;
-import edu.stanford.nlp.pipeline.*;
-import edu.stanford.nlp.util.*;
-import edu.stanford.nlp.ling.*;
 
 // Input:
 //   Key:   article name (Text)
@@ -39,26 +33,14 @@ import edu.stanford.nlp.ling.*;
 
 public class CoreNLP extends Configured implements Tool {
 	public static class CoreNLPAnnotateMapper extends Mapper<Text, Text, Text, Text>{
-		private StanfordCoreNLP pipeline;
 		private int prefixLength;
+		private CoreNLPInterface corenlpInterface = new CoreNLPInterface();
 
 		@Override
 		public void setup(Context context) {
 			Configuration conf = context.getConfiguration();
 			prefixLength = conf.getInt("prefix_length", 10);
-
-			Properties props = new Properties();
-			// TODO: MODEL
-			props.put("annotators",
-					"tokenize,ssplit,pos,parse," +
-					"lemma,ner,dcoref");
-			props.put("parser.maxlen", "100");
-			props.put("pos.maxlen", "100");
-
-			// Use shift-reduce model to parse faster.
-			props.put("parse.model", "edu/stanford/nlp/models/srparser/englishSR.ser.gz");
-
-			pipeline = new StanfordCoreNLP(props);
+			corenlpInterface.setup();
 		}
 
 		@Override
@@ -75,13 +57,7 @@ public class CoreNLP extends Configured implements Tool {
 			articleText = articleText.substring(0, length);
 			// articleText = "Jackdaws love my big sphinx on quartz.";
 
-			StringWriter xmlOut = new StringWriter();
-
-			Annotation annotation = new Annotation(articleText);
-			pipeline.annotate(annotation);
-			pipeline.xmlPrint(annotation, xmlOut);
-
-			context.write(key, new Text(xmlOut.toString()));
+			context.write(key, new Text(corenlpInterface.getXML(articleText)));
 		}
 	}
 

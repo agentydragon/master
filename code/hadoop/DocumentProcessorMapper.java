@@ -23,17 +23,13 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
-import edu.stanford.nlp.io.*;
-import edu.stanford.nlp.pipeline.*;
-import edu.stanford.nlp.util.*;
-import edu.stanford.nlp.ling.*;
 
 // Input: Article title (Text) => Article text (Text)
 // Output: Article title (Text) => JSON:
 //	{"text": "...", "corenlp_xml": "<...>", "spotlight_json": "..."}
 
 public class DocumentProcessorMapper extends Mapper<Text, Text, Text, Text> {
-	private StanfordCoreNLP nlpPipeline;
+	private CoreNLPInterface corenlpInterface = new CoreNLPInterface();
 	// TODO: load-balance
 	private SpotlightConnection spotlightConnection;
 	// private int prefixLength;
@@ -51,18 +47,7 @@ public class DocumentProcessorMapper extends Mapper<Text, Text, Text, Text> {
 	}
 
 	public void setNLPPipeline() {
-		Properties props = new Properties();
-		// TODO: MODEL
-		props.put("annotators",
-				"tokenize,ssplit,pos,parse," +
-				"lemma,ner,dcoref");
-		props.put("parser.maxlen", "100");
-		props.put("pos.maxlen", "100");
-
-		// Use shift-reduce model to parse faster.
-		props.put("parse.model", "edu/stanford/nlp/models/srparser/englishSR.ser.gz");
-
-		nlpPipeline = new StanfordCoreNLP(props);
+		corenlpInterface.setup();
 	}
 
 	public String articleToJson(String articleTitle, String articleText) throws IOException {
@@ -82,14 +67,8 @@ public class DocumentProcessorMapper extends Mapper<Text, Text, Text, Text> {
 
 		//	context.write(key, new Text(jsonOut.toString()));
 
-		StringWriter xmlOut = new StringWriter();
-
-		Annotation annotation = new Annotation(articleText);
-		nlpPipeline.annotate(annotation);
-		nlpPipeline.xmlPrint(annotation, xmlOut);
-
 		String jsonOut = new JSONObject()
-			.put("corenlp_xml", xmlOut.toString())
+			.put("corenlp_xml", corenlpInterface.getXML(articleText))
 			.put("spotlight_json", spotlightJsonOut)
 			.put("text", articleText)
 			.put("title", articleTitle).toString();

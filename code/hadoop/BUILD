@@ -27,6 +27,21 @@ java_binary(
     ],
 )
 
+java_library(
+    name = "CoreNLPInterface",
+    srcs = [
+        "CoreNLPInterface.java",
+    ],
+    deps = [
+        "//:edu_stanford_nlp_stanford_corenlp",
+        # TODO: must be installed separately
+        "@corenlp_models//jar",
+        "@corenlp_srparser_model//jar",
+        # TODO: what about models?
+        # "//:org_apache_hadoop_hadoop_mapreduce_client_core",
+    ],
+)
+
 java_binary(
     name = "CoreNLP",
     srcs = [
@@ -36,12 +51,7 @@ java_binary(
     deps = [
         "//:org_apache_hadoop_hadoop_common",
         "//:org_apache_hadoop_hadoop_mapreduce_client_core",
-        "//:edu_stanford_nlp_stanford_corenlp",
-        # TODO: must be installed separately
-        "@corenlp_models//jar",
-        "@corenlp_srparser_model//jar",
-        # TODO: what about models?
-        # "//:org_apache_hadoop_hadoop_mapreduce_client_core",
+        ":CoreNLPInterface",
     ],
 )
 

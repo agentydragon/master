@@ -30,9 +30,9 @@ py_test(
 )
 
 py_binary(
-    name = "launch_split_wiki_main",
+    name = "launch",
     srcs = [
-        "launch_split_wiki_main.py",
+        "launch.py",
     ],
     deps = [
         ":split_wiki_main",
