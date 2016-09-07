@@ -19,13 +19,13 @@ job_command = [
     'prototype/add_parses/add_parses',
 ] + article_names
 
-subprocess.check_output(job_command)
+#subprocess.check_output(job_command)
 
-#job_id = pbs_util.launch_job(
-#    # TODO: calculate walltime; parallelize
-#    walltime="01:00:00",
-#    node_spec="nodes=1:brno:ppn=1,mem=8gb",
-#    job_name="add-parses",
-#    job_command=job_command
-#)
-#print("Launched add-parses:", job_id)
+job_id = pbs_util.launch_job(
+    # TODO: calculate walltime; parallelize
+    walltime="01:00:00",
+    node_spec="nodes=1:brno:ppn=1,mem=8gb",
+    job_name="add-parses",
+    job_command=job_command
+)
+print("Launched add-parses:", job_id)
