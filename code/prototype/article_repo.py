@@ -5,6 +5,8 @@ import io
 
 def sanitize_articletitle(title):
     sanitized_articletitle = title.replace(' ', '_').replace('/', '_')
+    if len(sanitized_articletitle) > 100:
+        sanitized_articletitle = sanitized_articletitle[:100]
     return sanitized_articletitle
 
 def article_title_to_path(target_dir, title):
