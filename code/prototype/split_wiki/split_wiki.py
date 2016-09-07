@@ -61,7 +61,7 @@ def split_corpus(wiki_plaintext_path, target_dir, target_articles=None):
                         print('#%d' % articles, 'article', articletitle,
                               'already exists')
                         pass
-                    else
+                    else:
                         print('#%d' % articles, 'writing article:', articletitle)
                         articletext = sanitize_article(articletext)
                         article_repo.write_article(target_dir, articletitle,
