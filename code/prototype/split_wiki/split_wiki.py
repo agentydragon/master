@@ -6,6 +6,7 @@ Splits Wiki plaintext into articles.
 Usage: TODO
 """
 
+import io
 import json
 import locale
 locale.setlocale(locale.LC_ALL, 'en_US.utf8')

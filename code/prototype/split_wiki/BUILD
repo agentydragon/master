@@ -40,6 +40,9 @@ py_binary(
         "//py:pbs_util_lib",
         "//py:paths_lib",
     ],
+    data = [
+        ":split_wiki_main",
+    ],
     default_python_version = "PY3",
     srcs_version = "PY3",
 )

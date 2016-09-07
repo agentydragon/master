@@ -20,8 +20,8 @@ def article_title_to_path(target_dir, title):
 
 def write_article(target_dir, title, data):
     path = article_title_to_path(target_dir, title)
-    with io.open(path, 'w', encoding='utf8') as out:
-        json.dump(data)
+    with io.open(path, 'w', encoding='utf8') as f:
+        json.dump(data, f)
 
 def load_article(target_dir, title):
     path = article_title_to_path(target_dir, title)
