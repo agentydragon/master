@@ -18,6 +18,8 @@ if args.max_articles:
 
 nonexistant = 0
 got_plaintext = 0
+with_spotlight = 0
+with_corenlp = 0
 fully_processed = []
 for title in article_names:
     if not article_repo.article_exists(args.article_plaintexts_dir, title):
@@ -29,9 +31,15 @@ for title in article_names:
         got_plaintext += 1
     if ('spotlight_json' in art) and ('corenlp_xml' in art):
         fully_processed.append(title)
+    if 'spotlight_json' in art:
+        with_spotlight += 1
+    if 'corenlp_xml' in art:
+        with_corenlp += 1
 
 print("Nonexistant", nonexistant,
       "With plaintext", got_plaintext,
+      "With spotlight", with_spotlight,
+      "With corenlp", with_corenlp,
       "Fully processed", len(fully_processed))
 for name in fully_processed:
     print(name)
