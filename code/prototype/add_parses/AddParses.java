@@ -9,10 +9,16 @@ public class AddParses {
 		try {
 			System.out.println(title);
 
+			if (!ArticleRepository.articleExists(title)) {
+				System.out.println("Article doesn't exist");
+				return;
+			}
+
 			JSONObject json = ArticleRepository.readArticle(title);
 
 			// Skip if already processed.
 			if (json.has("corenlp_xml")) {
+				System.out.println("Article already annotated");
 				return;
 			}
 

@@ -34,6 +34,11 @@ if args.spotlight_endpoint:
 
 for title in args.articles:
     print("Spotlighting", title)
+
+    if not article_repo.article_exists(args.article_plaintexts_dir, title):
+        print("Doesn't exist")
+        continue
+
     article_data = article_repo.load_article(args.article_plaintexts_dir, title)
 
     # Skip if already done.

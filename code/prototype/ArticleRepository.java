@@ -36,4 +36,9 @@ public class ArticleRepository {
 		File file = new File(path);
 		FileUtils.writeStringToFile(file, data.toString());
 	}
+
+	public static boolean articleExists(String title) {
+		String path = articleTitleToPath(title);
+		return new File(path).exists();
+	}
 }
