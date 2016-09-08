@@ -45,3 +45,14 @@ java_library(
         "//:com_google_protobuf_protobuf_java",
     ],
 )
+
+py_binary(
+    name = "data_stats",
+    srcs = [
+        "data_stats.py",
+    ],
+    deps = [
+        ":article_repo_lib",
+        "//py:paths_lib",
+    ],
+)
