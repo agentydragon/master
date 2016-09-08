@@ -71,6 +71,9 @@ public class GetTrainingSamples {
 					continue;
 				}
 				for (Sentence.Mention mention : coref.getMentionsList()) {
+					if (mention.getSentenceId() != sentenceId) {
+						continue;
+					}
 					mentions.add(new MentionInSentence(
 								mention.getStartWordId(),
 								mention.getEndWordId(),
@@ -205,6 +208,7 @@ public class GetTrainingSamples {
 		// Add positive samples.
 		for (EntityPair pair : allPairs.keySet()) {
 			for (String relation : allPairs.get(pair)) {
+				log.info("Expressed: " + relation + " " + pair.toString());
 				TrainingSamples.TrainingSample sample = sentence.toSample(relation, pair.e1, pair.e2, true);
 				// log.info(sample.toString());
 				samples.add(sample);
