@@ -56,4 +56,6 @@ py_test(
         "//testdata:Obama.txt.out",
         "//testdata:Obama.spotlight.json",
     ],
+    srcs_version = "PY3",
+    default_python_version = "PY3",
 )

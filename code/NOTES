@@ -1,3 +1,7 @@
+NOTE: must use python 2.7
+
+pip install --upgrade setuptools --user
+
 hador.ics.muni.cz: Hadoop frontend
 
 export HADOOP_CLASSPATH=/storage/brno7-cerit/home/prvak/bin/stanford-english-corenlp-2016-01-10-models.jar
