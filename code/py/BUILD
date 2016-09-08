@@ -33,33 +33,6 @@ py_library(
 #    default_python_version = "PY3",
 #)
 #
-#py_binary(
-#    name = "launch_nlpize_articles_main",
-#    srcs = [
-#        "launch_nlpize_articles_main.py",
-#    ],
-#    deps = [
-#        ":file_util_lib",
-#        ":paths_lib",
-#        ":pbs_util_lib",
-#        ":nlpize_articles_main",
-#    ],
-#    srcs_version = "PY3",
-#    default_python_version = "PY3",
-#)
-#
-#py_binary(
-#    name = "nlpize_articles_main",
-#    srcs = [
-#        "nlpize_articles_main.py",
-#    ],
-#    deps = [
-#        ":file_util_lib",
-#        ":paths_lib",
-#    ],
-#    srcs_version = "PY3",
-#)
-#
 #sh_binary(
 #    name = "metacentrum_distant_supervision_train",
 #    srcs = [
