@@ -35,11 +35,21 @@ java_library(
 )
 
 py_library(
+    name = "sentence_lib",
+    srcs = [
+        "sentence.py",
+    ],
+)
+
+py_library(
     name = "parse_xmls_to_protos_lib",
     srcs = [
         "parse_xmls_to_protos.py",
-        "//:sentence_pb2.py",
+        #"//:sentence_pb2.py",
         "//py:dbpedia_lib",
+    ],
+    deps = [
+        ":sentence_lib",
     ],
 )
 

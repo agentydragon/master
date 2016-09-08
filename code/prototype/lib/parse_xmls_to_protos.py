@@ -1,4 +1,6 @@
-import sentence_pb2
+# import sentence_pb2
+from prototype.lib import sentence
+
 from xml.etree import ElementTree
 from py import dbpedia
 
@@ -18,12 +20,19 @@ def flush_named_entity(document, ner, start_token, end_token, sentence_id):
     if found:
         return
 
-    document.coreferences.add().mentions.add(
-        sentence_id = sentence_id,
-        start_word_id = start_token.id,
-        end_word_id = end_token.id + 1,
-        text = document.text[start_token.start_offset:end_token.end_offset]
+    coreference = sentence.Coreference(
+        mentions = [
+            sentence.Mention(
+                sentence_id = sentence_id,
+                start_word_id = start_token.id,
+                end_word_id = end_token.id + 1,
+                text = document.text[start_token.start_offset:end_token.end_offset]
+            )
+        ],
+        wikidata_entity_id = None
     )
+    document.coreferences.append(coreference)
+    #document.coreferences.add().mentions.add(
 
 def add_single_referenced_entities_to_coreferences(document):
     """
@@ -53,9 +62,15 @@ def spotlight_to_mentions(spotlight_json):
         if not mention_json['@surfaceForm']:
             # TODO HACK?
             continue
-        mention = sentence_pb2.SpotlightMention(
+        # mention = sentence_pb2.SpotlightMention(
+        #     start_offset = int(mention_json['@offset']),
+        #     uri = mention_json['@URI']
+        # )
+        mention = sentence.SpotlightMention(
             start_offset = int(mention_json['@offset']),
-            uri = mention_json['@URI']
+            uri = mention_json['@URI'],
+            end_offset = None,
+            surface_form = None
         )
         surface_form = mention_json['@surfaceForm']
         mention.end_offset = mention.start_offset + len(surface_form)
@@ -129,14 +144,25 @@ def document_to_proto(root, spotlight_json, plaintext):
         plaintext (str)
     """
 
-    document = sentence_pb2.Document(
-        text = plaintext
+    # document = sentence_pb2.Document(
+    #     text = plaintext
+    # )
+    document = sentence.Document(
+        title = None,
+        text = plaintext,
+        sentences = [],
+        coreferences = [],
+        spotlight_mentions = None
     )
     sentence_tags = root.find('document').find('sentences').findall('sentence')
     for sentence_tag in sentence_tags:
-        sentence = document.sentences.add(
+        # this_sentence = document.sentences.add(
+        this_sentence = sentence.DocumentSentence(
+            text = None,
+            tokens = [],
             id = int(sentence_tag.attrib['id'])
         )
+        document.sentences.append(this_sentence)
 
         sentence_begin = None
 
@@ -148,7 +174,8 @@ def document_to_proto(root, spotlight_json, plaintext):
             if sentence_begin is None:
                 sentence_begin = token_start
 
-            sentence.tokens.add(
+            # this_sentence.tokens.add(
+            this_token = sentence.SentenceToken(
                 id = int(token_tag.attrib['id']),
                 start_offset = token_start,
                 end_offset = token_end,
@@ -157,18 +184,26 @@ def document_to_proto(root, spotlight_json, plaintext):
                 pos = token_tag.find('POS').text,
                 ner = token_tag.find('NER').text
             )
-        sentence.text = plaintext[sentence_begin:sentence_end]
+            this_sentence.tokens.append(this_token)
+        this_sentence.text = plaintext[sentence_begin:sentence_end]
 
     for coreference_tag in root.find('document').find('coreference').findall('coreference'):
-        coreference = document.coreferences.add()
+        # coreference = document.coreferences.add()
+        coreference = sentence.Coreference(
+            mentions = [],
+            wikidata_entity_id = None
+        )
+        document.coreferences.append(coreference)
 
         for mention_tag in coreference_tag.findall('mention'):
-            coreference.mentions.add(
+            # coreference.mentions.add(
+            mention = sentence.Mention(
                 start_word_id = int(mention_tag.find('start').text),
                 end_word_id = int(mention_tag.find('end').text),
                 sentence_id = int(mention_tag.find('sentence').text),
                 text = mention_tag.find('text').text
             )
+            coreference.mentions.append(mention)
 
     add_single_referenced_entities_to_coreferences(document)
 
