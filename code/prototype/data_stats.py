@@ -18,6 +18,7 @@ fully_processed = []
 for title in article_names:
     if not article_repo.article_exists(args.article_plaintexts_dir, title):
         nonexistant += 1
+        continue
 
     art = article_repo.load_article(args.article_plaintexts_dir, title)
     if 'plaintext' in art:
