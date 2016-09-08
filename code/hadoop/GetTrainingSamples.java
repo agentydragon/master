@@ -115,6 +115,20 @@ public class GetTrainingSamples {
 			return getSentence().getText();
 		}
 
+		private List<Integer> tokenIndicesMentioningEntity(String entity) {
+			List<Integer> indices = new ArrayList<>();
+			for (MentionInSentence mention : mentions) {
+				for (int tokenIndex = mention.startTokenId - 1;
+						tokenIndex < mention.endTokenId - 1;
+						tokenIndex++) {
+					if (mention.wikidataId.equals(entity) && !indices.contains(tokenIndex)) {
+						indices.add(tokenIndex);
+					}
+				}
+			}
+			return indices;
+		}
+
 		public TrainingSamples.TrainingSample toSample(String relation, String e1, String e2, boolean positive) {
 			assert wikidataIds.contains(e1) && wikidataIds.contains(e2);
 
@@ -126,22 +140,8 @@ public class GetTrainingSamples {
 
 			Sentence.DocumentSentence sentence = getSentence();
 
-			List<Integer> e1Indices = new ArrayList<>();
-			List<Integer> e2Indices = new ArrayList<>();
-			for (MentionInSentence mention : mentions) {
-				for (int tokenIndex = mention.startTokenId - 1;
-						tokenIndex < mention.endTokenId - 1;
-						tokenIndex++) {
-					if (mention.wikidataId.equals(e1) && !e1Indices.contains(tokenIndex)) {
-						e1Indices.add(tokenIndex);
-					}
-					if (mention.wikidataId.equals(e2) && !e2Indices.contains(tokenIndex)) {
-						e2Indices.add(tokenIndex);
-					}
-				}
-			}
-			sample.addAllE1TokenIndices(e1Indices)
-				.addAllE2TokenIndices(e2Indices);
+			sample.addAllE1TokenIndices(tokenIndicesMentioningEntity(e1))
+				.addAllE2TokenIndices(tokenIndicesMentioningEntity(e2));
 
 			TrainingSamples.TrainingSampleParsedSentence.Builder bldr = TrainingSamples.TrainingSampleParsedSentence.newBuilder();
 			//sample.getSentence().setText(sentence.getText());
@@ -149,13 +149,12 @@ public class GetTrainingSamples {
 
 			int sentenceStart = sentence.getTokens(0).getStartOffset();
 			for (Sentence.SentenceToken token : sentence.getTokensList()) {
-				TrainingSamples.TrainingSampleSentenceToken.Builder b = TrainingSamples.TrainingSampleSentenceToken.newBuilder();
-				b.setStartOffset(token.getStartOffset() - sentenceStart);
-				b.setEndOffset(token.getEndOffset() - sentenceStart);
-				b.setLemma(token.getLemma());
-				b.setPos(token.getPos());
-				b.setNer(token.getNer());
-				bldr.addTokens(b);
+				bldr.addTokensBuilder()
+					.setStartOffset(token.getStartOffset() - sentenceStart)
+					.setEndOffset(token.getEndOffset() - sentenceStart)
+					.setLemma(token.getLemma())
+					.setPos(token.getPos())
+					.setNer(token.getNer());
 			}
 			sample.setSentence(bldr);
 			return sample.build();

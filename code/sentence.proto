@@ -28,7 +28,7 @@ message Coreference {
 	repeated Mention mentions = 1;
 
 	// added by us
-	optional string wikidataEntityId = 2;
+	optional string wikidata_entity_id = 2;
 }
 
 message Document {

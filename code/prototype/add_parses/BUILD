@@ -5,7 +5,7 @@ java_binary(
     ],
     main_class = "AddParses",
     deps = [
-        "//prototype:ArticleRepository",
+        "//prototype/lib:ArticleRepository",
         "//hadoop:CoreNLPInterface",
         "//:org_json_json",
     ],

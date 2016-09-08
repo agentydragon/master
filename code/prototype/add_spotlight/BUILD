@@ -6,7 +6,7 @@ py_binary(
     deps = [
         "//py:paths_lib",
         "//py:spotlight_lib",
-        "//prototype:article_repo_lib",
+        "//prototype/lib:article_repo_lib",
     ],
 )
 

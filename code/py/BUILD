@@ -80,17 +80,17 @@ py_library(
 #    ],
 #)
 #
-#py_library(
-#    name = "dbpedia_lib",
-#    srcs = [
-#        "dbpedia.py",
-#    ],
-#    deps = [
-#        ":json_cache_lib",
-#        ":sparql_client_lib",
-#        ":wikidata_util_lib",
-#    ],
-#)
+py_library(
+    name = "dbpedia_lib",
+    srcs = [
+        "dbpedia.py",
+    ],
+    deps = [
+        #":json_cache_lib",
+        ":sparql_client_lib",
+        ":wikidata_util_lib",
+    ],
+)
 #
 #py_test(
 #    name = "dbpedia_test",

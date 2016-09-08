@@ -1,25 +1,25 @@
-import json_cache
-import sparql_client
-import wikidata_util
+#import json_cache
+from py import sparql_client
+from py import wikidata_util
 
 dbpedia_client = sparql_client.SPARQLClient('http://dbpedia.org/sparql')
-dbpedia_to_wikidata_cache = json_cache.JsonCache('dbpedia_to_wikidata_cache')
+#dbpedia_to_wikidata_cache = json_cache.JsonCache('dbpedia_to_wikidata_cache')
 
 # TODO: hack
-persist_cache = True
-
-def load_cache():
-    dbpedia_to_wikidata_cache.load()
-
-def save_cache():
-    if persist_cache:
-        dbpedia_to_wikidata_cache.save()
+#persist_cache = True
+#
+#def load_cache():
+#    dbpedia_to_wikidata_cache.load()
+#
+#def save_cache():
+#    if persist_cache:
+#        dbpedia_to_wikidata_cache.save()
 
 def dbpedia_uri_to_wikidata_id(uri):
-    load_cache()
+#    load_cache()
 
-    if uri in dbpedia_to_wikidata_cache:
-        return dbpedia_to_wikidata_cache[uri]
+#    if uri in dbpedia_to_wikidata_cache:
+#        return dbpedia_to_wikidata_cache[uri]
 
     results = dbpedia_client.get_results("""
         PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -34,9 +34,9 @@ def dbpedia_uri_to_wikidata_id(uri):
             break
     #print(uri, 'wikidata entity:', wikidata_entity)
     #print()
-    dbpedia_to_wikidata_cache[uri] = wikidata_entity
+#    dbpedia_to_wikidata_cache[uri] = wikidata_entity
 
     # TODO HAX
-    save_cache()
+#    save_cache()
 
     return wikidata_entity

@@ -69,12 +69,12 @@ public class ParseXmlsToProtos {
 		}
 
 		String mentionText = document.getText().substring(startToken.getStartOffset(), endToken.getEndOffset());
-		Sentence.Coreference.Builder corefBuilder = document.addCoreferencesBuilder();
-		corefBuilder.addMentionsBuilder()
-			.setSentenceId(sentenceId)
-			.setStartWordId(startToken.getId())
-			.setEndWordId(endToken.getId() + 1)
-			.setText(mentionText);
+		document.addCoreferencesBuilder()
+			.addMentionsBuilder()
+				.setSentenceId(sentenceId)
+				.setStartWordId(startToken.getId())
+				.setEndWordId(endToken.getId() + 1)
+				.setText(mentionText);
 	}
 
 	private static void addSingleReferencedEntitiesToCoreferences(Sentence.Document.Builder document) {
@@ -122,8 +122,8 @@ public class ParseXmlsToProtos {
 			Sentence.DocumentSentence.Builder sentenceBuilder = builder.addSentencesBuilder()
 				.setId(getAttributeAsInt(sentenceTag, "id"));
 
-			int sentenceBegin = 0;
-			int sentenceEnd = 0;
+			int sentenceBegin = -1;
+			int sentenceEnd = -1;
 
 			NodeList tokens = queryXPathNodes("tokens/token", sentenceTag);
 			for (int j = 0; j < tokens.getLength(); j++) {
@@ -135,7 +135,7 @@ public class ParseXmlsToProtos {
 				int tokenEnd = Integer.parseInt(texts.get("CharacterOffsetEnd"));
 
 				sentenceEnd = tokenEnd;
-				if (sentenceBegin == 0) {
+				if (sentenceBegin == -1) {
 					sentenceBegin = tokenStart;
 				}
 
