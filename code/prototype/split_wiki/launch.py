@@ -24,7 +24,7 @@ job_command = [
 ]
 job_id = pbs_util.launch_job(
     walltime="48:00:00",
-    node_spec="nodes=1:brno:ppn=1,mem=4gb",
+    node_spec="nodes=1:brno:ppn=2,mem=4gb",
     job_name="wiki-split",
     job_command=job_command
 )
