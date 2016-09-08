@@ -4,6 +4,7 @@ import argparse
 from py import paths
 
 parser = argparse.ArgumentParser(description='TODO')
+parser.add_argument('--max_articles', type=int)
 parser.add_argument('--article_list_file', type=str, required=True)
 parser.add_argument('--article_plaintexts_dir',
                     default=paths.WIKI_ARTICLES_PLAINTEXTS_DIR)
@@ -11,6 +12,9 @@ args = parser.parse_args()
 
 with open(args.article_list_file) as f:
     article_names = list(map(lambda line: line.strip(), list(f)))
+
+if args.max_articles:
+    article_names = article_names[:args.max_articles]
 
 nonexistant = 0
 got_plaintext = 0
