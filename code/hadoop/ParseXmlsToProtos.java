@@ -32,19 +32,6 @@ public class ParseXmlsToProtos {
 
 	private static Map<String, XPathExpression> tagContentXpaths = new HashMap<>();
 
-	private static String findTagContent(Node parent, String tag) throws XPathExpressionException {
-		String xp = "string(" + tag + ")";
-		if (!tagContentXpaths.containsKey(xp)) {
-			tagContentXpaths.put(xp, xPath.compile(xp));
-		}
-		XPathExpression expr = tagContentXpaths.get(xp);
-		return expr.evaluate(parent);
-	}
-
-	private static int findTagContentAsInt(Node parent, String tag) throws XPathExpressionException {
-		return Integer.parseInt(findTagContent(parent, tag));
-	}
-
 	private static int getAttributeAsInt(Node tag, String attribute) {
 		return Integer.parseInt(tag.getAttributes().getNamedItem(attribute).getNodeValue());
 	}
@@ -82,14 +69,12 @@ public class ParseXmlsToProtos {
 		}
 
 		String mentionText = document.getText().substring(startToken.getStartOffset(), endToken.getEndOffset());
-		Sentence.Coreference.Builder corefBuilder = Sentence.Coreference.newBuilder();
-		Sentence.Mention.Builder mentionBuilder = Sentence.Mention.newBuilder()
+		Sentence.Coreference.Builder corefBuilder = document.addCoreferencesBuilder();
+		corefBuilder.addMentionsBuilder()
 			.setSentenceId(sentenceId)
 			.setStartWordId(startToken.getId())
 			.setEndWordId(endToken.getId() + 1)
 			.setText(mentionText);
-		corefBuilder.addMentions(mentionBuilder);
-		document.addCoreferences(corefBuilder);
 	}
 
 	private static void addSingleReferencedEntitiesToCoreferences(Sentence.Document.Builder document) {
@@ -115,6 +100,16 @@ public class ParseXmlsToProtos {
 		}
 	}
 
+	private static Map<String, String> getTagTexts(Node node) {
+		Map<String, String> result = new HashMap<>();
+		NodeList children = node.getChildNodes();
+		for (int k = 0; k < children.getLength(); k++) {
+			Node child = children.item(k);
+			result.put(child.getNodeName(), child.getTextContent());
+		}
+		return result;
+	}
+
 	public static Sentence.Document documentToProto(org.w3c.dom.Document root, String plaintext) throws XPathExpressionException {
 		Sentence.Document.Builder builder = Sentence.Document.newBuilder()
 			.setText(plaintext);
@@ -124,7 +119,7 @@ public class ParseXmlsToProtos {
 		for (int i = 0; i < nodes.getLength(); i++) {
 			Node sentenceTag = nodes.item(i);
 
-			Sentence.DocumentSentence.Builder sentenceBuilder = Sentence.DocumentSentence.newBuilder()
+			Sentence.DocumentSentence.Builder sentenceBuilder = builder.addSentencesBuilder()
 				.setId(getAttributeAsInt(sentenceTag, "id"));
 
 			int sentenceBegin = 0;
@@ -134,49 +129,47 @@ public class ParseXmlsToProtos {
 			for (int j = 0; j < tokens.getLength(); j++) {
 				Node tokenTag = tokens.item(j);
 
-				int tokenStart = findTagContentAsInt(tokenTag, "CharacterOffsetBegin");
-				int tokenEnd = findTagContentAsInt(tokenTag, "CharacterOffsetEnd");
+				Map<String, String> texts = getTagTexts(tokenTag);
+
+				int tokenStart = Integer.parseInt(texts.get("CharacterOffsetBegin"));
+				int tokenEnd = Integer.parseInt(texts.get("CharacterOffsetEnd"));
 
 				sentenceEnd = tokenEnd;
 				if (sentenceBegin == 0) {
 					sentenceBegin = tokenStart;
 				}
 
-				Sentence.SentenceToken.Builder tokenBuilder = Sentence.SentenceToken.newBuilder()
+				sentenceBuilder.addTokensBuilder()
 					.setId(getAttributeAsInt(tokenTag, "id"))
 					.setStartOffset(tokenStart)
 					.setEndOffset(tokenEnd)
-					.setLemma(findTagContent(tokenTag, "lemma"))
-					.setWord(findTagContent(tokenTag, "word"))
-					.setPos(findTagContent(tokenTag, "POS"))
-					.setNer(findTagContent(tokenTag, "NER"));
-
-				sentenceBuilder.addTokens(tokenBuilder);
+					.setLemma(texts.get("lemma"))
+					.setWord(texts.get("word"))
+					.setPos(texts.get("POS"))
+					.setNer(texts.get("NER"));
 			}
 
 			System.out.println("Sentence: [" + sentenceBegin + ";" + sentenceEnd + "]");
 			sentenceBuilder.setText(plaintext.substring(sentenceBegin, sentenceEnd));
-
-			builder.addSentences(sentenceBuilder);
 		}
 
 		nodes = queryXPathNodes("/root/document/coreference/coreference", root);
 		for (int i = 0; i < nodes.getLength(); i++) {
 			Node corefNode = nodes.item(i);
-			Sentence.Coreference.Builder corefBuilder = Sentence.Coreference.newBuilder();
+			Sentence.Coreference.Builder corefBuilder = builder.addCoreferencesBuilder();
 
 			NodeList mentionTags = queryXPathNodes("mention", corefNode);
 			for (int j = 0; j < mentionTags.getLength(); j++) {
 				Node mentionNode = mentionTags.item(j);
 
-				Sentence.Mention.Builder mentionBuilder = Sentence.Mention.newBuilder()
-					.setStartWordId(findTagContentAsInt(mentionNode, "start"))
-					.setEndWordId(findTagContentAsInt(mentionNode, "end"))
-					.setSentenceId(findTagContentAsInt(mentionNode, "sentence"))
-					.setText(findTagContent(mentionNode, "text"));
-				corefBuilder.addMentions(mentionBuilder);
+				Map<String, String> texts = getTagTexts(mentionNode);
+
+				corefBuilder.addMentionsBuilder()
+					.setStartWordId(Integer.parseInt(texts.get("start")))
+					.setEndWordId(Integer.parseInt(texts.get("end")))
+					.setSentenceId(Integer.parseInt(texts.get("sentence")))
+					.setText(texts.get("text"));
 			}
-			builder.addCoreferences(corefBuilder);
 		}
 		addSingleReferencedEntitiesToCoreferences(builder);
 		return builder.build();

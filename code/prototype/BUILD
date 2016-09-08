@@ -32,3 +32,16 @@ java_library(
         "//:org_json_json",
     ],
 )
+
+java_library(
+    name = "SampleRepository",
+    srcs = [
+        "SampleRepository.java",
+        "//:TrainingSamples.java",
+    ],
+    deps = [
+        "//:commons_io_commons_io",
+        "//:org_json_json",
+        "//:com_google_protobuf_protobuf_java",
+    ],
+)

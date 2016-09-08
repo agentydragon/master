@@ -2,6 +2,7 @@ import java.util.*;
 import org.json.*;
 import java.io.*;
 import java.lang.*;
+import org.apache.log4j.BasicConfigurator;
 
 public class MakeTrainingSamples {
 	private GenerateTrainingSamples generateTrainingSamples = new GenerateTrainingSamples();
@@ -14,9 +15,7 @@ public class MakeTrainingSamples {
 			String str = json.toString();
 			List<TrainingSamples.TrainingSample> samples = generateTrainingSamples.makeTrainingSamples(str);
 
-			for (TrainingSamples.TrainingSample sample : samples) {
-				System.out.println(sample.toString());
-			}
+			SampleRepository.writeArticle(title, samples);
 		} catch (IOException e) {
 			System.out.println("Failed: " + title);
 			System.out.println(e);
@@ -33,6 +32,7 @@ public class MakeTrainingSamples {
 	}
 
 	public static void main(String[] args) {
+		BasicConfigurator.configure();
 		new MakeTrainingSamples().run(args);
 	}
 }

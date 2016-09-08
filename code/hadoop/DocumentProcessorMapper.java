@@ -69,7 +69,7 @@ public class DocumentProcessorMapper extends Mapper<Text, Text, Text, Text> {
 
 		String jsonOut = new JSONObject()
 			.put("corenlp_xml", corenlpInterface.getXML(articleText))
-			.put("spotlight_json", spotlightJsonOut)
+			.put("spotlight_json", new JSONObject(spotlightJsonOut))
 			.put("plaintext", articleText)
 			.put("title", articleTitle).toString();
 		return jsonOut;

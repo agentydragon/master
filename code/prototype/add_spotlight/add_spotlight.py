@@ -43,6 +43,7 @@ for title in args.articles:
 
     # Skip if already done.
     if 'spotlight_json' in article_data:
+        print("Already done")
         continue
 
     spotlight_json = spotlight.annotate_text(article_data['plaintext'])

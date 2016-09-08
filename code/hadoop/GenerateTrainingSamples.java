@@ -37,7 +37,7 @@ public class GenerateTrainingSamples {
 		}
 		// log.info(documentProto.toString());
 
-		JSONObject spotlightJson = new JSONObject((String) inputJson.get("spotlight_json"));
+		JSONObject spotlightJson = (JSONObject) inputJson.get("spotlight_json");
 		List<Sentence.SpotlightMention> spotlightMentions = AnnotateCoreferences.SpotlightToMentions(spotlightJson);
 		documentProto = AnnotateCoreferences.PropagateEntities(documentProto, spotlightMentions);
 		// log.info(documentProto.toString());

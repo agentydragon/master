@@ -79,6 +79,8 @@ public class AnnotateCoreferences {
 	}
 
 	public static Sentence.Document PropagateEntities(Sentence.Document documentProto, List<Sentence.SpotlightMention> spotlightMentions) {
+		log.info("Propagating entities...");
+
 		Sentence.Document.Builder builder = Sentence.Document.newBuilder();
 		builder.mergeFrom(documentProto);
 
@@ -131,6 +133,8 @@ public class AnnotateCoreferences {
 				}
 			}
 		}
+
+		log.info("Entities propagated.");
 
 		return builder.build();
 	}

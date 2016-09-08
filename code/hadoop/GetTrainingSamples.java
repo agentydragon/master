@@ -188,16 +188,17 @@ public class GetTrainingSamples {
 	}
 
 	public List<TrainingSamples.TrainingSample> documentToSamples(Sentence.Document document) {
+		log.info("Getting samples.");
 		ArrayList<TrainingSamples.TrainingSample> samples = new ArrayList<>();
 		for (Sentence.DocumentSentence sentence : document.getSentencesList()) {
 			SentenceInDocument sid = new SentenceInDocument(document, sentence.getId());
+			log.info("Getting samples from sentence: " + sid.getText());
 			samples.addAll(sentenceToTrainingSamples(sid));
 		}
 		return samples;
 	}
 
 	public List<TrainingSamples.TrainingSample> sentenceToTrainingSamples(SentenceInDocument sentence) {
-		log.info("Sentence to training samples: " + sentence.getText());
 		Map<EntityPair, List<String>> allPairs = getTrueTriplesExpressedBySentence(sentence);
 
 		List<TrainingSamples.TrainingSample> samples = new ArrayList<>();
@@ -205,6 +206,7 @@ public class GetTrainingSamples {
 		for (EntityPair pair : allPairs.keySet()) {
 			for (String relation : allPairs.get(pair)) {
 				TrainingSamples.TrainingSample sample = sentence.toSample(relation, pair.e1, pair.e2, true);
+				// log.info(sample.toString());
 				samples.add(sample);
 			}
 		}
@@ -228,6 +230,8 @@ public class GetTrainingSamples {
 			}
 		}
 		*/
+
+		log.info("Sentence to training samples: " + sentence.getText() + "; yielded " + Integer.toString(samples.size()) + " samples");
 
 		return samples;
 	}
