@@ -17,6 +17,7 @@ py_library(
     ],
     deps = [
         ":article_repo_lib",
+        ":training_sample_lib",
         "//py:file_util_lib",
     ],
 )
@@ -49,6 +50,13 @@ py_library(
     name = "sentence_lib",
     srcs = [
         "sentence.py",
+    ],
+)
+
+py_library(
+    name = "training_sample_lib",
+    srcs = [
+        "training_sample.py",
     ],
 )
 

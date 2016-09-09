@@ -10,6 +10,7 @@ samples = sample_repo.load_samples(relation)
 html = "<h1>" + relation + ": " + client.get_name(relation) + "</h1>"
 
 for sample in samples:
-    html += "<li>" + sample['subject'] + " " + sample['object'] + " " + sample['sentence']
+    html += "<li>" + sample.subject + " " + sample.object + " " + sample.sentence
+    html += str(sample.to_json())
 
 print(html)

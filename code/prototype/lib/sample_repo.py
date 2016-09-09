@@ -3,6 +3,7 @@ from py import file_util
 import io
 import os.path
 from prototype.lib import article_repo
+from prototype.lib import training_sample
 
 base_dir = '/storage/brno7-cerit/home/prvak/data/relation-samples'
 
@@ -19,7 +20,7 @@ def write_relations(title, relation, samples):
     # TODO: richer samples
     samps = []
     for sample in samples:
-        samps.append({'subject': sample[0], 'object': sample[1], 'sentence': sample[2]})
+        samps.append(sample.to_json())
     with open(article_relation_to_path(title, relation), 'w') as f:
         json.dump({'samples': samps}, f)
 
@@ -34,5 +35,7 @@ def load_samples(relation):
         for f in files:
             filename = root + '/' + f
             with open(filename) as f:
-                samples.extend(json.load(f)['samples'])
+                batch = json.load(f)['samples']
+                for sample in batch:
+                    samples.append(training_sample.TrainingSample.from_json(sample))
     return samples
