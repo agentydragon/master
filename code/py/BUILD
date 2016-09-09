@@ -91,17 +91,17 @@ py_library(
         ":wikidata_util_lib",
     ],
 )
-#
-#py_test(
-#    name = "dbpedia_test",
-#    srcs = [
-#        "dbpedia_test.py",
-#    ],
-#    deps = [
-#        ":dbpedia_lib",
-#    ],
-#)
-#
+
+py_test(
+    name = "dbpedia_test",
+    srcs = [
+        "dbpedia_test.py",
+    ],
+    deps = [
+        ":dbpedia_lib",
+    ],
+)
+
 #py_library(
 #    name = "get_training_samples_lib",
 #    srcs = [
@@ -169,17 +169,17 @@ py_library(
     #srcs_version = "PY3",
 )
 
-#
-#py_test(
-#    name = "wikidata_test",
-#    srcs = [
-#        "wikidata_test.py",
-#    ],
-#    deps = [
-#        ":wikidata_lib",
-#    ],
-#    srcs_version = "PY3",
-#)
+py_test(
+    name = "wikidata_test",
+    srcs = [
+        "wikidata_test.py",
+    ],
+    deps = [
+        ":wikidata_lib",
+    ],
+    srcs_version = "PY3",
+    default_python_version = "PY3",
+)
 
 # TODO: I can make my own wiki2text! With blackjack and hookers!
 # genrule(

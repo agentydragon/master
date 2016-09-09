@@ -1,4 +1,4 @@
-from py import json_cache
+#from py import json_cache
 from py import wikidata_util
 from py import sparql_client
 
@@ -6,20 +6,20 @@ wikidata_url = 'https://query.wikidata.org/sparql'
 
 class WikidataClient(object):
     def __init__(self):
-        self.wikidata_relations_cache = json_cache.JsonCache('wikidata_cache')
-        self.name_cache = json_cache.JsonCache('name_cache')
+#        self.wikidata_relations_cache = json_cache.JsonCache('wikidata_cache')
+#        self.name_cache = json_cache.JsonCache('name_cache')
         self.wikidata_client = sparql_client.SPARQLClient(wikidata_url)
         self.persist_caches = True
 
-    def load_cache(self):
-        if self.persist_caches:
-            self.wikidata_relations_cache.load()
-            self.name_cache.load()
-
-    def save_cache(self):
-        if self.persist_caches:
-            self.wikidata_relations_cache.save()
-            self.name_cache.save()
+#    def load_cache(self):
+#        if self.persist_caches:
+#            self.wikidata_relations_cache.load()
+#            self.name_cache.load()
+#
+#    def save_cache(self):
+#        if self.persist_caches:
+#            self.wikidata_relations_cache.save()
+#            self.name_cache.save()
 
     def collect_forward_properties(self, wikidata_id):
         # print('forward for', wikidata_id)
@@ -64,20 +64,28 @@ class WikidataClient(object):
         return properties
 
     def get_all_triples_of_entity(self, wikidata_id):
-        self.load_cache()
-
-        if wikidata_id in self.wikidata_relations_cache:
-            return self.wikidata_relations_cache[wikidata_id]
+#        self.load_cache()
+#
+#        if wikidata_id in self.wikidata_relations_cache:
+#            return self.wikidata_relations_cache[wikidata_id]
 
         properties = []
         properties.extend(self.collect_forward_properties(wikidata_id))
         properties.extend(self.collect_backward_properties(wikidata_id))
 
-        self.wikidata_relations_cache[wikidata_id] = properties
-
-        # TODO HAX
-        self.save_cache()
+#        self.wikidata_relations_cache[wikidata_id] = properties
+#
+#        # TODO HAX
+#        self.save_cache()
         return properties
+
+    def get_triples_between_entities(self, wikidata_ids):
+        # TODO: optimize
+        all_triples = []
+        for entity in wikidata_ids:
+            all_triples.extend(self.get_all_triples_of_entity(entity))
+        return list(sorted(set(triple for triple in all_triples
+                        if (triple[0] in wikidata_ids) and (triple[2] in wikidata_ids))))
 
     def fetch_label(self, entity_id):
         results = self.wikidata_client.get_results("""
@@ -90,19 +98,19 @@ class WikidataClient(object):
             return results['results']['bindings'][0]['label']['value']
 
     def get_entity_name(self, entity_id):
-        self.load_cache()
-        if entity_id in self.name_cache:
-            return self.name_cache[entity_id]
+#        self.load_cache()
+#        if entity_id in self.name_cache:
+#            return self.name_cache[entity_id]
         name = self.fetch_label(entity_id)
-        self.name_cache[entity_id] = name
-        self.save_cache()
+#        self.name_cache[entity_id] = name
+#        self.save_cache()
         return name
 
     def get_name(self, property_id):
-        self.load_cache()
-        if property_id in self.name_cache:
-            return self.name_cache[property_id]
+#        self.load_cache()
+#        if property_id in self.name_cache:
+#            return self.name_cache[property_id]
         name = self.fetch_label(property_id)
-        self.name_cache[property_id] = name
-        self.save_cache()
+#        self.name_cache[property_id] = name
+#        self.save_cache()
         return name

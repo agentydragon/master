@@ -78,62 +78,36 @@ def spotlight_to_mentions(spotlight_json):
         mentions.append(mention)
     return mentions
 
-def find_sentence_by_id(document, sentence_id):
-    for sentence in document.sentences:
-        if sentence.id == sentence_id:
-            return sentence
-
-def find_sentence_token(sentence, token_id):
-    for token in sentence.tokens:
-        if token.id == token_id:
-            return token
-
-def get_mention_start(document, mention):
-    sentence = find_sentence_by_id(document, mention.sentence_id)
-    token = find_sentence_token(sentence, mention.start_word_id)
-    return token.start_offset
-
-def get_mention_end(document, mention):
-    sentence = find_sentence_by_id(document, mention.sentence_id)
-    token = find_sentence_token(sentence, mention.end_word_id - 1)
-    return token.end_offset
-
-def find_resources_between(spotlight_mentions, start, end):
-    return [mention for mention in spotlight_mentions
-            if mention.start_offset >= start and mention.end_offset <= end]
-
-def annotate_coreferences(document, spotlight_json):
-    spotlight_mentions = spotlight_to_mentions(spotlight_json)
-    for coreference in document.coreferences:
-        full_matches = []
-
-        for mention in coreference.mentions:
-            mention_start = get_mention_start(document, mention)
-            mention_end = get_mention_end(document, mention)
-            # if mention_end == -1:
-            #     # TODO HAX
-            #     continue
-            mention_text = mention.text
-            mention_actual_text = document.text[mention_start:mention_end]
-            # if mention_text != mention_actual_text:
-            #     # TODO: check equality
-
-            full_matches = []
-            for resource in find_resources_between(spotlight_mentions,
-                                                   mention_start,
-                                                   mention_end):
-                if resource.surface_form in [mention_text, mention_actual_text]:
-                    full_matches.append(resource)
-                else:
-                    pass # TODO: ?
-
-            uris = set(match.uri for match in full_matches)
-            if len(uris) == 1:
-                best_match = list(uris)[0]
-                wikidata_id = dbpedia.dbpedia_uri_to_wikidata_id(best_match)
-                if wikidata_id:
-                    coreference.wikidata_entity_id = wikidata_id
-            # TODO: else?
+# def annotate_coreferences(document):
+#     for coreference in document.coreferences:
+#         full_matches = []
+# 
+#         for mention in coreference.mentions:
+#             mention_start = get_mention_start(document, mention)
+#             mention_end = get_mention_end(document, mention)
+#             # if mention_end == -1:
+#             #     # TODO HAX
+#             #     continue
+#             mention_text = mention.text
+#             mention_actual_text = document.text[mention_start:mention_end]
+#             # if mention_text != mention_actual_text:
+#             #     # TODO: check equality
+# 
+#             full_matches = []
+#             for resource in document.find_spotlight_mentions_between(
+#                     mention_start, mention_end):
+#                 if resource.surface_form in [mention_text, mention_actual_text]:
+#                     full_matches.append(resource)
+#                 else:
+#                     pass # TODO: ?
+# 
+#             uris = set(match.uri for match in full_matches)
+#             if len(uris) == 1:
+#                 best_match = list(uris)[0]
+#                 wikidata_id = dbpedia.dbpedia_uri_to_wikidata_id(best_match)
+#                 if wikidata_id:
+#                     coreference.wikidata_entity_id = wikidata_id
+#             # TODO: else?
 
 def document_to_proto(root, spotlight_json, plaintext):
     # TODO: Spotlight JSON
@@ -152,7 +126,7 @@ def document_to_proto(root, spotlight_json, plaintext):
         text = plaintext,
         sentences = [],
         coreferences = [],
-        spotlight_mentions = None
+        spotlight_mentions = spotlight_to_mentions(spotlight_json)
     )
     sentence_tags = root.find('document').find('sentences').findall('sentence')
     for sentence_tag in sentence_tags:
@@ -205,8 +179,7 @@ def document_to_proto(root, spotlight_json, plaintext):
             )
             coreference.mentions.append(mention)
 
-    add_single_referenced_entities_to_coreferences(document)
-
-    annotate_coreferences(document, spotlight_json)
+    # add_single_referenced_entities_to_coreferences(document)
+    # annotate_coreferences(document)
 
     return document
