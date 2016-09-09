@@ -19,12 +19,12 @@ def find_sentence_token_idxs_of_entity(document, sentence, entity):
             mentions.append(mention)
 
     # now we have all mentions of the entity in the sentence
-    tokens_idxs = []
+    tokens_idxs = set()
     for i, token in enumerate(sentence.tokens):
         for mention in mentions:
             if token.start_offset >= mention.start_offset and token.end_offset <= mention.end_offset:
-                tokens_idxs.append(i)
-    return tokens_idxs
+                tokens_idxs.add(i)
+    return list(sorted(tokens_idxs))
 
 def make_training_sample(document, sentence, s, relation, o):
     sample = training_sample.TrainingSample(
@@ -84,12 +84,12 @@ def process_article(article_title):
             if wikidata_id:
                 wikidata_ids.add(wikidata_id)
 
-            for s, p, o in wikidata_client.get_triples_between_entities(wikidata_ids):
-                if p not in samples:
-                    samples[p] = []
+        for s, p, o in wikidata_client.get_triples_between_entities(wikidata_ids):
+            if p not in samples:
+                samples[p] = []
 
-                print(p, s, o, sentence.text)
-                samples[p].append(make_training_sample(document, sentence, s, p, o))
+            print(p, s, o, sentence.text)
+            samples[p].append(make_training_sample(document, sentence, s, p, o))
 
     sample_repo.write_article(article_title, samples)
 

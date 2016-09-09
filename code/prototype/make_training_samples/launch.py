@@ -12,7 +12,7 @@ def launch_job_for_slice(articles_slice, wikidata_endpoint):
         job_command.extend(['--articles', article])
     job_id = pbs_util.launch_job(
         # TODO: calculate walltime; parallelize
-        walltime="01:00:00",
+        walltime="04:00:00",
         node_spec="nodes=1:brno:ppn=2,mem=2gb",
         job_name="make-training-samples",
         job_command=job_command
