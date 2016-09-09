@@ -1,11 +1,14 @@
 from py import pbs_util
 import argparse
 
-def launch_job_for_slice(articles_slice, spotlight_endpoint):
+def launch_job_for_slice(articles_slice, spotlight_endpoint, force_redo):
     job_command = ['prototype/add_spotlight/add_spotlight']
 
     if spotlight_endpoint:
         job_command.extend(['--spotlight_endpoint', spotlight_endpoint])
+
+    if force_redo:
+        job_command.extend(['--force_redo=true'])
 
     for name in articles_slice:
         job_command.append('--articles')
@@ -25,6 +28,7 @@ def main():
     parser.add_argument('--article_list_file', type=str, required=True)
     parser.add_argument('--max_articles', type=int)
     parser.add_argument('--spotlight_endpoint')
+    parser.add_argument('--force_redo')
     # TODO: add max_jobs
     parser.add_argument('--articles_per_job', type=int)
     args = parser.parse_args()
@@ -44,7 +48,8 @@ def main():
 
     for articles_slice in slices:
         launch_job_for_slice(articles_slice,
-                             spotlight_endpoint=args.spotlight_endpoint)
+                             spotlight_endpoint=args.spotlight_endpoint,
+                             force_redo=args.force_redo)
 
 if __name__ == '__main__':
     main()

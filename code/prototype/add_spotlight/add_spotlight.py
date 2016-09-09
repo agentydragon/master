@@ -20,6 +20,7 @@ parser.add_argument('--article_plaintexts_dir',
                     default=paths.WIKI_ARTICLES_PLAINTEXTS_DIR)
 parser.add_argument('--articles', action='append')
 parser.add_argument('--spotlight_endpoint')
+parser.add_argument('--force_redo')
 args = parser.parse_args()
 
 # TODO: skip if finished
@@ -29,8 +30,7 @@ import os.path
 from py import spotlight
 from prototype.lib import article_repo
 
-if args.spotlight_endpoint:
-    spotlight.SPOTLIGHT_SERVER = args.spotlight_endpoint
+spotlight_client = spotlight.SpotlightClient(args.spotlight_endpoint)
 
 for title in args.articles:
     print("Spotlighting", title)
@@ -42,14 +42,15 @@ for title in args.articles:
     article_data = article_repo.load_article(args.article_plaintexts_dir, title)
 
     # Skip if already done.
-    if 'spotlight_json' in article_data:
-        print("Already done")
-        continue
-    plaintext = article_data['plaintext'].strip()
-    if plaintext == '':
+    if ('spotlight_json' in article_data):
+        if not args.force_redo:
+            print("Already done")
+            continue
+    plaintext = article_data['plaintext']
+    if plaintext.strip() == '':
         print("Empty article")
         continue
-    spotlight_json = spotlight.annotate_text(plaintext)
+    spotlight_json = spotlight_client.annotate_text(plaintext)
     article_data['spotlight_json'] = spotlight_json
     article_repo.write_article(args.article_plaintexts_dir, title, article_data)
     print("Done")
