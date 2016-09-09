@@ -10,6 +10,9 @@ py_binary(
         "//py:pbs_util_lib",
         "//py:paths_lib",
     ],
+    data = [
+        ":Spotlight",
+    ]
 )
 
 java_binary(
