@@ -8,6 +8,8 @@ from py import dbpedia
 from xml.etree import ElementTree
 import json
 
+wikidata_client = None
+
 def find_sentence_token_idxs_of_entity(document, sentence, entity):
     mentions = []
     for mention in document.find_spotlight_mentions_between(sentence.start_offset(),
@@ -74,8 +76,6 @@ def process_article(article_title):
 
     samples = {}
 
-    client = wikidata.WikidataClient()
-
     for sentence in document.sentences:
         wikidata_ids = set()
         for mention in document.find_spotlight_mentions_between(sentence.start_offset(),
@@ -84,7 +84,7 @@ def process_article(article_title):
             if wikidata_id:
                 wikidata_ids.add(wikidata_id)
 
-            for s, p, o in client.get_triples_between_entities(wikidata_ids):
+            for s, p, o in wikidata_client.get_triples_between_entities(wikidata_ids):
                 if p not in samples:
                     samples[p] = []
 
@@ -97,7 +97,12 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description='TODO')
     parser.add_argument('--articles', action='append')
+    parser.add_argument('--wikidata_endpoint')
+                        # description='example: https://query.wikidata.org/sparql, or http://hador:3030/wikidata/query')
     args = parser.parse_args()
+
+    global wikidata_client
+    wikidata_client = wikidata.WikidataClient(args.wikidata_endpoint)
 
     for article in args.articles:
         process_article(article)

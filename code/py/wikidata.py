@@ -5,10 +5,12 @@ from py import sparql_client
 wikidata_url = 'https://query.wikidata.org/sparql'
 
 class WikidataClient(object):
-    def __init__(self):
+    def __init__(self, endpoint=None):
         self.wikidata_relations_cache = {} # json_cache.JsonCache('wikidata_cache')
 #        self.name_cache = json_cache.JsonCache('name_cache')
-        self.wikidata_client = sparql_client.SPARQLClient(wikidata_url)
+        if endpoint is None:
+            endpoint = wikidata_url
+        self.wikidata_client = sparql_client.SPARQLClient(endpoint)
         self.persist_caches = True
 
 #    def load_cache(self):

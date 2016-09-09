@@ -8,7 +8,7 @@ Usage:
 """
 
 import argparse
-
+import time
 import json
 import requests
 
@@ -20,16 +20,22 @@ def annotate_text(text, spotlight_endpoint=None):
     if spotlight_endpoint is None:
         spotlight_endpoint = SPOTLIGHT_SERVER
 
-    r = requests.post(spotlight_endpoint, data={
-      'text': text,
-      'confidence': '0.35'
-    }, headers={'Accept': 'application/json'})
-    try:
-        return r.json()
-    except:
-        print(r)
-        print(r.text)
-        raise
+    retries = 0
+
+    while True:
+        r = requests.post(spotlight_endpoint, data={
+          'text': text,
+          'confidence': '0.35'
+        }, headers={'Accept': 'application/json'})
+        try:
+            return r.json()
+        except:
+            print(r)
+            print(r.text)
+            retries += 1
+            if retries >= 5:
+                raise
+            time.sleep(10)
 
 def main():
     parser = argparse.ArgumentParser(description='Get DBpedia entity mentions using Spotlight')

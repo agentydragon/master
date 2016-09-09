@@ -39,3 +39,6 @@ def load_samples(relation):
                 for sample in batch:
                     samples.append(training_sample.TrainingSample.from_json(sample))
     return samples
+
+def all_relations():
+    return os.listdir(base_dir)
