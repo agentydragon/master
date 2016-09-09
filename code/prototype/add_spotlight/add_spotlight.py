@@ -45,8 +45,11 @@ for title in args.articles:
     if 'spotlight_json' in article_data:
         print("Already done")
         continue
-
-    spotlight_json = spotlight.annotate_text(article_data['plaintext'])
+    plaintext = article_data['plaintext'].strip()
+    if plaintext == '':
+        print("Empty article")
+        continue
+    spotlight_json = spotlight.annotate_text(plaintext)
     article_data['spotlight_json'] = spotlight_json
     article_repo.write_article(args.article_plaintexts_dir, title, article_data)
     print("Done")

@@ -17,6 +17,8 @@ SPOTLIGHT_SERVER = 'http://spotlight.sztaki.hu:2222/rest/annotate'
 # SPOTLIGHT_SERVER = 'http://zebra6a:2222/rest/annotate'
 
 def annotate_text(text, spotlight_endpoint=None):
+    assert text != ''
+
     if spotlight_endpoint is None:
         spotlight_endpoint = SPOTLIGHT_SERVER
 
