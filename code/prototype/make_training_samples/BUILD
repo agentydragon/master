@@ -27,3 +27,19 @@ py_binary(
         "//py:wikidata_lib",
     ],
 )
+
+py_binary(
+    name = "launch",
+    srcs = [
+        "launch.py",
+    ],
+    deps = [
+        "//py:pbs_util_lib",
+        "//py:paths_lib",
+    ],
+    data = [
+        ":make_training_samples",
+    ],
+    default_python_version = "PY3",
+    srcs_version = "PY3",
+)

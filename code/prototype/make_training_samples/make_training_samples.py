@@ -8,8 +8,13 @@ from xml.etree import ElementTree
 import json
 
 def process_article(article_title):
+    print(article_title)
     article = article_repo.load_article(paths.WIKI_ARTICLES_PLAINTEXTS_DIR,
                                         article_title)
+    if 'corenlp_xml' not in article or 'spotlight_json' not in article:
+        print('incomplete')
+        return
+
     document = parse_xmls_to_protos.document_to_proto(
         root = ElementTree.fromstring(article['corenlp_xml']),
         plaintext = article['plaintext'],

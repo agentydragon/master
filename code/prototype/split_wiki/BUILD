@@ -35,7 +35,6 @@ py_binary(
         "launch.py",
     ],
     deps = [
-        ":split_wiki_main",
         "//py:pbs_util_lib",
         "//py:paths_lib",
     ],
