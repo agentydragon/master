@@ -19,7 +19,11 @@ results = wikidata_client.wikidata_client.get_results("""
     LIMIT %d
 """ % NUM_PERSONS)
 results = results['results']['bindings']
+names = []
 for row in results:
     id = wikidata_util.wikidata_entity_url_to_entity_id(row['person']['value'])
-    print(wikidata_client.get_entity_name(id))
+    names.append(wikidata_client.get_entity_name(id))
+
+for nam in sorted(names):
+    print(name)
     sys.stdout.flush()
