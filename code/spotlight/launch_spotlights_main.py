@@ -85,8 +85,8 @@ while True:
         assert job.state['job_state'] == 'R'
 
         try:
-            spotlight.annotate_text("Barack Obama is the president of the United States.",
-                                    spotlight_endpoint=job.get_address())
+            client = spotlight.SpotlightClient(job.get_address())
+            client.annotate_text("Barack Obama is the president of the United States.")
         except:
             waiting = True
             print(job.get_id(), 'not yet OK:', sys.exc_info()[0], 'waiting 30 seconds')

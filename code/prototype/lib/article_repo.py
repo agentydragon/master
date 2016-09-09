@@ -30,4 +30,8 @@ def article_exists(target_dir, title):
 def load_article(target_dir, title):
     path = article_title_to_path(target_dir, title)
     with io.open(path, 'r', encoding='utf8') as f:
-        return json.load(f)
+        try:
+            return json.load(f)
+        except:
+            print("Error loading article", title)
+            raise
