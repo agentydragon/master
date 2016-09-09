@@ -26,3 +26,13 @@ def write_relations(title, relation, samples):
 def write_article(title, samples):
     for relation in samples.keys():
         write_relations(title, relation, samples[relation])
+
+import glob
+def load_samples(relation):
+    samples = []
+    for root, subdirs, files in os.walk(base_dir + '/' + relation + '/positive'):
+        for f in files:
+            filename = root + '/' + f
+            with open(filename) as f:
+                samples.extend(json.load(f)['samples'])
+    return samples

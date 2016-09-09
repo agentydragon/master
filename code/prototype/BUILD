@@ -34,3 +34,17 @@ py_binary(
     default_python_version = "PY3",
     srcs_version = "PY3",
 )
+
+py_binary(
+    name = "visualize_relation",
+    srcs = [
+        "visualize_relation.py",
+    ],
+    deps = [
+        "//prototype/lib:sample_repo_lib",
+        "//py:paths_lib",
+        "//py:wikidata_lib",
+    ],
+    default_python_version = "PY3",
+    srcs_version = "PY3",
+)

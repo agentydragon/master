@@ -7,7 +7,9 @@ def launch_job_for_slice(articles_slice):
     job_id = pbs_util.launch_job(
         # TODO: calculate walltime; parallelize
         walltime="01:00:00",
-        node_spec="nodes=1:brno:ppn=4,mem=8gb",
+        # node_spec="nodes=1:brno:ppn=4,mem=8gb",
+        # 8 gigs is not enough
+        node_spec="nodes=1:brno:ppn=4,mem=9gb",
         job_name="add-parses",
         job_command=job_command
     )
