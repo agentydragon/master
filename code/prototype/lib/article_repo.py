@@ -1,4 +1,3 @@
-import unicodedata
 import json
 from py import file_util
 import io

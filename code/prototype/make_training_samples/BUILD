@@ -21,6 +21,7 @@ py_binary(
     ],
     deps = [
         "//prototype/lib:article_repo_lib",
+        "//prototype/lib:sample_repo_lib",
         "//prototype/lib:parse_xmls_to_protos_lib",
         "//py:paths_lib",
         "//py:wikidata_lib",

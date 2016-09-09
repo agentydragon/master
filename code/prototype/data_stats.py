@@ -1,4 +1,4 @@
-import article_repo
+from prototype.lib import article_repo
 import argparse
 
 from py import paths

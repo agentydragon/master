@@ -10,6 +10,17 @@ py_library(
     ],
 )
 
+py_library(
+    name = "sample_repo_lib",
+    srcs = [
+        "sample_repo.py",
+    ],
+    deps = [
+        ":article_repo_lib",
+        "//py:file_util_lib",
+    ],
+)
+
 java_library(
     name = "ArticleRepository",
     srcs = [

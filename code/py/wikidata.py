@@ -6,7 +6,7 @@ wikidata_url = 'https://query.wikidata.org/sparql'
 
 class WikidataClient(object):
     def __init__(self):
-#        self.wikidata_relations_cache = json_cache.JsonCache('wikidata_cache')
+        self.wikidata_relations_cache = {} # json_cache.JsonCache('wikidata_cache')
 #        self.name_cache = json_cache.JsonCache('name_cache')
         self.wikidata_client = sparql_client.SPARQLClient(wikidata_url)
         self.persist_caches = True
@@ -65,15 +65,15 @@ class WikidataClient(object):
 
     def get_all_triples_of_entity(self, wikidata_id):
 #        self.load_cache()
-#
-#        if wikidata_id in self.wikidata_relations_cache:
-#            return self.wikidata_relations_cache[wikidata_id]
+
+        if wikidata_id in self.wikidata_relations_cache:
+            return self.wikidata_relations_cache[wikidata_id]
 
         properties = []
         properties.extend(self.collect_forward_properties(wikidata_id))
         properties.extend(self.collect_backward_properties(wikidata_id))
 
-#        self.wikidata_relations_cache[wikidata_id] = properties
+        self.wikidata_relations_cache[wikidata_id] = properties
 #
 #        # TODO HAX
 #        self.save_cache()
