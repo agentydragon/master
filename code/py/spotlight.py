@@ -30,7 +30,7 @@ class SpotlightClient(object):
         while True:
             endpoint = random.choice(self.endpoints)
 
-            r = requests.post(self.endpoint, data={
+            r = requests.post(endpoint, data={
               'text': text,
               'confidence': '0.35'
             }, headers={'Accept': 'application/json'})
