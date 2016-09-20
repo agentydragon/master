@@ -22,7 +22,7 @@ def launch_job_for_slice(articles_slice, wikidata_endpoint):
     job = pbs_util.launch_job(
         # TODO: parallelize on one node
         walltime=walltime_estimate,
-        node_spec="nodes=1:brno:ppn=" + str(min(2, parallelism)) + ",mem=2gb",
+        node_spec="nodes=1:brno:ppn=" + str(max(2, parallelism)) + ",mem=2gb",
         job_name="make-training-samples",
         job_command=job_command
     )

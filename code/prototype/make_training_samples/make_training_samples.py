@@ -106,8 +106,8 @@ def main():
     global wikidata_client
     wikidata_client = wikidata.WikidataClient(args.wikidata_endpoint or None)
 
-    assert parallelism >= 1
-    if parallelism == 1:
+    assert args.parallelism >= 1
+    if args.parallelism == 1:
         for article in args.articles:
             process_article(article)
     else:
