@@ -5,7 +5,10 @@ import argparse
 import subprocess
 
 def launch_job_for_slice(articles_slice, wikidata_endpoint):
-    job_command = ['prototype/make_training_samples/make_training_samples']
+    parallelism = 4
+
+    job_command = ['prototype/make_training_samples/make_training_samples',
+                   '--parallelism', str(parallelism)]
     if wikidata_endpoint:
         job_command.extend(['--wikidata_endpoint', wikidata_endpoint])
     for article in articles_slice:
@@ -14,12 +17,12 @@ def launch_job_for_slice(articles_slice, wikidata_endpoint):
     # 15 minutes per 100-article job -> 9 seconds/article
     # pessimistic: twice as much, 100 seconds for startup
 
-    walltime_estimate = str((9 * len(articles_slice)) * 2 + 100)  # or default: "04:00:00"
+    walltime_estimate = str(round((9 * len(articles_slice) / float(parallelism)) * 2 + 100))  # or default: "04:00:00"
 
     job = pbs_util.launch_job(
         # TODO: parallelize on one node
         walltime=walltime_estimate,
-        node_spec="nodes=1:brno:ppn=2,mem=2gb",
+        node_spec="nodes=1:brno:ppn=" + str(min(2, parallelism)) + ",mem=2gb",
         job_name="make-training-samples",
         job_command=job_command
     )
