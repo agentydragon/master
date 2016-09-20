@@ -51,15 +51,17 @@ for relation in relations:
 # Remove features used in <2 samples.
 feature_counts = {}
 for sample in samples:
-    for feature in sample.keys():
+    for feature in list(sample[0].keys()):
         if feature not in feature_counts:
             feature_counts[feature] = 0
         feature_counts[feature] += 1
 
+min_feature_occurrences = 10
+
 for sample in samples:
-    for feature in sample.keys():
-        if feature_counts[feature] <= 2:
-            del sample[feature]
+    for feature in list(sample[0].keys()):
+        if feature_counts[feature] < min_feature_occurrences:
+            del sample[0][feature]
 
 print("Samples:", len(samples))
 
