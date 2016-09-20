@@ -48,6 +48,19 @@ for relation in relations:
     for sample in sample_repo.load_samples(relation):
         samples.append(sample_to_features_label(sample))
 
+# Remove features used in <2 samples.
+feature_counts = {}
+for sample in samples:
+    for feature in sample.keys():
+        if feature not in feature_counts:
+            feature_counts[feature] = 0
+        feature_counts[feature] += 1
+
+for sample in samples:
+    for feature in sample.keys():
+        if feature_counts[feature] <= 2:
+            del sample[feature]
+
 print("Samples:", len(samples))
 
 random.shuffle(samples)
