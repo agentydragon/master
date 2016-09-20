@@ -28,6 +28,11 @@ def find_sentence_token_idxs_of_entity(document, sentence, entity):
                 tokens_idxs.add(i)
     return list(sorted(tokens_idxs))
 
+def mentions_in_sentence_overlap(document, sentence, s, o):
+    si = find_sentence_token_idxs_of_entity(document, sentence, s)
+    oi = find_sentence_token_idxs_of_entity(document, sentence, o)
+    return len(set(si) & set(oi)) > 0
+
 def make_training_sample(document, sentence, s, relation, o):
     sample = training_sample.TrainingSample(
         relation = relation,
@@ -89,6 +94,10 @@ def process_article(article_title):
         for s, p, o in wikidata_client.get_triples_between_entities(wikidata_ids):
             if p not in samples:
                 samples[p] = []
+
+            # Against reflexive references ("Country is in country").
+            if mentions_in_sentence_overlap(document, sentence, s, o):
+                continue
 
             print(p, s, o, sentence.text)
             samples[p].append(make_training_sample(document, sentence, s, p, o))
