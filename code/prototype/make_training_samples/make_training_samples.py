@@ -7,6 +7,8 @@ from py import wikidata
 from py import dbpedia
 from xml.etree import ElementTree
 import json
+import argparse
+import multiprocessing
 
 wikidata_client = None
 
@@ -94,18 +96,23 @@ def process_article(article_title):
     sample_repo.write_article(article_title, samples)
 
 def main():
-    import argparse
     parser = argparse.ArgumentParser(description='TODO')
     parser.add_argument('--articles', action='append')
     parser.add_argument('--wikidata_endpoint')
                         # description='example: https://query.wikidata.org/sparql, or http://hador:3030/wikidata/query')
+    parser.add_argument('--parallelism', default=1, type=int)
     args = parser.parse_args()
 
     global wikidata_client
     wikidata_client = wikidata.WikidataClient(args.wikidata_endpoint or None)
 
-    for article in args.articles:
-        process_article(article)
+    assert parallelism >= 1
+    if parallelism == 1:
+        for article in args.articles:
+            process_article(article)
+    else:
+        pool = multiprocessing.Pool(args.parallelism)
+        pool.map(process_article, args.articles)
 
 if __name__ == '__main__':
     main()
