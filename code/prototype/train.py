@@ -114,8 +114,10 @@ def cull_uninformative_features(samples):
 samples = []
 for relation in relations:
     print('Loading relation', relation, '...')
-    for sample in sample_repo.load_samples(relation):
+    relation_samples = sample_repo.load_samples(relation)
+    for sample in relation_samples:
         samples.append(sample_to_features_label(sample))
+    print(len(relation_samples))
 
 random.shuffle(samples)
 cull_uninformative_features(samples)
