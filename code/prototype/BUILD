@@ -48,3 +48,15 @@ py_binary(
     default_python_version = "PY3",
     srcs_version = "PY3",
 )
+
+py_binary(
+    name = "train",
+    srcs = [
+        "train.py",
+    ],
+    deps = [
+        "//prototype/lib:sample_repo_lib",
+    ],
+    default_python_version = "PY3",
+    srcs_version = "PY3",
+)
