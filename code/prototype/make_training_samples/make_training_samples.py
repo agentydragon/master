@@ -93,7 +93,11 @@ def process_article(article_title):
             print(p, s, o, sentence.text)
             samples[p].append(make_training_sample(document, sentence, s, p, o))
 
-    sample_repo.write_article(article_title, samples)
+    try:
+        sample_repo.write_article(article_title, samples)
+    except:
+        print("Error during processing article '%s'" % article_title)
+        raise
     return
 
 def main():

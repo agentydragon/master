@@ -22,7 +22,7 @@ def write_relations(title, relation, samples):
 
     # Check that there are no duplicate samples.
     if len(set(map(json.dumps, samps))) != len(samps):
-        raise
+        raise Exception('Samples were reduced')
 
     with open(article_relation_to_path(title, relation), 'w') as f:
         json.dump({'samples': samps}, f)
