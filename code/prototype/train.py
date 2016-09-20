@@ -54,6 +54,7 @@ random.shuffle(samples)
 n_train = round(len(samples) * 0.5)
 train = samples[:n_train]
 test = samples[n_train:]
+print("N training samples:", len(train), "test:", len(test))
 
 print('Training...')
 classifier = nltk.NaiveBayesClassifier.train(train)
