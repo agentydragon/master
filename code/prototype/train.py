@@ -27,7 +27,7 @@ relations = [
     'P57', # director
 ]
 
-relations = sample_repo.all_relations()
+# relations = sample_repo.all_relations()
 
 def sample_to_features_label(sample):
     features = {}
