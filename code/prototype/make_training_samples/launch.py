@@ -2,12 +2,14 @@
 
 from py import pbs_util
 from py import paths
+from py import file_util
 import argparse
 import subprocess
 import datetime
 
 now = datetime.datetime.now()
 log_base_dir = paths.LOG_PATH + "/make-training-samples/" + now.strftime('%Y%m%d%H%M%S')
+file_util.ensure_dir(log_base_dir)
 
 def launch_job_for_slice(i, articles_slice, wikidata_endpoint, parallelism):
     job_command = ['prototype/make_training_samples/make_training_samples',
@@ -28,8 +30,8 @@ def launch_job_for_slice(i, articles_slice, wikidata_endpoint, parallelism):
         node_spec="nodes=1:brno:ppn=" + str(max(2, parallelism)) + ",mem=2gb",
         job_name="make-training-samples",
         job_command=job_command,
-        output_path=log_base_dir + "/" + str(i) + ".o",
-        error_path=log_base_dir + "/" + str(i) + ".e"
+        output_path=(log_base_dir + ("/%04d.o" % i)),
+        error_path=(log_base_dir + ("/%04d.e" % i))
     )
     print("Launched make-training-samples:", job.job_id)
 

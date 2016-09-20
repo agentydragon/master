@@ -14,4 +14,4 @@ WIKI_ARTICLES_PLAINTEXTS_DIR=WORK_DIR + "/wiki-articles-plaintexts"
 
 JSON_CACHE_DIR = WORK_DIR + '/json-caches'
 
-LOG_PATH = STORAGE_HOME + "/logs/"
+LOG_PATH = STORAGE_HOME + "/logs"

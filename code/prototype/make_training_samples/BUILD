@@ -37,6 +37,7 @@ py_binary(
     deps = [
         "//py:pbs_util_lib",
         "//py:paths_lib",
+        "//py:file_util_lib",
     ],
     data = [
         ":make_training_samples",
