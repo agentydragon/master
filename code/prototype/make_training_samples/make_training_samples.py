@@ -94,6 +94,7 @@ def process_article(article_title):
             samples[p].append(make_training_sample(document, sentence, s, p, o))
 
     sample_repo.write_article(article_title, samples)
+    return
 
 def main():
     parser = argparse.ArgumentParser(description='TODO')

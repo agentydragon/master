@@ -4,9 +4,7 @@ from py import pbs_util
 import argparse
 import subprocess
 
-def launch_job_for_slice(articles_slice, wikidata_endpoint):
-    parallelism = 4
-
+def launch_job_for_slice(articles_slice, wikidata_endpoint, parallelism):
     job_command = ['prototype/make_training_samples/make_training_samples',
                    '--parallelism', str(parallelism)]
     if wikidata_endpoint:
@@ -34,6 +32,7 @@ def main():
     parser.add_argument('--max_articles', type=int)
     parser.add_argument('--articles_per_job', type=int)
     parser.add_argument('--wikidata_endpoint')
+    parser.add_argument('--local_parallelism', type=int, default=1)
     # TODO: add max_jobs
     args = parser.parse_args()
 
@@ -51,7 +50,8 @@ def main():
             slices.append(article_names[i:i+args.articles_per_job])
 
     for articles_slice in slices:
-        launch_job_for_slice(articles_slice, args.wikidata_endpoint)
+        launch_job_for_slice(articles_slice, args.wikidata_endpoint,
+                             parallelism=args.local_parallelism)
 
 if __name__ == '__main__':
     main()
