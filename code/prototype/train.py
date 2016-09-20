@@ -135,7 +135,8 @@ classifier.show_most_informative_features(10)
 print('Accuracy:', nltk.classify.accuracy(classifier, test))
 
 print('Training decision tree...')
-classifier = nltk.classify.decisiontree.DecisionTreeClassifier.train(train)
+classifier = nltk.classify.decisiontree.DecisionTreeClassifier.train(
+    train, depth_cutoff=4, binary=True)
 # classifier.show_most_informative_features(10)
 print('Accuracy:', nltk.classify.accuracy(classifier, test))
 
