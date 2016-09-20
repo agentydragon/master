@@ -67,7 +67,7 @@ def launch(walltime, node_spec, job_name, script):
                     '-l', node_spec,
                     '-m', 'abe',
                     '-N', job_name]
-    print(qsub_command)
+    # print(qsub_command)
     job_script = (JOBSCRIPT_HEADER + script)
 
     js_path = job_name + '.sh'
