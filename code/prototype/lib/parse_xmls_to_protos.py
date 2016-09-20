@@ -161,7 +161,13 @@ def document_to_proto(root, spotlight_json, plaintext):
             this_sentence.tokens.append(this_token)
         this_sentence.text = plaintext[sentence_begin:sentence_end]
 
-    for coreference_tag in root.find('document').find('coreference').findall('coreference'):
+    coreferences_tag = root.find('document').find('coreference')
+    # Coreference tag may be missing.
+    if coreferences_tag:
+        coreference_tags = coreferences_tag.findall('coreference')
+    else:
+        coreference_tags = []
+    for coreference_tag in coreference_tags:
         # coreference = document.coreferences.add()
         coreference = sentence.Coreference(
             mentions = [],

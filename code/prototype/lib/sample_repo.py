@@ -18,9 +18,12 @@ def article_relation_to_path(title, relation):
 
 def write_relations(title, relation, samples):
     # TODO: richer samples
-    samps = []
-    for sample in samples:
-        samps.append(sample.to_json())
+    samps = [sample.to_json() for sample in samples]
+
+    # Check that there are no duplicate samples.
+    if len(set(map(json.dumps, samps))) != len(samps):
+        raise
+
     with open(article_relation_to_path(title, relation), 'w') as f:
         json.dump({'samples': samps}, f)
 
@@ -28,7 +31,6 @@ def write_article(title, samples):
     for relation in samples.keys():
         write_relations(title, relation, samples[relation])
 
-import glob
 def load_samples(relation):
     samples = []
     for root, subdirs, files in os.walk(base_dir + '/' + relation + '/positive'):
@@ -36,8 +38,7 @@ def load_samples(relation):
             filename = root + '/' + f
             with open(filename) as f:
                 batch = json.load(f)['samples']
-                for sample in batch:
-                    samples.append(training_sample.TrainingSample.from_json(sample))
+            samples.extend(map(training_sample.TrainingSample.from_json, batch))
     return samples
 
 def all_relations():

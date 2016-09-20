@@ -10,14 +10,14 @@ def launch_job_for_slice(articles_slice, wikidata_endpoint):
         job_command.extend(['--wikidata_endpoint', wikidata_endpoint])
     for article in articles_slice:
         job_command.extend(['--articles', article])
-    job_id = pbs_util.launch_job(
+    job = pbs_util.launch_job(
         # TODO: calculate walltime; parallelize
         walltime="04:00:00",
         node_spec="nodes=1:brno:ppn=2,mem=2gb",
         job_name="make-training-samples",
         job_command=job_command
     )
-    print("Launched add-parses:", job_id)
+    print("Launched make-training-samples:", job.job_id)
 
 def main():
     parser = argparse.ArgumentParser(description='TODO')

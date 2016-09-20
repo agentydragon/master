@@ -10,6 +10,6 @@ samples = sample_repo.load_samples(mother)
 
 for sample in samples:
     lemmas = []
-    for token in sample.sentence.tokens:
+    for i, token in enumerate(sample.sentence.tokens):
         lemmas.append(token.lemma)
     print(" ".join(lemmas))

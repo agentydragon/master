@@ -102,7 +102,7 @@ def main():
     args = parser.parse_args()
 
     global wikidata_client
-    wikidata_client = wikidata.WikidataClient(args.wikidata_endpoint)
+    wikidata_client = wikidata.WikidataClient(args.wikidata_endpoint or None)
 
     for article in args.articles:
         process_article(article)

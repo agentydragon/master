@@ -17,7 +17,7 @@ class TrainingSample(recordclass("TrainingSample",
 
     @classmethod
     def from_json(klass, json):
-        return klass(
+        self = klass(
             relation=json['relation'],
             positive=json['positive'],
             sentence=TrainingSampleParsedSentence.from_json(json['sentence']),
@@ -26,6 +26,16 @@ class TrainingSample(recordclass("TrainingSample",
             subject_token_indices=json['subject_token_indices'],
             object_token_indices=json['object_token_indices'],
         )
+
+        # Check that token indices look alright.
+        for index in self.subject_token_indices:
+            if index not in range(len(self.sentence.tokens)):
+                raise
+        for index in self.object_token_indices:
+            if index not in range(len(self.sentence.tokens)):
+                raise
+
+        return self
 
 class TrainingSampleParsedSentence(recordclass("TrainingSampleParsedSentence",
                                                ["text", "tokens"])):
@@ -39,7 +49,7 @@ class TrainingSampleParsedSentence(recordclass("TrainingSampleParsedSentence",
     def from_json(klass, json):
         return klass(
             text=json['text'],
-            tokens=map(TrainingSampleSentenceToken.from_json, json['tokens'])
+            tokens=list(map(TrainingSampleSentenceToken.from_json, json['tokens']))
         )
 
 class TrainingSampleSentenceToken(recordclass("TrainingSampleSentenceToken",
