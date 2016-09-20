@@ -32,7 +32,9 @@ relations = [
 def sample_to_features_label(sample):
     features = {}
     for token in sample.sentence.tokens:
-        features['word_' + token.lemma.lower()] = 1
+        features['lemma_' + token.lemma.lower()] = 1
+        word = sample.sentence.text[token.start_offset:token.end_offset]
+        features['word_' + word] = 1
     return (features, sample.relation)
 
 #samples = sample_repo.load_samples(mother)
@@ -42,26 +44,28 @@ def sample_to_features_label(sample):
 #        lemmas.append(token.lemma)
 #    print(" ".join(lemmas))
 
+def cull_uninformative_features(samples):
+    feature_counts = {}
+    for sample in samples:
+        for feature in list(sample[0].keys()):
+            if feature not in feature_counts:
+                feature_counts[feature] = 0
+            feature_counts[feature] += 1
+
+    min_feature_occurrences = 10
+
+    for sample in samples:
+        for feature in list(sample[0].keys()):
+            if feature_counts[feature] < min_feature_occurrences:
+                del sample[0][feature]
+
 samples = []
 for relation in relations:
     print('Loading relation', relation, '...')
     for sample in sample_repo.load_samples(relation):
         samples.append(sample_to_features_label(sample))
 
-# Remove features used in <2 samples.
-feature_counts = {}
-for sample in samples:
-    for feature in list(sample[0].keys()):
-        if feature not in feature_counts:
-            feature_counts[feature] = 0
-        feature_counts[feature] += 1
-
-min_feature_occurrences = 10
-
-for sample in samples:
-    for feature in list(sample[0].keys()):
-        if feature_counts[feature] < min_feature_occurrences:
-            del sample[0][feature]
+cull_uninformative_features(samples)
 
 print("Samples:", len(samples))
 
