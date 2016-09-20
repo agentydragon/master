@@ -48,3 +48,6 @@ truth = [(potus, 'P1001', united_states),
          (barack_obama, 'P39', potus)]
 
 assert true_triples == truth
+
+assert client.relation_exists(barack_obama, 'P39', potus)
+assert not client.relation_exists(barack_obama, 'P40', potus)

@@ -30,6 +30,10 @@ def write_relations(title, relation, samples):
     with open(article_relation_to_path(title, relation), 'w') as f:
         json.dump({'samples': samps}, f)
 
+def write_negative_samples(relation, samples):
+    with open(base_dir + '/' + relation + '/negatives.json', 'w') as f:
+        json.dump({'samples': samples}, f)
+
 def write_article(title, samples):
     for relation in samples.keys():
         write_relations(title, relation, samples[relation])

@@ -117,3 +117,9 @@ class WikidataClient(object):
 #        self.name_cache[property_id] = name
 #        self.save_cache()
         return name
+
+    def relation_exists(self, s, p, o):
+        query = """
+            ASK { wd:%s wdp:%s wd:%s }
+        """ % (s, p, o)
+        return self.wikidata_client.get_results(query)['boolean']

@@ -33,11 +33,13 @@ class Document(k("Document", ["title", "text", # "corenlp_xml", "spotlight_json"
         token = sentence.find_token_by_id(mention.end_word_id - 1)
         return token.end_offset
 
+    def get_spotlight_mentions_in_sentence(self, sentence):
+        return self.find_spotlight_mentions_between(sentence.start_offset(),
+                                                    sentence.end_offset())
+
 SpotlightMention = k("SpotlightMention",
-                              ["start_offset",
-                              "end_offset",
-                              "surface_form",
-                              "uri"])
+                     ["start_offset", "end_offset", "surface_form", "uri"])
+
 class DocumentSentence(k("DocumentSentence", ["id", "text", "tokens"])):
     def start_offset(self):
         return self.tokens[0].start_offset
