@@ -1,6 +1,8 @@
 from prototype.lib import sample_repo
 import random
 import nltk
+import nltk.classify.decisiontree
+import nltk.classify.maxent
 
 relations = [
     'P25', # mother
@@ -46,7 +48,7 @@ def sample_to_features_label(sample):
             continue
 
         features['lemma_' + token.lemma.lower()] = 1
-        word = sample.sentence.text[token.start_offset:token.end_offset]
+        word = sample.sentence.text[token.start_offset:token.end_offset].lower()
         features['word_' + word] = 1
 
     # window before subject
@@ -54,36 +56,36 @@ def sample_to_features_label(sample):
         idx = min(sample.subject_token_indices) - i
         if idx not in range(len(sample.sentence.tokens)):
             continue
-        features['subject_window_left_%d_lemma_%s' % (i, token.lemma)] = 1
-        word = sample.sentence.text[token.start_offset:token.end_offset]
-        features['subject_window_left_%d_word_%s' % (i, word)] = 1
+        features['subject_window_%d_lemma_%s' % (i, token.lemma)] = 1
+        word = sample.sentence.text[token.start_offset:token.end_offset].lower()
+        features['subject_window_%d_word_%s' % (i, word)] = 1
 
     # window before object
     for i in range(-2, 0):
         idx = min(sample.object_token_indices) - i
         if idx not in range(len(sample.sentence.tokens)):
             continue
-        features['object_window_left_%d_lemma_%s' % (i, token.lemma)] = 1
-        word = sample.sentence.text[token.start_offset:token.end_offset]
-        features['object_window_left_%d_word_%s' % (i, word)] = 1
+        features['object_window_%d_lemma_%s' % (i, token.lemma)] = 1
+        word = sample.sentence.text[token.start_offset:token.end_offset].lower()
+        features['object_window_%d_word_%s' % (i, word)] = 1
 
     # window after subject
     for i in range(1, 3):
         idx = max(sample.subject_token_indices) + i
         if idx not in range(len(sample.sentence.tokens)):
             continue
-        features['subject_window_right_%d_lemma_%s' % (i, token.lemma)] = 1
-        word = sample.sentence.text[token.start_offset:token.end_offset]
-        features['subject_window_right_%d_word_%s' % (i, word)] = 1
+        features['subject_window_%d_lemma_%s' % (i, token.lemma)] = 1
+        word = sample.sentence.text[token.start_offset:token.end_offset].lower()
+        features['subject_window_%d_word_%s' % (i, word)] = 1
 
     # window after object
     for i in range(1, 3):
         idx = max(sample.object_token_indices) + i
         if idx not in range(len(sample.sentence.tokens)):
             continue
-        features['object_window_right_%d_lemma_%s' % (i, token.lemma)] = 1
-        word = sample.sentence.text[token.start_offset:token.end_offset]
-        features['object_window_right_%d_word_%s' % (i, word)] = 1
+        features['object_window_%d_lemma_%s' % (i, token.lemma)] = 1
+        word = sample.sentence.text[token.start_offset:token.end_offset].lower()
+        features['object_window_%d_word_%s' % (i, word)] = 1
 
     return (features, sample.relation)
 
@@ -125,7 +127,17 @@ train = samples[:n_train]
 test = samples[n_train:]
 print("N training samples:", len(train), "test:", len(test))
 
-print('Training...')
+print('Training naive Bayes...')
 classifier = nltk.NaiveBayesClassifier.train(train)
-print('Accuracy:', nltk.classify.accuracy(classifier, test))
 classifier.show_most_informative_features(10)
+print('Accuracy:', nltk.classify.accuracy(classifier, test))
+
+print('Training decision tree...')
+classifier = nltk.classify.decisiontree.DecisionTreeClassifier.train(train)
+# classifier.show_most_informative_features(10)
+print('Accuracy:', nltk.classify.accuracy(classifier, test))
+
+print('Training maxent...')
+classifier = nltk.classify.maxent.MaxentClassifier.train(train)
+# classifier.show_most_informative_features(10)
+print('Accuracy:', nltk.classify.accuracy(classifier, test))
