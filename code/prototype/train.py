@@ -87,6 +87,11 @@ def sample_to_features_label(sample):
         word = sample.sentence.text[token.start_offset:token.end_offset].lower()
         features['object_window_%d_word_%s' % (i, word)] = 1
 
+    if min(sample.subject_token_indices) < min(sample.object_token_indices):
+        features['comes_first'] = 'subject'
+    else:
+        features['comes_first'] = 'object'
+
     return (features, sample.relation)
 
 #samples = sample_repo.load_samples(mother)
