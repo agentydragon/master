@@ -22,7 +22,8 @@ def launch_job_for_slice(i, articles_slice, wikidata_endpoint, parallelism):
     # 15 minutes per 100-article job -> 9 seconds/article
     # pessimistic: twice as much, 100 seconds for startup
 
-    walltime_estimate = str(round((9 * len(articles_slice) / float(parallelism)) * 2 + 100))  # or default: "04:00:00"
+    # walltime_estimate = str(round((9 * len(articles_slice) / float(parallelism)) * 2 + 100))  # or default: "04:00:00"
+    walltime_estimate = str(round((30 * len(articles_slice) / float(parallelism)) * 2 + 100))  # or default: "04:00:00"
 
     job = pbs_util.launch_job(
         # TODO: parallelize on one node
