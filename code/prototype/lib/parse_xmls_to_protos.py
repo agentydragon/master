@@ -58,6 +58,12 @@ def add_single_referenced_entities_to_coreferences(document):
 
 def spotlight_to_mentions(spotlight_json):
     mentions = []
+
+    # TODO: fix?
+    if 'Resources' not in spotlight_json:
+        print("WARN: no resources returned by Spotlight")
+        return []
+
     for mention_json in spotlight_json['Resources']:
         if not mention_json['@surfaceForm']:
             # TODO HACK?

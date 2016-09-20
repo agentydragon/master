@@ -24,7 +24,7 @@ class SPARQLClient(object):
         try:
             self.client.setQuery(STANDARD_PREFIXES + query)
             return self.client.query().convert()
-        except (ConnectionResetError, OSError, urllib.error.URLError) as e:
+        except (ConnectionResetError, OSError, urllib.error.URLError, SPARQLWrapper.SPARQLExceptions.EndPointInternalError) as e:
             if retry:
                 # Try retrying in case of transient failures
                 print(e)

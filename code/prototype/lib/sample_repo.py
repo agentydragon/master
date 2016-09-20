@@ -5,6 +5,9 @@ import os.path
 from prototype.lib import article_repo
 from prototype.lib import training_sample
 
+class SavingError(Exception):
+    pass
+
 base_dir = '/storage/brno7-cerit/home/prvak/data/relation-samples'
 
 def article_relation_to_path(title, relation):
@@ -22,7 +25,7 @@ def write_relations(title, relation, samples):
 
     # Check that there are no duplicate samples.
     if len(set(map(json.dumps, samps))) != len(samps):
-        raise Exception('Samples were reduced')
+        raise SavingError('Samples were reduced')
 
     with open(article_relation_to_path(title, relation), 'w') as f:
         json.dump({'samples': samps}, f)

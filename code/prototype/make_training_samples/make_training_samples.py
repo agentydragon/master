@@ -95,8 +95,12 @@ def process_article(article_title):
 
     try:
         sample_repo.write_article(article_title, samples)
+    except sample_repo.SavingError as e:
+        print("Error during processing article '%s'" % article_title)
+        print(e)
     except:
         print("Error during processing article '%s'" % article_title)
+        print(e)
         raise
     return
 
