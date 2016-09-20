@@ -7,7 +7,7 @@ import subprocess
 import datetime
 
 now = datetime.datetime.now()
-base_log_dir = paths.LOG_PATH + "/make-training-samples/" + now.strptime('%Y%m%d%H%M%S')
+log_base_dir = paths.LOG_PATH + "/make-training-samples/" + now.strftime('%Y%m%d%H%M%S')
 
 def launch_job_for_slice(i, articles_slice, wikidata_endpoint, parallelism):
     job_command = ['prototype/make_training_samples/make_training_samples',

@@ -69,9 +69,9 @@ def launch(walltime, node_spec, job_name, script, error_path=None, output_path=N
                     '-N', job_name
                     ]
     if error_path:
-        qsub_command.extend('-e', error_path)
+        qsub_command.extend(['-e', error_path])
     if output_path:
-        qsub_command.extend('-o', output_path)
+        qsub_command.extend(['-o', output_path])
     # print(qsub_command)
     job_script = (JOBSCRIPT_HEADER + script)
 
