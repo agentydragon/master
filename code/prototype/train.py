@@ -31,7 +31,13 @@ relations = [
 
 def sample_to_features_label(sample):
     features = {}
-    for token in sample.sentence.tokens:
+    for i, token in enumerate(sample.sentence.tokens):
+        # debias
+        if i in sample.subject_token_indices:
+            continue
+        if i in sample.object_token_indices:
+            continue
+
         features['lemma_' + token.lemma.lower()] = 1
         word = sample.sentence.text[token.start_offset:token.end_offset]
         features['word_' + word] = 1
@@ -65,11 +71,11 @@ for relation in relations:
     for sample in sample_repo.load_samples(relation):
         samples.append(sample_to_features_label(sample))
 
+random.shuffle(samples)
 cull_uninformative_features(samples)
 
 print("Samples:", len(samples))
 
-random.shuffle(samples)
 n_train = round(len(samples) * 0.5)
 train = samples[:n_train]
 test = samples[n_train:]
