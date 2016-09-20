@@ -8,24 +8,30 @@ relations = [
     'P7', # brother
     'P40', # child
     'P26', # spouse
-    'P108', # employer
-    'P710', # participant
-    'P463', # member of
-    'P27', # country of citizenship
-    'P36', # capital
-    'P31', # instance of
-    'P1066', # student of
-    'P551', # residence
-    'P112', # founder
-    'P115', # follows
-    'P175', # performer
-    'P457', # member of political party
-    'P50', # author
-    'P19', # place of birth
-    'P361', # part of
-    'P86', # composer
-    'P57', # director
 ]
+#     'P108', # employer
+#     'P710', # participant
+#     'P463', # member of
+#     'P27', # country of citizenship
+#     'P36', # capital
+#     'P31', # instance of
+#     'P1066', # student of
+#     'P551', # residence
+#     'P112', # founder
+#     'P115', # follows
+#     'P175', # performer
+#     'P457', # member of political party
+#     'P50', # author
+#     'P19', # place of birth
+#     'P361', # part of
+#     'P86', # composer
+#     'P57', # director
+#     'P463', # member of
+#     'P69', # educated at
+#     'P159', # headquarters location
+#     'P140', # religion
+#     'P800', # notable work
+# ]
 
 # relations = sample_repo.all_relations()
 
