@@ -9,6 +9,7 @@ relations = [
     'P40', # child
     'P26', # spouse
 ]
+
 #     'P108', # employer
 #     'P710', # participant
 #     'P463', # member of
@@ -47,6 +48,43 @@ def sample_to_features_label(sample):
         features['lemma_' + token.lemma.lower()] = 1
         word = sample.sentence.text[token.start_offset:token.end_offset]
         features['word_' + word] = 1
+
+    # window before subject
+    for i in range(-2, 0):
+        idx = min(sample.subject_token_indices) - i
+        if idx not in range(len(sample.sentence.tokens)):
+            continue
+        features['subject_window_left_%d_lemma_%s' % (i, token.lemma)] = 1
+        word = sample.sentence.text[token.start_offset:token.end_offset]
+        features['subject_window_left_%d_word_%s' % (i, word)] = 1
+
+    # window before object
+    for i in range(-2, 0):
+        idx = min(sample.object_token_indices) - i
+        if idx not in range(len(sample.sentence.tokens)):
+            continue
+        features['object_window_left_%d_lemma_%s' % (i, token.lemma)] = 1
+        word = sample.sentence.text[token.start_offset:token.end_offset]
+        features['object_window_left_%d_word_%s' % (i, word)] = 1
+
+    # window after subject
+    for i in range(1, 3):
+        idx = max(sample.subject_token_indices) + i
+        if idx not in range(len(sample.sentence.tokens)):
+            continue
+        features['subject_window_right_%d_lemma_%s' % (i, token.lemma)] = 1
+        word = sample.sentence.text[token.start_offset:token.end_offset]
+        features['subject_window_right_%d_word_%s' % (i, word)] = 1
+
+    # window after object
+    for i in range(1, 3):
+        idx = max(sample.object_token_indices) + i
+        if idx not in range(len(sample.sentence.tokens)):
+            continue
+        features['object_window_right_%d_lemma_%s' % (i, token.lemma)] = 1
+        word = sample.sentence.text[token.start_offset:token.end_offset]
+        features['object_window_right_%d_word_%s' % (i, word)] = 1
+
     return (features, sample.relation)
 
 #samples = sample_repo.load_samples(mother)
