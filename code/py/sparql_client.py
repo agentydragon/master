@@ -1,4 +1,5 @@
 import SPARQLWrapper
+import time
 
 STANDARD_PREFIXES = """
 PREFIX wd: <http://www.wikidata.org/entity/>
@@ -17,6 +18,14 @@ class SPARQLClient(object):
         self.client = SPARQLWrapper.SPARQLWrapper(endpoint)
         self.client.setReturnFormat(SPARQLWrapper.JSON)
 
-    def get_results(self, query):
-        self.client.setQuery(STANDARD_PREFIXES + query)
-        return self.client.query().convert()
+    def get_results(self, query, retry=True):
+        try:
+            self.client.setQuery(STANDARD_PREFIXES + query)
+            return self.client.query().convert()
+        except ConnectionResetError, OSError:
+            if retry:
+                # Try retrying in case of transient failures
+                time.sleep(10)
+                return self.get_results(query, retry=False)
+            else:
+                raise
