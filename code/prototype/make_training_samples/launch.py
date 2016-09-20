@@ -1,10 +1,15 @@
 #!/usr/bin/python3
 
 from py import pbs_util
+from py import paths
 import argparse
 import subprocess
+import datetime
 
-def launch_job_for_slice(articles_slice, wikidata_endpoint, parallelism):
+now = datetime.datetime.now()
+base_log_dir = paths.LOG_PATH + "/make-training-samples/" + now.strptime('%Y%m%d%H%M%S')
+
+def launch_job_for_slice(i, articles_slice, wikidata_endpoint, parallelism):
     job_command = ['prototype/make_training_samples/make_training_samples',
                    '--parallelism', str(parallelism)]
     if wikidata_endpoint:
@@ -22,7 +27,9 @@ def launch_job_for_slice(articles_slice, wikidata_endpoint, parallelism):
         walltime=walltime_estimate,
         node_spec="nodes=1:brno:ppn=" + str(max(2, parallelism)) + ",mem=2gb",
         job_name="make-training-samples",
-        job_command=job_command
+        job_command=job_command,
+        output_path=log_base_dir + "/" + str(i) + ".o",
+        error_path=log_base_dir + "/" + str(i) + ".e"
     )
     print("Launched make-training-samples:", job.job_id)
 
@@ -49,8 +56,8 @@ def main():
         for i in range(0, len(article_names), args.articles_per_job):
             slices.append(article_names[i:i+args.articles_per_job])
 
-    for articles_slice in slices:
-        launch_job_for_slice(articles_slice, args.wikidata_endpoint,
+    for i, articles_slice in enumerate(slices):
+        launch_job_for_slice(i, articles_slice, args.wikidata_endpoint,
                              parallelism=args.local_parallelism)
 
 if __name__ == '__main__':

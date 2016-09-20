@@ -57,7 +57,7 @@ class Job(object):
         print("Killing", self.job_id)
         subprocess.check_output(['qdel', self.job_id])
 
-def launch(walltime, node_spec, job_name, script):
+def launch(walltime, node_spec, job_name, script, error_path=None, output_path=None):
     """
     Returns:
         PBS job ID (str)
@@ -66,7 +66,12 @@ def launch(walltime, node_spec, job_name, script):
                     '-l', 'walltime=' + walltime,
                     '-l', node_spec,
                     '-m', 'abe',
-                    '-N', job_name]
+                    '-N', job_name
+                    ]
+    if error_path:
+        qsub_command.extend('-e', error_path)
+    if output_path:
+        qsub_command.extend('-o', output_path)
     # print(qsub_command)
     job_script = (JOBSCRIPT_HEADER + script)
 
@@ -89,5 +94,8 @@ def launch(walltime, node_spec, job_name, script):
         sys.exit(1)
     return Job(stdoutdata.strip())
 
-def launch_job(walltime, node_spec, job_name, job_command):
-    return launch(walltime, node_spec, job_name, ' '.join(map(shlex.quote, job_command)))
+def launch_job(walltime, node_spec, job_name, job_command,
+               error_path=None, output_path=None):
+    command = ' '.join(map(shlex.quote, job_command))
+    return launch(walltime, node_spec, job_name, command,
+                  error_path=error_path, output_path=output_path)
