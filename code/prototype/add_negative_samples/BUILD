@@ -18,10 +18,8 @@ py_binary(
         "launch.py",
     ],
     deps = [
-        "//py:pbs_util_lib",
-        "//py:paths_lib",
-        "//py:file_util_lib",
         "//prototype/lib:sample_repo_lib",
+        "//prototype/lib:mapper_lib",
     ],
     data = [
         ":add_negative_samples",
