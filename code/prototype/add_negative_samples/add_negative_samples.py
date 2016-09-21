@@ -5,16 +5,12 @@ import argparse
 import multiprocessing
 import itertools
 
-def generate_negatives_for_relation(article_names, relation, count,
+documents = None
+
+def generate_negatives_for_relation(relation, count,
                                     wikidata_endpoint):
     wikidata_client = wikidata.WikidataClient(wikidata_endpoint or None)
 
-    documents = []
-    for article_title in article_names:
-        document = sample_generation.try_load_document(article_title)
-        if not document:
-            continue
-        documents.append(document)
 
     samples = []
     for i in range(count):
@@ -27,7 +23,7 @@ def generate_negatives_for_relation(article_names, relation, count,
 def ll(x):
     return generate_negatives_for_relation(*x)
 
-def process_relation(pool, relation, article_names, count_per_relation,
+def process_relation(pool, relation, count_per_relation,
                      parallelism, wikidata_endpoint):
 
     wikidata_client = wikidata.WikidataClient(wikidata_endpoint or None)
@@ -50,7 +46,7 @@ def process_relation(pool, relation, article_names, count_per_relation,
 
     pool_parts = list(map(
         lambda pool_part: (
-            article_names, relation, len(pool_part), wikidata_endpoint
+            relation, len(pool_part), wikidata_endpoint
         ),
         pool_parts
     ))
@@ -78,10 +74,19 @@ def main():
     else:
         relations = args.relation
 
+    # Load all documents.
+    global documents
+    documents = []
+    for article_title in article_names:
+        document = sample_generation.try_load_document(article_title)
+        if not document:
+            continue
+        documents.append(document)
+
     pool = multiprocessing.Pool(args.parallelism)
 
     for relation in relations:
-        process_relation(pool, relation, article_names,
+        process_relation(pool, relation,
                          args.count_per_relation, args.parallelism,
                          args.wikidata_endpoint)
 
