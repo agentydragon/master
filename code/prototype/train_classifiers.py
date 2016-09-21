@@ -1,5 +1,6 @@
 from prototype.lib import sample_repo
 from py import paths
+from py import wikidata
 from py import file_util
 import numpy
 from scipy import sparse
@@ -72,8 +73,12 @@ def sample_to_features_label(sample):
     features = sample_to_features(sample)
     return (features, sample.positive)
 
+wikidata_client = wikidata.WikidataClient()
+
 def train_classifier_for_relation(relation):
-    print('Training classifier for relation:', relation)
+    print('Training classifier for relation:',
+          relation,
+          wikidata_client.get_name(relation))
 
     relation_samples = sample_repo.load_samples(relation)
     positive_count = len([sample for sample in relation_samples

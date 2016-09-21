@@ -84,6 +84,7 @@ py_binary(
         "//prototype/lib:sample_repo_lib",
         "//py:paths_lib",
         "//py:file_util_lib",
+        "//py:wikidata_lib",
     ],
     default_python_version = "PY3",
     srcs_version = "PY3",
