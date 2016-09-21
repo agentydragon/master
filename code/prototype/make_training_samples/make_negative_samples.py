@@ -2,15 +2,15 @@ from prototype.lib import sample_repo
 from prototype.make_training_samples import sample_generation
 from py import wikidata
 import argparse
+import multiprocessing
 
 def generate_negatives_for_relation(article_names, relation, count, wikidata_client):
-    samples = []
-    for i in range(count):
-        print(i)
-        sample = sample_generation.sample_negative(article_names,
-                                                   relation,
-                                                   wikidata_client).to_json()
-        samples.append(sample)
+    pool = multiprocessing.Pool(4)
+    def sample_negative():
+        return sample_generation.sample_negative(article_names,
+                                                 relation,
+                                                 wikidata_client).to_json()
+    samples = pool.map(sample_negative, range(count))
     sample_repo.write_negative_samples(relation, samples)
     print("Produced negatives for", relation)
 
