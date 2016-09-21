@@ -12,3 +12,10 @@
 
 4. Make training samples
 	bazel run //prototype/make_training_samples -- 'George Washington'
+		%-- TODO FIX SAMPLES
+
+5. Join positive samples
+	bazel run //prototype/make_training_samples:join_positives
+
+5. Make negative samples
+	bazel run //prototype/make_training_samples:make_negative_samples

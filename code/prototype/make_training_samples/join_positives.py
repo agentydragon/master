@@ -1,6 +1,4 @@
 from prototype.lib import sample_repo
-from prototype.make_training_samples import sample_generation
-from py import wikidata
 import argparse
 
 def main():
@@ -9,7 +7,9 @@ def main():
 
     for relation in sample_repo.all_relations():
         samples = sample_repo.load_samples_by_articles(relation)
+        samples = list(map(lambda sample: sample.to_json(), samples))
         sample_repo.write_positive_samples(relation, samples)
+        print(relation, 'positives joined')
 
 if __name__ == '__main__':
     main()
