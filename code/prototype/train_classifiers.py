@@ -76,9 +76,9 @@ def sample_to_features_label(sample):
 wikidata_client = wikidata.WikidataClient()
 
 def train_classifier_for_relation(relation):
+    relation_name = wikidata_client.get_name(relation)
     print('Training classifier for relation:',
-          relation,
-          wikidata_client.get_name(relation))
+          relation, relation_name)
 
     relation_samples = sample_repo.load_samples(relation)
     positive_count = len([sample for sample in relation_samples
@@ -109,7 +109,8 @@ def train_classifier_for_relation(relation):
 
     def plot_roc(fpr, tpr, auc, prefix):
         pyplot.figure()
-        pyplot.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % auc)
+        pyplot.plot(fpr, tpr, label='ROC curve -- %s %s (area = %0.2f)' %
+                    (relation, relation_name, auc))
         pyplot.plot([0, 1], [0, 1], 'k--')
         pyplot.xlim([0.0, 1.0])
         pyplot.ylim([0.0, 1.0])
