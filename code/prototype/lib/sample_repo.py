@@ -63,4 +63,4 @@ def load_samples_by_articles(relation):
     return samples
 
 def all_relations():
-    return os.listdir(base_dir)
+    return list(sorted(os.listdir(base_dir)))
