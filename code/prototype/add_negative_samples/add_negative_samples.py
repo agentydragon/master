@@ -11,7 +11,7 @@ def generate_negatives_for_relation(article_names, relation, count,
 
     samples = []
     for i in range(count):
-        print(i)
+        # print(i)
         samples.append(sample_generation.sample_negative(article_names,
                                                          relation,
                                                          wikidata_client).to_json())
