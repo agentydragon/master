@@ -69,19 +69,22 @@ def sample_negative(article_titles, relation, wikidata_client):
             if len(wikidata_ids) < 2:
                 continue
 
-            # select two random wikidata ids
-            s, o = random.sample(wikidata_ids, 2)
+            for j in range(5):
+                # select two random wikidata ids
+                s, o = random.sample(wikidata_ids, 2)
 
-            # Against reflexive references ("Country is in country").
-            if sentence_wrapper.mentions_in_sentence_overlap(s, o):
-                continue
+                # Against reflexive references ("Country is in country").
+                if sentence_wrapper.mentions_in_sentence_overlap(s, o):
+                    continue
 
-            if wikidata_client.relation_exists(s, relation, o):
-                # skip if we happen to hit it
-                continue
+                if wikidata_client.relation_exists(s, relation, o):
+                    # skip if we happen to hit it
+                    continue
 
-            return sentence_wrapper.make_training_sample(s, relation, o,
-                                                         positive=False)
+                return sentence_wrapper.make_training_sample(s, relation, o,
+                                                             positive=False)
+            # select sentence again
+            continue
         # pick next article
         continue
 

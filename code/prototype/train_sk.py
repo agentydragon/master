@@ -66,8 +66,10 @@ def sample_to_features_label(sample):
     return (features, sample.positive)
 
 relation_samples = sample_repo.load_samples('P25')
-print('Positive:', len(sample for sample in relation_samples if sample.positive)
-print('Negative:', len(sample for sample in relation_samples if not sample.positive)
+print('Positive:', len([sample for sample in relation_samples if
+                       sample.positive]))
+print('Negative:', len([sample for sample in relation_samples if not
+                       sample.positive]))
 
 things = list(map(sample_to_features_label, relation_samples)) # [:10]
 all_features = set()

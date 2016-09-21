@@ -3,11 +3,23 @@ from prototype.make_training_samples import sample_generation
 from py import wikidata
 import argparse
 
+def generate_negatives_for_relation(article_names, relation, count, wikidata_client):
+    samples = []
+    for i in range(count):
+        print(i)
+        sample = sample_generation.sample_negative(article_names,
+                                                   relation,
+                                                   wikidata_client).to_json()
+        samples.append(sample)
+    sample_repo.write_negative_samples(relation, samples)
+    print("Produced negatives for", relation)
+
 def main():
     parser = argparse.ArgumentParser(description='TODO')
     parser.add_argument('--article_list_file', required=True)
     parser.add_argument('--wikidata_endpoint')
     parser.add_argument('--count_per_relation', default=10, type=int)
+    parser.add_argument('--relation')
     args = parser.parse_args()
 
     wikidata_client = wikidata.WikidataClient(args.wikidata_endpoint or None)
@@ -15,15 +27,15 @@ def main():
     with open(args.article_list_file) as f:
         article_names = list(map(lambda line: line.strip(), list(f)))
 
-    for relation in sample_repo.all_relations():
-        samples = []
-        for i in range(args.count_per_relation):
-            sample = sample_generation.sample_negative(article_names,
-                                                        relation,
-                                                        wikidata_client).to_json()
-            samples.append(sample)
-        sample_repo.write_negative_samples(relation, samples)
-        print("Produced negatives for", relation)
+    if not args.relation:
+        for relation in sample_repo.all_relations():
+            generate_negatives_for_relation(article_names, relation,
+                                            args.count_per_relation,
+                                            wikidata_client)
+    else:
+        generate_negatives_for_relation(article_names, args.relation,
+                                        args.count_per_relation,
+                                        wikidata_client)
 
 if __name__ == '__main__':
     main()
