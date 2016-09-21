@@ -16,3 +16,4 @@ JSON_CACHE_DIR = WORK_DIR + '/json-caches'
 
 LOG_PATH = STORAGE_HOME + "/logs"
 CHARTS_PATH = STORAGE_HOME + "/charts"
+MODELS_PATH = STORAGE_HOME  + "/models"

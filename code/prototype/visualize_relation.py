@@ -9,8 +9,8 @@ client = wikidata.WikidataClient()
 def show_all_relations():
     for relation in sample_repo.all_relations():
         samples = sample_repo.load_samples(relation)
-        positive = filter(lambda sample: sample.positive, samples)
-        negative = filter(lambda sample: not sample.positive, samples)
+        positive = list(filter(lambda sample: sample.positive, samples))
+        negative = list(filter(lambda sample: not sample.positive, samples))
         print(relation,
               client.get_name(relation), ":",
               len(samples), "samples",
