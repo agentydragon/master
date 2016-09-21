@@ -28,9 +28,11 @@ class TrainingSample(recordclass("TrainingSample",
         )
 
         # Check that token indices look alright.
+        assert len(self.subject_token_indices) > 0
         for index in self.subject_token_indices:
             if index not in range(len(self.sentence.tokens)):
                 raise
+        assert len(self.object_token_indices) > 0
         for index in self.object_token_indices:
             if index not in range(len(self.sentence.tokens)):
                 raise
