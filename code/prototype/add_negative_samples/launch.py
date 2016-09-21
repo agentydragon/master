@@ -10,15 +10,15 @@ import datetime
 
 now = datetime.datetime.now()
 
-def launch_job_for_slice(i, relations_slice): # , wikidata_endpoint, parallelism):
+def launch_job_for_slice(i, relations_slice, wikidata_endpoint): #, parallelism):
     job_name = 'add-negative-samples'
 
     log_base_dir = paths.LOG_PATH + "/job_name/" + now.strftime('%Y%m%d-%H%M%S')
     file_util.ensure_dir(log_base_dir)
 
     job_command = ['prototype/add_negative_samples/add_negative_samples']
-    #if wikidata_endpoint:
-    #    job_command.extend(['--wikidata_endpoint', wikidata_endpoint])
+    if wikidata_endpoint:
+        job_command.extend(['--wikidata_endpoint', wikidata_endpoint])
     for relation in relations_slice:
         job_command.extend(['--relation', relation])
     job_command.extend(['--count_per_relation', '1000'])
@@ -40,7 +40,7 @@ def launch_job_for_slice(i, relations_slice): # , wikidata_endpoint, parallelism
 def main():
     parser = argparse.ArgumentParser(description='TODO')
     parser.add_argument('--relations_per_job', type=int)
-    # parser.add_argument('--wikidata_endpoint')
+    parser.add_argument('--wikidata_endpoint')
     args = parser.parse_args()
 
     relations = sample_repo.all_relations()
@@ -53,7 +53,7 @@ def main():
             slices.append(relations[i:i+args.relations_per_job])
 
     for i, relation_slice in enumerate(slices):
-        launch_job_for_slice(i, relation_slice)# , args.wikidata_endpoint,
+        launch_job_for_slice(i, relation_slice, args.wikidata_endpoint)
 
 if __name__ == '__main__':
     main()
