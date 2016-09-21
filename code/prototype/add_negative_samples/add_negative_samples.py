@@ -60,7 +60,7 @@ def main():
     else:
         relations = args.relation
 
-    pool = multiprocessing.Pool(parallelism)
+    pool = multiprocessing.Pool(args.parallelism)
 
     for relation in relations:
         process_relation(pool, relation, article_names,
