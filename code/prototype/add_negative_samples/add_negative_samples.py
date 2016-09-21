@@ -20,7 +20,8 @@ def generate_negatives_for_relation(article_names, relation, count,
 def ll(x):
     return generate_negatives_for_relation(*x)
 
-def process_relation(relation, article_names, count_per_relation, parallelism, wikidata_endpoint):
+def process_relation(pool, relation, article_names, count_per_relation,
+                     parallelism, wikidata_endpoint):
     indexes = list(range(count_per_relation))
     pool_parts = []
     per_pool = count_per_relation // parallelism
@@ -30,21 +31,17 @@ def process_relation(relation, article_names, count_per_relation, parallelism, w
         print('pool part', i, len(pool_part))
 
     pool_parts = list(map(
-        lambda pool_part: (article_names, relation, len(pool_part), wikidata_endpoint),
+        lambda pool_part: (
+            article_names, relation, len(pool_part), wikidata_endpoint
+        ),
         pool_parts
     ))
 
-    pool = multiprocessing.Pool(parallelism)
     parts = pool.map(ll, pool_parts)
     all_samples = list(itertools.chain(*parts))
     print(len(all_samples))
-    #parts = map(lambda size: generate_negatives_for_relation(article_names,
-    #                                                         relation, size,
-    #                                                         wikidata_endpoint), pool_parts)
     sample_repo.write_negative_samples(relation, all_samples)
     print("Produced negatives for", relation)
-    #generate_negatives_for_relation(article_names, relation,
-    #                                args.count_per_relation)
 
 def main():
     parser = argparse.ArgumentParser(description='TODO')
@@ -63,8 +60,10 @@ def main():
     else:
         relations = args.relation
 
+    pool = multiprocessing.Pool(parallelism)
+
     for relation in relations:
-        process_relation(relation, article_names,
+        process_relation(pool, relation, article_names,
                          args.count_per_relation, args.parallelism,
                          args.wikidata_endpoint)
 
