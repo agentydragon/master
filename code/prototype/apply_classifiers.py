@@ -10,7 +10,7 @@ from prototype.lib import feature_extraction
 from py import wikidata
 
 # load classifiers
-relation = 'P25'
+relation = 'P101'
 
 with open(paths.MODELS_PATH + "/" + relation + ".pkl", "wb") as f:
     d = pickle.load(f)
@@ -18,7 +18,7 @@ with open(paths.MODELS_PATH + "/" + relation + ".pkl", "wb") as f:
 clf = d['classifier']
 all_features = d['features']
 
-document = sample_generation.try_load_document('George Washington')
+document = sample_generation.try_load_document('Albert Einstein')
 
 document_samples = []
 for sentence in document.sentences:
