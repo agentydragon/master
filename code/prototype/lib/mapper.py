@@ -6,7 +6,8 @@ import datetime
 def launch_in_slices(job_name, items, slice_size,
                      slice_to_commandline,
                      slice_to_walltime=None,
-                     cores=2):
+                     cores=2,
+                     ram='2gb'):
     if not slice_size:
         slices = [items]
     else:
@@ -31,17 +32,19 @@ def launch_in_slices(job_name, items, slice_size,
         launch_job_for_slice(i, job_name, log_base_dir,
                              slice_to_commandline(slice_items),
                              walltime_estimate=str(walltime),
-                             cores=cores)
+                             cores=cores,
+                             ram=ram)
 
 
 def launch_job_for_slice(slice_index, job_name, log_base_dir,
                          job_command,
                          walltime_estimate,
-                         cores=2):
+                         cores=2,
+                         ram='2gb'):
     job = pbs_util.launch_job(
         # TODO: parallelize on one node
         walltime=walltime_estimate,
-        node_spec="nodes=1:brno:ppn=%d,mem=2gb" % (cores),
+        node_spec="nodes=1:brno:ppn=%d,mem=%s" % (cores, ram),
         job_name=job_name,
         job_command=job_command,
         output_path=(log_base_dir + ("/%04d.o" % slice_index)),

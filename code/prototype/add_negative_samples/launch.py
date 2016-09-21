@@ -34,7 +34,8 @@ def main():
                             args.relations_per_job,
                             make_commandline,
                             slice_to_walltime,
-                            cores=max(2, args.local_parallelism))
+                            cores=max(2, args.local_parallelism),
+                            ram='4gb')
 
 if __name__ == '__main__':
     main()
