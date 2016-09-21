@@ -150,6 +150,14 @@ class SentenceWrapper(object):
         wikidata_ids = set()
         for mention in self.document.get_spotlight_mentions_in_sentence(self.sentence):
             wikidata_id = dbpedia.dbpedia_uri_to_wikidata_id(mention.uri)
-            if wikidata_id:
-                wikidata_ids.add(wikidata_id)
+            if not wikidata_id:
+                continue
+
+            # Also check that some tokens actually have this ID.
+            if len(self.find_sentence_token_idxs_of_entity(wikidata_id)) == 0:
+                # TODO: hack
+                continue
+
+            wikidata_ids.add(wikidata_id)
+
         return wikidata_ids
