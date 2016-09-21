@@ -28,7 +28,6 @@ def process_relation(pool, relation, article_names, count_per_relation,
     for i in range(0, count_per_relation, per_pool):
         pool_part = indexes[i:i+per_pool]
         pool_parts.append(pool_part)
-        print('pool part', i, len(pool_part))
 
     pool_parts = list(map(
         lambda pool_part: (
