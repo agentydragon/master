@@ -22,6 +22,12 @@ def ll(x):
 
 def process_relation(pool, relation, article_names, count_per_relation,
                      parallelism, wikidata_endpoint):
+    samples = sample_repo.load_samples(relation)
+    negatives = list(filter(lambda s: not s.positive, samples))
+    if len(negatives) >= count_per_relation:
+        print("all done already")
+        return
+
     indexes = list(range(count_per_relation))
     pool_parts = []
     per_pool = count_per_relation // parallelism
