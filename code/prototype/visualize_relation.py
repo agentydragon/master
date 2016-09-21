@@ -17,6 +17,8 @@ def show_relation(relation):
     html = ""
     html += """
     <style>
+    li.positive { color: darkgreen; }
+    li.negative { color: darkred; }
     .token.subject { text-decoration: underline; color: #999; }
     .token.object { text-style: italic; color: #999; }
     </style>
@@ -24,7 +26,9 @@ def show_relation(relation):
     html += "<h1>" + relation + ": " + client.get_name(relation) + "</h1>"
 
     for sample in samples:
-        html += "<li>" + sample.subject + " " + sample.object + " "
+        html += "<li class='%s'>" % ('positive' if sample.positive else
+                                     'negative')
+        html += sample.subject + " " + sample.object + " "
         # html += sample.sentence.text
         arry = sample.to_json()
         del arry['sentence']['tokens']

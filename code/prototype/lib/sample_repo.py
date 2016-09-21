@@ -34,11 +34,25 @@ def write_negative_samples(relation, samples):
     with open(base_dir + '/' + relation + '/negatives.json', 'w') as f:
         json.dump({'samples': samples}, f)
 
+def write_positive_samples(relation, samples):
+    with open(base_dir + '/' + relation + '/positives.json', 'w') as f:
+        json.dump({'samples': samples}, f)
+
 def write_article(title, samples):
     for relation in samples.keys():
         write_relations(title, relation, samples[relation])
 
 def load_samples(relation):
+    samples = []
+    with open(base_dir + '/' + relation + '/positives.json') as f:
+        batch = json.load(f)['samples']
+        samples.extend(map(training_sample.TrainingSample.from_json, batch))
+    with open(base_dir + '/' + relation + '/negatives.json') as f:
+        batch = json.load(f)['samples']
+        samples.extend(map(training_sample.TrainingSample.from_json, batch))
+    return samples
+
+def load_samples_by_articles(relation):
     samples = []
     for root, subdirs, files in os.walk(base_dir + '/' + relation + '/positive'):
         for f in files:

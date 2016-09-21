@@ -69,3 +69,13 @@ py_binary(
         "//py:wikidata_lib",
     ],
 )
+
+py_binary(
+    name = "join_positives",
+    srcs = [
+        "join_positives.py",
+    ],
+    deps = [
+        "//prototype/lib:sample_repo_lib",
+    ],
+)

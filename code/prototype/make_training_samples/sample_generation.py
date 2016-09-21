@@ -60,27 +60,30 @@ def sample_negative(article_titles, relation, wikidata_client):
         if not document:
             continue
 
-        # select random sentence that has at least 2 mentions in it
-        sentence = random.choice(document.sentences)
-        sentence_wrapper = SentenceWrapper(document, sentence)
+        for i in range(5):
+            # select random sentence that has at least 2 mentions in it
+            sentence = random.choice(document.sentences)
+            sentence_wrapper = SentenceWrapper(document, sentence)
 
-        wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
-        if len(wikidata_ids) < 2:
-            continue
+            wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
+            if len(wikidata_ids) < 2:
+                continue
 
-        # select two random wikidata ids
-        s, o = random.sample(wikidata_ids, 2)
+            # select two random wikidata ids
+            s, o = random.sample(wikidata_ids, 2)
 
-        # Against reflexive references ("Country is in country").
-        if sentence_wrapper.mentions_in_sentence_overlap(s, o):
-            continue
+            # Against reflexive references ("Country is in country").
+            if sentence_wrapper.mentions_in_sentence_overlap(s, o):
+                continue
 
-        if wikidata_client.relation_exists(s, relation, o):
-            # skip if we happen to hit it
-            continue
+            if wikidata_client.relation_exists(s, relation, o):
+                # skip if we happen to hit it
+                continue
 
-        return sentence_wrapper.make_training_sample(s, relation, o,
-                                                     positive=False)
+            return sentence_wrapper.make_training_sample(s, relation, o,
+                                                         positive=False)
+        # pick next article
+        continue
 
 class SentenceWrapper(object):
     def __init__(self, document, sentence):

@@ -120,6 +120,7 @@ samples = []
 for relation in relations:
     print('Loading relation', relation, '...')
     relation_samples = sample_repo.load_samples(relation)
+    relation_samples = list(filter(lambda sample: sample.positive, relation_samples))
     for sample in relation_samples:
         samples.append(sample_to_features_label(sample))
     print(len(relation_samples))
