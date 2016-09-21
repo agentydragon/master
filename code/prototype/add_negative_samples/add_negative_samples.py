@@ -11,7 +11,7 @@ def generate_negatives_for_relation(article_names, relation, count,
 
     documents = []
     for article_title in article_names:
-        document = try_load_document(article_title)
+        document = sample_generation.try_load_document(article_title)
         if not document:
             continue
         documents.append(document)
