@@ -17,6 +17,6 @@ py_binary(
     ],
     data = [
         ":add_spotlight",
-        "//py:pbs_util_lib",
+        "//prototype/lib:mapper_lib",
     ],
 )

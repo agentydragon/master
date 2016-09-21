@@ -16,8 +16,10 @@ py_binary(
     srcs = [
         "launch.py",
     ],
+    deps = [
+        "//prototype/lib:mapper_lib",
+    ],
     data = [
         ":add_parses",
-        "//py:pbs_util_lib",
     ],
 )

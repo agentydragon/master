@@ -1,19 +1,5 @@
-from py import pbs_util
 import argparse
-import subprocess
-
-def launch_job_for_slice(articles_slice):
-    job_command = ['prototype/add_parses/add_parses'] + articles_slice
-    job_id = pbs_util.launch_job(
-        # TODO: calculate walltime; parallelize
-        walltime="01:00:00",
-        # node_spec="nodes=1:brno:ppn=4,mem=8gb",
-        # 8 gigs is not enough
-        node_spec="nodes=1:brno:ppn=4,mem=9gb",
-        job_name="add-parses",
-        job_command=job_command
-    )
-    print("Launched add-parses:", job_id)
+from prototype.lib import mapper
 
 def main():
     parser = argparse.ArgumentParser(description='TODO')
@@ -29,15 +15,16 @@ def main():
     if args.max_articles:
         article_names = article_names[:args.max_articles]
 
-    if not args.articles_per_job:
-        slices = [article_names]
-    else:
-        slices = []
-        for i in range(0, len(article_names), args.articles_per_job):
-            slices.append(article_names[i:i+args.articles_per_job])
+    def make_commandline(articles_slice)
+        return ['prototype/add_parses/add_parses'] + articles_slice
 
-    for articles_slice in slices:
-        launch_job_for_slice(articles_slice)
+    mapper.launch_in_slices('add-parses',
+                            article_names,
+                            args.articles_per_job,
+                            make_commandline,
+                            slice_to_walltime=(lambda s: return "01:00:00"),
+                            cores=4,
+                            ram='9gb')
 
 if __name__ == '__main__':
     main()

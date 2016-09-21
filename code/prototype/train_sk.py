@@ -87,22 +87,8 @@ for i, thing in enumerate(things):
 print(matrix.toarray())
 
 target = [thing[1] for thing in things]
-
-# TODO: train-test split
-
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(
     matrix, target, test_size=0.33, random_state=42)
-
-clf = linear_model.LogisticRegression().fit(X_train, y_train)
-score = clf.decision_function(X_test)
-print(len(y_test))
-print(y_test)
-print(len(score))
-print(score)
-
-fpr, tpr, _ = metrics.roc_curve(y_test, score)
-auc = metrics.auc(fpr, tpr)
-print("Logistic regression AUC:", auc)
 
 def plot_roc(fpr, tpr, auc, prefix):
     pyplot.figure()
@@ -117,21 +103,24 @@ def plot_roc(fpr, tpr, auc, prefix):
     file_util.ensure_dir(d)
     pyplot.savefig(d + "/" + "roc-%s.png" % prefix)
 
-print(fpr, tpr)
-plot_roc(fpr, tpr, auc, "logreg")
+def try_classifier(name, classifier, prefix):
+    clf = classifier.fit(X_train, y_train)
+    score = clf.decision_function(X_test)
 
-predicted = clf.predict(X_test)
-print("Logistic regression accuracy:", numpy.mean(predicted == y_test))
+    fpr, tpr, _ = metrics.roc_curve(y_test, score)
+    auc = metrics.auc(fpr, tpr)
+    print("%s AUC:" % name, auc)
 
-clf = linear_model.SGDClassifier(loss='hinge', penalty='l2', alpha=1e-3,
-                                 n_iter=5, random_state=42).fit(X_train, y_train)
-score = clf.decision_function(X_test)
+    plot_roc(fpr, tpr, auc, prefix)
 
-fpr, tpr, _ = metrics.roc_curve(y_test, score)
-auc = metrics.auc(fpr, tpr)
-print("Linear SVM AUC:", auc)
+    predicted = clf.predict(X_test)
+    print("%s accuracy:" % name, numpy.mean(predicted == y_test))
 
-plot_roc(fpr, tpr, auc, "linear-svm")
+try_classifier('Logistic regression', linear_model.LogisticRegression(),
+               'logreg')
+try_classifier('Linear SVM',
+               linear_model.SGDClassifier(loss='hinge', penalty='l2',
+                                          alpha=1e-3, n_iter=5,
+                                          random_state=42),
+               'linear-svm')
 
-predicted = clf.predict(X_test)
-print("Linear SVM accuracy:", numpy.mean(predicted == y_test))

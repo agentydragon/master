@@ -1,27 +1,5 @@
-from py import pbs_util
 import argparse
-
-def launch_job_for_slice(articles_slice, spotlight_endpoint, force_redo):
-    job_command = ['prototype/add_spotlight/add_spotlight']
-
-    if spotlight_endpoint:
-        job_command.extend(['--spotlight_endpoint', spotlight_endpoint])
-
-    if force_redo:
-        job_command.extend(['--force_redo=true'])
-
-    for name in articles_slice:
-        job_command.append('--articles')
-        job_command.append(name)
-
-    job_id = pbs_util.launch_job(
-        # TODO: calculate walltime; parallelize
-        walltime="01:00:00",
-        node_spec="nodes=1:brno:ppn=1,mem=1gb",
-        job_name="add-spotlight",
-        job_command=job_command
-    )
-    print("Launched add-spotlight:", job_id)
+from prototype.lib import mapper
 
 def main():
     parser = argparse.ArgumentParser(description='TODO')
@@ -39,17 +17,26 @@ def main():
     if args.max_articles:
         article_names = article_names[:args.max_articles]
 
-    if not args.articles_per_job:
-        slices = [article_names]
-    else:
-        slices = []
-        for i in range(0, len(article_names), args.articles_per_job):
-            slices.append(article_names[i:i+args.articles_per_job])
+    def make_commandline(articles_slice):
+        job_command = ['prototype/add_spotlight/add_spotlight']
+        if args.spotlight_endpoint:
+            job_command.extend(['--spotlight_endpoint',
+                                args.spotlight_endpoint])
+        if args.force_redo:
+            job_command.extend(['--force_redo=true'])
 
-    for articles_slice in slices:
-        launch_job_for_slice(articles_slice,
-                             spotlight_endpoint=args.spotlight_endpoint,
-                             force_redo=args.force_redo)
+        for name in articles_slice:
+            job_command.extend(['--articles', name])
+
+        return job_command
+
+    mapper.launch_in_slices('add-spotlight',
+                            article_names,
+                            args.articles_per_job,
+                            make_commandline,
+                            slice_to_walltime=(lambda s: return "01:00:00"),
+                            cores=1,
+                            ram='1gb')
 
 if __name__ == '__main__':
     main()
