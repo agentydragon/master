@@ -7,7 +7,7 @@ from prototype.lib import training_sample
 import random
 
 def try_load_document(article_title):
-    print(article_title)
+    # print(article_title)
     if not article_repo.article_exists(paths.WIKI_ARTICLES_PLAINTEXTS_DIR,
                                        article_title):
         print('article does not exist')
