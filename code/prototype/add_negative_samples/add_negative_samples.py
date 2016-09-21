@@ -9,10 +9,17 @@ def generate_negatives_for_relation(article_names, relation, count,
                                     wikidata_endpoint):
     wikidata_client = wikidata.WikidataClient(wikidata_endpoint or None)
 
+    documents = []
+    for article_title in article_names:
+        document = try_load_document(article_title)
+        if not document:
+            continue
+        documents.append(document)
+
     samples = []
     for i in range(count):
         # print(i)
-        samples.append(sample_generation.sample_negative(article_names,
+        samples.append(sample_generation.sample_negative(documents,
                                                          relation,
                                                          wikidata_client).to_json())
     return samples

@@ -51,13 +51,9 @@ def get_samples_from_document(article_title, wikidata_client):
             samples[p].append(sample)
     return samples
 
-def sample_negative(article_titles, relation, wikidata_client):
+def sample_negative(documents, relation, wikidata_client):
     while True:
-        # select random article and break if it loads okay
-        article_title = random.choice(article_titles)
-        document = try_load_document(article_title)
-        if not document:
-            continue
+        document = random.choice(documents)
 
         for i in range(5):
             # select random sentence that has at least 2 mentions in it
