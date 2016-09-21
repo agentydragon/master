@@ -5,13 +5,13 @@ import argparse
 import multiprocessing
 
 def generate_negatives_for_relation(article_names, relation, count, wikidata_client):
-    pool = multiprocessing.Pool(4)
-    def sample_negative():
+    def make_sample(i):
+        print(i)
         return sample_generation.sample_negative(article_names,
                                                  relation,
                                                  wikidata_client).to_json()
-    samples = pool.map(sample_negative, range(count))
-    sample_repo.write_negative_samples(relation, samples)
+    samples = map(make_sample, range(count))
+    sample_repo.write_negative_samples(relation, list(samples))
     print("Produced negatives for", relation)
 
 def main():
