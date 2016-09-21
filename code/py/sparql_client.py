@@ -27,8 +27,7 @@ class SPARQLClient(object):
         except (ConnectionResetError, OSError, urllib.error.URLError, SPARQLWrapper.SPARQLExceptions.EndPointInternalError) as e:
             if retry:
                 # Try retrying in case of transient failures
-                print(e)
-                print("Retrying in 10 seconds (retries left:", retry, ")")
+                print(e, "Retrying in 10 seconds (retries left:", retry, ")")
                 time.sleep(10)
                 return self.get_results(query, retry=retry-1)
             else:
