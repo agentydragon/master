@@ -82,6 +82,23 @@ py_binary(
     ],
     deps = [
         "//prototype/lib:sample_repo_lib",
+        "//prototype/lib:feature_extraction_lib",
+        "//py:paths_lib",
+        "//py:file_util_lib",
+        "//py:wikidata_lib",
+    ],
+    default_python_version = "PY3",
+    srcs_version = "PY3",
+)
+
+py_binary(
+    name = "apply_classifiers",
+    srcs = [
+        "apply_classifiers.py",
+    ],
+    deps = [
+        "//prototype/lib:sample_repo_lib",
+        "//prototype/lib:feature_extraction_lib",
         "//py:paths_lib",
         "//py:file_util_lib",
         "//py:wikidata_lib",

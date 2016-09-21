@@ -113,3 +113,12 @@ py_library(
         "//py:pbs_util_lib",
     ],
 )
+
+py_library(
+    name = "feature_extraction_lib",
+    srcs = [
+        "feature_extraction.py",
+    ],
+    deps = [
+    ],
+)

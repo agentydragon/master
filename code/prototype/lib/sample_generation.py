@@ -34,13 +34,12 @@ def get_samples_from_document(article_title, wikidata_client):
     samples = {}
 
     for sentence in document.sentences:
-        wikidata_ids = get_sentence_wikidata_ids(document, sentence)
+        sentence_wrapper = SentenceWrapper(document, sentence)
+        wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
 
         for s, p, o in wikidata_client.get_triples_between_entities(wikidata_ids):
             if p not in samples:
                 samples[p] = []
-
-            sentence_wrapper = SentenceWrapper(document, sentence)
 
             # Against reflexive references ("Country is in country").
             if sentence_wrapper.mentions_in_sentence_overlap(s, o):
