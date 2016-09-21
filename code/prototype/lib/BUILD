@@ -88,3 +88,16 @@ py_test(
     srcs_version = "PY3",
     default_python_version = "PY3",
 )
+
+py_library(
+    name = "sample_generation_lib",
+    srcs = [
+        "sample_generation.py",
+    ],
+    deps = [
+        "//py:paths_lib",
+        "//py:dbpedia_lib",
+        ":training_sample_lib",
+        ":parse_xmls_to_protos_lib",
+    ]
+)

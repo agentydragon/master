@@ -1,5 +1,5 @@
 from prototype.lib import sample_repo
-from prototype.make_training_samples import sample_generation
+from prototype.lib import sample_generation
 from py import wikidata
 import argparse
 import multiprocessing
@@ -19,7 +19,7 @@ def main():
     parser.add_argument('--article_list_file', required=True)
     parser.add_argument('--wikidata_endpoint')
     parser.add_argument('--count_per_relation', default=10, type=int)
-    parser.add_argument('--relation')
+    parser.add_argument('--relation', action='append')
     args = parser.parse_args()
 
     wikidata_client = wikidata.WikidataClient(args.wikidata_endpoint or None)
@@ -33,9 +33,10 @@ def main():
                                             args.count_per_relation,
                                             wikidata_client)
     else:
-        generate_negatives_for_relation(article_names, args.relation,
-                                        args.count_per_relation,
-                                        wikidata_client)
+        for relation in args.relation:
+            generate_negatives_for_relation(article_names, relation,
+                                            args.count_per_relation,
+                                            wikidata_client)
 
 if __name__ == '__main__':
     main()

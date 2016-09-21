@@ -111,7 +111,7 @@ def plot_roc(fpr, tpr, auc, prefix):
     pyplot.xlim([0.0, 1.0])
     pyplot.ylim([0.0, 1.0])
     pyplot.xlabel('False Positive Rate')
-    pyplot.xlabel('True Positive Rate')
+    pyplot.ylabel('True Positive Rate')
     pyplot.legend(loc="lower right")
     d = paths.CHARTS_PATH + "/train-roc"
     file_util.ensure_dir(d)
@@ -123,15 +123,15 @@ plot_roc(fpr, tpr, auc, "logreg")
 predicted = clf.predict(X_test)
 print("Logistic regression accuracy:", numpy.mean(predicted == y_test))
 
-#clf = linear_model.SGDClassifier(loss='hinge', penalty='l2', alpha=1e-3,
-#                                 n_iter=5, random_state=42).fit(X_train, y_train)
-#score = clf.decision_function(X_test)
+clf = linear_model.SGDClassifier(loss='hinge', penalty='l2', alpha=1e-3,
+                                 n_iter=5, random_state=42).fit(X_train, y_train)
+score = clf.decision_function(X_test)
 
-#fpr, tpr, _ = metrics.roc_curve(y_test, score)
-#auc = metrics.auc(fpr, tpr)
-#print("Linear SVM AUC:", auc)
-#
-#plot_roc(fpr, tpr, auc, "linear-svm")
-#
-#predicted = clf.predict(X_test)
-#print("Linear SVM accuracy:", numpy.mean(predicted == y_test))
+fpr, tpr, _ = metrics.roc_curve(y_test, score)
+auc = metrics.auc(fpr, tpr)
+print("Linear SVM AUC:", auc)
+
+plot_roc(fpr, tpr, auc, "linear-svm")
+
+predicted = clf.predict(X_test)
+print("Linear SVM accuracy:", numpy.mean(predicted == y_test))

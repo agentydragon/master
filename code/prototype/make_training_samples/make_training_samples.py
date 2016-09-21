@@ -1,5 +1,5 @@
 from prototype.lib import sample_repo
-from prototype.make_training_samples import sample_generation
+from prototype.lib import sample_generation
 from py import wikidata
 import argparse
 import multiprocessing
