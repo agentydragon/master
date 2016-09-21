@@ -66,6 +66,7 @@ def train_classifier_for_relation(relation):
         d = paths.CHARTS_PATH + "/train-roc/" + relation
         file_util.ensure_dir(d)
         pyplot.savefig(d + "/" + "roc-%s.png" % prefix)
+        pyplot.close()
 
     def try_classifier(name, classifier, prefix):
         clf = classifier.fit(X_train, y_train)

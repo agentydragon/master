@@ -99,6 +99,7 @@ py_binary(
     deps = [
         "//prototype/lib:sample_repo_lib",
         "//prototype/lib:feature_extraction_lib",
+        "//prototype/lib:sample_generation_lib",
         "//py:paths_lib",
         "//py:file_util_lib",
         "//py:wikidata_lib",

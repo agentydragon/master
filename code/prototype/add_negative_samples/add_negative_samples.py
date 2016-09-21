@@ -23,11 +23,12 @@ def ll(x):
 def process_relation(pool, relation, article_names, count_per_relation,
                      parallelism, wikidata_endpoint):
 
+    wikidata_client = wikidata.WikidataClient(wikidata_endpoint or None)
     try:
         samples = sample_repo.load_samples(relation)
         negatives = list(filter(lambda s: not s.positive, samples))
         if len(negatives) >= count_per_relation:
-            print("all done already")
+            print(relation, wikidata_client.get_name(relation), "all done already")
             return
     except AssertionError:
         # TODO: horrible!

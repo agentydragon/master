@@ -10,13 +10,13 @@ def try_load_document(article_title):
     # print(article_title)
     if not article_repo.article_exists(paths.WIKI_ARTICLES_PLAINTEXTS_DIR,
                                        article_title):
-        print('article does not exist')
+        print('article', article_title, 'does not exist')
         return
 
     article = article_repo.load_article(paths.WIKI_ARTICLES_PLAINTEXTS_DIR,
                                         article_title)
     if 'corenlp_xml' not in article or 'spotlight_json' not in article:
-        print('incomplete')
+        print('incomplete article', article_title)
         return
 
     return parse_xmls_to_protos.document_to_proto(
