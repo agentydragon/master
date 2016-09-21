@@ -128,6 +128,9 @@ class SentenceWrapper(object):
             object_token_indices = self.find_sentence_token_idxs_of_entity(o)
         )
 
+        assert len(sample.subject_token_indices) > 0
+        assert len(sample.object_token_indices) > 0
+
         for token in self.sentence.tokens:
             sample.sentence.tokens.append(
                 training_sample.TrainingSampleSentenceToken(
