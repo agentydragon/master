@@ -5,6 +5,9 @@ class TrainingSample(recordclass("TrainingSample",
                                   "sentence", "subject_token_indices",
                                   "object_token_indices"])):
     def to_json(self):
+        assert len(self.subject_token_indices) > 0
+        assert len(self.object_token_indices) > 0
+
         return {
             'relation': self.relation,
             'positive': self.positive,
@@ -32,6 +35,7 @@ class TrainingSample(recordclass("TrainingSample",
         for index in self.subject_token_indices:
             if index not in range(len(self.sentence.tokens)):
                 raise
+
         assert len(self.object_token_indices) > 0
         for index in self.object_token_indices:
             if index not in range(len(self.sentence.tokens)):
