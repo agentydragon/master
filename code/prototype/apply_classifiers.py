@@ -81,7 +81,9 @@ wikidata_client = wikidata.WikidataClient()
 scored_samples = reversed(sorted(scored_samples))
 for score, stuff in scored_samples:
     s, r, o, text = stuff
+    truth = wikidata_client.relation_exists(s, r, o)
     print(score, text,
           wikidata_client.get_name(s),
           wikidata_client.get_name(r),
-          wikidata_client.get_name(o))
+          wikidata_client.get_name(o),
+          truth)
