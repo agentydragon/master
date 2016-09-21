@@ -1,4 +1,6 @@
 from prototype.lib import sample_repo
+from py import paths
+from py import file_util
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot
@@ -111,7 +113,9 @@ def plot_roc(fpr, tpr, auc, prefix):
     pyplot.xlabel('False Positive Rate')
     pyplot.xlabel('True Positive Rate')
     pyplot.legend(loc="lower right")
-    pyplot.savefig("roc-%s.png" % prefix)
+    d = paths.CHARTS_PATH + "/train-roc"
+    file_util.ensure_dir(d)
+    pyplot.savefig(d + "/" + "roc-%s.png" % prefix)
 
 print(fpr, tpr)
 plot_roc(fpr, tpr, auc, "logreg")
