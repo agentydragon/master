@@ -2,6 +2,7 @@ from prototype.lib import sample_repo
 from prototype.lib import sample_generation
 from prototype.lib import training_sample
 from py import wikidata
+import random
 import argparse
 import multiprocessing
 import itertools
@@ -132,10 +133,18 @@ def main():
             print(e)
             pass
 
+    #global complete_negatives
+    #complete_negatives = []
+    #print('Generating complete negatives...')
+    #for i in range(1000):
+    #    sample = sample_generation.sample_complete_negative(documents, wikidata_client)
+    #    complete_negatives.append(sample)
+
     global negative_samples
     negative_samples = {relation: [] for relation in all_relations}
+    random.shuffle(all_positive_samples)
 
-    for i, positive_sample in enumerate(all_positive_samples):
+    for i, positive_sample in enumerate(all_positive_samples[:10000]):
         if i % 1000 == 0:
             print(i, '/', len(all_positive_samples))
         # TODO: we care only about sentence ID and mentions in it.

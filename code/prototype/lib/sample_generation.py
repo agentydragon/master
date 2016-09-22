@@ -79,6 +79,19 @@ def sample_random_entity_pair(documents):
         # pick next article
         continue
 
+def sample_complete_negative(documents, wikidata_client):
+    while True:
+        sample = sample_random_entity_pair(documents)
+        if len(wikidata_client.get_holding_relations_between(self,
+                                                             sample.subject,
+                                                             sample.object)) > 0:
+            # skip if we happen to hit it
+            continue
+        else:
+            sample.relation = None
+            sample.positive = False
+            return sample
+
 def sample_negative(documents, relation, wikidata_client):
     while True:
         sample = sample_random_entity_pair(documents)
