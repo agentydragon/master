@@ -1,14 +1,5 @@
-#!/usr/bin/python3
-
-#"""
-#Usage:
-#    ./spotlight.py \
-#        --article_plaintext_path=/mnt/crypto/data/wiki-articles/Allan_Dwan.txt \
-#        --output_path=Allan_Dwan.spotlight.json
-#"""
-
 import random
-import argparse
+# import argparse
 import time
 import json
 import requests

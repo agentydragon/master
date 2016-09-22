@@ -6,7 +6,7 @@ py_binary(
         "launch_spotlights_main.py",
     ],
     deps = [
-        "//py:spotlight_lib",
+        "//prototype/lib:spotlight_lib",
         "//py:pbs_util_lib",
         "//py:paths_lib",
     ],

@@ -7,18 +7,6 @@ py_library(
     ],
 )
 
-py_test(
-    name = "spotlight_test",
-    srcs = [
-        "spotlight_test.py",
-    ],
-    deps = [
-        ":spotlight_lib",
-    ],
-    srcs_version = "PY3",
-    default_python_version = "PY3",
-)
-#
 #sh_binary(
 #    name = "metacentrum_distant_supervision_train",
 #    srcs = [
@@ -123,10 +111,3 @@ py_library(
     ],
 )
 
-py_library(
-    name = "spotlight_lib",
-    #srcs_version = "PY3",
-    srcs = [
-        "spotlight.py",
-    ],
-)

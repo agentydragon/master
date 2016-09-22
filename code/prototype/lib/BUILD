@@ -185,3 +185,23 @@ py_library(
     ],
     #srcs_version = "PY3",
 )
+
+py_library(
+    name = "spotlight_lib",
+    #srcs_version = "PY3",
+    srcs = [
+        "spotlight.py",
+    ],
+)
+
+py_test(
+    name = "spotlight_test",
+    srcs = [
+        "spotlight_test.py",
+    ],
+    deps = [
+        ":spotlight_lib",
+    ],
+    srcs_version = "PY3",
+    default_python_version = "PY3",
+)
