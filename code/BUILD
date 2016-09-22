@@ -14,6 +14,7 @@ py_binary(
     ],
     data = [
         "@jena_fuseki//:everything",
+        ":paths_lib",
     ],
 )
 
