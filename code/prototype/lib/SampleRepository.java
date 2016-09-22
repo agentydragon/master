@@ -5,7 +5,7 @@ import org.apache.commons.io.FileUtils;
 import java.util.*;
 
 public class SampleRepository {
-	private static String basePath = "/storage/brno7-cerit/home/prvak/data/relation-samples";
+	private static String basePath = Paths.RelationSamplesDir;
 
 	private static String prefix(String str, int len) {
 		if (str.codePointCount(0, str.length()) < len) {

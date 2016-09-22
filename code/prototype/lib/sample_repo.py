@@ -1,3 +1,4 @@
+import paths
 import json
 from py import file_util
 import io
@@ -8,7 +9,7 @@ from prototype.lib import training_sample
 class SavingError(Exception):
     pass
 
-base_dir = '/storage/brno7-cerit/home/prvak/data/relation-samples'
+base_dir = paths.RELATION_SAMPLES_DIR
 
 def article_relation_to_path(title, relation):
     sanitized_articletitle = article_repo.sanitize_articletitle(title)

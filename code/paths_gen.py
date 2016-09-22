@@ -4,6 +4,7 @@ import argparse
 parser = argparse.ArgumentParser(description='TODO')
 parser.add_argument('--python_out', required=True)
 parser.add_argument('--sh_out', required=True)
+parser.add_argument('--java_out', required=True)
 args = parser.parse_args()
 
 # Generates paths.py and paths.sh.
@@ -23,12 +24,16 @@ models_path = storage_home + "/models"
 wikidata_dump_date = '20160801'
 wikipedia_dump_date = '20160720'
 
+relation_samples_dir = work_dir + '/relation-samples'
+
 python = open(args.python_out, "w")
 shell = open(args.sh_out, "w")
+java = open(args.java_out, "w")
 
 python.write(
     'WIKIPEDIA_PLAINTEXT = "' + wikipedia_plaintext + '"\n' +
     'WIKI_ARTICLES_PLAINTEXTS_DIR = "' + wiki_articles_plaintexts_dir+ '"\n' +
+    'RELATION_SAMPLES_DIR = "' + relation_samples_dir + '"\n' +
     'LOG_PATH = "' + log_path + '"\n' +
     'CHARTS_PATH = "' + charts_path + '"\n' +
     'MODELS_PATH = "' + models_path + '"\n' +
@@ -61,7 +66,15 @@ shell.write(
     ''
 )
 
+java.write("""
+    public class Paths {
+        public static String RelationSamplesDir = \"""" + relation_samples_dir + """\";
+        public static String WikiArticlesPlaintextsDir = \"""" + wiki_articles_plaintexts_dir + """\";
+    }
+""")
+
 python.close()
 shell.close()
+java.close()
 
 # TODO: WIKI2TEXT_BINARY=BIN_ROOT + "/wiki2text"

@@ -4,7 +4,7 @@ import java.lang.*;
 import org.apache.commons.io.FileUtils;
 
 public class ArticleRepository {
-	private static String basePath = "/storage/brno7-cerit/home/prvak/data/wiki-articles-plaintexts";
+	private static String basePath = Paths.WikiArticlesPlaintextsDir;
 
 	private static String prefix(String str, int len) {
 		if (str.codePointCount(0, str.length()) < len) {

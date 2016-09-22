@@ -16,6 +16,7 @@ py_library(
         "sample_repo.py",
     ],
     deps = [
+        "//:paths_lib",
         ":article_repo_lib",
         ":training_sample_lib",
         "//py:file_util_lib",
@@ -40,6 +41,7 @@ java_library(
         "//:TrainingSamples.java",
     ],
     deps = [
+        "//:paths_java_lib",
         "//:commons_io_commons_io",
         "//:org_json_json",
         "//:com_google_protobuf_protobuf_java",
