@@ -1,5 +1,6 @@
 from prototype.lib import sample_repo
 import paths
+import argparse
 from prototype.lib import wikidata
 from py import file_util
 import numpy
