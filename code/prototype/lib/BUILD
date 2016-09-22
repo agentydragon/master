@@ -116,7 +116,7 @@ py_library(
         "sample_generation.py",
     ],
     deps = [
-        "//py:paths_lib",
+        "//:paths_lib",
         ":dbpedia_lib",
         ":training_sample_lib",
         ":parse_xmls_to_protos_lib",
@@ -129,7 +129,7 @@ py_library(
         "mapper.py",
     ],
     deps = [
-        "//py:paths_lib",
+        "//:paths_lib",
         "//py:file_util_lib",
         "//py:pbs_util_lib",
     ],

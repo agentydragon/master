@@ -36,7 +36,7 @@ py_binary(
     ],
     deps = [
         "//py:pbs_util_lib",
-        "//py:paths_lib",
+        "//:paths_lib",
     ],
     data = [
         ":split_wiki_main",

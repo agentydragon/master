@@ -4,7 +4,7 @@ py_binary(
         "add_spotlight.py",
     ],
     deps = [
-        "//py:paths_lib",
+        "//:paths_lib",
         "//prototype/lib:spotlight_lib",
         "//prototype/lib:article_repo_lib",
     ],

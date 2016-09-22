@@ -17,7 +17,7 @@ py_binary(
     ],
     deps = [
         "//prototype/lib:article_repo_lib",
-        "//py:paths_lib",
+        "//:paths_lib",
     ],
 )
 
@@ -29,7 +29,7 @@ py_binary(
     deps = [
         "//prototype/lib:article_repo_lib",
         "//prototype/lib:parse_xmls_to_protos_lib",
-        "//py:paths_lib",
+        "//:paths_lib",
     ],
     default_python_version = "PY3",
     srcs_version = "PY3",
@@ -42,7 +42,7 @@ py_binary(
     ],
     deps = [
         "//prototype/lib:sample_repo_lib",
-        "//py:paths_lib",
+        "//:paths_lib",
         "//py:wikidata_lib",
     ],
     default_python_version = "PY3",
@@ -68,7 +68,7 @@ py_binary(
     ],
     deps = [
         "//prototype/lib:sample_repo_lib",
-        "//py:paths_lib",
+        "//:paths_lib",
         "//py:file_util_lib",
     ],
     default_python_version = "PY3",
@@ -84,7 +84,7 @@ py_binary(
         "//prototype/lib:sample_repo_lib",
         "//prototype/lib:feature_extraction_lib",
         "//prototype/lib:wikidata_lib",
-        "//py:paths_lib",
+        "//:paths_lib",
         "//py:file_util_lib",
     ],
     default_python_version = "PY3",
@@ -101,7 +101,7 @@ py_binary(
         "//prototype/lib:feature_extraction_lib",
         "//prototype/lib:sample_generation_lib",
         "//prototype/lib:wikidata_lib",
-        "//py:paths_lib",
+        "//:paths_lib",
         "//py:file_util_lib",
     ],
     default_python_version = "PY3",

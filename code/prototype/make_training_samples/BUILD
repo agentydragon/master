@@ -24,7 +24,7 @@ py_binary(
         "//prototype/lib:sample_repo_lib",
         "//prototype/lib:wikidata_lib",
         "//prototype/lib:sample_generation_lib",
-        "//py:paths_lib",
+        "//:paths_lib",
     ],
 )
 
@@ -35,7 +35,7 @@ py_binary(
     ],
     deps = [
         "//py:pbs_util_lib",
-        "//py:paths_lib",
+        "//:paths_lib",
         "//py:file_util_lib",
     ],
     data = [

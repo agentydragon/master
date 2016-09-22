@@ -5,6 +5,26 @@ sh_library(
     ],
 )
 
+py_library(
+    name = "paths_lib",
+    #srcs_version = "PY3",
+    srcs = [
+        "paths.py",
+    ],
+)
+
+genrule(
+    name = "paths_genrule",
+    srcs = [
+        "paths_gen.py",
+    ],
+    outs = [
+        "paths.py",
+        "paths.sh",
+    ],
+    cmd = "python ./paths_gen.py --python_out=$(GENDIR)/paths.py --sh_out $(GENDIR)/paths.sh",
+)
+
 # The following dependencies were calculated from:
 # org.apache.hadoop:hadoop-common:2.6.0
 # org.apache.hadoop:hadoop-mapreduce-client-core:2.6.0

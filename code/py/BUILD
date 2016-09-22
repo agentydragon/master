@@ -26,12 +26,3 @@ py_library(
         "pbs_util.py",
     ],
 )
-
-py_library(
-    name = "paths_lib",
-    #srcs_version = "PY3",
-    srcs = [
-        "paths.py",
-    ],
-)
-
