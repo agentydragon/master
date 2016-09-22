@@ -32,11 +32,11 @@ def write_relations(title, relation, samples):
 
 def write_negative_samples(relation, samples):
     with open(base_dir + '/' + relation + '/negatives.json', 'w') as f:
-        json.dump({'samples': samples}, f)
+        json.dump({'samples': [sample.to_json() for sample in samples]}, f)
 
 def write_positive_samples(relation, samples):
     with open(base_dir + '/' + relation + '/positives.json', 'w') as f:
-        json.dump({'samples': samples}, f)
+        json.dump({'samples': [sample.to_json() for sample in samples]}, f)
 
 def write_article(title, samples):
     for relation in samples.keys():

@@ -7,7 +7,6 @@ def main():
 
     for relation in sample_repo.all_relations():
         samples = sample_repo.load_samples_by_articles(relation)
-        samples = list(map(lambda sample: sample.to_json(), samples))
         sample_repo.write_positive_samples(relation, samples)
         print(relation, 'positives joined')
 

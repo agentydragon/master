@@ -19,7 +19,7 @@ def generate_negatives_for_relation(relation, count,
         # print(i)
         samples.append(sample_generation.sample_negative(documents,
                                                          relation,
-                                                         wikidata_client).to_json())
+                                                         wikidata_client))
     return samples
 
 def ll(x):
@@ -49,11 +49,6 @@ def ll(x):
 ###        print(other_relation, 'produced', len(negatives_from_relation),
 ###              'negatives for', relation)
 ###        negatives_from_other_relations.extend(negatives_from_relation)
-###
-###    negatives_from_other_relations = list(map(
-###        lambda sample: sample.to_json(),
-###        negatives_from_other_relations
-###    ))
 ###
 ###    return negatives_from_other_relations
 
