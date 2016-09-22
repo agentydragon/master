@@ -23,19 +23,50 @@ def generate_negatives_for_relation(relation, count,
 def ll(x):
     return generate_negatives_for_relation(*x)
 
+def add_negative_samples_from_other_relations(relation, wikidata_client):
+    negatives_from_other_relations = []
+
+    for other_relation in sample_repo.all_relations():
+        if other_relation == relation:
+            continue
+
+        negatives_from_relation = []
+
+        other_samples = sample_repo.load_samples(other_relation)
+        for sample in other_samples:
+            if wikidata_client.relation_exists(sample.subject,
+                                               relation,
+                                               sample.object):
+                continue
+            else:
+                negatives_from_relation.append(sample)
+        print(other_relation, 'produced', len(negatives_from_relation),
+              'negatives for', relation)
+        negatives_from_other_relations.extend(negatives_from_relation)
+
+    negatives_from_other_relations = list(map(
+        lambda sample: sample.to_json(),
+        negatives_from_other_relations
+    ))
+
+    return negatives_from_other_relations
+
 def process_relation(pool, relation, count_per_relation,
                      parallelism, wikidata_endpoint):
-
     wikidata_client = wikidata.WikidataClient(wikidata_endpoint or None)
-    try:
-        samples = sample_repo.load_samples(relation)
-        negatives = list(filter(lambda s: not s.positive, samples))
-        if len(negatives) >= count_per_relation:
-            print(relation, wikidata_client.get_name(relation), "all done already")
-            return
-    except AssertionError:
-        # TODO: horrible!
-        pass
+
+    ## try:
+    ##     samples = sample_repo.load_samples(relation)
+    ##     negatives = list(filter(lambda s: not s.positive, samples))
+    ##     if len(negatives) >= count_per_relation:
+    ##         print(relation, wikidata_client.get_name(relation), "all done already")
+    ##         return
+    ## except AssertionError:
+    ##     # TODO: horrible!
+    ##     pass
+
+    from_others = make_negative_samples_from_other_relations(relation,
+                                                             wikidata_client)
 
     indexes = list(range(count_per_relation))
     pool_parts = []
@@ -52,7 +83,7 @@ def process_relation(pool, relation, count_per_relation,
     ))
 
     parts = pool.map(ll, pool_parts)
-    all_samples = list(itertools.chain(*parts))
+    all_samples = list(itertools.chain(*parts)) + from_others
     print(len(all_samples))
     sample_repo.write_negative_samples(relation, all_samples)
     print("Produced negatives for", relation)
