@@ -32,6 +32,7 @@ python.write(
     'WIKIPEDIA_PLAINTEXT = "' + wikipedia_plaintext + '"\n' +
     'WIKI_ARTICLES_PLAINTEXTS_DIR = "' + wiki_articles_plaintexts_dir+ '"\n' +
     'RELATION_SAMPLES_DIR = "' + relation_samples_dir + '"\n' +
+    'WORK_DIR = "' + work_dir + '"\n' +
     'LOG_PATH = "' + log_path + '"\n' +
     'CHARTS_PATH = "' + charts_path + '"\n' +
     'MODELS_PATH = "' + models_path + '"\n' +

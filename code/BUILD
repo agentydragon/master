@@ -7,6 +7,16 @@ py_library(
     visibility = ["//visibility:public"],
 )
 
+py_binary(
+    name = "run_fuseki",
+    srcs = [
+        "run_fuseki.py",
+    ],
+    data = [
+        "@jena_fuseki//:everything",
+    ],
+)
+
 java_library(
     name = "paths_java_lib",
     srcs = [
