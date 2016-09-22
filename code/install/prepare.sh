@@ -1,5 +1,6 @@
 set -e
 
+pwd
 source paths.sh
 
 function convert_wikipedia_to_plaintext() {
