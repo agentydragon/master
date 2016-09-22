@@ -1,9 +1,9 @@
 py_binary(
-    name = "launch_spotlights_main",
+    name = "launch_spotlight_servers",
     default_python_version = "PY3",
     srcs_version = "PY3",
     srcs = [
-        "launch_spotlights_main.py",
+        "launch_spotlight_servers.py",
     ],
     deps = [
         "//prototype/lib:spotlight_lib",
