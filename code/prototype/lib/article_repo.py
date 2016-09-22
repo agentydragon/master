@@ -1,3 +1,4 @@
+import paths
 import json
 from py import file_util
 import io
@@ -23,7 +24,8 @@ def write_article(target_dir, title, data):
     with io.open(path, 'w', encoding='utf8') as f:
         json.dump(data, f)
 
-def article_exists(target_dir, title):
+def article_exists(title,
+                   target_dir=paths.WIKI_ARTICLES_PLAINTEXTS_DIR):
     path = article_title_to_path(target_dir, title)
     return os.path.isfile(path)
 

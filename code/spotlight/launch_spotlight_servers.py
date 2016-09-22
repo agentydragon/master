@@ -2,8 +2,8 @@
 
 #import atexit
 from prototype.lib import spotlight
-from py import pbs_util
-from py import paths
+from prototype.lib import pbs_util
+import paths
 import sys
 import time
 

@@ -1,5 +1,5 @@
-from py import paths
-from py import pbs_util
+import paths
+from prototype.lib import pbs_util
 from py import file_util
 import datetime
 

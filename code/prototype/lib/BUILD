@@ -131,7 +131,15 @@ py_library(
     deps = [
         "//:paths_lib",
         "//py:file_util_lib",
-        "//py:pbs_util_lib",
+        ":pbs_util_lib",
+    ],
+)
+
+py_library(
+    name = "pbs_util_lib",
+    #srcs_version = "PY3",
+    srcs = [
+        "pbs_util.py",
     ],
 )
 

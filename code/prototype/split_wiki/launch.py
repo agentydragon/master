@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
-from py import pbs_util
+from prototype.lib import pbs_util
 from py import file_util
-from py import paths
+import paths
 import argparse
 
 parser = argparse.ArgumentParser(description='TODO')

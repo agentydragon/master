@@ -1,4 +1,5 @@
 import numpy
+import paths
 from scipy import sparse
 from prototype.lib import sample_generation
 from sklearn import metrics
@@ -6,7 +7,6 @@ from sklearn import naive_bayes
 from sklearn import cross_validation
 from sklearn import linear_model
 import pickle
-from py import paths
 from prototype.lib import feature_extraction
 from prototype.lib import wikidata
 

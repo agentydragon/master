@@ -12,7 +12,7 @@ import time
 import locale
 locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
-from py import paths
+import paths
 
 import argparse
 parser = argparse.ArgumentParser(description='Look up articles in Spotlight')
@@ -35,7 +35,8 @@ spotlight_client = spotlight.SpotlightClient(args.spotlight_endpoint)
 for title in args.articles:
     print("Spotlighting", title)
 
-    if not article_repo.article_exists(args.article_plaintexts_dir, title):
+    if not article_repo.article_exists(title,
+                                       target_dir=args.article_plaintexts_dir):
         print("Doesn't exist")
         continue
 

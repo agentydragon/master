@@ -1,7 +1,7 @@
 from prototype.lib import article_repo
 from prototype.lib import parse_xmls_to_protos
 from xml.etree import ElementTree
-from py import paths
+import paths
 from prototype.lib import dbpedia
 
 def document_to_html(document):

@@ -1,7 +1,7 @@
 from prototype.lib import article_repo
 import argparse
 
-from py import paths
+import paths
 
 parser = argparse.ArgumentParser(description='TODO')
 parser.add_argument('--max_articles', type=int)
@@ -22,7 +22,8 @@ with_spotlight = 0
 with_corenlp = 0
 fully_processed = []
 for title in article_names:
-    if not article_repo.article_exists(args.article_plaintexts_dir, title):
+    if not article_repo.article_exists(title,
+                                       target_dir=args.article_plaintexts_dir):
         nonexistant += 1
         continue
 

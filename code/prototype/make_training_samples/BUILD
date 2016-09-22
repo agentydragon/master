@@ -34,7 +34,7 @@ py_binary(
         "launch.py",
     ],
     deps = [
-        "//py:pbs_util_lib",
+        "//prototype/lib:pbs_util_lib",
         "//:paths_lib",
         "//py:file_util_lib",
     ],

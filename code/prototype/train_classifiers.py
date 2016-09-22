@@ -1,5 +1,5 @@
 from prototype.lib import sample_repo
-from py import paths
+import paths
 from prototype.lib import wikidata
 from py import file_util
 import numpy

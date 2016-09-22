@@ -8,8 +8,7 @@ import random
 
 def try_load_document(article_title):
     # print(article_title)
-    if not article_repo.article_exists(paths.WIKI_ARTICLES_PLAINTEXTS_DIR,
-                                       article_title):
+    if not article_repo.article_exists(article_title):
         print('article', article_title, 'does not exist')
         return
 

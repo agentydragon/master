@@ -57,7 +57,8 @@ def split_corpus(wiki_plaintext_path, target_dir, target_articles=None):
         for line in f:
             if regex.match(line):
                 if articletitle is not None:
-                    if article_repo.article_exists(target_dir, articletitle):
+                    if article_repo.article_exists(articletitle,
+                                                   target_dir=target_dir):
                         print('#%d' % articles, 'article', articletitle,
                               'already exists')
                         pass

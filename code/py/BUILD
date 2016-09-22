@@ -18,11 +18,3 @@ py_library(
 #     ],
 #     cmd = "nim c -d:release --app:console $(location @wiki2text//:wiki2text.nim) && mv wiki2text $(GENDIR)"
 # )
-
-py_library(
-    name = "pbs_util_lib",
-    #srcs_version = "PY3",
-    srcs = [
-        "pbs_util.py",
-    ],
-)
