@@ -4,6 +4,7 @@ py_library(
     srcs = [
         "paths.py",
     ],
+    visibility = ["//visibility:public"],
 )
 
 java_library(
@@ -11,6 +12,7 @@ java_library(
     srcs = [
         "Paths.java",
     ],
+    visibility = ["//visibility:public"],
 )
 
 genrule(
@@ -23,7 +25,7 @@ genrule(
         "paths.sh",
         "Paths.java",
     ],
-    cmd = "python ./paths_gen.py --python_out=$(GENDIR)/paths.py --sh_out $(GENDIR)/paths.sh --java_out $(GENDIR)/Paths.java",
+    cmd = "python3 ./paths_gen.py --python_out=$(GENDIR)/paths.py --sh_out $(GENDIR)/paths.sh --java_out $(GENDIR)/Paths.java",
 )
 
 # The following dependencies were calculated from:

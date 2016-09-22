@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import argparse
 parser = argparse.ArgumentParser(description='TODO')
 parser.add_argument('--python_out', required=True)
