@@ -1,3 +1,5 @@
+exports_files(['wiki2text'])
+
 py_library(
     name = "paths_lib",
     #srcs_version = "PY3",
@@ -22,6 +24,14 @@ java_library(
     name = "paths_java_lib",
     srcs = [
         "Paths.java",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+sh_library(
+    name = "paths_sh_lib",
+    srcs = [
+        "paths.sh",
     ],
     visibility = ["//visibility:public"],
 )

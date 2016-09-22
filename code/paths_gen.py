@@ -75,5 +75,3 @@ java.write("""
 python.close()
 shell.close()
 java.close()
-
-# TODO: WIKI2TEXT_BINARY=BIN_ROOT + "/wiki2text"

@@ -1,5 +1,3 @@
-#!/bin/bash
-
 set -e
 
 source paths.sh
@@ -7,11 +5,11 @@ source paths.sh
 function convert_wikipedia_to_plaintext() {
 	echo "converting wikipedia to plaintext"
 	# TODO: -done--file?
-	bzcat $WIKIPEDIA_DUMP_FILE | $WIKI2TEXT_BINARY > $WIKIPEDIA_PLAINTEXT
+	bzcat $WIKIPEDIA_DUMP_FILE | ./wiki2text > $WIKIPEDIA_PLAINTEXT
 }
 
 function main() {
-	./metacentrum_download_dumps.sh
+	#./metacentrum_download_dumps.sh
 	convert_wikipedia_to_plaintext
 }
 
