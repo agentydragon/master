@@ -1,6 +1,14 @@
+#!/bin/bash
+
 set -e
 
 pwd
+ls -la
+echo
+echo XXXXX
+echo
+cat paths.sh
+echo
 source paths.sh
 
 function convert_wikipedia_to_plaintext() {

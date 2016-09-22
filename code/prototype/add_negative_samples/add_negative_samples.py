@@ -99,6 +99,10 @@ def main():
     parser.add_argument('--parallelism', default=1, type=int)
     args = parser.parse_args()
 
+    N_ARTICLES = 100
+    N_COMPLETE_NEGATIVES = 1000
+    N_CROSSUSED_POSITIVES = 1000
+
     with open(args.article_list_file) as f:
         article_names = list(map(lambda line: line.strip(), list(f)))
 
@@ -111,8 +115,9 @@ def main():
     global documents
     documents = []
     random.shuffle(article_names)
-    for i, article_title in enumerate(article_names[:100]):
-        print('loading article (', i, '/', 100, ')')
+    article_names = article_names[:N_ARTICLES]
+    for i, article_title in enumerate(article_names):
+        print('loading article (', i, '/', len(article_names), ')')
         document = sample_generation.try_load_document(article_title)
         if not document:
             continue
@@ -131,26 +136,25 @@ def main():
 
     global complete_negatives
     complete_negatives = []
-    n_complete_negatives = 10000
-    print('Generating', n_complete_negatives, 'complete negatives...')
-    for i in range(n_complete_negatives):
+    print('Generating', N_COMPLETE_NEGATIVES, 'complete negatives...')
+    for i in range(N_COMPLETE_NEGATIVES):
         if i % 100 == 0:
-            print(i, '/', n_complete_negatives)
+            print(i, '/', N_COMPLETE_NEGATIVES)
         sample = sample_generation.sample_complete_negative(documents, wikidata_client)
         complete_negatives.append(sample)
 
     global negative_samples
-    negative_samples = {relation: [] for relation in all_relations}
+    negative_samples = {relation: [] for relation in relations}
     random.shuffle(all_positive_samples)
 
-    for i, positive_sample in enumerate(all_positive_samples[:10000]):
+    for i, positive_sample in enumerate(all_positive_samples[:N_CROSSUSED_POSITIVES]):
         if i % 1000 == 0:
             print(i, '/', len(all_positive_samples))
         # TODO: we care only about sentence ID and mentions in it.
         holding_relations = wikidata_client.get_holding_relations_between(
             positive_sample.subject, positive_sample.object)
 
-        for negative_relation in set(all_relations) - set(holding_relations):
+        for negative_relation in set(relations) - set(holding_relations):
             # TODO
             negated = training_sample.TrainingSample.from_json(positive_sample.to_json())
             negated.positive = False

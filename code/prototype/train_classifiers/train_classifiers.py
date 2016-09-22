@@ -86,6 +86,33 @@ def train_classifier_for_relation(relation):
 
         predicted = clf.predict(X_test)
         print("%s accuracy:" % name, numpy.mean(predicted == y_test))
+
+        positive_probs = []
+        negative_probs = []
+        scores = clf.predict_proba(X_train)
+        for i in range(X_train.shape[0]):
+            if y_train[i]:
+                positive_probs.append(scores[i][1])
+            else:
+                negative_probs.append(scores[i][1])
+        print("Train -- positive avg:",
+              numpy.mean(positive_probs),
+              "negative avg:",
+              numpy.mean(negative_probs))
+
+        positive_probs = []
+        negative_probs = []
+        scores = clf.predict_proba(X_test)
+        for i in range(X_test.shape[0]):
+            if y_test[i]:
+                positive_probs.append(scores[i][1])
+            else:
+                negative_probs.append(scores[i][1])
+        print("Test -- positive avg:",
+              numpy.mean(positive_probs),
+              "negative avg:",
+              numpy.mean(negative_probs))
+
         return clf
 
     clf = try_classifier('Logistic regression', linear_model.LogisticRegression(),
