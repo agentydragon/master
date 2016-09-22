@@ -26,7 +26,10 @@ def train_classifier_for_relation(relation):
     print('Training classifier for relation:',
           relation, relation_name)
 
-    relation_samples = sample_repo.load_samples(relation)
+    try:
+        relation_samples = sample_repo.load_samples(relation)
+    except AssertionError:
+        return  # TODO HAX
     positive_count = len([sample for sample in relation_samples
                           if sample.positive])
     print('Positive:', positive_count)
