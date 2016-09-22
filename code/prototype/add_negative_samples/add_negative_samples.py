@@ -86,7 +86,7 @@ def process_relation(pool, relation, count_per_relation,
 
     #parts = pool.map(ll, pool_parts)
     #all_samples = list(itertools.chain(*parts)) + from_others
-    all_samples = from_others
+    all_samples = from_others + complete_negatives
     sample_repo.write_negative_samples(relation, all_samples)
     print("Produced", len(all_samples), "negatives for", relation)
 
@@ -128,12 +128,15 @@ def main():
             print(e)
             pass
 
-    #global complete_negatives
-    #complete_negatives = []
-    #print('Generating complete negatives...')
-    #for i in range(1000):
-    #    sample = sample_generation.sample_complete_negative(documents, wikidata_client)
-    #    complete_negatives.append(sample)
+    global complete_negatives
+    complete_negatives = []
+    n_complete_negatives = 10000
+    print('Generating', n_complete_negatives, 'complete negatives...')
+    for i in range(n_complete_negatives):
+        if i % 100 == 0:
+            print(i, '/', n_complete_negatives)
+        sample = sample_generation.sample_complete_negative(documents, wikidata_client)
+        complete_negatives.append(sample)
 
     global negative_samples
     negative_samples = {relation: [] for relation in all_relations}
