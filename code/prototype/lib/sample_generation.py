@@ -1,6 +1,6 @@
 from xml.etree import ElementTree
 from py import paths
-from py import dbpedia
+from prototype.lib import dbpedia
 from prototype.lib import parse_xmls_to_protos
 from prototype.lib import article_repo
 from prototype.lib import training_sample

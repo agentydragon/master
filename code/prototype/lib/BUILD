@@ -65,10 +65,32 @@ py_library(
     srcs = [
         "parse_xmls_to_protos.py",
         #"//:sentence_pb2.py",
-        "//py:dbpedia_lib",
+        ":dbpedia_lib",
     ],
     deps = [
         ":sentence_lib",
+    ],
+)
+
+py_library(
+    name = "dbpedia_lib",
+    srcs = [
+        "dbpedia.py",
+    ],
+    deps = [
+        #":json_cache_lib",
+        ":sparql_client_lib",
+        ":wikidata_util_lib",
+    ],
+)
+
+py_test(
+    name = "dbpedia_test",
+    srcs = [
+        "dbpedia_test.py",
+    ],
+    deps = [
+        ":dbpedia_lib",
     ],
 )
 
@@ -96,7 +118,7 @@ py_library(
     ],
     deps = [
         "//py:paths_lib",
-        "//py:dbpedia_lib",
+        ":dbpedia_lib",
         ":training_sample_lib",
         ":parse_xmls_to_protos_lib",
     ],
@@ -121,4 +143,45 @@ py_library(
     ],
     deps = [
     ],
+)
+
+py_library(
+    name = "wikidata_lib",
+    srcs = [
+        "wikidata.py",
+    ],
+    deps = [
+        # ":json_cache_lib",
+        ":sparql_client_lib",
+        ":wikidata_util_lib",
+    ],
+    #srcs_version = "PY3",
+)
+
+py_test(
+    name = "wikidata_test",
+    srcs = [
+        "wikidata_test.py",
+    ],
+    deps = [
+        ":wikidata_lib",
+    ],
+    srcs_version = "PY3",
+    default_python_version = "PY3",
+)
+
+py_library(
+    name = "wikidata_util_lib",
+    srcs = [
+        "wikidata_util.py",
+    ],
+    #srcs_version = "PY3",
+)
+
+py_library(
+    name = "sparql_client_lib",
+    srcs = [
+        "sparql_client.py",
+    ],
+    #srcs_version = "PY3",
 )

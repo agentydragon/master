@@ -1,27 +1,14 @@
-#from py import json_cache
-from py import wikidata_util
-from py import sparql_client
+from prototype.lib import wikidata_util
+from prototype.lib import sparql_client
 
 wikidata_url = 'https://query.wikidata.org/sparql'
 
 class WikidataClient(object):
     def __init__(self, endpoint=None):
-        self.wikidata_relations_cache = {} # json_cache.JsonCache('wikidata_cache')
-#        self.name_cache = json_cache.JsonCache('name_cache')
+        self.wikidata_relations_cache = {}
         if endpoint is None:
             endpoint = wikidata_url
         self.wikidata_client = sparql_client.SPARQLClient(endpoint)
-        self.persist_caches = True
-
-#    def load_cache(self):
-#        if self.persist_caches:
-#            self.wikidata_relations_cache.load()
-#            self.name_cache.load()
-#
-#    def save_cache(self):
-#        if self.persist_caches:
-#            self.wikidata_relations_cache.save()
-#            self.name_cache.save()
 
     def collect_forward_properties(self, wikidata_id):
         # print('forward for', wikidata_id)

@@ -3,14 +3,13 @@ Usage:
     bazel run :find_persons > persons
 """
 
-from py import wikidata
-from py import wikidata_util
+from prototype.lib import wikidata
+from prototype.lib import wikidata_util
 import sys
 
 NUM_PERSONS = 10000
 
 wikidata_client = wikidata.WikidataClient()
-wikidata_client.persist_caches = False
 # ?person (instance of) (human)
 print("Looking for %d persons..." % NUM_PERSONS)
 results = wikidata_client.wikidata_client.get_results("""

@@ -2,7 +2,7 @@
 from prototype.lib import sentence
 
 from xml.etree import ElementTree
-from py import dbpedia
+from prototype.lib import dbpedia
 
 BANNED_NERS = ['O', 'ORDINAL', 'DATE', 'NUMBER', 'DURATION']
 

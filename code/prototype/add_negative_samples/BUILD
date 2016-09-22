@@ -7,7 +7,7 @@ py_binary(
         "//prototype/lib:sample_repo_lib",
         "//prototype/lib:sample_generation_lib",
         "//prototype/lib:training_sample_lib",
-        "//py:wikidata_lib",
+        "//prototype/lib:wikidata_lib",
     ],
     default_python_version = "PY3",
     srcs_version = "PY3",

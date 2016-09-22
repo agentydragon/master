@@ -1,4 +1,4 @@
-from py import dbpedia
+from prototype.lib import dbpedia
 
 wikidata_id = dbpedia.dbpedia_uri_to_wikidata_id('http://dbpedia.org/resource/Barack_Obama')
 print(wikidata_id)

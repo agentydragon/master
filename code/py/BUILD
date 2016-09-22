@@ -7,20 +7,6 @@ py_library(
     ],
 )
 
-#py_binary(
-#    name = "add_negative_samples_main",
-#    srcs = [
-#        "add_negative_samples_main.py",
-#        "get_training_samples.py",
-#        "sentence_pb2.py",
-#        "training_samples_pb2.py",
-#    ],
-#    deps = [
-#        ":wikidata_lib",
-#        ":file_util_lib",
-#    ],
-#)
-#
 py_test(
     name = "spotlight_test",
     srcs = [
@@ -68,65 +54,6 @@ py_test(
 #        ":get_training_samples_lib",
 #    ],
 #)
-#
-#py_binary(
-#    name = "show_training_samples",
-#    srcs = [
-#        "show_training_samples.py",
-#        "training_samples_pb2.py",
-#    ],
-#    deps = [
-#        ":wikidata_lib",
-#    ],
-#)
-#
-py_library(
-    name = "dbpedia_lib",
-    srcs = [
-        "dbpedia.py",
-    ],
-    deps = [
-        #":json_cache_lib",
-        ":sparql_client_lib",
-        ":wikidata_util_lib",
-    ],
-)
-
-py_test(
-    name = "dbpedia_test",
-    srcs = [
-        "dbpedia_test.py",
-    ],
-    deps = [
-        ":dbpedia_lib",
-    ],
-)
-
-#py_library(
-#    name = "get_training_samples_lib",
-#    srcs = [
-#        "get_training_samples.py",
-#        "sentence_pb2.py",
-#        "training_samples_pb2.py",
-#        "relations.py",
-#    ],
-#    deps = [
-#        ":file_util_lib",
-#    ]
-#)
-#
-#py_binary(
-#    name = "get_training_samples_main",
-#    srcs = [
-#        "get_training_samples_main.py",
-#        "sentence_pb2.py",
-#    ],
-#    deps = [
-#        ":get_training_samples_lib",
-#        ":wikidata_lib",
-#        ":file_util_lib",
-#    ],
-#)
 
 py_library(
     name = "json_cache_lib",
@@ -140,46 +67,8 @@ py_library(
     #srcs_version = "PY3",
 )
 
-py_library(
-    name = "sparql_client_lib",
-    srcs = [
-        "sparql_client.py",
-    ],
-    #srcs_version = "PY3",
-)
 
-py_library(
-    name = "wikidata_util_lib",
-    srcs = [
-        "wikidata_util.py",
-    ],
-    #srcs_version = "PY3",
-)
 
-py_library(
-    name = "wikidata_lib",
-    srcs = [
-        "wikidata.py",
-    ],
-    deps = [
-        ":json_cache_lib",
-        ":sparql_client_lib",
-        ":wikidata_util_lib",
-    ],
-    #srcs_version = "PY3",
-)
-
-py_test(
-    name = "wikidata_test",
-    srcs = [
-        "wikidata_test.py",
-    ],
-    deps = [
-        ":wikidata_lib",
-    ],
-    srcs_version = "PY3",
-    default_python_version = "PY3",
-)
 
 # TODO: I can make my own wiki2text! With blackjack and hookers!
 # genrule(

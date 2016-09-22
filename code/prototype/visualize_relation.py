@@ -1,6 +1,6 @@
 from prototype.lib import sample_repo
 from py import paths
-from py import wikidata
+from prototype.lib import wikidata
 import argparse
 import json
 

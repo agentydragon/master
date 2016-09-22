@@ -1,6 +1,6 @@
 from prototype.lib import sample_repo
 from py import paths
-from py import wikidata
+from prototype.lib import wikidata
 from py import file_util
 import numpy
 from scipy import sparse

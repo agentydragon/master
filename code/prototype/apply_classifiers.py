@@ -8,7 +8,7 @@ from sklearn import linear_model
 import pickle
 from py import paths
 from prototype.lib import feature_extraction
-from py import wikidata
+from prototype.lib import wikidata
 
 # load classifiers
 relations = ['P106', # occupation,

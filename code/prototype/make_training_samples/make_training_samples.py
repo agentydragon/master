@@ -1,6 +1,6 @@
 from prototype.lib import sample_repo
 from prototype.lib import sample_generation
-from py import wikidata
+from prototype.lib import wikidata
 import argparse
 import multiprocessing
 

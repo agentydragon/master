@@ -1,4 +1,4 @@
-import wikidata
+from prototype.lib import wikidata
 import sys
 
 michelle_obama = 'Q13133'
@@ -7,7 +7,6 @@ united_states = 'Q30'
 potus = 'Q11696'
 
 client = wikidata.WikidataClient()
-#client.persist_caches = False
 triples = client.get_all_triples_of_entity(michelle_obama)
 
 # wdt:P26 wd:Q76

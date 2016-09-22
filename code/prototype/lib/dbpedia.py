@@ -1,6 +1,6 @@
 #import json_cache
-from py import sparql_client
-from py import wikidata_util
+from prototype.lib import sparql_client
+from prototype.lib import wikidata_util
 
 dbpedia_client = sparql_client.SPARQLClient('http://dbpedia.org/sparql')
 #dbpedia_to_wikidata_cache = json_cache.JsonCache('dbpedia_to_wikidata_cache')

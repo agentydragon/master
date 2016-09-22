@@ -1,7 +1,7 @@
 from prototype.lib import sample_repo
 from prototype.lib import sample_generation
 from prototype.lib import training_sample
-from py import wikidata
+from prototype.lib import wikidata
 import random
 import argparse
 import multiprocessing

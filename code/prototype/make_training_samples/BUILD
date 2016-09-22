@@ -22,9 +22,9 @@ py_binary(
     deps = [
         "//prototype/lib:article_repo_lib",
         "//prototype/lib:sample_repo_lib",
-        "//py:paths_lib",
-        "//py:wikidata_lib",
+        "//prototype/lib:wikidata_lib",
         "//prototype/lib:sample_generation_lib",
+        "//py:paths_lib",
     ],
 )
 
