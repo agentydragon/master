@@ -1,5 +1,6 @@
 from prototype.lib import sample_repo
 from prototype.lib import sample_generation
+from prototype.lib import training_sample
 from py import wikidata
 import argparse
 import multiprocessing
@@ -23,38 +24,37 @@ def generate_negatives_for_relation(relation, count,
 def ll(x):
     return generate_negatives_for_relation(*x)
 
-all_positive_samples = {}
-for r in sample_repo.all_relations():
-    print('loading positives for', r)
-    all_positive_samples[r] = sample_repo.load_positive_samples(r)
 
-def add_negative_samples_from_other_relations(relation, wikidata_client):
-    negatives_from_other_relations = []
-
-    for other_relation in sample_repo.all_relations():
-        if other_relation == relation:
-            continue
-
-        negatives_from_relation = []
-
-        other_samples = all_positive_samples[other_relation]
-        for sample in other_samples:
-            if wikidata_client.relation_exists(sample.subject,
-                                               relation,
-                                               sample.object):
-                continue
-            else:
-                negatives_from_relation.append(sample)
-        print(other_relation, 'produced', len(negatives_from_relation),
-              'negatives for', relation)
-        negatives_from_other_relations.extend(negatives_from_relation)
-
-    negatives_from_other_relations = list(map(
-        lambda sample: sample.to_json(),
-        negatives_from_other_relations
-    ))
-
-    return negatives_from_other_relations
+###def add_negative_samples_from_other_relations(relation, wikidata_client):
+###    negatives_from_other_relations = []
+###
+###    for other_relation in sample_repo.all_relations():
+###        if other_relation == relation:
+###            continue
+###
+###        negatives_from_relation = []
+###
+###        if other_relation not in all_positive_samples:
+###            continue
+###
+###        other_samples = all_positive_samples[other_relation]
+###        for sample in other_samples:
+###            if wikidata_client.relation_exists(sample.subject,
+###                                               relation,
+###                                               sample.object):
+###                continue
+###            else:
+###                negatives_from_relation.append(sample)
+###        print(other_relation, 'produced', len(negatives_from_relation),
+###              'negatives for', relation)
+###        negatives_from_other_relations.extend(negatives_from_relation)
+###
+###    negatives_from_other_relations = list(map(
+###        lambda sample: sample.to_json(),
+###        negatives_from_other_relations
+###    ))
+###
+###    return negatives_from_other_relations
 
 def process_relation(pool, relation, count_per_relation,
                      parallelism, wikidata_endpoint):
@@ -70,8 +70,9 @@ def process_relation(pool, relation, count_per_relation,
     ##     # TODO: horrible!
     ##     pass
 
-    from_others = add_negative_samples_from_other_relations(relation,
-                                                            wikidata_client)
+    from_others = negative_samples[relation]
+    #from_others = add_negative_samples_from_other_relations(relation,
+    #                                                        wikidata_client)
 
     #indexes = list(range(count_per_relation))
     #pool_parts = []
@@ -90,9 +91,8 @@ def process_relation(pool, relation, count_per_relation,
     #parts = pool.map(ll, pool_parts)
     #all_samples = list(itertools.chain(*parts)) + from_others
     all_samples = from_others
-    print(len(all_samples))
     sample_repo.write_negative_samples(relation, all_samples)
-    print("Produced negatives for", relation)
+    print("Produced", len(all_samples), "negatives for", relation)
 
 def main():
     parser = argparse.ArgumentParser(description='TODO')
@@ -120,6 +120,34 @@ def main():
     ##        continue
     ##    documents.append(document)
     documents = []
+
+    wikidata_client = wikidata.WikidataClient(args.wikidata_endpoint or None)
+    all_relations = sample_repo.all_relations()
+    all_positive_samples = []
+    for r in all_relations:
+        print('loading positives for', r)
+        try:
+            all_positive_samples.extend(sample_repo.load_positive_samples(r))
+        except AssertionError as e:
+            print(e)
+            pass
+
+    global negative_samples
+    negative_samples = {relation: [] for relation in all_relations}
+
+    for i, positive_sample in enumerate(all_positive_samples):
+        if i % 1000 == 0:
+            print(i, '/', len(all_positive_samples))
+        # TODO: we care only about sentence ID and mentions in it.
+        holding_relations = wikidata_client.get_holding_relations_between(
+            positive_sample.subject, positive_sample.object)
+
+        for negative_relation in set(all_relations) - set(holding_relations):
+            # TODO
+            negated = training_sample.TrainingSample.from_json(positive_sample.to_json())
+            negated.positive = False
+            negated.relation = negative_relation
+            negative_samples[negative_relation].append(negated)
 
     pool = multiprocessing.Pool(args.parallelism)
 

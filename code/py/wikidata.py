@@ -65,6 +65,22 @@ class WikidataClient(object):
                 properties.append(triple)
         return properties
 
+    def get_holding_relations_between(self, s, o):
+        results = self.wikidata_client.get_results("""
+            SELECT ?rel
+            WHERE { wd:%s ?rel wd:%s . }
+            LIMIT 500
+        """ % (s, o))
+        # TODO: remove limit 500
+
+        rels = []
+        for x in results['results']['bindings']:
+            rel = x['rel']['value']
+            rel = wikidata_util.normalize_relation(rel)
+            if rel is not None:
+                rels.append(rel)
+        return rels
+
     def get_all_triples_of_entity(self, wikidata_id):
 #        self.load_cache()
 
@@ -89,6 +105,7 @@ class WikidataClient(object):
             all_triples.extend(self.get_all_triples_of_entity(entity))
         return list(sorted(set(triple for triple in all_triples
                         if (triple[0] in wikidata_ids) and (triple[2] in wikidata_ids))))
+
 
     def fetch_label(self, entity_id):
         results = self.wikidata_client.get_results("""

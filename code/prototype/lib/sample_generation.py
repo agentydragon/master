@@ -51,7 +51,7 @@ def get_samples_from_document(article_title, wikidata_client):
             samples[p].append(sample)
     return samples
 
-def sample_negative(documents, relation, wikidata_client):
+def sample_random_entity_pair(documents):
     while True:
         document = random.choice(documents)
 
@@ -72,16 +72,23 @@ def sample_negative(documents, relation, wikidata_client):
                 if sentence_wrapper.mentions_in_sentence_overlap(s, o):
                     continue
 
-                if wikidata_client.relation_exists(s, relation, o):
-                    # skip if we happen to hit it
-                    continue
-
-                return sentence_wrapper.make_training_sample(s, relation, o,
-                                                             positive=False)
+                return sentence_wrapper.make_training_sample(s, None, o,
+                                                             positive=None)
             # select sentence again
             continue
         # pick next article
         continue
+
+def sample_negative(documents, relation, wikidata_client):
+    while True:
+        sample = sample_random_entity_pair(documents)
+        if wikidata_client.relation_exists(sample.subject, relation, sample.object):
+            # skip if we happen to hit it
+            continue
+        else:
+            sample.relation = relation
+            sample.positive = False
+            return sample
 
 class SentenceWrapper(object):
     def __init__(self, document, sentence):

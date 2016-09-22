@@ -51,3 +51,6 @@ assert true_triples == truth
 
 assert client.relation_exists(barack_obama, 'P39', potus)
 assert not client.relation_exists(barack_obama, 'P40', potus)
+
+assert set(client.get_holding_relations_between(united_states, potus)) == set(['P1313', 'P1906'])
+assert set(client.get_holding_relations_between(united_states, michelle_obama)) == set()

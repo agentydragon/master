@@ -1,5 +1,4 @@
 wikidata_entity_prefix = 'http://www.wikidata.org/entity/'
-# wikidata_property_prefix = 'http://www.wikidata.org/wiki/Property:'
 wikidata_property_prefix = 'http://www.wikidata.org/prop/direct/'
 
 def is_wikidata_entity_url(url):
@@ -14,6 +13,8 @@ def wikidata_property_url_to_property_id(url):
     return url[len(wikidata_property_prefix):]
 
 def normalize_relation(rel):
+    if not relation_interesting(rel):
+        return None
     # http://www.wikidata.org/entity/P9999c => http://www.wikidata.org/wiki/Property:P9999
     if rel.startswith('http://www.wikidata.org/entity/P') and rel.endswith('s'):
         rel = rel[:-1]
@@ -23,6 +24,12 @@ def normalize_relation(rel):
         rel = rel[:-1]
         rel = rel.replace('http://www.wikidata.org/entity/P',
                           'http://www.wikidata.org/wiki/Property:P')
+    if '/P' not in rel:
+        return None
+    if not rel.startswith(wikidata_property_prefix):
+        return None
+
+    rel = wikidata_property_url_to_property_id(rel)
     return rel
 
 def relation_interesting(relation):
@@ -38,9 +45,9 @@ def is_statement(url):
     return url.startswith('http://www.wikidata.org/entity/statement/')
 
 def transform_relation(subject, rel, other):
-    if not relation_interesting(rel):
-        return None
     rel = normalize_relation(rel)
+    if rel is None:
+        return None
     if is_statement(other):
         return None
     if is_statement(subject):
@@ -48,8 +55,6 @@ def transform_relation(subject, rel, other):
     if '/Q' not in subject:
         return None
     if '/Q' not in other:
-        return None
-    if '/P' not in rel:
         return None
     if not is_wikidata_entity_url(other):
         return None
@@ -59,6 +64,5 @@ def transform_relation(subject, rel, other):
     # print(subject, rel, other)
     subject = wikidata_entity_url_to_entity_id(subject)
     other = wikidata_entity_url_to_entity_id(other)
-    rel = wikidata_property_url_to_property_id(rel)
 
     return (subject, rel, other)
