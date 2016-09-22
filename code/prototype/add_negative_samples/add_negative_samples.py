@@ -111,7 +111,7 @@ def main():
     global documents
     documents = []
     random.shuffle(article_names)
-    for article_title in article_names[:100]:
+    for i, article_title in enumerate(article_names[:100]):
         print('loading article (', i, '/', 100, ')')
         document = sample_generation.try_load_document(article_title)
         if not document:

@@ -81,8 +81,7 @@ def sample_random_entity_pair(documents):
 def sample_complete_negative(documents, wikidata_client):
     while True:
         sample = sample_random_entity_pair(documents)
-        if len(wikidata_client.get_holding_relations_between(self,
-                                                             sample.subject,
+        if len(wikidata_client.get_holding_relations_between(sample.subject,
                                                              sample.object)) > 0:
             # skip if we happen to hit it
             continue
