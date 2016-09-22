@@ -95,5 +95,8 @@ def train_classifier_for_relation(relation):
     #                                          random_state=42),
     #               'linear-svm')
 
-for relation in sample_repo.all_relations():
-    train_classifier_for_relation(relation)
+import multiprocessing
+multiprocessing.Pool(32).map(train_classifier_for_relation,
+                             sample_repo.all_relations())
+#for relation in sample_repo.all_relations():
+#    train_classifier_for_relation(relation)
