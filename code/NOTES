@@ -146,3 +146,19 @@ chmod +x hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -input /user/
 	# has very long bootup
 
 
+How to build protobuf files:
+	genrule(
+	    name = "sentence_proto",
+	    srcs = [
+		"sentence.proto",
+	    ],
+	    outs = [
+		"sentence_pb2.py",
+		"Sentence.java",
+	    ],
+	    visibility = ["//visibility:public"],
+	    cmd = "protoc -I=. " +
+		"--python_out=$(GENDIR)/ " +
+		"--java_out=$(GENDIR)/ " +
+		"$(location :sentence.proto)"
+	)

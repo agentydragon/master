@@ -1,0 +1,3 @@
+* Pokusil jsem se pouzit pro serializaci protocol buffers, ale nejsou
+  kompatibilni s Pythonem 3. Musel bych si vybrat mezi SPARQLWrapperem
+  a protocol buffery.

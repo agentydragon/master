@@ -5,38 +5,6 @@ sh_library(
     ],
 )
 
-genrule(
-    name = "sentence_proto",
-    srcs = [
-        "sentence.proto",
-    ],
-    outs = [
-        "sentence_pb2.py",
-        "Sentence.java",
-    ],
-    visibility = ["//visibility:public"],
-    cmd = "protoc -I=. " +
-        "--python_out=$(GENDIR)/ " +
-        "--java_out=$(GENDIR)/ " +
-        "$(location :sentence.proto)"
-)
-
-genrule(
-    name = "training_samples_proto",
-    srcs = [
-        "training_samples.proto",
-    ],
-    outs = [
-        "training_samples_pb2.py",
-        "TrainingSamples.java",
-    ],
-    visibility = ["//visibility:public"],
-    cmd = "protoc -I=. " +
-        "--python_out=$(GENDIR)/ " +
-        "--java_out=$(GENDIR)/ " +
-        "$(location :training_samples.proto)"
-)
-
 # The following dependencies were calculated from:
 # org.apache.hadoop:hadoop-common:2.6.0
 # org.apache.hadoop:hadoop-mapreduce-client-core:2.6.0
