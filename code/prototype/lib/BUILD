@@ -78,7 +78,6 @@ py_library(
         "dbpedia.py",
     ],
     deps = [
-        #":json_cache_lib",
         ":sparql_client_lib",
         ":wikidata_util_lib",
     ],
@@ -151,7 +150,6 @@ py_library(
         "wikidata.py",
     ],
     deps = [
-        # ":json_cache_lib",
         ":sparql_client_lib",
         ":wikidata_util_lib",
     ],

@@ -12,8 +12,6 @@ WIKIPEDIA_PLAINTEXT=WORK_DIR + "/wiki-plain.txt"
 
 WIKI_ARTICLES_PLAINTEXTS_DIR=WORK_DIR + "/wiki-articles-plaintexts"
 
-JSON_CACHE_DIR = WORK_DIR + '/json-caches'
-
 LOG_PATH = STORAGE_HOME + "/logs"
 CHARTS_PATH = STORAGE_HOME + "/charts"
 MODELS_PATH = STORAGE_HOME  + "/models"
