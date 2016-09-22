@@ -3,4 +3,5 @@ filegroup(
     srcs = glob(
 	include = ["**/*"]
     ),
+    visibility = ["//visibility:public"],
 )
