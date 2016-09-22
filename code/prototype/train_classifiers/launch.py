@@ -19,7 +19,8 @@ def main():
 
     def slice_to_walltime(relations_slice):
         # TODO: more precise
-        return "01:00:00"
+        # 1 hour is not enough to train 4 classifiers
+        return "04:00:00"
 
     mapper.launch_in_slices('train-classifiers',
                             sample_repo.all_relations(),
