@@ -4,10 +4,6 @@ set -e
 
 source common.sh
 
-WIKIPEDIA_DUMP_DATE=20160720
-WIKIPEDIA_DUMP_FILENAME=enwiki-${WIKIPEDIA_DUMP_DATE}-pages-articles.xml.bz2
-WIKIPEDIA_DUMP_FILE=$WIKIPEDIA_DUMP_DIR/${WIKIPEDIA_DUMP_FILENAME}
-
 function convert_wikipedia_to_plaintext() {
 	echo "converting wikipedia to plaintext"
 	# TODO: -done--file?

@@ -19,6 +19,10 @@ log_path = storage_home + "/logs"
 charts_path = storage_home + "/charts"
 models_path = storage_home + "/models"
 
+# Dump dates
+wikidata_dump_date = '20160801'
+wikipedia_dump_date = '20160720'
+
 python = open(args.python_out, "w")
 shell = open(args.sh_out, "w")
 
@@ -42,14 +46,21 @@ shell.write(
     'WORK_DIR="' + work_dir + '"\n' +
     'FUSEKI_DIR="' + (storage_home + '/fuseki') + '"\n' +
     'WIKIDATA_DUMP_DIR="' + (work_dir + '/wikidata') + '"\n' +
-    'WIKIDATA_DUMP_DATE="20160801"\n' +
+    'WIKIDATA_DUMP_DATE="' + wikidata_dump_date + '"\n' +
     'WIKIDATA_TTL_DUMP_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all-BETA.ttl.bz2\n' +
     'WIKIDATA_TTL_DUMP_FILE=$WIKIDATA_DUMP_DIR/${WIKIDATA_TTL_DUMP_FILENAME}\n' +
     'WIKIDATA_TTL_DUMP_UNPACKED_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all-BETA.ttl.bz2\n' +
     'WIKIDATA_TTL_DUMP_UNPACKED_FILE=$WIKIDATA_DUMP_DIR/${WIKIDATA_TTL_DUMP_UNPACKED_FILENAME}\n' +
+    'WIKIPEDIA_DUMP_DIR="' + (work_dir + '/wikipedia_dump') + '"\n' +
+    'WIKIPEDIA_DUMP_DATE="' + wikipedia_dump_date + '"\n' +
+    'WIKIPEDIA_DUMP_FILENAME=enwiki-${WIKIPEDIA_DUMP_DATE}-pages-articles.xml.bz2\n' +
+    'WIKIPEDIA_DUMP_FILE=$WIKIPEDIA_DUMP_DIR/${WIKIPEDIA_DUMP_FILENAME}\n' +
+    'WIKIDATA_JSON_DUMP_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all.json.bz2\n' +
+    'WIKIDATA_JSON_DUMP_FILE=$WIKIDATA_DUMP_DIR/${WIKIDATA_JSON_DUMP_FILENAME}\n' +
     ''
 )
 
 python.close()
 shell.close()
-# WIKI2TEXT_BINARY=BIN_ROOT + "/wiki2text"
+
+# TODO: WIKI2TEXT_BINARY=BIN_ROOT + "/wiki2text"
