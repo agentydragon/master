@@ -2,7 +2,7 @@
 
 set -e
 
-source common.sh
+source paths.sh
 
 function convert_wikipedia_to_plaintext() {
 	echo "converting wikipedia to plaintext"

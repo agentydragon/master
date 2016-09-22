@@ -1,10 +1,3 @@
-sh_library(
-    name = "common",
-    srcs = [
-        "common.sh",
-    ],
-)
-
 py_library(
     name = "paths_lib",
     #srcs_version = "PY3",

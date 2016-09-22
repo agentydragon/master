@@ -2,7 +2,7 @@
 
 set -e
 
-source common.sh
+source paths.sh
 
 function download_wikipedia_dump() {
 	echo "downloading wikipedia dump"

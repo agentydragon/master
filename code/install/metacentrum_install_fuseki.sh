@@ -2,7 +2,7 @@
 
 set -e
 
-source common.sh
+source paths.sh
 
 module add jdk-8
 
