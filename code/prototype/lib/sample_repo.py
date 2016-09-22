@@ -42,11 +42,14 @@ def write_article(title, samples):
     for relation in samples.keys():
         write_relations(title, relation, samples[relation])
 
-def load_samples(relation):
-    samples = []
+def load_positive_samples(relation):
     with open(base_dir + '/' + relation + '/positives.json') as f:
         batch = json.load(f)['samples']
-        samples.extend(map(training_sample.TrainingSample.from_json, batch))
+        return list(map(training_sample.TrainingSample.from_json, batch))
+
+def load_samples(relation):
+    samples = []
+    samples.extend(load_positive_samples(relation))
     with open(base_dir + '/' + relation + '/negatives.json') as f:
         batch = json.load(f)['samples']
         samples.extend(map(training_sample.TrainingSample.from_json, batch))

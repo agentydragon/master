@@ -23,6 +23,11 @@ def generate_negatives_for_relation(relation, count,
 def ll(x):
     return generate_negatives_for_relation(*x)
 
+all_positive_samples = {}
+for r in sample_repo.all_relations():
+    print('loading positives for', r)
+    all_positive_samples[r] = sample_repo.load_positive_samples(r)
+
 def add_negative_samples_from_other_relations(relation, wikidata_client):
     negatives_from_other_relations = []
 
@@ -32,7 +37,7 @@ def add_negative_samples_from_other_relations(relation, wikidata_client):
 
         negatives_from_relation = []
 
-        other_samples = sample_repo.load_samples(other_relation)
+        other_samples = all_positive_samples[other_relation]
         for sample in other_samples:
             if wikidata_client.relation_exists(sample.subject,
                                                relation,
@@ -65,25 +70,26 @@ def process_relation(pool, relation, count_per_relation,
     ##     # TODO: horrible!
     ##     pass
 
-    from_others = make_negative_samples_from_other_relations(relation,
-                                                             wikidata_client)
+    from_others = add_negative_samples_from_other_relations(relation,
+                                                            wikidata_client)
 
-    indexes = list(range(count_per_relation))
-    pool_parts = []
-    per_pool = count_per_relation // parallelism
-    for i in range(0, count_per_relation, per_pool):
-        pool_part = indexes[i:i+per_pool]
-        pool_parts.append(pool_part)
+    #indexes = list(range(count_per_relation))
+    #pool_parts = []
+    #per_pool = count_per_relation // parallelism
+    #for i in range(0, count_per_relation, per_pool):
+    #    pool_part = indexes[i:i+per_pool]
+    #    pool_parts.append(pool_part)
 
-    pool_parts = list(map(
-        lambda pool_part: (
-            relation, len(pool_part), wikidata_endpoint
-        ),
-        pool_parts
-    ))
+    #pool_parts = list(map(
+    #    lambda pool_part: (
+    #        relation, len(pool_part), wikidata_endpoint
+    #    ),
+    #    pool_parts
+    #))
 
-    parts = pool.map(ll, pool_parts)
-    all_samples = list(itertools.chain(*parts)) + from_others
+    #parts = pool.map(ll, pool_parts)
+    #all_samples = list(itertools.chain(*parts)) + from_others
+    all_samples = from_others
     print(len(all_samples))
     sample_repo.write_negative_samples(relation, all_samples)
     print("Produced negatives for", relation)
@@ -106,13 +112,14 @@ def main():
         relations = args.relation
 
     # Load all documents.
-    global documents
+    ##global documents
+    ##documents = []
+    ##for article_title in article_names:
+    ##    document = sample_generation.try_load_document(article_title)
+    ##    if not document:
+    ##        continue
+    ##    documents.append(document)
     documents = []
-    for article_title in article_names:
-        document = sample_generation.try_load_document(article_title)
-        if not document:
-            continue
-        documents.append(document)
 
     pool = multiprocessing.Pool(args.parallelism)
 
