@@ -162,3 +162,6 @@ How to build protobuf files:
 		"--java_out=$(GENDIR)/ " +
 		"$(location :sentence.proto)"
 	)
+
+to download charts:
+	scp -r hador.ics.muni.cz:/storage/brno7-cerit/home/prvak/charts
