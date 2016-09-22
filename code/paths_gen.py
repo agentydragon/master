@@ -33,6 +33,7 @@ python.write(
     'CHARTS_PATH = "' + charts_path + '"\n' +
     'MODELS_PATH = "' + models_path + '"\n' +
     ''
+    # TODO: allow path overrides
 )
 
 shell.write(
