@@ -15,6 +15,8 @@ import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot
 
+import multiprocessing
+
 def sample_to_features_label(sample):
     features = feature_extraction.sample_to_features(sample)
     return (features, sample.positive)
@@ -98,8 +100,22 @@ def train_classifier_for_relation(relation):
     #                                          random_state=42),
     #               'linear-svm')
 
-import multiprocessing
-multiprocessing.Pool(32).map(train_classifier_for_relation,
-                             sample_repo.all_relations())
-#for relation in sample_repo.all_relations():
-#    train_classifier_for_relation(relation)
+def main():
+    parser = argparse.ArgumentParser(description='TODO')
+    parser.add_argument('--parallelism', default=1, type=int)
+    parser.add_argument('--relation', action='append')
+    args = parser.parse_args()
+
+    if args.relation:
+        relations = args.relation
+    else:
+        relations = sample_repo.all_relations()
+
+    pool = multiprocessing.Pool(args.parallelism)
+    pool.map(train_classifier_for_relation, relations)
+    #for relation in sample_repo.all_relations():
+    #    train_classifier_for_relation(relation)
+
+if __name__ == '__main__':
+    main()
+
