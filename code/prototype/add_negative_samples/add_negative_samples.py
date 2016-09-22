@@ -108,20 +108,21 @@ def main():
         relations = args.relation
 
     # Load all documents.
-    ##global documents
-    ##documents = []
-    ##for article_title in article_names:
-    ##    document = sample_generation.try_load_document(article_title)
-    ##    if not document:
-    ##        continue
-    ##    documents.append(document)
+    global documents
     documents = []
+    random.shuffle(article_names)
+    for article_title in article_names[:100]:
+        print('loading article (', i, '/', 100, ')')
+        document = sample_generation.try_load_document(article_title)
+        if not document:
+            continue
+        documents.append(document)
 
     wikidata_client = wikidata.WikidataClient(args.wikidata_endpoint or None)
     all_relations = sample_repo.all_relations()
     all_positive_samples = []
-    for r in all_relations:
-        print('loading positives for', r)
+    for i, r in enumerate(all_relations):
+        print('loading positives for', r, '(', i, '/', len(all_relations), ')')
         try:
             all_positive_samples.extend(sample_repo.load_positive_samples(r))
         except AssertionError as e:
