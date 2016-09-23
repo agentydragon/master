@@ -18,6 +18,8 @@ sh_binary(
     ],
     deps = [
         "//:paths_sh_lib",
+    ],
+    data = [
         "@jena//:everything",
     ],
 )
