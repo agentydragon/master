@@ -133,7 +133,9 @@ class SentenceWrapper(object):
             positive = positive,
             sentence = training_sample.TrainingSampleParsedSentence(
                 text = self.sentence.text,
-                tokens = []
+                tokens = [],
+                origin_article = self.document.title,
+                origin_sentence_id = self.sentence.id
             ),
             subject = s,
             object = o,
