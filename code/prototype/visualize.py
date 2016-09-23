@@ -45,6 +45,7 @@ def document_to_html(document):
 
 article = article_repo.load_article(paths.WIKI_ARTICLES_PLAINTEXTS_DIR, "Douglas Adams")
 proto = parse_xmls_to_protos.document_to_proto(
+    title = "Douglas Adams",
     root = ElementTree.fromstring(article['corenlp_xml']),
     spotlight_json = article['spotlight_json'],
     plaintext = article['plaintext'],

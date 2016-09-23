@@ -19,6 +19,7 @@ def try_load_document(article_title):
         return
 
     return parse_xmls_to_protos.document_to_proto(
+        title = article_title,
         root = ElementTree.fromstring(article['corenlp_xml']),
         plaintext = article['plaintext'],
         spotlight_json = article['spotlight_json']
@@ -45,7 +46,7 @@ def get_samples_from_document(article_title, wikidata_client):
                 continue
 
             print(p, s, o, sentence.text)
-            sample = sentence_wrapper.make_training_sample(s, relation, o,
+            sample = sentence_wrapper.make_training_sample(s, p, o,
                                                            positive=True)
             samples[p].append(sample)
     return samples

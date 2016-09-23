@@ -115,7 +115,7 @@ def spotlight_to_mentions(spotlight_json):
 #                     coreference.wikidata_entity_id = wikidata_id
 #             # TODO: else?
 
-def document_to_proto(root, spotlight_json, plaintext):
+def document_to_proto(title, root, spotlight_json, plaintext):
     # TODO: Spotlight JSON
     """
     Args:
@@ -128,7 +128,7 @@ def document_to_proto(root, spotlight_json, plaintext):
     #     text = plaintext
     # )
     document = sentence.Document(
-        title = None,
+        title = title,
         text = plaintext,
         sentences = [],
         coreferences = [],

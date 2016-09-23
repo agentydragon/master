@@ -10,6 +10,7 @@ with open('testdata/Obama.spotlight.json') as f:
     spotlight_json = json.load(f)
 
 document_proto = parse_xmls_to_protos.document_to_proto(
+    title = 'hello',
     root = corenlp_xml,
     plaintext = plaintext,
     spotlight_json = spotlight_json

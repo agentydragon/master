@@ -5,18 +5,18 @@ import argparse
 import multiprocessing
 
 def process_article(article_title, wikidata_client):
-    document = sample_generation.get_samples_from_document(
+    samples = sample_generation.get_samples_from_document(
         article_title,
         wikidata_client=wikidata_client
     )
-    if not document:
+    if not samples:
         return
     try:
         sample_repo.write_article(article_title, samples)
     except sample_repo.SavingError as e:
         print("Error during processing article '%s'" % article_title)
         print(e)
-    except:
+    except e:
         print("Error during processing article '%s'" % article_title)
         print(e)
         raise

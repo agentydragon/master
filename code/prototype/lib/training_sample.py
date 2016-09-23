@@ -3,9 +3,7 @@ from recordclass import recordclass
 class TrainingSample(recordclass("TrainingSample",
                                  ["relation", "positive", "subject", "object",
                                   "sentence", "subject_token_indices",
-                                  "object_token_indices",
-                                  "origin_article",
-                                  "origin_sentence_id"])):
+                                  "object_token_indices"])):
     def to_json(self):
         assert len(self.subject_token_indices) > 0
         assert len(self.object_token_indices) > 0
@@ -50,6 +48,8 @@ class TrainingSampleParsedSentence(recordclass("TrainingSampleParsedSentence",
                                                "origin_article",
                                                "origin_sentence_id"])):
     def to_json(self):
+        assert self.origin_article is not None
+
         return {
             'text': self.text,
             'tokens': [token.to_json() for token in self.tokens],
