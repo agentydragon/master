@@ -35,7 +35,7 @@ def main():
     def slice_to_walltime(articles_slice):
         article_count = len(articles_slice)
         walltime_estimate = round(
-            (30 * article_count / float(args.local_parallelism)) * 2 + 100
+            (60 * article_count / float(args.local_parallelism)) * 2 + 100
         ) # or default: "04:00:00"
         return walltime_estimate
 
