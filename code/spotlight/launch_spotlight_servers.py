@@ -19,7 +19,6 @@ class Job(object):
     def start_new(self):
         port = self.i + 2222
         SCRIPT="""
-        cd /storage/brno7-cerit/home/prvak/master/code/bazel-bin/spotlight/launch_spotlight_servers.runfiles/__main__
         spotlight/Spotlight %d
         """ % port
         # 4: not enough
