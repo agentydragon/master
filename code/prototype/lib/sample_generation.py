@@ -7,13 +7,14 @@ from prototype.lib import training_sample
 import random
 
 def try_load_document(article_title):
+    article_repository = article_repo.ArticleRepo()
+
     # print(article_title)
-    if not article_repo.article_exists(article_title):
+    if not article_repository.article_exists():
         print('article', article_title, 'does not exist')
         return
 
-    article = article_repo.load_article(paths.WIKI_ARTICLES_PLAINTEXTS_DIR,
-                                        article_title)
+    article = article_repository.load_article(article_title)
     if 'corenlp_xml' not in article or 'spotlight_json' not in article:
         print('incomplete article', article_title)
         return

@@ -7,8 +7,7 @@ parser = argparse.ArgumentParser(description='TODO')
 parser.add_argument('--max_articles', type=int)
 parser.add_argument('--article_list_file',
                     default=paths.ARTICLE_LIST_PATH)
-parser.add_argument('--article_plaintexts_dir',
-                    default=paths.WIKI_ARTICLES_PLAINTEXTS_DIR)
+parser.add_argument('--article_plaintexts_dir')
 args = parser.parse_args()
 
 with open(args.article_list_file) as f:

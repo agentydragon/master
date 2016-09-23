@@ -51,23 +51,26 @@ def sanitize_article(article):
 def split_corpus(wiki_plaintext_path, target_dir, target_articles=None):
     articletext = ""
     articletitle = None
+
+    article_repository = article_repo.ArticleRepo(target_dir)
+
     with io.open(wiki_plaintext_path, encoding='utf8') as f:
         articles = 0
         regex = re.compile('^= .+ =$')
         for line in f:
             if regex.match(line):
                 if articletitle is not None:
-                    if article_repo.article_exists(articletitle,
-                                                   target_dir=target_dir):
+                    if article_repository.article_exists(articletitle):
                         print('#%d' % articles, 'article', articletitle,
                               'already exists')
                         pass
                     else:
                         print('#%d' % articles, 'writing article:', articletitle)
                         articletext = sanitize_article(articletext)
-                        article_repo.write_article(target_dir, articletitle,
-                                                   {'title': articletitle, 'plaintext':
-                                                    articletext})
+                        article_repository.write_article(
+                            articletitle,
+                            {'title': articletitle, 'plaintext': articletext}
+                        )
 
                 articletext = ""
                 articletitle = line.strip().replace('= ', '').replace(' =', '')

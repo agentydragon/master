@@ -43,7 +43,8 @@ def document_to_html(document):
 
     return html
 
-article = article_repo.load_article(paths.WIKI_ARTICLES_PLAINTEXTS_DIR, "Douglas Adams")
+article_repository = article_repo.ArticleRepo()
+article = article_repository.load_article("Douglas Adams")
 proto = parse_xmls_to_protos.document_to_proto(
     title = "Douglas Adams",
     root = ElementTree.fromstring(article['corenlp_xml']),

@@ -16,8 +16,7 @@ import paths
 
 import argparse
 parser = argparse.ArgumentParser(description='Look up articles in Spotlight')
-parser.add_argument('--article_plaintexts_dir',
-                    default=paths.WIKI_ARTICLES_PLAINTEXTS_DIR)
+parser.add_argument('--article_plaintexts_dir')
 parser.add_argument('--articles', action='append')
 parser.add_argument('--spotlight_endpoint')
 parser.add_argument('--force_redo')
@@ -53,5 +52,6 @@ for title in args.articles:
         continue
     spotlight_json = spotlight_client.annotate_text(plaintext)
     article_data['spotlight_json'] = spotlight_json
-    article_repo.write_article(args.article_plaintexts_dir, title, article_data)
+    article_repository = article_repo.ArticleRepo(args.article_plaintexts_dir)
+    article_repo.write_article(title, article_data)
     print("Done")
