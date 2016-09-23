@@ -92,7 +92,8 @@ def process_relation(pool, relation, count_per_relation,
 
 def main():
     parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--article_list_file', required=True)
+    parser.add_argument('--article_list_file',
+                        default=paths.ARTICLE_LIST_PATH)
     parser.add_argument('--wikidata_endpoint')
     parser.add_argument('--count_per_relation', default=10, type=int)
     parser.add_argument('--relation', action='append')

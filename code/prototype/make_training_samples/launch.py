@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 
 from prototype.lib import mapper
+from prototype.lib import paths
 import argparse
 
 def main():
     parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--article_list_file', type=str, required=True)
+    parser.add_argument('--article_list_file',
+                        default=paths.ARTICLE_LIST_PATH)
     parser.add_argument('--max_articles', type=int)
     parser.add_argument('--articles_per_job', type=int)
     parser.add_argument('--wikidata_endpoint')

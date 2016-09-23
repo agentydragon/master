@@ -29,39 +29,41 @@ shell = open(args.sh_out, "w")
 java = open(args.java_out, "w")
 
 python.write(
-    'WIKIPEDIA_PLAINTEXT = "' + wikipedia_plaintext + '"\n' +
-    'WIKI_ARTICLES_PLAINTEXTS_DIR = "' + wiki_articles_plaintexts_dir+ '"\n' +
-    'RELATION_SAMPLES_DIR = "' + relation_samples_dir + '"\n' +
-    'WORK_DIR = "' + work_dir + '"\n' +
-    'LOG_PATH = "' + log_path + '"\n' +
-    'CHARTS_PATH = "' + charts_path + '"\n' +
-    'MODELS_PATH = "' + models_path + '"\n' +
-    ''
+    'WIKIPEDIA_PLAINTEXT = "' + wikipedia_plaintext + '"\n'
+    'WIKI_ARTICLES_PLAINTEXTS_DIR = "' + wiki_articles_plaintexts_dir+ '"\n'
+    'RELATION_SAMPLES_DIR = "' + relation_samples_dir + '"\n'
+    'WORK_DIR = "' + work_dir + '"\n'
+    'LOG_PATH = "' + log_path + '"\n'
+    'CHARTS_PATH = "' + charts_path + '"\n'
+    'MODELS_PATH = "' + models_path + '"\n'
+    '\n'
+    # TODO: hack
+    'ARTICLE_LIST_PATH = "' + (storage_home + "/code/prototype/persons") + "'\n"
     # TODO: allow path overrides
 )
 
 shell.write(
-    'WIKIPEDIA_PLAINTEXT="' + wikipedia_plaintext + '"\n' +
-    'WIKI_ARTICLES_PLAINTEXTS_DIR="' + wiki_articles_plaintexts_dir+ '"\n' +
-    'LOG_PATH="' + log_path + '"\n' +
-    'CHARTS_PATH="' + charts_path + '"\n' +
-    'MODELS_PATH="' + models_path + '"\n' +
-    '\n' +
-    'STORAGE_HOME="' + storage_home + '"\n' +
-    'WORK_DIR="' + work_dir + '"\n' +
-    'FUSEKI_DIR="' + (storage_home + '/fuseki') + '"\n' +
-    'WIKIDATA_DUMP_DIR="' + (work_dir + '/wikidata') + '"\n' +
-    'WIKIDATA_DUMP_DATE="' + wikidata_dump_date + '"\n' +
-    'WIKIDATA_TTL_DUMP_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all-BETA.ttl.bz2\n' +
-    'WIKIDATA_TTL_DUMP_FILE=$WIKIDATA_DUMP_DIR/${WIKIDATA_TTL_DUMP_FILENAME}\n' +
-    'WIKIDATA_TTL_DUMP_UNPACKED_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all-BETA.ttl.bz2\n' +
-    'WIKIDATA_TTL_DUMP_UNPACKED_FILE=$WIKIDATA_DUMP_DIR/${WIKIDATA_TTL_DUMP_UNPACKED_FILENAME}\n' +
-    'WIKIPEDIA_DUMP_DIR="' + (work_dir + '/wikipedia_dump') + '"\n' +
-    'WIKIPEDIA_DUMP_DATE="' + wikipedia_dump_date + '"\n' +
-    'WIKIPEDIA_DUMP_FILENAME=enwiki-${WIKIPEDIA_DUMP_DATE}-pages-articles.xml.bz2\n' +
-    'WIKIPEDIA_DUMP_FILE=$WIKIPEDIA_DUMP_DIR/${WIKIPEDIA_DUMP_FILENAME}\n' +
-    'WIKIDATA_JSON_DUMP_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all.json.bz2\n' +
-    'WIKIDATA_JSON_DUMP_FILE=$WIKIDATA_DUMP_DIR/${WIKIDATA_JSON_DUMP_FILENAME}\n' +
+    'WIKIPEDIA_PLAINTEXT="' + wikipedia_plaintext + '"\n'
+    'WIKI_ARTICLES_PLAINTEXTS_DIR="' + wiki_articles_plaintexts_dir+ '"\n'
+    'LOG_PATH="' + log_path + '"\n'
+    'CHARTS_PATH="' + charts_path + '"\n'
+    'MODELS_PATH="' + models_path + '"\n'
+    '\n'
+    'STORAGE_HOME="' + storage_home + '"\n'
+    'WORK_DIR="' + work_dir + '"\n'
+    'FUSEKI_DIR="' + (storage_home + '/fuseki') + '"\n'
+    'WIKIDATA_DUMP_DIR="' + (work_dir + '/wikidata') + '"\n'
+    'WIKIDATA_DUMP_DATE="' + wikidata_dump_date + '"\n'
+    'WIKIDATA_TTL_DUMP_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all-BETA.ttl.bz2\n'
+    'WIKIDATA_TTL_DUMP_FILE=$WIKIDATA_DUMP_DIR/${WIKIDATA_TTL_DUMP_FILENAME}\n'
+    'WIKIDATA_TTL_DUMP_UNPACKED_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all-BETA.ttl.bz2\n'
+    'WIKIDATA_TTL_DUMP_UNPACKED_FILE=$WIKIDATA_DUMP_DIR/${WIKIDATA_TTL_DUMP_UNPACKED_FILENAME}\n'
+    'WIKIPEDIA_DUMP_DIR="' + (work_dir + '/wikipedia_dump') + '"\n'
+    'WIKIPEDIA_DUMP_DATE="' + wikipedia_dump_date + '"\n'
+    'WIKIPEDIA_DUMP_FILENAME=enwiki-${WIKIPEDIA_DUMP_DATE}-pages-articles.xml.bz2\n'
+    'WIKIPEDIA_DUMP_FILE=$WIKIPEDIA_DUMP_DIR/${WIKIPEDIA_DUMP_FILENAME}\n'
+    'WIKIDATA_JSON_DUMP_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all.json.bz2\n'
+    'WIKIDATA_JSON_DUMP_FILE=$WIKIDATA_DUMP_DIR/${WIKIDATA_JSON_DUMP_FILENAME}\n'
     ''
 )
 

@@ -1,9 +1,11 @@
 import argparse
 from prototype.lib import mapper
+from prototype.lib import paths
 
 def main():
     parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--article_list_file', type=str, required=True)
+    parser.add_argument('--article_list_file',
+                        default=paths.ARTICLE_LIST_PATH)
     parser.add_argument('--max_articles', type=int)
     parser.add_argument('--spotlight_endpoint')
     parser.add_argument('--force_redo')

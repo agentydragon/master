@@ -1,9 +1,10 @@
-import argparse
+istmport argparse
 from prototype.lib import mapper
 
 def main():
     parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--article_list_file', type=str, required=True)
+    parser.add_argument('--article_list_file',
+                        default=paths.ARTICLE_LIST_PATH)
     parser.add_argument('--max_articles', type=int)
     parser.add_argument('--articles_per_job', type=int)
     # TODO: add max_jobs
