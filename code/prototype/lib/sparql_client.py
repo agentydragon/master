@@ -20,15 +20,16 @@ class SPARQLClient(object):
         self.client = SPARQLWrapper.SPARQLWrapper(endpoint)
         self.client.setReturnFormat(SPARQLWrapper.JSON)
 
-    def get_results(self, query, retry=5):
+    def get_results(self, query, retry=4):
         try:
             self.client.setQuery(STANDARD_PREFIXES + query)
             return self.client.query().convert()
         except (ConnectionResetError, OSError, urllib.error.URLError, SPARQLWrapper.SPARQLExceptions.EndPointInternalError) as e:
-            if retry:
-                # Try retrying in case of transient failures
-                print(e, "Retrying in 10 seconds (retries left:", retry, ")")
-                time.sleep(10)
-                return self.get_results(query, retry=retry-1)
-            else:
+            error = e
+            if not retry:
                 raise
+        # Try retrying in case of transient failures
+        time_to_sleep = 10 * (2 ** (4 - retry))
+        print(error, "Retrying in %d seconds (retries left:" % time_to_sleep, retry, ")")
+        time.sleep(time_to_sleep)
+        return self.get_results(query, retry=retry-1)

@@ -4,7 +4,10 @@ from prototype.lib import wikidata
 import argparse
 import multiprocessing
 
-def process_article(article_title, wikidata_client):
+def process_article(article_title):
+    global wikidata_endpoint
+    wikidata_client = wikidata.WikidataClient(wikidata_endpoint or None)
+
     samples = sample_generation.get_samples_from_document(
         article_title,
         wikidata_client=wikidata_client
@@ -30,17 +33,16 @@ def main():
     parser.add_argument('--parallelism', default=1, type=int)
     args = parser.parse_args()
 
-    wikidata_client = wikidata.WikidataClient(args.wikidata_endpoint or None)
+    global wikidata_endpoint
+    wikidata_endpoint = args.wikidata_endpoint
 
     assert args.parallelism >= 1
     if args.parallelism == 1:
         for article in args.articles:
-            process_article(article, wikidata_client)
+            process_article(article)
     else:
-        assert False
-    #    pool = multiprocessing.Pool(args.parallelism)
-    #    pool.map(lambda article: process_article(article, wikidata_client),
-    #             args.articles)
+        pool = multiprocessing.Pool(args.parallelism)
+        pool.map(process_article, args.articles)
 
 if __name__ == '__main__':
     main()
