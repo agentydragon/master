@@ -42,7 +42,7 @@ def main():
                             args.articles_per_job,
                             make_commandline,
                             slice_to_walltime,
-                            cores=max(2, args.parallelism))
+                            cores=max(2, args.local_parallelism))
 
 if __name__ == '__main__':
     main()

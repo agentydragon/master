@@ -61,7 +61,8 @@ class TrainingSampleParsedSentence(recordclass("TrainingSampleParsedSentence",
     def from_json(klass, json):
         return klass(
             text = json['text'],
-            tokens = list(map(TrainingSampleSentenceToken.from_json, json['tokens']))
+            tokens = list(map(TrainingSampleSentenceToken.from_json,
+                              json['tokens'])),
             origin_article = json['origin_article'],
             origin_sentence_id = json['origin_sentence_id'],
         )
