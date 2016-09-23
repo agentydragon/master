@@ -37,9 +37,10 @@ def main():
         for article in args.articles:
             process_article(article, wikidata_client)
     else:
-        pool = multiprocessing.Pool(args.parallelism)
-        pool.map(lambda article: process_article(article, wikidata_client),
-                 args.articles)
+        assert False
+    #    pool = multiprocessing.Pool(args.parallelism)
+    #    pool.map(lambda article: process_article(article, wikidata_client),
+    #             args.articles)
 
 if __name__ == '__main__':
     main()
