@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from prototype.lib import mapper
-from prototype.lib import paths
+import paths
 import argparse
 
 def main():

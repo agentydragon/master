@@ -10,7 +10,7 @@ def try_load_document(article_title):
     article_repository = article_repo.ArticleRepo()
 
     # print(article_title)
-    if not article_repository.article_exists():
+    if not article_repository.article_exists(article_title):
         print('article', article_title, 'does not exist')
         return
 
