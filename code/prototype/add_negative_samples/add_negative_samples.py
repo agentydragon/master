@@ -3,6 +3,7 @@ from prototype.lib import sample_generation
 from prototype.lib import training_sample
 from prototype.lib import dbpedia
 from prototype.lib import wikidata
+from prototype.lib import zk
 import paths
 import random
 import argparse
@@ -106,6 +107,8 @@ def main():
     parser.add_argument('--relation', action='append')
     parser.add_argument('--parallelism', default=1, type=int)
     args = parser.parse_args()
+
+    zk.start()
 
     N_ARTICLES = 100
     N_COMPLETE_NEGATIVES = 1000

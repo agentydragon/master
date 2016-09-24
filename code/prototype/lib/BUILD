@@ -1,6 +1,13 @@
 package(default_visibility = ["//visibility:public"])
 
 py_library(
+    name = "zk_lib",
+    srcs = [
+        "zk.py",
+    ],
+)
+
+py_library(
     name = "file_util_lib",
     srcs = [
         "file_util.py",
@@ -169,6 +176,7 @@ py_library(
     deps = [
         ":sparql_client_lib",
         ":wikidata_util_lib",
+        ":zk_lib",
     ],
     #srcs_version = "PY3",
 )

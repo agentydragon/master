@@ -1,13 +1,22 @@
 from prototype.lib import wikidata_util
 from prototype.lib import sparql_client
 
-wikidata_url = 'https://query.wikidata.org/sparql'
+default_wikidata_url = 'https://query.wikidata.org/sparql'
 
 class WikidataClient(object):
     def __init__(self, endpoint=None):
         self.wikidata_relations_cache = {}
+
         if endpoint is None:
-            endpoint = wikidata_url
+            zk_endpoint = zk.get_wikidata_endpoint()
+            if zk_endpoint:
+                print("Grabbed Wikidata endpoint from ZK:", zk_endpoint)
+                endpoint = zk_endpoint
+            else:
+                print("WARN: Falling back to Wikimedia Foundation's Wikidata")
+                endpoint = default_wikidata_url
+
+
         self.wikidata_client = sparql_client.SPARQLClient(endpoint)
 
     def collect_forward_properties(self, wikidata_id):
