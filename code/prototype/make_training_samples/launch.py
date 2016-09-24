@@ -19,18 +19,31 @@ def main():
     args = parser.parse_args()
 
     def make_commandline(articles_slice):
+        wikidata = args.wikidata_endpoint
+        if not wikidata:
+            zk_wikidata = zk.get_wikidata_endpoint()
+            if zk_wikidata:
+                wikidata = ('http://%s/wikidata/query' % zk_wikidata)
+            else:
+                wikidata = ''
+
+        dbpedia = args.dbpedia_endpoint
+        if not dbpedia:
+            zk_dbpedia = zk.get_dbpedia_endpoint()
+            if zk_dbpedia:
+                dbpedia = ('http://%s/dbpedia-sameas/query' % zk_dbpedia)
+            else:
+                dbpedia = ''
+
         job_command = [
             'prototype/make_training_samples/make_training_samples',
-            '--parallelism', str(args.local_parallelism)
-
-            '--wikidata_endpoint',
-            (args.wikidata_endpoint or zk.get_wikidata_endpoint() or ''),
-
-            '--dbpedia_endpoint',
-            (args.dbpedia_endpoint or zk.get_dbpedia_endpoint() or '')
+            '--parallelism', str(args.local_parallelism),
+            '--wikidata_endpoint', wikidata,
+            '--dbpedia_endpoint', dbpedia,
         ]
         for article in articles_slice:
             job_command.extend(['--articles', article])
+        print(job_command)
         return job_command
 
     def slice_to_walltime(articles_slice):
@@ -45,12 +58,14 @@ def main():
         maximum = args.max_articles
     )
 
-    mapper.launch_in_slices('make-training-samples',
-                            art_set.article_names,
-                            args.articles_per_job,
-                            make_commandline,
-                            slice_to_walltime,
-                            cores=max(2, args.local_parallelism))
+    mapper.launch_in_slices(
+        'make-training-samples',
+        art_set.article_names,
+        args.articles_per_job,
+        make_commandline,
+        slice_to_walltime,
+        cores=max(2, args.local_parallelism)
+    )
 
 if __name__ == '__main__':
     main()
