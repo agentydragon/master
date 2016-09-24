@@ -27,7 +27,7 @@ relation = 'P25'
 wikidata_client = wikidata.WikidataClient()
 print('Training for', relation, wikidata_client.get_name(relation))
 
-positive_samples = sample_repo.load_positive_samples(relation)
+positive_samples = sample_repo.load_positive_samples(relation)[:20]
 negative_samples = []
 
 article_titles = set(sample.sentence.origin_article
