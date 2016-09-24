@@ -1,4 +1,6 @@
 from prototype.lib import sample_repo
+from prototype.lib import dbpedia
+from prototype.lib import sample_generation
 import paths
 from prototype.lib import file_util
 import matplotlib
@@ -67,11 +69,45 @@ def sample_to_features_label(sample):
 
     return (features, sample.positive)
 
-relation_samples = sample_repo.load_samples('P25')
-print('Positive:', len([sample for sample in relation_samples if
-                       sample.positive]))
-print('Negative:', len([sample for sample in relation_samples if not
-                       sample.positive]))
+positive_samples = sample_repo.load_positive_samples('P25')
+negative_samples = []
+
+article_titles = set(sample.sentence.origin_article
+                     for sample in positive_samples)
+dbpedia_client = dbpedia.DBpediaClient()
+for i, title in enumerate(article_titles):
+    print('Getting negative samples from', title, '(', i, '/', len(article_titles), ')')
+
+    art = sample_generation.try_load_document(title)
+    if art is None:
+        continue
+
+    positive_sentence_ids = set(sample.sentence.origin_sentence_id
+                                for sample in positive_samples
+                                if sample.sentence.origin_article == title)
+
+    for sentence in art.sentences:
+        if sentence.id in positive_sentence_ids:
+            continue
+        else:
+            sentence_wrapper = sample_generation.SentenceWrapper(art,
+                                                                 sentence,
+                                                                 dbpedia_client)
+            wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
+            for s in sentence.wikidata_ids:
+                for o in sentence.wikidata_ids:
+                    if sentence_wrapper.mentions_in_sentence_overlap(s, o):
+                        continue
+
+                    negative_samples.append(sentence_wrapper.make_training_sample(
+                        s, 'P25', o, positive=False))
+
+#relation_samples = sample_repo.load_samples('P25')
+relation_samples = positive_samples + negative_samples
+print('Positive:', len([sample for sample in relation_samples
+                        if sample.positive]))
+print('Negative:', len([sample for sample in relation_samples
+                        if not sample.positive]))
 
 things = list(map(sample_to_features_label, relation_samples)) # [:10]
 all_features = set()
@@ -84,7 +120,7 @@ for i, thing in enumerate(things):
     for feature in thing[0]:
         matrix[i, all_features.index(feature)] = 1
 
-print(matrix.toarray())
+# print(matrix.toarray())
 
 target = [thing[1] for thing in things]
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(

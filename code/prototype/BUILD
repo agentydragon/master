@@ -69,6 +69,8 @@ py_binary(
     deps = [
         "//prototype/lib:file_util_lib",
         "//prototype/lib:sample_repo_lib",
+        "//prototype/lib:dbpedia_lib",
+        "//prototype/lib:sample_generation_lib",
         "//:paths_lib",
     ],
     default_python_version = "PY3",

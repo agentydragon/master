@@ -17,7 +17,6 @@ class WikidataClient(object):
                 print("WARN: Falling back to Wikimedia Foundation's Wikidata")
                 endpoint = default_wikidata_url
 
-
         self.wikidata_client = sparql_client.SPARQLClient(endpoint)
 
     def collect_forward_properties(self, wikidata_id):

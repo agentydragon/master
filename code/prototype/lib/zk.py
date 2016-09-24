@@ -13,7 +13,7 @@ def get_wikidata_endpoint():
     wikidata_endpoint_node = '/user/prvak/thesis/wikidata-service'
 
     if kz.exists(wikidata_endpoint_node):
-        return kz.get(wikidata_endpoint_node).decode('UTF-8')
+        return kz.get(wikidata_endpoint_node)[0].decode('UTF-8')
     else:
         return None
 
@@ -25,6 +25,6 @@ def get_dbpedia_endpoint():
     dbpedia_endpoint_node = '/user/prvak/thesis/dbpedia-service'
 
     if kz.exists(dbpedia_endpoint_node):
-        return kz.get(dbpedia_endpoint_node).decode('UTF-8')
+        return kz.get(dbpedia_endpoint_node)[0].decode('UTF-8')
     else:
         return None

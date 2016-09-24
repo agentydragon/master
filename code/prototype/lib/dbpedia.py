@@ -17,13 +17,13 @@ class DBpediaClient(object):
                 print("WARN: Falling back to Wikimedia Foundation's DBpedia")
                 endpoint = default_dbpedia_url
 
-        self.dbpedia_client = sparql_client.SPARQLClient('http://dbpedia.org/sparql')
+        self.dbpedia_client = sparql_client.SPARQLClient(endpoint)
 
     def dbpedia_uri_to_wikidata_id(self, uri):
         if uri in self.dbpedia_to_wikidata_cache:
             return self.dbpedia_to_wikidata_cache[uri]
 
-        results = dbpedia_client.get_results("""
+        results = self.dbpedia_client.get_results("""
             SELECT ?same
             WHERE { <%s> owl:sameAs ?same . }
         """ % uri)
