@@ -18,6 +18,7 @@ py_binary(
     ],
     deps = [
         "//thirdparty/jena:jena_lib",
+        "//prototype/lib:file_util_lib",
         "//:paths_lib",
     ],
 )

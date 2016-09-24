@@ -1,21 +1,22 @@
 from thirdparty.jena import jena
 from prototype.lib import file_util
 import subprocess
+import paths
 
 dataset_path = paths.WORK_DIR + '/fuseki-datasets/dbpedia-sameas'
 
 print("cleaning output")
-subprocess.check_output([
+subprocess.call([
     "rm",
     "-f",
     "interlanguage-links_en.ttl.bz2"
 ])
-subprocess.check_output([
+subprocess.call([
     "rm",
     "-f",
     "interlanguage-links_en.ttl"
 ])
-subprocess.check_output([
+subprocess.call([
     "rm",
     "-rf",
     dataset_path
@@ -24,15 +25,16 @@ subprocess.check_output([
 file_util.ensure_dir(dataset_path)
 
 print("downloading...")
-subprocess.check_output([
+subprocess.call([
     "wget",
     "http://downloads.dbpedia.org/2015-04/core-i18n/en/interlanguage-links_en.ttl.bz2"
-], stdout=subprocess.STDOUT)
+])
 
 print("bunzipping...")
-subprocess.check_output([
-    "bunzip2 interlanguage-links_en.ttl.bz2"
-], stdout=subprocess.STDOUT)
+subprocess.call([
+    "bunzip2",
+    "interlanguage-links_en.ttl.bz2"
+])
 
 print("loading...")
 jena.load_ttl_file(
