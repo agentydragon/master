@@ -24,6 +24,9 @@ wikipedia_dump_date = '20160720'
 
 relation_samples_dir = work_dir + '/relation-samples'
 
+wikidata_dump_dir = (work_dir + '/wikidata')
+wikidata_ttl_dump_unpacked_filename = ('wikidata-%s-all-BETA.ttl.bz2' % wikidata_dump_date)
+
 python = open(args.python_out, "w")
 shell = open(args.sh_out, "w")
 java = open(args.java_out, "w")
@@ -40,20 +43,16 @@ python.write(
     # TODO: hack
     'ARTICLE_LIST_PATH = "' + (storage_home + "/master/code/prototype/persons") + '"\n'
     # TODO: allow path overrides
+    'WIKIDATA_TTL_DUMP_UNPACKED_FILE = ' + wikidata_dump_dir + '/' + wikidata_ttl_dump_unpacked_filename + '\n'
 )
-
-wikidata_dump_dir = (work_dir + '/wikidata')
 shell.write(
     'WIKIPEDIA_PLAINTEXT="' + wikipedia_plaintext + '"\n'
     '\n'
     'STORAGE_HOME="' + storage_home + '"\n'
     'WORK_DIR="' + work_dir + '"\n'
-    'FUSEKI_DIR="' + (storage_home + '/fuseki') + '"\n'
     'WIKIDATA_DUMP_DATE="' + wikidata_dump_date + '"\n'
     'WIKIDATA_TTL_DUMP_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all-BETA.ttl.bz2\n'
     'WIKIDATA_TTL_DUMP_FILE=' + wikidata_dump_dir + '/${WIKIDATA_TTL_DUMP_FILENAME}\n'
-    'WIKIDATA_TTL_DUMP_UNPACKED_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all-BETA.ttl.bz2\n'
-    'WIKIDATA_TTL_DUMP_UNPACKED_FILE=' + wikidata_dump_dir + '/${WIKIDATA_TTL_DUMP_UNPACKED_FILENAME}\n'
     'WIKIPEDIA_DUMP_DIR="' + (work_dir + '/wikipedia_dump') + '"\n'
     'WIKIPEDIA_DUMP_DATE="' + wikipedia_dump_date + '"\n'
     'WIKIPEDIA_DUMP_FILENAME=enwiki-${WIKIPEDIA_DUMP_DATE}-pages-articles.xml.bz2\n'
