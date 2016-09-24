@@ -4,7 +4,8 @@ py_binary(
         "run_fuseki.py",
     ],
     deps = [
-        "//thirdparty:fuseki_lib",
+        "//thirdparty/fuseki:fuseki_lib",
+        "//:paths_lib",
     ],
 )
 

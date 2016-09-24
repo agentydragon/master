@@ -1,5 +1,5 @@
 import paths
-from thirdparty import fuseki
+from thirdparty.fuseki import fuseki
 
 from kazoo import client as kazoo_client
 
@@ -8,8 +8,14 @@ kz = kazoo_client.KazooClient()
 kz.start()
 
 kz.ensure_path('/user/prvak/thesis')
+
+node = '/user/prvak/thesis/wikidata-service'
+
+if kz.exists(node):
+    kz.delete(node)
+
 kz.create(
-    '/user/prvak/thesis/wikidata-service',
+    node,
     b'hador:3030',
     makepath = True
 )

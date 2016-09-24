@@ -57,7 +57,7 @@ python.write(
     'WIKIPEDIA_DUMP_FILENAME = "' + wikipedia_dump_filename + '"\n'
     'WIKIPEDIA_DUMP_FILE = "' + wikipedia_dump_file + '"\n'
     'WIKIDATA_JSON_DUMP_FILENAME = "wikidata-' + wikidata_dump_date + '-all.json.bz2"\n'
-    'WIKIDATA_JSON_DUMP_FILE = "' + wikidata_dump_dir + '/" + WIKIDATA_JSON_DUMP_FILENAME"\n'
+    'WIKIDATA_JSON_DUMP_FILE = "' + wikidata_dump_dir + '/" + WIKIDATA_JSON_DUMP_FILENAME\n'
 )
 shell.write(
     'WIKIPEDIA_PLAINTEXT="' + wikipedia_plaintext + '"\n'
