@@ -20,6 +20,13 @@ from prototype.lib import zk
 
 #zk.start()
 
+parser = argparse.ArgumentParser(description='TODO')
+parser.add_argument('--relation', default='P25')
+parser.add_argument('--max_pos', default=None, type=int)
+args = parser.parse_args()
+
+relation = args.relation
+
 art_set = article_set.ArticleSet()
 train_articles, test_articles = art_set.split_train_test()
 
@@ -27,7 +34,9 @@ relation = 'P25'
 wikidata_client = wikidata.WikidataClient()
 print('Training for', relation, wikidata_client.get_name(relation))
 
-positive_samples = sample_repo.load_positive_samples(relation)[:20]
+positive_samples = sample_repo.load_positive_samples(relation)
+if args.max_pos:
+    positive_samples = positive_samples[:args.max_pos]
 negative_samples = []
 
 article_titles = set(sample.sentence.origin_article
