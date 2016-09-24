@@ -11,6 +11,7 @@ py_binary(
         "//prototype/lib:zk_lib",
         "//:paths_lib",
     ],
+    visibility = ["//visibility:public"]
 )
 
 py_binary(
