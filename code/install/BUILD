@@ -7,7 +7,7 @@ sh_binary(
         "//:paths_sh_lib",
     ],
     data = [
-        "//:wiki2text",
+        "//thirdparty:wiki2text",
     ],
 )
 

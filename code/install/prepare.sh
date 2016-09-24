@@ -14,7 +14,7 @@ source paths.sh
 function convert_wikipedia_to_plaintext() {
 	echo "converting wikipedia to plaintext"
 	# TODO: -done--file?
-	bzcat $WIKIPEDIA_DUMP_FILE | ./wiki2text > $WIKIPEDIA_PLAINTEXT
+	bzcat $WIKIPEDIA_DUMP_FILE | ../thirdparty/wiki2text > $WIKIPEDIA_PLAINTEXT
 }
 
 function main() {

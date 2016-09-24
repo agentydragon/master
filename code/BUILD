@@ -1,5 +1,3 @@
-exports_files(['wiki2text'])
-
 py_binary(
     name = "run_fuseki",
     srcs = [
