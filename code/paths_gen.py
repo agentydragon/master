@@ -31,6 +31,10 @@ python = open(args.python_out, "w")
 shell = open(args.sh_out, "w")
 java = open(args.java_out, "w")
 
+wikipedia_dump_dir = (work_dir + '/wikipedia_dump')
+wikipedia_dump_filename = 'enwiki-' + wikipedia_dump_date + '-pages-articles.xml.bz2'
+wikipedia_dump_file = wikipedia_dump_dir + '/' + wikipedia_dump_filename
+
 python.write(
     'WIKIPEDIA_PLAINTEXT = "' + wikipedia_plaintext + '"\n'
     'WIKI_ARTICLES_PLAINTEXTS_DIR = "' + wiki_articles_plaintexts_dir+ '"\n'
@@ -43,22 +47,21 @@ python.write(
     # TODO: hack
     'ARTICLE_LIST_PATH = "' + (storage_home + "/master/code/prototype/persons") + '"\n'
     # TODO: allow path overrides
-    'WIKIDATA_TTL_DUMP_UNPACKED_FILE = ' + wikidata_dump_dir + '/' + wikidata_ttl_dump_unpacked_filename + '\n'
+    'WIKIDATA_TTL_DUMP_UNPACKED_FILE = "' + wikidata_dump_dir + '/' + wikidata_ttl_dump_unpacked_filename + '"\n'
+    'WIKIDATA_DUMP_DATE = "' + wikidata_dump_date + '"\n'
+    'WIKIDATA_TTL_DUMP_FILENAME = "wikidata-' + wikidata_dump_date + '-all-BETA.ttl.bz2"\n'
+    'WIKIDATA_TTL_DUMP_FILE = "' + wikidata_dump_dir + '/" + WIKIDATA_TTL_DUMP_FILENAME\n'
+    'WIKIPEDIA_DUMP_DIR = "' + wikipedia_dump_dir + '"\n'
+    'WIKIPEDIA_DUMP_FILE = "' + wikipedia_dump_file + '"\n'
+    'WIKIDATA_JSON_DUMP_FILENAME = "wikidata-' + wikidata_dump_date + '-all.json.bz2"\n'
+    'WIKIDATA_JSON_DUMP_FILE = "' + wikidata_dump_dir + '/" + WIKIDATA_JSON_DUMP_FILENAME"\n'
 )
 shell.write(
     'WIKIPEDIA_PLAINTEXT="' + wikipedia_plaintext + '"\n'
     '\n'
-    'STORAGE_HOME="' + storage_home + '"\n'
-    'WORK_DIR="' + work_dir + '"\n'
-    'WIKIDATA_DUMP_DATE="' + wikidata_dump_date + '"\n'
-    'WIKIDATA_TTL_DUMP_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all-BETA.ttl.bz2\n'
-    'WIKIDATA_TTL_DUMP_FILE=' + wikidata_dump_dir + '/${WIKIDATA_TTL_DUMP_FILENAME}\n'
-    'WIKIPEDIA_DUMP_DIR="' + (work_dir + '/wikipedia_dump') + '"\n'
     'WIKIPEDIA_DUMP_DATE="' + wikipedia_dump_date + '"\n'
-    'WIKIPEDIA_DUMP_FILENAME=enwiki-${WIKIPEDIA_DUMP_DATE}-pages-articles.xml.bz2\n'
-    'WIKIPEDIA_DUMP_FILE=$WIKIPEDIA_DUMP_DIR/${WIKIPEDIA_DUMP_FILENAME}\n'
-    'WIKIDATA_JSON_DUMP_FILENAME=wikidata-${WIKIDATA_DUMP_DATE}-all.json.bz2\n'
-    'WIKIDATA_JSON_DUMP_FILE=' + wikidata_dump_dir + '/${WIKIDATA_JSON_DUMP_FILENAME}\n'
+    'WIKIPEDIA_DUMP_FILENAME="' + wikipedia_dump_filename + '"\n'
+    'WIKIPEDIA_DUMP_FILE="' + wikipedia_dump_file + '"\n'
     ''
 )
 
