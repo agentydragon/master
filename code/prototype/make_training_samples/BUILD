@@ -22,6 +22,7 @@ py_binary(
         "//:paths_lib",
         "//prototype/lib:file_util_lib",
         "//prototype/lib:mapper_lib",
+        "//prototype/lib:article_set_lib",
     ],
     data = [
         ":make_training_samples",

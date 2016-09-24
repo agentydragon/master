@@ -117,6 +117,7 @@ py_test(
     ],
     deps = [
         ":dbpedia_lib",
+        ":zk_lib",
     ],
 )
 

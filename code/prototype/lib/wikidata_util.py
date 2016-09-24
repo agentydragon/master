@@ -1,12 +1,17 @@
 wikidata_entity_prefix = 'http://www.wikidata.org/entity/'
+wikidata_entity_prefix2 = 'http://wikidata.org/entity/'
 wikidata_property_prefix = 'http://www.wikidata.org/prop/direct/'
 
 def is_wikidata_entity_url(url):
-    return url.startswith(wikidata_entity_prefix)
+    return (url.startswith(wikidata_entity_prefix) or
+            url.startswith(wikidata_entity_prefix2))
 
 def wikidata_entity_url_to_entity_id(url):
-    assert url.startswith(wikidata_entity_prefix)
-    return url[len(wikidata_entity_prefix):]
+    if url.startswith(wikidata_entity_prefix):
+        return url[len(wikidata_entity_prefix):]
+    if url.startswith(wikidata_entity_prefix2):
+        return url[len(wikidata_entity_prefix2):]
+    assert False
 
 def wikidata_property_url_to_property_id(url):
     assert url.startswith(wikidata_property_prefix)

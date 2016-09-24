@@ -4,24 +4,6 @@ from prototype.lib import mapper
 from prototype.lib import article_set
 import argparse
 
-def make_commandline(articles_slice):
-    job_command = [
-        'prototype/make_training_samples/make_training_samples',
-        '--parallelism', str(args.local_parallelism)
-    ]
-    if args.wikidata_endpoint:
-        job_command.extend(['--wikidata_endpoint', args.wikidata_endpoint])
-    for article in articles_slice:
-        job_command.extend(['--articles', article])
-    return job_command
-
-def slice_to_walltime(articles_slice):
-    article_count = len(articles_slice)
-    walltime_estimate = round(
-        (60 * article_count / float(args.local_parallelism)) * 2 + 100
-    ) # or default: "04:00:00"
-    return walltime_estimate
-
 def main():
     parser = argparse.ArgumentParser(description='TODO')
     parser.add_argument('--article_list_file', default=None)
@@ -31,6 +13,24 @@ def main():
     parser.add_argument('--local_parallelism', type=int, default=1)
     # TODO: add max_jobs
     args = parser.parse_args()
+
+    def make_commandline(articles_slice):
+        job_command = [
+            'prototype/make_training_samples/make_training_samples',
+            '--parallelism', str(args.local_parallelism)
+        ]
+        if args.wikidata_endpoint:
+            job_command.extend(['--wikidata_endpoint', args.wikidata_endpoint])
+        for article in articles_slice:
+            job_command.extend(['--articles', article])
+        return job_command
+
+    def slice_to_walltime(articles_slice):
+        article_count = len(articles_slice)
+        walltime_estimate = round(
+            (60 * article_count / float(args.local_parallelism)) * 2 + 100
+        ) # or default: "04:00:00"
+        return walltime_estimate
 
     art_set = article_set.ArticleSet(
         path = args.article_list_file,
