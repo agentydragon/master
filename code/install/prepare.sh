@@ -18,7 +18,6 @@ function convert_wikipedia_to_plaintext() {
 }
 
 function main() {
-	#./metacentrum_download_dumps.sh
 	convert_wikipedia_to_plaintext
 }
 

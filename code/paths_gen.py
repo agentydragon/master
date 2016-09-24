@@ -46,23 +46,22 @@ python.write(
     '\n'
     # TODO: hack
     'ARTICLE_LIST_PATH = "' + (storage_home + "/master/code/prototype/persons") + '"\n'
+    '\n'
     # TODO: allow path overrides
     'WIKIDATA_TTL_DUMP_UNPACKED_FILE = "' + wikidata_dump_dir + '/' + wikidata_ttl_dump_unpacked_filename + '"\n'
     'WIKIDATA_DUMP_DATE = "' + wikidata_dump_date + '"\n'
     'WIKIDATA_TTL_DUMP_FILENAME = "wikidata-' + wikidata_dump_date + '-all-BETA.ttl.bz2"\n'
     'WIKIDATA_TTL_DUMP_FILE = "' + wikidata_dump_dir + '/" + WIKIDATA_TTL_DUMP_FILENAME\n'
+    'WIKIPEDIA_DUMP_DATE = "' + wikipedia_dump_date + '"\n'
     'WIKIPEDIA_DUMP_DIR = "' + wikipedia_dump_dir + '"\n'
+    'WIKIPEDIA_DUMP_FILENAME = "' + wikipedia_dump_filename + '"\n'
     'WIKIPEDIA_DUMP_FILE = "' + wikipedia_dump_file + '"\n'
     'WIKIDATA_JSON_DUMP_FILENAME = "wikidata-' + wikidata_dump_date + '-all.json.bz2"\n'
     'WIKIDATA_JSON_DUMP_FILE = "' + wikidata_dump_dir + '/" + WIKIDATA_JSON_DUMP_FILENAME"\n'
 )
 shell.write(
     'WIKIPEDIA_PLAINTEXT="' + wikipedia_plaintext + '"\n'
-    '\n'
-    'WIKIPEDIA_DUMP_DATE="' + wikipedia_dump_date + '"\n'
-    'WIKIPEDIA_DUMP_FILENAME="' + wikipedia_dump_filename + '"\n'
     'WIKIPEDIA_DUMP_FILE="' + wikipedia_dump_file + '"\n'
-    ''
 )
 
 java.write("""
