@@ -10,17 +10,13 @@ from sklearn import naive_bayes
 from sklearn import cross_validation
 from sklearn import linear_model
 import pickle
-from prototype.lib import feature_extraction
+from prototype import feature_extraction
 
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot
 
 import multiprocessing
-
-def sample_to_features_label(sample):
-    features = feature_extraction.sample_to_features(sample)
-    return (features, sample.positive)
 
 wikidata_client = wikidata.WikidataClient()
 
@@ -44,7 +40,8 @@ def train_classifier_for_relation(relation):
         print('Too few samples to train for', relation, '.')
         return
 
-    things = list(map(sample_to_features_label, relation_samples)) # [:10]
+    things = list(map(feature_extraction.sample_to_features_label,
+                      relation_samples)) # [:10]
     all_features = set()
     for thing in things:
         all_features = all_features.union(thing[0])

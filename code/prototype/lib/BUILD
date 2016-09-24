@@ -15,6 +15,16 @@ py_library(
 )
 
 py_library(
+    name = "article_set_lib",
+    srcs = [
+        "article_set.py",
+    ],
+    deps = [
+        "//:paths_lib",
+    ],
+)
+
+py_library(
     name = "article_repo_lib",
     srcs = [
         "article_repo.py",
@@ -157,15 +167,6 @@ py_library(
     #srcs_version = "PY3",
     srcs = [
         "pbs_util.py",
-    ],
-)
-
-py_library(
-    name = "feature_extraction_lib",
-    srcs = [
-        "feature_extraction.py",
-    ],
-    deps = [
     ],
 )
 

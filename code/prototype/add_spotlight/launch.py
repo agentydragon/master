@@ -1,23 +1,21 @@
 import argparse
+from prototype.lib import article_set
 from prototype.lib import mapper
-from prototype.lib import paths
 
 def main():
     parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--article_list_file',
-                        default=paths.ARTICLE_LIST_PATH)
-    parser.add_argument('--max_articles', type=int)
+    parser.add_argument('--article_list_file', default=None)
+    parser.add_argument('--max_articles', type=int, default=None)
     parser.add_argument('--spotlight_endpoint')
     parser.add_argument('--force_redo')
     # TODO: add max_jobs
     parser.add_argument('--articles_per_job', type=int)
     args = parser.parse_args()
 
-    with open(args.article_list_file) as f:
-        article_names = list(map(lambda line: line.strip(), list(f)))
-
-    if args.max_articles:
-        article_names = article_names[:args.max_articles]
+    art_set = article_set.ArticleSet(
+        path = args.article_list_file,
+        maxium = args.max_articles
+    )
 
     def make_commandline(articles_slice):
         job_command = ['prototype/add_spotlight/add_spotlight']

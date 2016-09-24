@@ -52,3 +52,6 @@ def sample_to_features(sample):
     else:
         features.add('object_first')
     return features
+
+def sample_to_features_label(sample):
+    return (sample_to_features(sample), sample.positive)

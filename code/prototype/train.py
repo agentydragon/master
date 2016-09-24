@@ -1,4 +1,5 @@
 from prototype.lib import sample_repo
+from prototype import feature_extraction
 import random
 import nltk
 import nltk.classify.decisiontree
@@ -38,62 +39,6 @@ relations = [
 
 # relations = sample_repo.all_relations()
 
-def sample_to_features_label(sample):
-    features = {}
-    for i, token in enumerate(sample.sentence.tokens):
-        # debias
-        if i in sample.subject_token_indices:
-            continue
-        if i in sample.object_token_indices:
-            continue
-
-        features['lemma_' + token.lemma.lower()] = 1
-        word = sample.sentence.text[token.start_offset:token.end_offset].lower()
-        features['word_' + word] = 1
-
-    # window before subject
-    for i in range(-2, 0):
-        idx = min(sample.subject_token_indices) - i
-        if idx not in range(len(sample.sentence.tokens)):
-            continue
-        features['subject_window_%d_lemma_%s' % (i, token.lemma)] = 1
-        word = sample.sentence.text[token.start_offset:token.end_offset].lower()
-        features['subject_window_%d_word_%s' % (i, word)] = 1
-
-    # window before object
-    for i in range(-2, 0):
-        idx = min(sample.object_token_indices) - i
-        if idx not in range(len(sample.sentence.tokens)):
-            continue
-        features['object_window_%d_lemma_%s' % (i, token.lemma)] = 1
-        word = sample.sentence.text[token.start_offset:token.end_offset].lower()
-        features['object_window_%d_word_%s' % (i, word)] = 1
-
-    # window after subject
-    for i in range(1, 3):
-        idx = max(sample.subject_token_indices) + i
-        if idx not in range(len(sample.sentence.tokens)):
-            continue
-        features['subject_window_%d_lemma_%s' % (i, token.lemma)] = 1
-        word = sample.sentence.text[token.start_offset:token.end_offset].lower()
-        features['subject_window_%d_word_%s' % (i, word)] = 1
-
-    # window after object
-    for i in range(1, 3):
-        idx = max(sample.object_token_indices) + i
-        if idx not in range(len(sample.sentence.tokens)):
-            continue
-        features['object_window_%d_lemma_%s' % (i, token.lemma)] = 1
-        word = sample.sentence.text[token.start_offset:token.end_offset].lower()
-        features['object_window_%d_word_%s' % (i, word)] = 1
-
-    if min(sample.subject_token_indices) < min(sample.object_token_indices):
-        features['comes_first'] = 'subject'
-    else:
-        features['comes_first'] = 'object'
-
-    return (features, sample.relation)
-
 #samples = sample_repo.load_samples(mother)
 #for sample in samples:
 #    lemmas = []
@@ -122,7 +67,7 @@ for relation in relations:
     relation_samples = sample_repo.load_samples(relation)
     relation_samples = list(filter(lambda sample: sample.positive, relation_samples))
     for sample in relation_samples:
-        samples.append(sample_to_features_label(sample))
+        samples.append(feature_extraction.sample_to_features_label(sample))
     print(len(relation_samples))
 
 random.shuffle(samples)

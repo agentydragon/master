@@ -1,27 +1,26 @@
 from prototype.lib import article_repo
+from prototype.lib import article_set
 import argparse
 
 import paths
 
 parser = argparse.ArgumentParser(description='TODO')
-parser.add_argument('--max_articles', type=int)
-parser.add_argument('--article_list_file',
-                    default=paths.ARTICLE_LIST_PATH)
+parser.add_argument('--max_articles', type=int, default=None)
+parser.add_argument('--article_list_file', default=None)
 parser.add_argument('--article_plaintexts_dir')
 args = parser.parse_args()
 
-with open(args.article_list_file) as f:
-    article_names = list(map(lambda line: line.strip(), list(f)))
-
-if args.max_articles:
-    article_names = article_names[:args.max_articles]
+art_set = article_set.ArticleSet(
+    path = args.article_list_file,
+    maximum = args.max_articles
+)
 
 nonexistant = 0
 got_plaintext = 0
 with_spotlight = 0
 with_corenlp = 0
 fully_processed = []
-for title in article_names:
+for title in art_set.article_names:
     if not article_repo.article_exists(title,
                                        target_dir=args.article_plaintexts_dir):
         nonexistant += 1

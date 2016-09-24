@@ -10,6 +10,13 @@ py_binary(
     srcs_version = "PY3",
 )
 
+py_library(
+    name = "feature_extraction_lib",
+    srcs = [
+        "feature_extraction.py",
+    ],
+)
+
 py_binary(
     name = "data_stats",
     srcs = [
@@ -55,6 +62,7 @@ py_binary(
         "train.py",
     ],
     deps = [
+        "//prototype:feature_extraction_lib",
         "//prototype/lib:sample_repo_lib",
     ],
     default_python_version = "PY3",
@@ -68,8 +76,10 @@ py_binary(
     ],
     deps = [
         "//prototype/lib:file_util_lib",
+        "//prototype:feature_extraction_lib",
         "//prototype/lib:sample_repo_lib",
         "//prototype/lib:dbpedia_lib",
+        "//prototype/lib:wikidata_lib",
         "//prototype/lib:sample_generation_lib",
         "//:paths_lib",
     ],
@@ -84,7 +94,7 @@ py_binary(
     ],
     deps = [
         "//:paths_lib",
-        "//prototype/lib:feature_extraction_lib",
+        "//prototype:feature_extraction_lib",
         "//prototype/lib:file_util_lib",
         "//prototype/lib:sample_generation_lib",
         "//prototype/lib:sample_repo_lib",

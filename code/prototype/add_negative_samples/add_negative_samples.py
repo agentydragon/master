@@ -4,7 +4,6 @@ from prototype.lib import training_sample
 from prototype.lib import dbpedia
 from prototype.lib import wikidata
 from prototype.lib import zk
-import paths
 import random
 import argparse
 import multiprocessing
@@ -99,8 +98,7 @@ def process_relation(pool, relation, count_per_relation,
 
 def main():
     parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--article_list_file',
-                        default=paths.ARTICLE_LIST_PATH)
+    parser.add_argument('--article_list_file', default=None)
     parser.add_argument('--wikidata_endpoint')
     parser.add_argument('--dbpedia_endpoint')
     parser.add_argument('--count_per_relation', default=10, type=int)
@@ -114,8 +112,9 @@ def main():
     N_COMPLETE_NEGATIVES = 1000
     N_CROSSUSED_POSITIVES = 1000
 
-    with open(args.article_list_file) as f:
-        article_names = list(map(lambda line: line.strip(), list(f)))
+    art_set = article_set.ArticleSet(
+        path = args.article_list_file
+    )
 
     if not args.relation:
         relations = sample_repo.all_relations()
@@ -125,6 +124,7 @@ def main():
     # Load all documents.
     global documents
     documents = []
+    article_names = art_set.article_names[:]
     random.shuffle(article_names)
     article_names = article_names[:N_ARTICLES]
     for i, article_title in enumerate(article_names):

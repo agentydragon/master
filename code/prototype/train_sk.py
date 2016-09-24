@@ -1,6 +1,8 @@
 from prototype.lib import sample_repo
 from prototype.lib import dbpedia
 from prototype.lib import sample_generation
+from prototype.lib import wikidata
+from prototype import feature_extraction
 import paths
 from prototype.lib import file_util
 import matplotlib
@@ -13,63 +15,11 @@ from sklearn import naive_bayes
 from sklearn import cross_validation
 from sklearn import linear_model
 
-def sample_to_features_label(sample):
-    features = set()
-    for i, token in enumerate(sample.sentence.tokens):
-        # debias
-        if i in sample.subject_token_indices:
-            continue
-        if i in sample.object_token_indices:
-            continue
+relation = 'P25'
+wikidata_client = wikidata.WikidataClient()
+print('Training for', relation, wikidata_client.get_name(relation))
 
-        features.add('lemma_' + token.lemma.lower())
-        word = sample.sentence.text[token.start_offset:token.end_offset].lower()
-        features.add('word_' + word)
-
-    # window before subject
-    for i in range(-2, 0):
-        idx = min(sample.subject_token_indices) - i
-        if idx not in range(len(sample.sentence.tokens)):
-            continue
-        features.add('subject_window_%d_lemma_%s' % (i, token.lemma))
-        word = sample.sentence.text[token.start_offset:token.end_offset].lower()
-        features.add('subject_window_%d_word_%s' % (i, word))
-
-    # window before object
-    for i in range(-2, 0):
-        idx = min(sample.object_token_indices) - i
-        if idx not in range(len(sample.sentence.tokens)):
-            continue
-        features.add('object_window_%d_lemma_%s' % (i, token.lemma))
-        word = sample.sentence.text[token.start_offset:token.end_offset].lower()
-        features.add('object_window_%d_word_%s' % (i, word))
-
-    # window after subject
-    for i in range(1, 3):
-        idx = max(sample.subject_token_indices) + i
-        if idx not in range(len(sample.sentence.tokens)):
-            continue
-        features.add('subject_window_%d_lemma_%s' % (i, token.lemma))
-        word = sample.sentence.text[token.start_offset:token.end_offset].lower()
-        features.add('subject_window_%d_word_%s' % (i, word))
-
-    # window after object
-    for i in range(1, 3):
-        idx = max(sample.object_token_indices) + i
-        if idx not in range(len(sample.sentence.tokens)):
-            continue
-        features.add('object_window_%d_lemma_%s' % (i, token.lemma))
-        word = sample.sentence.text[token.start_offset:token.end_offset].lower()
-        features.add('object_window_%d_word_%s' % (i, word))
-
-    if min(sample.subject_token_indices) < min(sample.object_token_indices):
-        features.add('subject_first')
-    else:
-        features.add('object_first')
-
-    return (features, sample.positive)
-
-positive_samples = sample_repo.load_positive_samples('P25')
+positive_samples = sample_repo.load_positive_samples(relation)[:20]
 negative_samples = []
 
 article_titles = set(sample.sentence.origin_article
@@ -94,32 +44,38 @@ for i, title in enumerate(article_titles):
                                                                  sentence,
                                                                  dbpedia_client)
             wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
-            for s in sentence.wikidata_ids:
-                for o in sentence.wikidata_ids:
+            for s in wikidata_ids:
+                for o in wikidata_ids:
                     if sentence_wrapper.mentions_in_sentence_overlap(s, o):
                         continue
 
                     negative_samples.append(sentence_wrapper.make_training_sample(
-                        s, 'P25', o, positive=False))
+                        s, relation, o, positive=False))
 
-#relation_samples = sample_repo.load_samples('P25')
+#relation_samples = sample_repo.load_samples(relation)
 relation_samples = positive_samples + negative_samples
 print('Positive:', len([sample for sample in relation_samples
                         if sample.positive]))
 print('Negative:', len([sample for sample in relation_samples
                         if not sample.positive]))
 
-things = list(map(sample_to_features_label, relation_samples)) # [:10]
+print('Collecting features...')
+
+things = list(map(feature_extraction.sample_to_features_label, relation_samples)) # [:10]
 all_features = set()
 for thing in things:
     all_features = all_features.union(thing[0])
 all_features = list(sorted(all_features))
 
+print('Converting to feature matrix...')
+
 matrix = sparse.lil_matrix((len(relation_samples), len(all_features)), dtype=numpy.int8)
 for i, thing in enumerate(things):
-    for feature in thing[0]:
+    sample_features, label = thing
+    for feature in sample_features:
         matrix[i, all_features.index(feature)] = 1
 
+print('Splitting and training.')
 # print(matrix.toarray())
 
 target = [thing[1] for thing in things]
@@ -140,6 +96,7 @@ def plot_roc(fpr, tpr, auc, prefix):
     pyplot.savefig(d + "/" + "roc-%s.png" % prefix)
 
 def try_classifier(name, classifier, prefix):
+    print('Training %s...' % name)
     clf = classifier.fit(X_train, y_train)
     score = clf.decision_function(X_test)
 
@@ -152,7 +109,8 @@ def try_classifier(name, classifier, prefix):
     predicted = clf.predict(X_test)
     print("%s accuracy:" % name, numpy.mean(predicted == y_test))
 
-try_classifier('Logistic regression', linear_model.LogisticRegression(),
+try_classifier('Logistic regression',
+               linear_model.LogisticRegression(verbose=True),
                'logreg')
 try_classifier('Linear SVM',
                linear_model.SGDClassifier(loss='hinge', penalty='l2',

@@ -1,5 +1,5 @@
 from prototype.lib import dbpedia
-from prototype.lib import feature_extraction
+from prototype import feature_extraction
 from prototype.lib import sample_generation
 from prototype.lib import wikidata
 from scipy import sparse
