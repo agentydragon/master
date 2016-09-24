@@ -18,9 +18,7 @@ class Job(object):
 
     def start_new(self):
         port = self.i + 2222
-        SCRIPT="""
-        thirdparty/spotlight/Spotlight %d
-        """ % port
+        SCRIPT = ("thirdparty/spotlight/Spotlight %d" % port)
         # 4: not enough
         # 10: not enough
         self.job = pbs_util.launch(walltime="24:00:00",
