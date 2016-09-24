@@ -11,24 +11,25 @@ import itertools
 
 documents = None
 
-def generate_negatives_for_relation(relation, count,
-                                    wikidata_endpoint):
-    wikidata_client = wikidata.WikidataClient(wikidata_endpoint or None)
-    dbpedia_client = dbpedia.DBpediaClient()
-
-    samples = []
-    for i in range(count):
-        # print(i)
-        samples.append(sample_generation.sample_negative(
-            documents,
-            relation,
-            wikidata_client = wikidata_client,
-            dbpedia_client = dbpedia_client
-        ))
-    return samples
-
-def ll(x):
-    return generate_negatives_for_relation(*x)
+###def generate_negatives_for_relation(relation, count,
+###                                    wikidata_endpoint,
+###                                    dbpedia_endpoint):
+###    wikidata_client = wikidata.WikidataClient(wikidata_endpoint or None)
+###    dbpedia_client = dbpedia.DBpediaClient(dbpedia_endpoint or None)
+###
+###    samples = []
+###    for i in range(count):
+###        # print(i)
+###        samples.append(sample_generation.sample_negative(
+###            documents,
+###            relation,
+###            wikidata_client = wikidata_client,
+###            dbpedia_client = dbpedia_client
+###        ))
+###    return samples
+###
+###def ll(x):
+###    return generate_negatives_for_relation(*x)
 
 
 ###def add_negative_samples_from_other_relations(relation, wikidata_client):
@@ -100,6 +101,7 @@ def main():
     parser.add_argument('--article_list_file',
                         default=paths.ARTICLE_LIST_PATH)
     parser.add_argument('--wikidata_endpoint')
+    parser.add_argument('--dbpedia_endpoint')
     parser.add_argument('--count_per_relation', default=10, type=int)
     parser.add_argument('--relation', action='append')
     parser.add_argument('--parallelism', default=1, type=int)
@@ -140,7 +142,7 @@ def main():
             print(e)
             pass
 
-    dbpedia_client = dbpedia.DBpediaClient()
+    dbpedia_client = dbpedia.DBpediaClient(args.dbpedia_endpoint or None)
 
     global complete_negatives
     complete_negatives = []

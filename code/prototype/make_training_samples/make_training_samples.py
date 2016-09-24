@@ -7,8 +7,10 @@ import multiprocessing
 
 def process_article(article_title):
     global wikidata_endpoint
-    wikidata_client = wikidata.WikidataClient(wikidata_endpoint or None)
-    dbpedia_client = dbpedia.DBpediaClient()
+    wikidata_client = wikidata.WikidataClient(wikidata_endpoint)
+
+    global dbpedia_endpoint
+    dbpedia_client = dbpedia.DBpediaClient(dbpedia_endpoint)
 
     samples = sample_generation.get_samples_from_document(
         article_title,
@@ -33,11 +35,17 @@ def main():
     parser.add_argument('--articles', action='append')
     parser.add_argument('--wikidata_endpoint')
                         # description='example: https://query.wikidata.org/sparql, or http://hador:3030/wikidata/query')
+    parser.add_argument('--dbpedia_endpoint')
+                        # TODO UPDATE
+                        # description='example: http://dbpedia.org/sparql, or http://hador:3030/wikidata/query')
     parser.add_argument('--parallelism', default=1, type=int)
     args = parser.parse_args()
 
     global wikidata_endpoint
-    wikidata_endpoint = args.wikidata_endpoint
+    wikidata_endpoint = (args.wikidata_endpoint or None)
+
+    global dbpedia_endpoint
+    dbpedia_endpoint = (args.dbpedia_endpoint or None)
 
     assert args.parallelism >= 1
     if args.parallelism == 1:
