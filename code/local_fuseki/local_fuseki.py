@@ -1,11 +1,12 @@
 import paths
 from thirdparty.fuseki import fuseki
 import subprocess
+import datetime
 import os
 
 scratch_dir = os.environ['SCRATCHDIR']
 
-print("Copying Wikidata to local disk...")
+print("Copying Wikidata to local disk...", datetime.datetime.now())
 rv = subprocess.call([
     "cp",
     "-rv",
@@ -15,7 +16,7 @@ rv = subprocess.call([
 print("Copied.")
 assert rv == 0
 
-print("Copying DBpedia to local disk...")
+print("Copying DBpedia to local disk...", datetime.datetime.now())
 rv = subprocess.call([
     "cp",
     "-rv",
@@ -25,14 +26,14 @@ rv = subprocess.call([
 print("Copied.")
 assert rv == 0
 
-print("Starting Wikidata Fuseki...")
+print("Starting Wikidata Fuseki...", datetime.datetime.now())
 fuseki.spawn(
     dataset_path = scratch_dir + '/fuseki-datasets/wikidata',
     namespace = '/wikidata',
     port = 3030
 )
 
-print("Starting DBpedia Fuseki...")
+print("Starting DBpedia Fuseki...", datetime.datetime.now())
 fuseki.spawn(
     dataset_path = scratch_dir + '/fuseki-datasets/dbpedia-sameas',
     namespace = '/dbpedia-sameas',
@@ -51,5 +52,5 @@ for article in ['George Washington', 'Albert Einstein', 'Adolf Hitler',
                 'Charlie Chaplin', 'John Lennon']:
     args.extend(['--articles', article])
 
-print(cmdline)
+print(cmdline, datetime.datetime.now())
 subprocess.call(cmdline)
