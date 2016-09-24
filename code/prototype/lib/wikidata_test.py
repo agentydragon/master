@@ -4,6 +4,7 @@ To test:
 
 To test with Zookeeper:
     bazel test :wikidata_test --test_arg=--zk
+"""
 
 from prototype.lib import wikidata
 from prototype.lib import zk
