@@ -1,5 +1,17 @@
+"""
+To test:
+    bazel test :wikidata_test
+
+To test with Zookeeper:
+    bazel test :wikidata_test --test_arg=--zk
+
 from prototype.lib import wikidata
+from prototype.lib import zk
+
 import sys
+
+if '--zk' in sys.argv:
+    zk.start()
 
 michelle_obama = 'Q13133'
 barack_obama = 'Q76'

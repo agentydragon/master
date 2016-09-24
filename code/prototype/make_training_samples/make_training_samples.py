@@ -2,8 +2,11 @@ from prototype.lib import sample_repo
 from prototype.lib import sample_generation
 from prototype.lib import dbpedia
 from prototype.lib import wikidata
+from prototype.lib import zk
 import argparse
 import multiprocessing
+
+zk.start()
 
 def process_article(article_title):
     global wikidata_endpoint

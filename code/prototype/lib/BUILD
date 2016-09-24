@@ -190,6 +190,7 @@ py_test(
     ],
     deps = [
         ":wikidata_lib",
+        ":zk_lib",
     ],
     srcs_version = "PY3",
     default_python_version = "PY3",

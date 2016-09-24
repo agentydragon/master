@@ -1,19 +1,3 @@
-#java_binary(
-#    name = "make_training_samples",
-#    srcs = [
-#        "MakeTrainingSamples.java",
-#    ],
-#    main_class = "MakeTrainingSamples",
-#    deps = [
-#        "//prototype:ArticleRepository",
-#        "//prototype:SampleRepository",
-#        "//:org_json_json",
-#        "//hadoop:GenerateTrainingSamples",
-#        "//hadoop:WikidataClient",
-#        "//:log4j_log4j",
-#    ],
-#)
-
 py_binary(
     name = "make_training_samples",
     srcs = [
@@ -24,6 +8,7 @@ py_binary(
         "//prototype/lib:sample_repo_lib",
         "//prototype/lib:wikidata_lib",
         "//prototype/lib:sample_generation_lib",
+        "//prototype/lib:zk_lib",
         "//:paths_lib",
     ],
 )
