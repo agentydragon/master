@@ -94,6 +94,7 @@ py_library(
         "dbpedia.py",
     ],
     deps = [
+        ":zk_lib",
         ":sparql_client_lib",
         ":wikidata_util_lib",
     ],
