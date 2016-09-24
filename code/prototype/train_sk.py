@@ -40,8 +40,9 @@ if args.max_pos:
     positive_samples = positive_samples[:args.max_pos]
 negative_samples = []
 
-article_titles = set(sample.sentence.origin_article
-                     for sample in positive_samples)
+#article_titles = set(sample.sentence.origin_article
+#                     for sample in positive_samples)
+article_titles = art_set.article_names
 dbpedia_client = dbpedia.DBpediaClient()
 for i, title in enumerate(article_titles):
     print('Getting negative samples from', title, '(', i, '/', len(article_titles), ')')
