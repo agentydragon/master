@@ -1,6 +1,6 @@
 from prototype.lib import sample_repo
-from py import paths
-from py import file_util
+import paths
+from prototype.lib import file_util
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot

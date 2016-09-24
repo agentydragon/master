@@ -6,7 +6,7 @@ Splits Wiki plaintext into articles.
 Usage: TODO
 """
 
-from py import file_util
+from prototype.lib import file_util
 from prototype.split_wiki import split_wiki
 import argparse
 

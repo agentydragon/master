@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from prototype.lib import pbs_util
-from py import file_util
+from prototype.lib import file_util
 import paths
 import argparse
 

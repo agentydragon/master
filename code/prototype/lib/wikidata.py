@@ -11,7 +11,7 @@ class WikidataClient(object):
             zk_endpoint = zk.get_wikidata_endpoint()
             if zk_endpoint:
                 print("Grabbed Wikidata endpoint from ZK:", zk_endpoint)
-                endpoint = zk_endpoint
+                endpoint = ('http://%s/wikidata/query' % zk_endpoint)
             else:
                 print("WARN: Falling back to Wikimedia Foundation's Wikidata")
                 endpoint = default_wikidata_url

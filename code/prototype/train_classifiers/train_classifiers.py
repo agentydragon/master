@@ -2,7 +2,7 @@ from prototype.lib import sample_repo
 import paths
 import argparse
 from prototype.lib import wikidata
-from py import file_util
+from prototype.lib import file_util
 import numpy
 from scipy import sparse
 from sklearn import metrics

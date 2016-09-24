@@ -1,6 +1,6 @@
 import paths
 import json
-from py import file_util
+from prototype.lib import file_util
 import io
 import os.path
 

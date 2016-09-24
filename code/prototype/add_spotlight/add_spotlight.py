@@ -26,7 +26,7 @@ args = parser.parse_args()
 
 import json
 import os.path
-from py import spotlight
+from prototype.lib import spotlight
 from prototype.lib import article_repo
 
 spotlight_client = spotlight.SpotlightClient(args.spotlight_endpoint)
