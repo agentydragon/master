@@ -21,4 +21,7 @@ py_binary(
         "//thirdparty/fuseki:fuseki_lib",
         "//:paths_lib",
     ],
+    data = [
+        "//prototype/make_training_samples:make_training_samples",
+    ],
 )

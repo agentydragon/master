@@ -17,3 +17,14 @@ def serve_forever(dataset_path,
             namespace
         ]),
     ])
+
+def spawn(dataset_path,
+          namespace,
+          port):
+    subprocess.Popen(
+        "cd ../jena_fuseki/apache-jena-fuseki-2.4.0; " +
+        ("./fuseki-server "
+         "--loc " + dataset_path + " " +
+         "--port " + str(port) + " " +
+         namespace)
+    )
