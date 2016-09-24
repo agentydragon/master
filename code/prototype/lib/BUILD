@@ -1,12 +1,19 @@
 package(default_visibility = ["//visibility:public"])
 
 py_library(
+    name = "file_util_lib",
+    srcs = [
+        "file_util.py",
+    ],
+)
+
+py_library(
     name = "article_repo_lib",
     srcs = [
         "article_repo.py",
     ],
     deps = [
-        "//py:file_util_lib",
+        ":file_util_lib",
     ],
 )
 
@@ -19,7 +26,7 @@ py_library(
         "//:paths_lib",
         ":article_repo_lib",
         ":training_sample_lib",
-        "//py:file_util_lib",
+        ":file_util_lib",
     ],
 )
 
@@ -132,7 +139,7 @@ py_library(
     ],
     deps = [
         "//:paths_lib",
-        "//py:file_util_lib",
+        ":file_util_lib",
         ":pbs_util_lib",
     ],
 )

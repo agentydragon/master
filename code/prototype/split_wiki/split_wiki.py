@@ -12,7 +12,6 @@ import locale
 locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
 import re
-from py import file_util
 from prototype import article_repo
 
 # For workstation:

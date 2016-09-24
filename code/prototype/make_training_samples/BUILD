@@ -34,9 +34,9 @@ py_binary(
         "launch.py",
     ],
     deps = [
-        "//prototype/lib:mapper_lib",
         "//:paths_lib",
-        "//py:file_util_lib",
+        "//prototype/lib:file_util_lib",
+        "//prototype/lib:mapper_lib",
     ],
     data = [
         ":make_training_samples",
