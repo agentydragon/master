@@ -81,6 +81,8 @@ py_binary(
         "//prototype/lib:dbpedia_lib",
         "//prototype/lib:wikidata_lib",
         "//prototype/lib:sample_generation_lib",
+        "//prototype/lib:zk_lib",
+        "//prototype/lib:article_set_lib",
         "//:paths_lib",
     ],
     default_python_version = "PY3",
