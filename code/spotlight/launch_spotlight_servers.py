@@ -19,7 +19,7 @@ class Job(object):
     def start_new(self):
         port = self.i + 2222
         SCRIPT="""
-        spotlight/Spotlight %d
+        thirdparty/spotlight/Spotlight %d
         """ % port
         # 4: not enough
         # 10: not enough

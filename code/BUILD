@@ -1,5 +1,15 @@
 exports_files(['wiki2text'])
 
+py_binary(
+    name = "run_fuseki",
+    srcs = [
+        "run_fuseki.py",
+    ],
+    deps = [
+        "//thirdparty:fuseki_lib",
+    ],
+)
+
 py_library(
     name = "paths_lib",
     #srcs_version = "PY3",
@@ -7,17 +17,6 @@ py_library(
         "paths.py",
     ],
     visibility = ["//visibility:public"],
-)
-
-py_binary(
-    name = "run_fuseki",
-    srcs = [
-        "run_fuseki.py",
-    ],
-    data = [
-        "@jena_fuseki//:everything",
-        ":paths_lib",
-    ],
 )
 
 java_library(
@@ -1309,4 +1308,3 @@ java_library(
         "@org_slf4j_slf4j_api//jar",
     ],
 )
-
