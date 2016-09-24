@@ -1,6 +1,6 @@
 from prototype.lib import sample_repo
 import argparse
-import time
+import datetime
 from prototype.lib import article_set
 from prototype.lib import dbpedia
 from prototype.lib import sample_generation
@@ -95,7 +95,9 @@ for thing in things:
         all_features[feature] += 1
 
 # Drop tail features.
-enough = {feature for feature in all_features if all_features[feature] >= 5}
+min_occurences = len(relation_samples) / 10000
+print('min_occurences:', min_occurences)
+enough = {feature for feature in all_features if all_features[feature] >= min_occurences}
 
 all_features=sorted(list(enough))
 dcts = {}
@@ -107,23 +109,39 @@ for i, f in enumerate(all_features):
 def samples_to_matrix_target(samples):
     things = list(map(feature_extraction.sample_to_features_label, samples)) # [:10]
     # matrix = sparse.lil_matrix((len(things), len(all_features)), dtype=numpy.int8)
-    matrix = sparse.coo_matrix((len(things), len(all_features)), dtype=numpy.int8)
+    # matrix = sparse.coo_matrix((len(things), len(all_features)), dtype=numpy.int8)
 
     print('converting', len(samples), 'samples to matrix,', len(all_features), 'features')
     fullstart = datetime.datetime.now()
     start = datetime.datetime.now()
 
+    rows = []
+    cols = []
+    data = []
     for i, thing in enumerate(things):
-        if i % 100 == 0:
-            if datetime.datetime.now() - start > datetime.timedelta(seconds = 5):
-                print('elapsed:', (datetime.datetime.now() - fullstart).seconds, ', done:', i, 'samples')
-                start = datetime.datetime.now()
-
         sample_features, label = thing
-        sample_features = set(sample_features).intersect(dcts.keys())
-        sample_features = sorted(sample_features, key=lambda f: dcts[f])
-        for feature in sample_features:
-            matrix[i, dcts[feature]] = 1
+        f = set(sample_features) & dcts.keys()
+        rows.extend([i] * len(f))
+        cols.extend(dcts[x] for x in f)
+        data.extend([1] * len(f))
+
+    matrix = sparse.coo_matrix(
+        (data, (rows, cols)),
+        shape=(len(things), len(all_features)),
+        dtype=numpy.int8
+    )
+#
+#    for i, thing in enumerate(things):
+#        if i % 100 == 0:
+#            if datetime.datetime.now() - start > datetime.timedelta(seconds = 5):
+#                print('elapsed:', (datetime.datetime.now() - fullstart).seconds, ', done:', i, 'samples')
+#                start = datetime.datetime.now()
+#
+#        sample_features, label = thing
+#        sample_features = set(sample_features) & dcts.keys()
+#        sample_features = sorted(sample_features, key=lambda f: dcts[f])
+#        for feature in sample_features:
+#            matrix[i, dcts[feature]] = 1
     target = [thing[1] for thing in things]
     return matrix, target
 
