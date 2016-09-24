@@ -7,3 +7,5 @@ job = pbs_util.launch(
     script = "../cpulimit/cpulimit -l 400 local_fuseki/local_fuseki",
 )
 print(job.job_id)
+
+# TODO: wait until it boots up
