@@ -136,7 +136,7 @@ def plot_roc(fpr, tpr, auc, prefix):
     pyplot.xlabel('False Positive Rate')
     pyplot.ylabel('True Positive Rate')
     pyplot.legend(loc="lower right")
-    d = paths.CHARTS_PATH + "/train-roc"
+    d = paths.CHARTS_PATH + "/train-roc/" + relation
     file_util.ensure_dir(d)
     pyplot.savefig(d + "/" + "roc-%s.png" % prefix)
 
