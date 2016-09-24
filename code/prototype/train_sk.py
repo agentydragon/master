@@ -1,4 +1,5 @@
 from prototype.lib import sample_repo
+import argparse
 from prototype.lib import article_set
 from prototype.lib import dbpedia
 from prototype.lib import sample_generation
@@ -30,7 +31,6 @@ relation = args.relation
 art_set = article_set.ArticleSet()
 train_articles, test_articles = art_set.split_train_test()
 
-relation = 'P25'
 wikidata_client = wikidata.WikidataClient()
 print('Training for', relation, wikidata_client.get_name(relation))
 
@@ -50,27 +50,24 @@ for i, title in enumerate(article_titles):
         print('cannot load document')
         continue
 
-    positive_sentence_ids = set(sample.sentence.origin_sentence_id
-                                for sample in positive_samples
-                                if sample.sentence.origin_article == title)
-    print('positive sentence IDs:', positive_sentence_ids)
+    positives = set((sample.sentence.origin_sentence_id, sample.subject, sample.object)
+                    for sample in positive_samples
+                    if sample.sentence.origin_article == title)
+    #print('positive sentence IDs:', positive_sentence_ids)
 
     from_article = []
     for sentence in art.sentences:
-        if sentence.id in positive_sentence_ids:
-            # print('Sentence', sentence.id, ': is positive...')
-            continue
-        else:
-            sentence_wrapper = sample_generation.SentenceWrapper(art,
-                                                                 sentence,
-                                                                 dbpedia_client)
-            wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
-            # print('Sentence', sentence.id, ':', len(wikidata_ids), 'entities')
-            for s in wikidata_ids:
-                for o in wikidata_ids:
-                    if sentence_wrapper.mentions_in_sentence_overlap(s, o):
-                        continue
+        sentence_wrapper = sample_generation.SentenceWrapper(art,
+                                                             sentence,
+                                                             dbpedia_client)
+        wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
+        # print('Sentence', sentence.id, ':', len(wikidata_ids), 'entities')
+        for s in wikidata_ids:
+            for o in wikidata_ids:
+                if sentence_wrapper.mentions_in_sentence_overlap(s, o):
+                    continue
 
+                if (sentence.id, s, o) not in positives:
                     from_article.append(sentence_wrapper.make_training_sample(
                         s, relation, o, positive=False))
     print('Collected', len(from_article))
