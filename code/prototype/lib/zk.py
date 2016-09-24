@@ -16,3 +16,15 @@ def get_wikidata_endpoint():
         return kz.get(wikidata_endpoint_node).decode('UTF-8')
     else:
         return None
+
+def get_dbpedia_endpoint():
+    if kz.client_state != 'CONNECTED':
+        print('WARN: Kazoo client not connected')
+        return None
+
+    dbpedia_endpoint_node = '/user/prvak/thesis/dbpedia-service'
+
+    if kz.exists(dbpedia_endpoint_node):
+        return kz.get(dbpedia_endpoint_node).decode('UTF-8')
+    else:
+        return None

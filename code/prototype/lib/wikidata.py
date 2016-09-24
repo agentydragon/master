@@ -1,5 +1,6 @@
 from prototype.lib import wikidata_util
 from prototype.lib import sparql_client
+from prototype.lib import zk
 
 default_wikidata_url = 'https://query.wikidata.org/sparql'
 

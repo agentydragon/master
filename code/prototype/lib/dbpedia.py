@@ -1,13 +1,22 @@
 from prototype.lib import sparql_client
 from prototype.lib import wikidata_util
+from prototype.lib import zk
 
-dbpedia_url = 'http://dbpedia.org/sparql'
+default_dbpedia_url = 'http://dbpedia.org/sparql'
 
 class DBpediaClient(object):
     def __init__(self, endpoint=None):
         self.dbpedia_to_wikidata_cache = {}
+
         if endpoint is None:
-            endpoint = dbpedia_url
+            zk_endpoint = zk.get_dbpedia_endpoint()
+            if zk_endpoint:
+                print("Grabbed DBpedia endpoint from ZK:", zk_endpoint)
+                endpoint = ('http://%s/dbpedia-sameas/query' % zk_endpoint)
+            else:
+                print("WARN: Falling back to Wikimedia Foundation's DBpedia")
+                endpoint = default_dbpedia_url
+
         self.dbpedia_client = sparql_client.SPARQLClient('http://dbpedia.org/sparql')
 
     def dbpedia_uri_to_wikidata_id(self, uri):
