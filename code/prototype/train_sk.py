@@ -15,6 +15,10 @@ from sklearn import naive_bayes
 from sklearn import cross_validation
 from sklearn import linear_model
 
+from prototype.lib import zk
+
+zk.start()
+
 relation = 'P25'
 wikidata_client = wikidata.WikidataClient()
 print('Training for', relation, wikidata_client.get_name(relation))
