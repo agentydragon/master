@@ -1,14 +1,15 @@
-import numpy
-import paths
-from scipy import sparse
+from prototype.lib import dbpedia
+from prototype.lib import feature_extraction
 from prototype.lib import sample_generation
-from sklearn import metrics
-from sklearn import naive_bayes
+from prototype.lib import wikidata
+from scipy import sparse
 from sklearn import cross_validation
 from sklearn import linear_model
+from sklearn import metrics
+from sklearn import naive_bayes
+import numpy
+import paths
 import pickle
-from prototype.lib import feature_extraction
-from prototype.lib import wikidata
 
 # load classifiers
 relations = ['P106', # occupation,
@@ -34,12 +35,18 @@ document = sample_generation.try_load_document('Albert Einstein')
 
 scored_samples = []
 
+dbpedia_client = dbpedia.DBpediaClient()
+
 for relation in classifiers:
     print('Looking for relation', relation, '...')
 
     document_samples = []
     for sentence in document.sentences:
-        sentence_wrapper = sample_generation.SentenceWrapper(document, sentence)
+        sentence_wrapper = sample_generation.SentenceWrapper(
+            document,
+            sentence,
+            dbpedia_client = dbpedia_client
+        )
         wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
 
         sentence_samples = []

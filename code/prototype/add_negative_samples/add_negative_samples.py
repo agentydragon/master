@@ -1,6 +1,7 @@
 from prototype.lib import sample_repo
 from prototype.lib import sample_generation
 from prototype.lib import training_sample
+from prototype.lib import dbpedia
 from prototype.lib import wikidata
 import paths
 import random
@@ -13,14 +14,17 @@ documents = None
 def generate_negatives_for_relation(relation, count,
                                     wikidata_endpoint):
     wikidata_client = wikidata.WikidataClient(wikidata_endpoint or None)
-
+    dbpedia_client = dbpedia.DBpediaClient()
 
     samples = []
     for i in range(count):
         # print(i)
-        samples.append(sample_generation.sample_negative(documents,
-                                                         relation,
-                                                         wikidata_client))
+        samples.append(sample_generation.sample_negative(
+            documents,
+            relation,
+            wikidata_client = wikidata_client,
+            dbpedia_client = dbpedia_client
+        ))
     return samples
 
 def ll(x):
@@ -136,13 +140,19 @@ def main():
             print(e)
             pass
 
+    dbpedia_client = dbpedia.DBpediaClient()
+
     global complete_negatives
     complete_negatives = []
     print('Generating', N_COMPLETE_NEGATIVES, 'complete negatives...')
     for i in range(N_COMPLETE_NEGATIVES):
         if i % 100 == 0:
             print(i, '/', N_COMPLETE_NEGATIVES)
-        sample = sample_generation.sample_complete_negative(documents, wikidata_client)
+        sample = sample_generation.sample_complete_negative(
+            documents,
+            wikidata_client = wikidata_client,
+            dbpedia_client = dbpedia_client
+        )
         complete_negatives.append(sample)
 
     global negative_samples

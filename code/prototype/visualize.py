@@ -4,6 +4,8 @@ from xml.etree import ElementTree
 import paths
 from prototype.lib import dbpedia
 
+dbpedia_client = dbpedia.DBpediaClient()
+
 def document_to_html(document):
     html = ""
     html += "<pre>"
@@ -23,7 +25,7 @@ def document_to_html(document):
 
         for mention in document.find_spotlight_mentions_between(sentence.start_offset(),
                                                                 sentence.end_offset()):
-            html += "<b>" + str(dbpedia.dbpedia_uri_to_wikidata_id(mention.uri)) + "</b> "
+            html += "<b>" + str(dbpedia_client.dbpedia_uri_to_wikidata_id(mention.uri)) + "</b> "
             html += str(mention) + "<br>"
 
         for token in sentence.tokens:

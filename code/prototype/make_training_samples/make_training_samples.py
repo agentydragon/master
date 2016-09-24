@@ -1,5 +1,6 @@
 from prototype.lib import sample_repo
 from prototype.lib import sample_generation
+from prototype.lib import dbpedia
 from prototype.lib import wikidata
 import argparse
 import multiprocessing
@@ -7,10 +8,12 @@ import multiprocessing
 def process_article(article_title):
     global wikidata_endpoint
     wikidata_client = wikidata.WikidataClient(wikidata_endpoint or None)
+    dbpedia_client = dbpedia.DBpediaClient()
 
     samples = sample_generation.get_samples_from_document(
         article_title,
-        wikidata_client=wikidata_client
+        wikidata_client = wikidata_client,
+        dbpedia_client = dbpedia_client
     )
     if not samples:
         return
