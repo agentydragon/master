@@ -4,10 +4,10 @@ py_binary(
         "local_fuseki_launch.py",
     ],
     deps = [
-        "//prototype/lib:pbs_util",
+        "//prototype/lib:pbs_util_lib",
     ],
     data = [
-        "@cpulimit//:cpulimit",
+        "@cpulimit//:cpulimit_bin",
         ":local_fuseki",
     ],
 )

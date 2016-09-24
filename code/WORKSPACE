@@ -46,11 +46,13 @@ new_git_repository(
     commit = "bf0506b593a3b0392804c007bab98faf579bc681",
     remote = "https://github.com/MichalPokorny/cpulimit",
     build_file_content = """
+package(default_visibility = ["//visibility:public"])
+
 genrule(
     name = "cpulimit_bin",
     srcs = glob(["src/*.c", "src/*.h", "src/Makefile"]),
     cmd = ("cd external/cpulimit/src; " +
-           "make; " +
+           'CFLAGS="-Wall -g -D_GNU_SOURCE -B/usr/lib/x86_64-linux-gnu" make; ' +
            "mkdir -p -v $(@D); " +
            "cd ../../..; " +
            "cp -v external/cpulimit/src/cpulimit $(@)"),
