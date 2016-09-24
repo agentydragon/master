@@ -91,6 +91,9 @@ for thing in things:
 enough = {feature for feature in all_features if all_features[feature] >= 5}
 
 all_features=sorted(list(enough))
+dcts = {}
+for i, f in enumerate(all_features):
+    dcts[f] = i
 #all_features = list(sorted(all_features.keys()))
 #all_features = list(sorted(all_features))
 
@@ -102,7 +105,8 @@ def samples_to_matrix_target(samples):
     for i, thing in enumerate(things):
         sample_features, label = thing
         for feature in sample_features:
-            matrix[i, all_features.index(feature)] = 1
+            if feature in dcts:
+                matrix[i, dcts[feature]] = 1
     target = [thing[1] for thing in things]
     return matrix, target
 
