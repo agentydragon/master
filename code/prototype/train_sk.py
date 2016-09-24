@@ -1,5 +1,6 @@
 from prototype.lib import sample_repo
 import argparse
+import time
 from prototype.lib import article_set
 from prototype.lib import dbpedia
 from prototype.lib import sample_generation
@@ -103,18 +104,30 @@ for i, f in enumerate(all_features):
 #all_features = list(sorted(all_features.keys()))
 #all_features = list(sorted(all_features))
 
-print('Converting to feature matrix...')
-
 def samples_to_matrix_target(samples):
     things = list(map(feature_extraction.sample_to_features_label, samples)) # [:10]
-    matrix = sparse.lil_matrix((len(things), len(all_features)), dtype=numpy.int8)
+    # matrix = sparse.lil_matrix((len(things), len(all_features)), dtype=numpy.int8)
+    matrix = sparse.coo_matrix((len(things), len(all_features)), dtype=numpy.int8)
+
+    print('converting', len(samples), 'samples to matrix,', len(all_features), 'features')
+    fullstart = datetime.datetime.now()
+    start = datetime.datetime.now()
+
     for i, thing in enumerate(things):
+        if i % 100 == 0:
+            if datetime.datetime.now() - start > datetime.timedelta(seconds = 5):
+                print('elapsed:', (datetime.datetime.now() - fullstart).seconds, ', done:', i, 'samples')
+                start = datetime.datetime.now()
+
         sample_features, label = thing
+        sample_features = set(sample_features).intersect(dcts.keys())
+        sample_features = sorted(sample_features, key=lambda f: dcts[f])
         for feature in sample_features:
-            if feature in dcts:
-                matrix[i, dcts[feature]] = 1
+            matrix[i, dcts[feature]] = 1
     target = [thing[1] for thing in things]
     return matrix, target
+
+print('Splitting train/test...')
 
 train_samples = []
 test_samples = []
@@ -123,6 +136,8 @@ for sample in relation_samples:
         train_samples.append(sample)
     if sample.sentence.origin_article in test_articles:
         test_samples.append(sample)
+
+print('Converting to feature matrix...')
 
 X_train, y_train = samples_to_matrix_target(train_samples)
 X_test, y_test = samples_to_matrix_target(test_samples)
