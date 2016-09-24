@@ -7,20 +7,27 @@ print('Connecting to ZooKeeper...')
 kz = kazoo_client.KazooClient()
 kz.start()
 
-kz.ensure_path('/user/prvak/thesis')
-
 node = '/user/prvak/thesis/wikidata-service'
 
 if kz.exists(node):
     kz.delete(node)
 
+wikidata_port = 3030
+
 kz.create(
     node,
-    b'hador:3030',
+    bytes('hador:%d' % wikidata_port, encoding='UTF-8'),
     makepath = True
 )
 
 fuseki.serve_forever(
     dataset_path = paths.WORK_DIR + '/fuseki-datasets/wikidata',
-    namespace = '/wikidata'
+    namespace = '/wikidata',
+    port = wikidata_port
+)
+
+fuseki.serve_forever(
+    dataset_path = paths.WORK_DIR + '/fuseki-datasets/wikidata',
+    namespace = '/wikidata',
+    port = wikidata_port
 )

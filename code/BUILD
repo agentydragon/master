@@ -9,6 +9,17 @@ py_binary(
     ],
 )
 
+py_binary(
+    name = "run_fuseki2",
+    srcs = [
+        "run_fuseki2.py",
+    ],
+    deps = [
+        "//thirdparty/fuseki:fuseki_lib",
+        "//:paths_lib",
+    ],
+)
+
 py_library(
     name = "paths_lib",
     #srcs_version = "PY3",
