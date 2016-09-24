@@ -11,15 +11,13 @@ sh_binary(
     ],
 )
 
-sh_binary(
+py_binary(
     name = "fill_dbpedia",
     srcs = [
-        "fill_dbpedia.sh",
+        "fill_dbpedia.py",
     ],
     deps = [
-        "//:paths_sh_lib",
-    ],
-    data = [
-        "@jena//:everything",
+        "//thirdparty/jena:jena_lib",
+        "//:paths_lib",
     ],
 )
