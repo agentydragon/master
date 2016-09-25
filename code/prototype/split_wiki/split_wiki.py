@@ -9,6 +9,7 @@ Usage: TODO
 import io
 import json
 import locale
+import datetime
 locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
 import re
@@ -60,6 +61,7 @@ def split_corpus(wiki_plaintext_path, target_articles=None):
 
     total_size = os.stat(wiki_plaintext_path).st_size
     read = 0
+    last_report = datetime.datetime.now()
 
     with io.open(wiki_plaintext_path, encoding='utf8') as f:
         articles = 0
@@ -89,10 +91,12 @@ def split_corpus(wiki_plaintext_path, target_articles=None):
                             proto = None
                         )
                         article_repository.write_article(articletitle, article)
-                    print(('#%d' % articles + ' ' + message).ljust(40)[:40],
-                          bar,
-                          end='\r')
-                    sys.stdout.flush()
+                    if (datetime.datetime.now() - last_report).seconds >= 1:
+                        last_report = datetime.datetime.now()
+                        print(('#%d' % articles + ' ' + message).ljust(40)[:40],
+                              bar,
+                              end='\r')
+                        sys.stdout.flush()
 
 
 
