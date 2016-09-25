@@ -18,7 +18,8 @@ genrule(
     srcs = [
         "@dbpedia_spotlight_model_en//file",
     ],
-    cmd = "tar xpf $(location @dbpedia_spotlight_model_en//file) -C $(GENDIR)/spotlight",
+    cmd = ("tar xpf $(location @dbpedia_spotlight_model_en//file) " +
+           "-C $(GENDIR)/thirdparty/spotlight"),
     outs = [
         "en/model.properties",
         "en/spotter_thresholds.txt",

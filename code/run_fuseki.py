@@ -25,9 +25,3 @@ fuseki.serve_forever(
     namespace = '/wikidata',
     port = wikidata_port
 )
-
-fuseki.serve_forever(
-    dataset_path = paths.WORK_DIR + '/fuseki-datasets/wikidata',
-    namespace = '/wikidata',
-    port = wikidata_port
-)

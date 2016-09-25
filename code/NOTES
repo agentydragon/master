@@ -172,3 +172,6 @@ Zookeeper:
 
 	/user/prvak/thesis/dbpedia-service:
 		contains hostname:port of DBpedia Fuseki (e.g., hador:3030)
+
+	/user/prvak/thesis/spotlight-annotators:
+		list of annotator URLs (e.g., http://lex5.ncbr.muni.cz:2222/rest/annotate,http://lex6.ncbr.muni.cz:2223/rest/annotate)

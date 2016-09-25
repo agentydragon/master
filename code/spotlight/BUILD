@@ -8,6 +8,7 @@ py_binary(
     deps = [
         "//prototype/lib:spotlight_lib",
         "//prototype/lib:pbs_util_lib",
+        "//prototype/lib:flags_lib",
         "//:paths_lib",
     ],
     data = [

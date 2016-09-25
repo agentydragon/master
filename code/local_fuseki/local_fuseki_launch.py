@@ -2,8 +2,6 @@ from prototype.lib import mapper
 from prototype.lib import flags
 from prototype.lib import article_set
 from prototype.lib import pbs_util
-#from prototype.lib import zk
-#zk.start()
 
 # job = pbs_util.launch(
 #     walltime = "02:00:00",

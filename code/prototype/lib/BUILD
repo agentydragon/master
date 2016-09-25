@@ -12,6 +12,9 @@ py_library(
     srcs = [
         "zk.py",
     ],
+    deps = [
+        ":flags_lib",
+    ],
 )
 
 py_library(

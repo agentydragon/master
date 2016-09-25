@@ -1,10 +1,6 @@
 import sys
 
 from prototype.lib import dbpedia
-from prototype.lib import zk
-
-if '--zk' in sys.argv:
-    zk.start()
 
 client = dbpedia.DBpediaClient()
 

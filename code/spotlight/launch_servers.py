@@ -3,11 +3,14 @@
 #import atexit
 from prototype.lib import spotlight
 from prototype.lib import pbs_util
+from prototype.lib import zk
 import paths
 import sys
 import time
 
 import argparse
+
+from kazoo import client as kazoo_client
 
 class Job(object):
     def __init__(self, i):
@@ -21,8 +24,8 @@ class Job(object):
 
         port = self.i + 2222
         SCRIPT = (
-            "../cpulimit/cpulimit -l %d thirdparty/spotlight/Spotlight %d" %
-            (cores * 100, port)
+            "../cpulimit/cpulimit -l %d thirdparty/spotlight/spotlight %d" %
+            (CORES * 100, port)
         )
         # 4: not enough
         # 10: not enough
@@ -113,7 +116,12 @@ def main():
         print('Address:', address, 'job_id:', job.get_id(), 'i:', i)
         addresses.append(address)
 
-    print("Addresses:", ','.join(addresses))
+    address_list = ','.join(addresses)
+    print("Addresses:", address_list)
+
+    zk.set_spotlight_endpoint(address_list)
+    print('Written to Zookeeper.')
+
     sys.stdout.flush()
 
 if __name__ == '__main__':

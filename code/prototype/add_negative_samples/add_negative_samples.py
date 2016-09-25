@@ -3,7 +3,6 @@ from prototype.lib import sample_generation
 from prototype.lib import training_sample
 from prototype.lib import dbpedia
 from prototype.lib import wikidata
-from prototype.lib import zk
 from prototype.lib import flags
 import random
 import multiprocessing
@@ -100,8 +99,6 @@ def main():
     flags.add_argument('--parallelism', default=1, type=int)
     flags.make_parser(description='TODO')
     args = flags.parse_args()
-
-    zk.start()
 
     N_ARTICLES = 100
     N_COMPLETE_NEGATIVES = 1000

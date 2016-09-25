@@ -7,12 +7,8 @@ To test with Zookeeper:
 """
 
 from prototype.lib import wikidata
-from prototype.lib import zk
 
 import sys
-
-if '--zk' in sys.argv:
-    zk.start()
 
 michelle_obama = 'Q13133'
 barack_obama = 'Q76'

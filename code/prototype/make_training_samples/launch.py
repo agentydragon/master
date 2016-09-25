@@ -2,10 +2,7 @@ from prototype.lib import mapper
 from prototype.lib import article_set
 from prototype.lib import dbpedia
 from prototype.lib import wikidata
-from prototype.lib import zk
 from prototype.lib import flags
-
-zk.start()
 
 def main():
     flags.add_argument('--articles_per_job', type=int)

@@ -18,10 +18,6 @@ from sklearn import naive_bayes
 from sklearn import cross_validation
 from sklearn import linear_model
 
-from prototype.lib import zk
-
-#zk.start()
-
 flags.add_argument('--relation', default='P25')
 flags.add_argument('--max_pos', default=None, type=int)
 flags.make_parser(description='TODO')
