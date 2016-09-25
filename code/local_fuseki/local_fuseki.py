@@ -29,14 +29,14 @@ assert rv == 0
 
 #print("Starting Wikidata Fuseki...", datetime.datetime.now())
 #fuseki.spawn(
-#    dataset_path = scratch_dir + '/fuseki-datasets/wikidata',
+#    dataset_path = scratch_dir + '/wikidata',
 #    namespace = '/wikidata',
 #    port = 3030
 #)
 
 print("Starting DBpedia Fuseki...", datetime.datetime.now())
 fuseki.spawn(
-    dataset_path = scratch_dir + '/fuseki-datasets/dbpedia-sameas',
+    dataset_path = scratch_dir + '/dbpedia-sameas',
     namespace = '/dbpedia-sameas',
     port = 3031
 )
@@ -47,8 +47,8 @@ args = parser.parse_args()
 
 cmdline = [
     "prototype/make_training_samples/make_training_samples",
-#    "--wikidata_endpoint",
-#    "http://localhost:3030/wikidata/query",
+    #"--wikidata_endpoint",
+    #"http://localhost:3030/wikidata/query",
     "--dbpedia_endpoint",
     "http://localhost:3031/dbpedia-sameas/query",
 ]
