@@ -1,6 +1,6 @@
 from prototype.lib import sentence
 
-from xml import etree
+from xml.etree import ElementTree
 from prototype.lib import dbpedia
 
 BANNED_NERS = ['O', 'ORDINAL', 'DATE', 'NUMBER', 'DURATION']
@@ -119,7 +119,7 @@ def document_to_proto(title, document):
         plaintext (str)
     """
 
-    root = etree.ElementTree.fromstring(document.corenlp_xml)
+    root = ElementTree.fromstring(document.corenlp_xml)
     plaintext = document.plaintext
     spotlight_json = document.spotlight_json
 

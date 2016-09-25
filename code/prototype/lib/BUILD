@@ -39,6 +39,7 @@ py_library(
     deps = [
         ":file_util_lib",
         ":flags_lib",
+        ":sentence_lib",
     ],
 )
 
@@ -155,7 +156,6 @@ py_library(
         "//:paths_lib",
         ":dbpedia_lib",
         ":training_sample_lib",
-        ":parse_xmls_to_protos_lib",
     ],
 )
 

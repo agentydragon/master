@@ -66,7 +66,8 @@ class Coreference(k("Coreference",
 
 class SavedDocument(k("SavedDocument", ["plaintext", "corenlp_xml",
                                         "spotlight_json",
-                                        "proto"])):
+                                        "proto",
+                                        "title"])):
     def to_json(self):
         return {
             'title': self.title,

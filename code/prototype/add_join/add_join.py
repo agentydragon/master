@@ -9,6 +9,7 @@ locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
 from prototype.lib import flags
 flags.add_argument('--articles', action='append')
+flags.make_parser()
 args = flags.parse_args()
 
 repo = article_repo.ArticleRepo()
@@ -21,7 +22,7 @@ for title in args.articles:
         continue
 
     article_data = repo.load_article(title)
-    if not article_data.corenlp_xmls:
+    if not article_data.corenlp_xml:
         print("Not parsed yet")
         continue
     if not article_data.spotlight_json:
@@ -34,7 +35,7 @@ for title in args.articles:
         continue
     proto = parse_xmls_to_protos.document_to_proto(
         title = title,
-        document = article
+        document = article_data
     )
     article_data.proto = proto
     repo.write_article(title, article_data)

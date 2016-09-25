@@ -1,6 +1,7 @@
 import paths
 import json
 from prototype.lib import file_util
+from prototype.lib import sentence
 from prototype.lib import flags
 import io
 import os.path
@@ -45,7 +46,7 @@ class ArticleRepo(object):
         path = self.article_title_to_path(title)
         with io.open(path, 'r', encoding='utf8') as f:
             try:
-                return sentence.SavedDocument(json.load(f))
+                return sentence.SavedDocument.from_json(json.load(f))
             except:
                 print("Error loading article", title)
                 raise
