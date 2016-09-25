@@ -3,7 +3,7 @@ from prototype.lib import sample_generation
 from prototype.lib import dbpedia
 from prototype.lib import wikidata
 from prototype.lib import flags
-import multiprocessing
+# import multiprocessing
 
 def process_article(article_title):
     wikidata_client = wikidata.WikidataClient()
@@ -29,17 +29,20 @@ def process_article(article_title):
 
 def main():
     flags.add_argument('--articles', action='append')
-    flags.add_argument('--parallelism', default=1, type=int)
+    # flags.add_argument('--parallelism', default=1, type=int)
     flags.make_parser(description='TODO')
     args = flags.parse_args()
 
-    assert args.parallelism >= 1
-    if args.parallelism == 1:
-        for article in args.articles:
+    # assert args.parallelism >= 1
+    # if args.parallelism == 1:
+    if True:
+        bar = progressbar.ProgressBar(redirect_stdout=True)
+        for article in bar(args.articles):
+            print(article)
             process_article(article)
-    else:
-        pool = multiprocessing.Pool(args.parallelism)
-        pool.map(process_article, args.articles)
+    # else:
+    #     pool = multiprocessing.Pool(args.parallelism)
+    #     pool.map(process_article, args.articles)
 
 if __name__ == '__main__':
     main()
