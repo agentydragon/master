@@ -10,8 +10,15 @@ def main():
 
     art_set = article_set.ArticleSet()
 
+    CORES = 2
+
     def make_commandline(articles_slice):
-        return ['prototype/add_parses/add_parses'] + articles_slice
+        return [
+            '../cpulimit/cpulimit',
+            '--limit=' + str(CORES * 100),
+            '--include-childer',
+            'prototype/add_parses/add_parses'
+        ] + articles_slice
 
     mapper.launch_in_slices(
         'add-parses',
@@ -19,7 +26,7 @@ def main():
         args.articles_per_job,
         make_commandline,
         slice_to_walltime=(lambda s: "01:00:00"),
-        cores=4,
+        cores=CORES,
         ram='9gb'
     )
 
