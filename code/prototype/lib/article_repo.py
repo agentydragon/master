@@ -32,10 +32,10 @@ class ArticleRepo(object):
         file_util.ensure_dir(subdir)
         return subdir + '/' + sanitized_articletitle + '.json'
 
-    def write_article(self, title, data):
+    def write_article(self, title, document):
         path = self.article_title_to_path(title)
         with io.open(path, 'w', encoding='utf8') as f:
-            json.dump(data, f)
+            json.dump(document.to_json(), f)
 
     def article_exists(self, title):
         path = self.article_title_to_path(title)
@@ -45,7 +45,7 @@ class ArticleRepo(object):
         path = self.article_title_to_path(title)
         with io.open(path, 'r', encoding='utf8') as f:
             try:
-                return json.load(f)
+                return sentence.SavedDocument(json.load(f))
             except:
                 print("Error loading article", title)
                 raise

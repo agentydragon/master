@@ -38,15 +38,15 @@ for title in args.articles:
     article_data = repo.load_article(title)
 
     # Skip if already done.
-    if ('spotlight_json' in article_data):
+    if article_data.spotlight_json:
         if not args.force_redo:
             print("Already done")
             continue
-    plaintext = article_data['plaintext']
+    plaintext = article_data.plaintext
     if plaintext.strip() == '':
         print("Empty article")
         continue
     spotlight_json = spotlight_client.annotate_text(plaintext)
-    article_data['spotlight_json'] = spotlight_json
+    article_data.spotlight_json = spotlight_json
     repo.write_article(title, article_data)
     print("Done")

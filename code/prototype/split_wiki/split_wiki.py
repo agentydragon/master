@@ -66,10 +66,13 @@ def split_corpus(wiki_plaintext_path, target_articles=None):
                     else:
                         print('#%d' % articles, 'writing article:', articletitle)
                         articletext = sanitize_article(articletext)
-                        article_repository.write_article(
-                            articletitle,
-                            {'title': articletitle, 'plaintext': articletext}
+                        article = sentence.SavedDocument(
+                            plaintext = articletext,
+                            title = articletitle,
+                            corenlp_xml = None,
+                            spotlight_json = None
                         )
+                        article_repository.write_article(articletitle, article)
 
                 articletext = ""
                 articletitle = line.strip().replace('= ', '').replace(' =', '')

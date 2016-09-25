@@ -1,4 +1,3 @@
-# import sentence_pb2
 from prototype.lib import sentence
 
 from xml.etree import ElementTree
@@ -68,10 +67,6 @@ def spotlight_to_mentions(spotlight_json):
         if not mention_json['@surfaceForm']:
             # TODO HACK?
             continue
-        # mention = sentence_pb2.SpotlightMention(
-        #     start_offset = int(mention_json['@offset']),
-        #     uri = mention_json['@URI']
-        # )
         mention = sentence.SpotlightMention(
             start_offset = int(mention_json['@offset']),
             uri = mention_json['@URI'],
@@ -124,9 +119,6 @@ def document_to_proto(title, root, spotlight_json, plaintext):
         plaintext (str)
     """
 
-    # document = sentence_pb2.Document(
-    #     text = plaintext
-    # )
     document = sentence.Document(
         title = title,
         text = plaintext,

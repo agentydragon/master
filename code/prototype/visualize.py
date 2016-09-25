@@ -49,8 +49,8 @@ article_repository = article_repo.ArticleRepo()
 article = article_repository.load_article("Douglas Adams")
 proto = parse_xmls_to_protos.document_to_proto(
     title = "Douglas Adams",
-    root = ElementTree.fromstring(article['corenlp_xml']),
-    spotlight_json = article['spotlight_json'],
-    plaintext = article['plaintext'],
+    root = ElementTree.fromstring(article.corenlp_xml),
+    spotlight_json = article.spotlight_json,
+    plaintext = article.plaintext,
 )
 print(document_to_html(proto))

@@ -15,15 +15,15 @@ def try_load_document(article_title):
         return
 
     article = article_repository.load_article(article_title)
-    if 'corenlp_xml' not in article or 'spotlight_json' not in article:
+    if (not article.corenlp_xml) or (not article.spotlight_json):
         print('incomplete article', article_title)
         return
 
     return parse_xmls_to_protos.document_to_proto(
         title = article_title,
-        root = ElementTree.fromstring(article['corenlp_xml']),
-        plaintext = article['plaintext'],
-        spotlight_json = article['spotlight_json']
+        root = ElementTree.fromstring(article.corenlp_xml),
+        plaintext = article.plaintext,
+        spotlight_json = article.spotlight_json
     )
 
 def get_samples_from_document(article_title, wikidata_client, dbpedia_client):

@@ -23,13 +23,13 @@ for title in art_set.article_names:
         continue
 
     art = repo.load_article(title)
-    if 'plaintext' in art:
+    if art.plaintext:
         got_plaintext += 1
-    if ('spotlight_json' in art) and ('corenlp_xml' in art):
+    if art.spotlight_json and art.corenlp_xml:
         fully_processed.append(title)
-    if 'spotlight_json' in art:
+    if art.spotlight_json:
         with_spotlight += 1
-    if 'corenlp_xml' in art:
+    if art.corenlp_xml:
         with_corenlp += 1
 
 print("Nonexistant", nonexistant,

@@ -7,9 +7,28 @@ SentenceToken = k("SentenceToken",
                            ["id", "start_offset", "end_offset", "lemma", "pos",
                            "word", "ner"])
 Mention = k("Mention",
-                     ["sentence_id", "start_word_id", "end_word_id", "text"])
+            ["sentence_id", "start_word_id", "end_word_id", "text"])
 Coreference = k("Coreference",
                          ["mentions", "wikidata_entity_id"])
+
+class SavedDocument(k("SavedDocument", ["plaintext", "corenlp_xml",
+                                        "spotlight_json"])):
+    def to_json(self):
+        return {
+            'title': self.title,
+            'plaintext': self.plaintext,
+            'corenlp_xml': self.corenlp_xml,
+            'spotlight_json': self.spotlight_json,
+        }
+
+    @classmethod
+    def from_json(klass, json):
+        return klass(
+            title = (json['title'] if 'title' in json else None),
+            plaintext = json['plaintext'],
+            corenlp_xml = (json['corenlp_xml'] if 'corenlp_xml' in json else None),
+            spotlight_json = (json['spotlight_json'] if 'spotlight_json' in json else None),
+        )
 
 class Document(k("Document", ["title", "text", # "corenlp_xml", "spotlight_json",
                               "sentences", "coreferences",
