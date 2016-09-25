@@ -5,6 +5,7 @@ py_library(
     ],
     deps = [
         "//prototype/lib:article_repo_lib",
+        "//prototype/lib:sentence_lib",
     ],
 )
 
@@ -15,6 +16,7 @@ py_binary(
     ],
     deps = [
         ":split_wiki_lib",
+        "//prototype/lib:article_repo_lib",
     ],
 )
 

@@ -15,8 +15,7 @@ def main():
     flags.add_argument('--wiki_plaintext_path', type=str, required=True)
     flags.make_parser(description='Split plaintext Wiki into articles')
     args = flags.parse_args()
-    file_util.ensure_dir(args.article_plaintexts_path)
-    if args.max_articles >= 1:
+    if args.max_articles:
         split_wiki.split_corpus(args.wiki_plaintext_path,
                                 target_articles=args.max_articles)
     else:

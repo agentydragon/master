@@ -37,6 +37,7 @@ py_library(
         "article_repo.py",
     ],
     deps = [
+        "//:paths_lib",
         ":file_util_lib",
         ":flags_lib",
         ":sentence_lib",
