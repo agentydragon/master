@@ -1,5 +1,4 @@
 import random
-# import argparse
 import time
 import json
 import requests
@@ -36,7 +35,6 @@ class SpotlightClient(object):
                 time.sleep(10)
 
 #def main():
-#    parser = argparse.ArgumentParser(description='Get DBpedia entity mentions using Spotlight')
 #    parser.add_argument('--article_plaintext_path', required=True)
 #    parser.add_argument('--output_path', required=True)
 #    args = parser.parse_args()

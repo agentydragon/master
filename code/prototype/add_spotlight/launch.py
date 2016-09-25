@@ -1,16 +1,16 @@
-import argparse
+from prototype.lib import flags
 from prototype.lib import article_set
 from prototype.lib import mapper
 
 def main():
-    parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--article_list_file', default=None)
-    parser.add_argument('--max_articles', type=int, default=None)
-    parser.add_argument('--spotlight_endpoint')
-    parser.add_argument('--force_redo')
+    flags.add_argument('--article_list_file', default=None)
+    flags.add_argument('--max_articles', type=int, default=None)
+    flags.add_argument('--spotlight_endpoint')
+    flags.add_argument('--force_redo')
     # TODO: add max_jobs
-    parser.add_argument('--articles_per_job', type=int)
-    args = parser.parse_args()
+    flags.add_argument('--articles_per_job', type=int)
+    flags.make_parser(description='TODO')
+    args = flags.parse_args()
 
     art_set = article_set.ArticleSet(
         path = args.article_list_file,

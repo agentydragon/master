@@ -2,19 +2,12 @@ from prototype.lib import sample_repo
 from prototype.lib import sample_generation
 from prototype.lib import dbpedia
 from prototype.lib import wikidata
-# TODO
-# from prototype.lib import zk
-import argparse
+from prototype.lib import flags
 import multiprocessing
 
-# zk.start()
-
 def process_article(article_title):
-    global wikidata_endpoint
-    wikidata_client = wikidata.WikidataClient(wikidata_endpoint)
-
-    global dbpedia_endpoint
-    dbpedia_client = dbpedia.DBpediaClient(dbpedia_endpoint)
+    wikidata_client = wikidata.WikidataClient()
+    dbpedia_client = dbpedia.DBpediaClient()
 
     samples = sample_generation.get_samples_from_document(
         article_title,
@@ -35,21 +28,10 @@ def process_article(article_title):
     return
 
 def main():
-    parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--articles', action='append')
-    parser.add_argument('--wikidata_endpoint')
-                        # description='example: https://query.wikidata.org/sparql, or http://hador:3030/wikidata/query')
-    parser.add_argument('--dbpedia_endpoint')
-                        # TODO UPDATE
-                        # description='example: http://dbpedia.org/sparql, or http://hador:3030/wikidata/query')
-    parser.add_argument('--parallelism', default=1, type=int)
-    args = parser.parse_args()
-
-    global wikidata_endpoint
-    wikidata_endpoint = (args.wikidata_endpoint or None)
-
-    global dbpedia_endpoint
-    dbpedia_endpoint = (args.dbpedia_endpoint or None)
+    flags.add_argument('--articles', action='append')
+    flags.add_argument('--parallelism', default=1, type=int)
+    flags.make_parser(description='TODO')
+    args = flags.parse_args()
 
     assert args.parallelism >= 1
     if args.parallelism == 1:

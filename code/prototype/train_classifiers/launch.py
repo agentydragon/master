@@ -1,12 +1,12 @@
 from prototype.lib import sample_repo
 from prototype.lib import mapper
-import argparse
+from prototype.lib import flags
 
 def main():
-    parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--relations_per_job', type=int)
-    parser.add_argument('--local_parallelism', type=int, default=4)
-    args = parser.parse_args()
+    flags.add_argument('--relations_per_job', type=int)
+    flags.add_argument('--local_parallelism', type=int, default=4)
+    flags.make_parser(description='TODO')
+    args = flags.parse_args()
 
     def make_commandline(relations_slice):
         job_command = [

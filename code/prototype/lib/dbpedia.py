@@ -1,21 +1,33 @@
 from prototype.lib import sparql_client
 from prototype.lib import wikidata_util
 from prototype.lib import zk
+from prototype.lib import flags
+
+flags.add_argument('--dbpedia_endpoint')
+# TODO UPDATE
+# description='example: http://dbpedia.org/sparql, or http://hador:3030/wikidata/query')
 
 default_dbpedia_url = 'http://dbpedia.org/sparql'
+
+def get_default_endpoint_url():
+    endpoint = flags.parse_args().dbpedia_endpoint
+    if endpoint:
+        return endpoint
+
+    zk_endpoint = zk.get_dbpedia_endpoint()
+    if zk_endpoint:
+        print("Grabbed DBpedia endpoint from ZK:", zk_endpoint)
+        return ('http://%s/dbpedia-sameas/query' % zk_endpoint)
+    else:
+        print("WARN: Falling back to Wikimedia Foundation's DBpedia")
+        return default_dbpedia_url
 
 class DBpediaClient(object):
     def __init__(self, endpoint=None):
         self.dbpedia_to_wikidata_cache = {}
 
-        if endpoint is None:
-            zk_endpoint = zk.get_dbpedia_endpoint()
-            if zk_endpoint:
-                print("Grabbed DBpedia endpoint from ZK:", zk_endpoint)
-                endpoint = ('http://%s/dbpedia-sameas/query' % zk_endpoint)
-            else:
-                print("WARN: Falling back to Wikimedia Foundation's DBpedia")
-                endpoint = default_dbpedia_url
+        if not endpoint:
+            endpoint = get_default_endpoint_url()
 
         self.dbpedia_client = sparql_client.SPARQLClient(endpoint)
 

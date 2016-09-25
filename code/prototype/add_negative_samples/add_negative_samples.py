@@ -4,18 +4,16 @@ from prototype.lib import training_sample
 from prototype.lib import dbpedia
 from prototype.lib import wikidata
 from prototype.lib import zk
+from prototype.lib import flags
 import random
-import argparse
 import multiprocessing
 import itertools
 
 documents = None
 
-###def generate_negatives_for_relation(relation, count,
-###                                    wikidata_endpoint,
-###                                    dbpedia_endpoint):
-###    wikidata_client = wikidata.WikidataClient(wikidata_endpoint or None)
-###    dbpedia_client = dbpedia.DBpediaClient(dbpedia_endpoint or None)
+###def generate_negatives_for_relation(relation, count):
+###    wikidata_client = wikidata.WikidataClient()
+###    dbpedia_client = dbpedia.DBpediaClient()
 ###
 ###    samples = []
 ###    for i in range(count):
@@ -59,8 +57,8 @@ documents = None
 ###    return negatives_from_other_relations
 
 def process_relation(pool, relation, count_per_relation,
-                     parallelism, wikidata_endpoint):
-    wikidata_client = wikidata.WikidataClient(wikidata_endpoint or None)
+                     parallelism):
+    wikidata_client = wikidata.WikidataClient()
 
     ## try:
     ##     samples = sample_repo.load_samples(relation)
@@ -85,7 +83,7 @@ def process_relation(pool, relation, count_per_relation,
 
     #pool_parts = list(map(
     #    lambda pool_part: (
-    #        relation, len(pool_part), wikidata_endpoint
+    #        relation, len(pool_part)
     #    ),
     #    pool_parts
     #))
@@ -97,14 +95,12 @@ def process_relation(pool, relation, count_per_relation,
     print("Produced", len(all_samples), "negatives for", relation)
 
 def main():
-    parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--article_list_file', default=None)
-    parser.add_argument('--wikidata_endpoint')
-    parser.add_argument('--dbpedia_endpoint')
-    parser.add_argument('--count_per_relation', default=10, type=int)
-    parser.add_argument('--relation', action='append')
-    parser.add_argument('--parallelism', default=1, type=int)
-    args = parser.parse_args()
+    flags.add_argument('--article_list_file', default=None)
+    flags.add_argument('--count_per_relation', default=10, type=int)
+    flags.add_argument('--relation', action='append')
+    flags.add_argument('--parallelism', default=1, type=int)
+    flags.make_parser(description='TODO')
+    args = flags.parse_args()
 
     zk.start()
 
@@ -134,7 +130,7 @@ def main():
             continue
         documents.append(document)
 
-    wikidata_client = wikidata.WikidataClient(args.wikidata_endpoint or None)
+    wikidata_client = wikidata.WikidataClient()
     all_relations = sample_repo.all_relations()
     all_positive_samples = []
     for i, r in enumerate(all_relations):
@@ -145,7 +141,7 @@ def main():
             print(e)
             pass
 
-    dbpedia_client = dbpedia.DBpediaClient(args.dbpedia_endpoint or None)
+    dbpedia_client = dbpedia.DBpediaClient()
 
     global complete_negatives
     complete_negatives = []
@@ -182,8 +178,7 @@ def main():
 
     for relation in relations:
         process_relation(pool, relation,
-                         args.count_per_relation, args.parallelism,
-                         args.wikidata_endpoint)
+                         args.count_per_relation, args.parallelism)
 
 if __name__ == '__main__':
     main()

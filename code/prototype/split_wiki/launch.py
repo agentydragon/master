@@ -2,13 +2,13 @@
 
 from prototype.lib import pbs_util
 from prototype.lib import file_util
+from prototype.lib import flags
 import paths
-import argparse
 
-parser = argparse.ArgumentParser(description='TODO')
-parser.add_argument('--max_articles', type=int, required=True)
-parser.add_argument('--article_plaintexts_dir')
-parser.add_argument('--wiki_plaintext_path', default=paths.WIKIPEDIA_PLAINTEXT)
+flags.add_argument('--max_articles', type=int, required=True)
+flags.add_argument('--article_plaintexts_dir')
+flags.add_argument('--wiki_plaintext_path', default=paths.WIKIPEDIA_PLAINTEXT)
+flags.make_parser(description='TODO')
 args = parser.parse_args()
 
 file_util.ensure_dir(args.article_plaintexts_dir)

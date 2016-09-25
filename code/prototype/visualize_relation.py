@@ -1,6 +1,6 @@
 from prototype.lib import sample_repo
+from prototype.lib import flags
 from prototype.lib import wikidata
-import argparse
 import json
 
 client = wikidata.WikidataClient()
@@ -66,9 +66,9 @@ def show_relation(relation):
     print(html)
 
 def main():
-    parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--relation')
-    args = parser.parse_args()
+    flags.add_argument('--relation')
+    flags.make_parser(description='TODO')
+    args = flags.parse_args()
 
     if args.relation:
         relation = args.relation

@@ -1,6 +1,6 @@
 from prototype.lib import sample_repo
 import paths
-import argparse
+from prototype.lib import flags
 from prototype.lib import wikidata
 from prototype.lib import file_util
 import numpy
@@ -126,10 +126,10 @@ def train_classifier_for_relation(relation):
     #               'linear-svm')
 
 def main():
-    parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--parallelism', default=1, type=int)
-    parser.add_argument('--relation', action='append')
-    args = parser.parse_args()
+    flags.add_argument('--parallelism', default=1, type=int)
+    flags.add_argument('--relation', action='append')
+    flags.make_parser(description='TODO')
+    args = flags.parse_args()
 
     if args.relation:
         relations = args.relation

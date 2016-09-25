@@ -1,5 +1,5 @@
 from prototype.lib import sample_repo
-import argparse
+from prototype.lib import flags
 import datetime
 from prototype.lib import article_set
 from prototype.lib import dbpedia
@@ -22,10 +22,10 @@ from prototype.lib import zk
 
 #zk.start()
 
-parser = argparse.ArgumentParser(description='TODO')
-parser.add_argument('--relation', default='P25')
-parser.add_argument('--max_pos', default=None, type=int)
-args = parser.parse_args()
+flags.add_argument('--relation', default='P25')
+flags.add_argument('--max_pos', default=None, type=int)
+flags.make_parser(description='TODO')
+args = flags.parse_args()
 
 relation = args.relation
 

@@ -14,13 +14,13 @@ locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
 import paths
 
-import argparse
-parser = argparse.ArgumentParser(description='Look up articles in Spotlight')
-parser.add_argument('--article_plaintexts_dir')
-parser.add_argument('--articles', action='append')
-parser.add_argument('--spotlight_endpoint')
-parser.add_argument('--force_redo')
-args = parser.parse_args()
+from prototype.lib import flags
+flags.add_argument('--article_plaintexts_dir')
+flags.add_argument('--articles', action='append')
+flags.add_argument('--spotlight_endpoint')
+flags.add_argument('--force_redo')
+flags.make_parser(description='Look up articles in Spotlight')
+args = flags.parse_args()
 
 # TODO: skip if finished
 

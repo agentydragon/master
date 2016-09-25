@@ -1,21 +1,32 @@
 from prototype.lib import wikidata_util
 from prototype.lib import sparql_client
 from prototype.lib import zk
+from prototype.lib import flags
+
+flags.add_argument('--wikidata_endpoint')
+# description='example: https://query.wikidata.org/sparql, or http://hador:3030/wikidata/query')
 
 default_wikidata_url = 'https://query.wikidata.org/sparql'
+
+def get_default_endpoint_url():
+    endpoint = flags.parse_args().wikidata_endpoint
+    if endpoint:
+        return endpoint
+
+    zk_endpoint = zk.get_wikidata_endpoint()
+    if zk_endpoint:
+        print("Grabbed Wikidata endpoint from ZK:", zk_endpoint)
+        return ('http://%s/wikidata/query' % zk_endpoint)
+    else:
+        print("WARN: Falling back to Wikimedia Foundation's Wikidata")
+        return default_wikidata_url
 
 class WikidataClient(object):
     def __init__(self, endpoint=None):
         self.wikidata_relations_cache = {}
 
-        if endpoint is None:
-            zk_endpoint = zk.get_wikidata_endpoint()
-            if zk_endpoint:
-                print("Grabbed Wikidata endpoint from ZK:", zk_endpoint)
-                endpoint = ('http://%s/wikidata/query' % zk_endpoint)
-            else:
-                print("WARN: Falling back to Wikimedia Foundation's Wikidata")
-                endpoint = default_wikidata_url
+        if not endpoint:
+            endpoint = get_default_endpoint_url()
 
         self.wikidata_client = sparql_client.SPARQLClient(endpoint)
 

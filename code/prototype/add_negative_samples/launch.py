@@ -1,25 +1,24 @@
 from prototype.lib import sample_repo
 from prototype.lib import mapper
-import argparse
+from prototype.lib import flags
+from prototype.lib import wikidata
 
 def main():
-    parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--relations_per_job', type=int)
-    parser.add_argument('--wikidata_endpoint')
-    parser.add_argument('--article_list_file', required=True)
-    parser.add_argument('--count_per_relation', type=int, default=1000)
-    parser.add_argument('--local_parallelism', type=int, default=4)
-    args = parser.parse_args()
+    flags.add_argument('--relations_per_job', type=int)
+    flags.add_argument('--article_list_file', required=True)
+    flags.add_argument('--count_per_relation', type=int, default=1000)
+    flags.add_argument('--local_parallelism', type=int, default=4)
+    flags.make_parser(description='TODO')
+    args = flags.parse_args()
 
     def make_commandline(relations_slice):
         job_command = [
             'prototype/add_negative_samples/add_negative_samples',
             '--article_list_file', args.article_list_file,
             '--count_per_relation', str(args.count_per_relation),
-            '--parallelism', str(args.local_parallelism)
+            '--parallelism', str(args.local_parallelism),
+            '--wikidata_endpoint', wikidata.get_default_endpoint_url(),
         ]
-        if args.wikidata_endpoint:
-            job_command.extend(['--wikidata_endpoint', args.wikidata_endpoint])
         for relation in relations_slice:
             job_command.extend(['--relation', relation])
         return job_command

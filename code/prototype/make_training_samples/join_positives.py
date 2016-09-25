@@ -1,9 +1,9 @@
 from prototype.lib import sample_repo
-import argparse
+from prototype.lib import flags
 
 def main():
-    parser = argparse.ArgumentParser(description='TODO')
-    args = parser.parse_args()
+    flags.make_parser(description='TODO')
+    args = flags.parse_args()
 
     for relation in sample_repo.all_relations():
         samples = sample_repo.load_samples_by_articles(relation)
