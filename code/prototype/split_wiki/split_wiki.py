@@ -47,11 +47,11 @@ def sanitize_article(article):
     return article
 
 
-def split_corpus(wiki_plaintext_path, target_dir, target_articles=None):
+def split_corpus(wiki_plaintext_path, target_articles=None):
     articletext = ""
     articletitle = None
 
-    article_repository = article_repo.ArticleRepo(target_dir)
+    article_repository = article_repo.ArticleRepo()
 
     with io.open(wiki_plaintext_path, encoding='utf8') as f:
         articles = 0

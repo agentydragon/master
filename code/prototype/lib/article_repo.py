@@ -8,6 +8,9 @@ import os.path
 flags.add_argument('--article_plaintexts_dir',
                    default=paths.WIKI_ARTICLES_PLAINTEXTS_DIR)
 
+def get_article_plaintexts_dir():
+    return flags.parse_args().article_plaintexts_dir
+
 def sanitize_articletitle(title):
     sanitized_articletitle = title.replace(' ', '_').replace('/', '_').replace('.', '_')
     if len(sanitized_articletitle) > 100:
@@ -17,7 +20,7 @@ def sanitize_articletitle(title):
 class ArticleRepo(object):
     def __init__(self, target_dir=None):
         if target_dir is None:
-            target_dir = flags.article_plaintexts_dir
+            target_dir = get_article_plaintexts_dir()
         self.target_dir = target_dir
 
     def article_title_to_path(self, title):

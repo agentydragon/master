@@ -3,13 +3,19 @@ import time
 import json
 import requests
 
-SPOTLIGHT_SERVER = 'http://spotlight.sztaki.hu:2222/rest/annotate'
+from prototype.lib import flags
+
+flags.add_argument('--spotlight_endpoint',
+                   default='http://spotlight.sztaki.hu:2222/rest/annotate')
 # SPOTLIGHT_SERVER = 'http://localhost:2222/rest/annotate'
+
+def get_default_spotlight_endpoint():
+    return flags.parse_flags().spotlight_endpoint
 
 class SpotlightClient(object):
     def __init__(self, endpoint):
         if endpoint is None:
-            endpoint = SPOTLIGHT_SERVER
+            endpoint = get_default_spotlight_endpoint()
         self.endpoints = endpoint.split(',')
 
     def annotate_text(self, text):

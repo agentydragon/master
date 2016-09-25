@@ -1,9 +1,9 @@
 from prototype.lib import flags
 from prototype.lib import article_set
 from prototype.lib import mapper
+from prototype.lib import spotlight
 
 def main():
-    flags.add_argument('--spotlight_endpoint')
     flags.add_argument('--force_redo')
     # TODO: add max_jobs
     flags.add_argument('--articles_per_job', type=int)
@@ -13,10 +13,11 @@ def main():
     art_set = article_set.ArticleSet()
 
     def make_commandline(articles_slice):
-        job_command = ['prototype/add_spotlight/add_spotlight']
-        if args.spotlight_endpoint:
-            job_command.extend(['--spotlight_endpoint',
-                                args.spotlight_endpoint])
+        job_command = [
+            'prototype/add_spotlight/add_spotlight',
+            '--spotlight_endpoint', spotlight.get_default_spotlight_endpoint(),
+        ]
+
         if args.force_redo:
             job_command.extend(['--force_redo=true'])
 

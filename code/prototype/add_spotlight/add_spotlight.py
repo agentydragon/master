@@ -7,28 +7,25 @@ Usage:
         --article=(...)
 """
 
+import json
+import os.path
+from prototype.lib import spotlight
+from prototype.lib import article_repo
 import sys
 import time
 import locale
 locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
-import paths
-
 from prototype.lib import flags
 flags.add_argument('--articles', action='append')
-flags.add_argument('--spotlight_endpoint')
 flags.add_argument('--force_redo')
 flags.make_parser(description='Look up articles in Spotlight')
 args = flags.parse_args()
 
 # TODO: skip if finished
 
-import json
-import os.path
-from prototype.lib import spotlight
-from prototype.lib import article_repo
 
-spotlight_client = spotlight.SpotlightClient(args.spotlight_endpoint)
+spotlight_client = spotlight.SpotlightClient()
 repo = article_repo.ArticleRepo()
 
 for title in args.articles:
