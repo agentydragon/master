@@ -10,31 +10,24 @@ scratch_dir = os.environ['SCRATCHDIR']
 wikidata_dataset_source = paths.WORK_DIR + '/fuseki-datasets/wikidata'
 dbpedia_sameas_dataset_source = paths.WORK_DIR + '/fuseki-datasets/dbpedia-sameas'
 
-wikidata_dataset = wikidata_dataset_source
-dbpedia_sameas_dataset = dbpedia_sameas_dataset_source
+def copy_dataset(dataset_from, dataset_to, name):
+    print("Copying %s dataset to local disk..." % name, datetime.datetime.now())
+    rv = subprocess.call([
+        "cp",
+        "-rv",
+        dataset_from,
+        dataset_to
+    ])
+    print("Copied.")
+    assert rv == 0
 
-# wikidata_dataset = scratch_dir + '/wikidata'
-# dbpedia_sameas_dataset = scratch_dir + '/dbpedia-sameas'
-# 
-# print("Copying Wikidata to local disk...", datetime.datetime.now())
-# rv = subprocess.call([
-#     "cp",
-#     "-rv",
-#     wikidata_dataset_source,
-#     wikidata_dataset
-# ])
-# print("Copied.")
-# assert rv == 0
-# 
-# print("Copying DBpedia to local disk...", datetime.datetime.now())
-# rv = subprocess.call([
-#     "cp",
-#     "-rv",
-#     dbpedia_sameas_dataset_source,
-#     dbpedia_sameas_dataset
-# ])
-# print("Copied.")
-# assert rv == 0
+# wikidata_dataset = wikidata_dataset_source
+# dbpedia_sameas_dataset = dbpedia_sameas_dataset_source
+
+wikidata_dataset = scratch_dir + '/wikidata'
+dbpedia_sameas_dataset = scratch_dir + '/dbpedia-sameas'
+copy_dataset(wikidata_dataset_source, wikidata_dataset)
+copy_dataset(dbpedia_sameas_dataset_source, dbpedia_sameas_dataset)
 
 print("Starting Wikidata Fuseki...", datetime.datetime.now())
 config = """
