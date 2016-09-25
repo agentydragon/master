@@ -2,8 +2,9 @@ import os
 import subprocess
 from prototype.lib import pbs_util
 
-def serve_forever(dataset_path,
-                  namespace,
+def serve_forever(#dataset_path,
+                  #namespace,
+                  config,
                   port):
     os.chdir('../jena_fuseki/apache-jena-fuseki-2.4.0')
     os.execv("/bin/bash", [
@@ -11,11 +12,10 @@ def serve_forever(dataset_path,
         "-c",
         ' '.join([
             "./fuseki-server",
-            "--loc",
-            dataset_path,
-            "--port",
-            str(port),
-            namespace
+            #"--loc", dataset_path,
+            "--config", config,
+            "--port", str(port),
+            #namespace
         ]),
     ])
 

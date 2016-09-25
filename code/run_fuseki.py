@@ -1,27 +1,19 @@
 import paths
 from thirdparty.fuseki import fuseki
+from prototype.lib import zk
 
-from kazoo import client as kazoo_client
+# NOTE: must be absolute path
+config_file_path = '/tmp/fuseki-config.ttl'
+config.write_config(config_file_path,
+                    paths.WORK_DIR + '/fuseki-datasets/wikidata',
+                    paths.WORK_DIR + '/fuseki-datasets/dbpedia-sameas')
 
-print('Connecting to ZooKeeper...')
-kz = kazoo_client.KazooClient()
-kz.start()
+# TODO: not really Hador...
+zk.set_wikidata_endpoint('hador:3030')
+zk.set_dbpedia_endpoint('hador:3030')
 
-node = '/user/prvak/thesis/wikidata-service'
-
-if kz.exists(node):
-    kz.delete(node)
-
-wikidata_port = 3030
-
-kz.create(
-    node,
-    bytes('hador:%d' % wikidata_port, encoding='UTF-8'),
-    makepath = True
-)
-
+print("Starting Wikidata Fuseki...", datetime.datetime.now())
 fuseki.serve_forever(
-    dataset_path = paths.WORK_DIR + '/fuseki-datasets/wikidata',
-    namespace = '/wikidata',
-    port = wikidata_port
+    config = config_file_path,
+    port = 3030
 )

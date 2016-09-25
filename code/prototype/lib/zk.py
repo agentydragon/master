@@ -28,43 +28,65 @@ def maybe_connect():
     print('WARN: Kazoo client not connected')
     return False
 
+WIKIDATA_NODE = '/user/prvak/thesis/wikidata-service'
+
 def get_wikidata_endpoint():
     if not maybe_connect():
         return
 
-    wikidata_endpoint_node = '/user/prvak/thesis/wikidata-service'
+    if kz.exists(WIKIDATA_NODE):
+        return kz.get(WIKIDATA_NODE)[0].decode('UTF-8')
 
-    if kz.exists(wikidata_endpoint_node):
-        return kz.get(wikidata_endpoint_node)[0].decode('UTF-8')
+def set_wikidata_endpoint(wikidata_endpoint):
+    force_connect()
+
+    if kz.exists(WIKIDATA_NODE):
+        kz.delete(WIKIDATA_NODE)
+
+    kz.create(
+        WIKIDATA_NODE,
+        bytes(wikidata_endpoint, encoding='UTF-8'),
+        makepath = True
+    )
+
+DBPEDIA_NODE = '/user/prvak/thesis/dbpedia-service'
 
 def get_dbpedia_endpoint():
     if not maybe_connect():
         return
 
-    dbpedia_endpoint_node = '/user/prvak/thesis/dbpedia-service'
+    if kz.exists(DBPEDIA_NODE):
+        return kz.get(DBPEDIA_NODE)[0].decode('UTF-8')
 
-    if kz.exists(dbpedia_endpoint_node):
-        return kz.get(dbpedia_endpoint_node)[0].decode('UTF-8')
+def set_dbpedia_endpoint(dbpedia_endpoint):
+    force_connect()
+
+    if kz.exists(DBPEDIA_NODE):
+        kz.delete(DBPEDIA_NODE)
+
+    kz.create(
+        DBPEDIA_NODE,
+        bytes(dbpedia_endpoint, encoding='UTF-8'),
+        makepath = True
+    )
+
+SPOTLIGHT_NODE = '/user/prvak/thesis/spotlight-annotators'
 
 def get_spotlight_endpoint():
     if not maybe_connect():
         return
 
-    node = '/user/prvak/thesis/spotlight-annotators'
-
-    if kz.exists(node):
-        return kz.get(node)[0].decode('UTF-8')
+    if kz.exists(SPOTLIGHT_NODE):
+        return kz.get(SPOTLIGHT_NODE)[0].decode('UTF-8')
 
 def set_spotlight_endpoint(spotlight_endpoint):
     force_connect()
 
-    node = '/user/prvak/thesis/spotlight-annotators'
-
-    if kz.exists(node):
-        kz.delete(node)
+    if kz.exists(SPOTLIGHT_NODE):
+        kz.delete(SPOTLIGHT_NODE)
 
     kz.create(
-        node,
+        SPOTLIGHT_NODE,
         bytes(spotlight_endpoint, encoding='UTF-8'),
         makepath = True
     )

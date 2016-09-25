@@ -5,17 +5,7 @@ py_binary(
     ],
     deps = [
         "//thirdparty/fuseki:fuseki_lib",
-        "//:paths_lib",
-    ],
-)
-
-py_binary(
-    name = "run_fuseki2",
-    srcs = [
-        "run_fuseki2.py",
-    ],
-    deps = [
-        "//thirdparty/fuseki:fuseki_lib",
+        "//local_fuseki:config_lib",
         "//:paths_lib",
     ],
 )
