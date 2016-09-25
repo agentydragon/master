@@ -15,7 +15,6 @@ locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 import paths
 
 from prototype.lib import flags
-flags.add_argument('--article_plaintexts_dir')
 flags.add_argument('--articles', action='append')
 flags.add_argument('--spotlight_endpoint')
 flags.add_argument('--force_redo')
@@ -30,16 +29,16 @@ from prototype.lib import spotlight
 from prototype.lib import article_repo
 
 spotlight_client = spotlight.SpotlightClient(args.spotlight_endpoint)
+repo = article_repo.ArticleRepo()
 
 for title in args.articles:
     print("Spotlighting", title)
 
-    if not article_repo.article_exists(title,
-                                       target_dir=args.article_plaintexts_dir):
+    if not repo.article_exists(title):
         print("Doesn't exist")
         continue
 
-    article_data = article_repo.load_article(args.article_plaintexts_dir, title)
+    article_data = repo.load_article(title)
 
     # Skip if already done.
     if ('spotlight_json' in article_data):
@@ -52,6 +51,5 @@ for title in args.articles:
         continue
     spotlight_json = spotlight_client.annotate_text(plaintext)
     article_data['spotlight_json'] = spotlight_json
-    article_repository = article_repo.ArticleRepo(args.article_plaintexts_dir)
-    article_repo.write_article(title, article_data)
+    repo.write_article(title, article_data)
     print("Done")

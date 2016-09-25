@@ -4,7 +4,6 @@ from prototype.lib import flags
 
 import paths
 
-flags.add_argument('--article_plaintexts_dir')
 flags.make_parser(description='TODO')
 args = flags.parse_args()
 
@@ -15,13 +14,15 @@ got_plaintext = 0
 with_spotlight = 0
 with_corenlp = 0
 fully_processed = []
+
+repo = article_repo.ArticleRepo()
+
 for title in art_set.article_names:
-    if not article_repo.article_exists(title,
-                                       target_dir=args.article_plaintexts_dir):
+    if not repo.article_exists(title):
         nonexistant += 1
         continue
 
-    art = article_repo.load_article(args.article_plaintexts_dir, title)
+    art = repo.load_article(title)
     if 'plaintext' in art:
         got_plaintext += 1
     if ('spotlight_json' in art) and ('corenlp_xml' in art):

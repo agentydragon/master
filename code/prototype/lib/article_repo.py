@@ -1,8 +1,12 @@
 import paths
 import json
 from prototype.lib import file_util
+from prototype.lib import flags
 import io
 import os.path
+
+flags.add_argument('--article_plaintexts_dir',
+                   default=paths.WIKI_ARTICLES_PLAINTEXTS_DIR)
 
 def sanitize_articletitle(title):
     sanitized_articletitle = title.replace(' ', '_').replace('/', '_').replace('.', '_')
@@ -13,7 +17,7 @@ def sanitize_articletitle(title):
 class ArticleRepo(object):
     def __init__(self, target_dir=None):
         if target_dir is None:
-            target_dir = paths.WIKI_ARTICLES_PLAINTEXTS_DIR
+            target_dir = flags.article_plaintexts_dir
         self.target_dir = target_dir
 
     def article_title_to_path(self, title):

@@ -38,6 +38,7 @@ py_library(
     ],
     deps = [
         ":file_util_lib",
+        ":flags_lib",
     ],
 )
 
