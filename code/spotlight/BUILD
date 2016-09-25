@@ -11,6 +11,7 @@ py_binary(
         "//:paths_lib",
     ],
     data = [
+        "@cpulimit//:cpulimit_bin",
         "//thirdparty/spotlight",
     ]
 )

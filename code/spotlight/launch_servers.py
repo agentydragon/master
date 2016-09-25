@@ -17,14 +17,21 @@ class Job(object):
         self.job = None
 
     def start_new(self):
+        CORES = 16
+
         port = self.i + 2222
-        SCRIPT = ("thirdparty/spotlight/Spotlight %d" % port)
+        SCRIPT = (
+            "../cpulimit/cpulimit -l %d thirdparty/spotlight/Spotlight %d" %
+            (cores * 100, port)
+        )
         # 4: not enough
         # 10: not enough
-        self.job = pbs_util.launch(walltime="24:00:00",
-                                   node_spec="nodes=1:brno:ppn=12,mem=16gb,scratch=100mb",
-                                   job_name="spotlight_%d" % (self.i + 1),
-                                   script=SCRIPT)
+        self.job = pbs_util.launch(
+            walltime="24:00:00",
+            node_spec="nodes=1:brno:ppn=%d,mem=16gb,scratch=100mb" % CORES,
+            job_name="spotlight_%d" % (self.i + 1),
+            script=SCRIPT
+        )
         print("port:", port)
 
         self.port = port
