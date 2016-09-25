@@ -3,6 +3,7 @@ from thirdparty.fuseki import fuseki
 import subprocess
 import datetime
 import os
+import argparse
 
 scratch_dir = os.environ['SCRATCHDIR']
 
@@ -40,6 +41,10 @@ fuseki.spawn(
     port = 3031
 )
 
+parser = argparse.ArgumentParser(description='TODO')
+parser.add_argument('--articles', action='append')
+args = parser.parse_args()
+
 cmdline = [
     "prototype/make_training_samples/make_training_samples",
     "--wikidata_endpoint",
@@ -48,9 +53,8 @@ cmdline = [
     "http://localhost:3031/dbpedia-sameas/query",
 ]
 
-for article in ['George Washington', 'Albert Einstein', 'Adolf Hitler',
-                'Charlie Chaplin', 'John Lennon']:
-    args.extend(['--articles', article])
+for article in args.articles:
+    cmdline.extend(['--articles', article])
 
 print(cmdline, datetime.datetime.now())
 subprocess.call(cmdline)

@@ -5,6 +5,8 @@ py_binary(
     ],
     deps = [
         "//prototype/lib:pbs_util_lib",
+        "//prototype/lib:mapper_lib",
+        "//prototype/lib:article_set_lib",
     ],
     data = [
         "@cpulimit//:cpulimit_bin",

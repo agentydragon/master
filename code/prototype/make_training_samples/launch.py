@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 from prototype.lib import mapper
 from prototype.lib import article_set
 from prototype.lib import zk
