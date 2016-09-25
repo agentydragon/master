@@ -1,7 +1,6 @@
 import paths
 from xml.etree import ElementTree
 from prototype.lib import dbpedia
-from prototype.lib import parse_xmls_to_protos
 from prototype.lib import article_repo
 from prototype.lib import training_sample
 import random
@@ -15,14 +14,19 @@ def try_load_document(article_title):
         return
 
     article = article_repository.load_article(article_title)
-    if (not article.corenlp_xml) or (not article.spotlight_json):
-        print('incomplete article', article_title)
+    if not article.corenlp_xml:
+        print('unparsed article', article_title)
         return
 
-    return parse_xmls_to_protos.document_to_proto(
-        title = article_title,
-        document = article
-    )
+    if not article.spotlight_json:
+        print('unspotlighted article', article_title)
+        return
+
+    if not document.proto:
+        print('unjoined article', article_title)
+        return
+
+    return document.proto
 
 def get_samples_from_document(article_title, wikidata_client, dbpedia_client):
     document = try_load_document(article_title)

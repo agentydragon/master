@@ -123,7 +123,7 @@ def document_to_proto(title, document):
     plaintext = document.plaintext
     spotlight_json = document.spotlight_json
 
-    document = sentence.Document(
+    document = sentence.DocumentProto(
         title = title,
         text = plaintext,
         sentences = [],
