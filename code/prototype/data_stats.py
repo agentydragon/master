@@ -15,6 +15,7 @@ nonexistant = 0
 got_plaintext = 0
 with_spotlight = 0
 with_corenlp = 0
+with_proto = 0
 fully_processed = []
 
 repo = article_repo.ArticleRepo()
@@ -27,17 +28,20 @@ for title in art_set.article_names:
     art = repo.load_article(title)
     if art.plaintext:
         got_plaintext += 1
-    if art.spotlight_json and art.corenlp_xml:
-        fully_processed.append(title)
     if art.spotlight_json:
         with_spotlight += 1
     if art.corenlp_xml:
         with_corenlp += 1
+    if art.proto:
+        with_proto += 1
+    if art.spotlight_json and art.corenlp_xml and art.proto:
+        fully_processed.append(title)
 
 print("Nonexistant", nonexistant,
-      "With plaintext", got_plaintext,
-      "With spotlight", with_spotlight,
-      "With corenlp", with_corenlp,
-      "Fully processed", len(fully_processed))
+      "plaintext", got_plaintext,
+      "spotlight", with_spotlight,
+      "corenlp", with_corenlp,
+      "proto", with_proto,
+      "fully processed", len(fully_processed))
 for name in fully_processed:
     print(name)
