@@ -3,9 +3,10 @@ from prototype.lib import wikidata_util
 from prototype.lib import zk
 from prototype.lib import flags
 
-flags.add_argument('--dbpedia_endpoint')
-# TODO UPDATE
-# description='example: http://dbpedia.org/sparql, or http://hador:3030/wikidata/query')
+flags.add_argument('--dbpedia_endpoint',
+                   help=('DBpedia SPARQL endpoint. '
+                         'Example: http://dbpedia.org/sparql, '
+                         'http://hador:3030/wikidata/query'))
 
 default_dbpedia_url = 'http://dbpedia.org/sparql'
 

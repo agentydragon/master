@@ -5,8 +5,12 @@ import requests
 
 from prototype.lib import flags
 
-flags.add_argument('--spotlight_endpoint')
-# SPOTLIGHT_SERVER = 'http://localhost:2222/rest/annotate'
+DEFAULT_PUBLIC_SPOTLIGHT_ENDPOINT = 'http://spotlight.sztaki.hu:2222/rest/annotate'
+
+flags.add_argument('--spotlight_endpoint',
+                   help=('List of Spotlight endpoints. Example: '
+                         'http://localhost:2222/rest/annotate,'
+                         'http://spotlight.sztaki.hu:2222/rest/annotate'))
 
 def get_default_spotlight_endpoint():
     endpoint = flags.parse_flags().spotlight_endpoint
@@ -18,7 +22,8 @@ def get_default_spotlight_endpoint():
         print("Grabbed Spotlight endpoint from ZK:", zk_endpoint)
         return zk_endpoint
 
-    return 'http://spotlight.sztaki.hu:2222/rest/annotate'
+    print("WARN: Using default public Spotlight endpoint")
+    return DEFAULT_PUBLIC_SPOTLIGHT_ENDPOINT
 
 class SpotlightClient(object):
     def __init__(self, endpoint):

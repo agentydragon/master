@@ -3,8 +3,10 @@ from prototype.lib import sparql_client
 from prototype.lib import zk
 from prototype.lib import flags
 
-flags.add_argument('--wikidata_endpoint')
-# description='example: https://query.wikidata.org/sparql, or http://hador:3030/wikidata/query')
+flags.add_argument('--wikidata_endpoint',
+                   help=('Wikidata SPARQL endpoint. Example: '
+                         'https://query.wikidata.org/sparql, '
+                         'http://hador:3030/wikidata/query'))
 
 default_wikidata_url = 'https://query.wikidata.org/sparql'
 

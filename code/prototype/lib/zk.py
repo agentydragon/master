@@ -1,7 +1,8 @@
 from prototype.lib import flags
 from kazoo import client as kazoo_client
 
-flags.add_argument('--zk_enabled', default=False, type=bool)
+flags.add_argument('--zk_enabled', default=False, type=bool,
+                   help='Enables Zookeeper service discovery.')
 
 kz = kazoo_client.KazooClient()
 
