@@ -4,7 +4,7 @@ py_library(
         "split_wiki.py",
     ],
     deps = [
-        "//prototype:article_repo_lib",
+        "//prototype/lib:article_repo_lib",
     ],
 )
 
