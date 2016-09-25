@@ -9,6 +9,7 @@ py_binary(
         "//prototype/lib:spotlight_lib",
         "//prototype/lib:pbs_util_lib",
         "//prototype/lib:flags_lib",
+        "//prototype/lib:zk_lib",
         "//:paths_lib",
     ],
     data = [
