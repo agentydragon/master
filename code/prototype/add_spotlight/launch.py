@@ -3,8 +3,6 @@ from prototype.lib import article_set
 from prototype.lib import mapper
 
 def main():
-    flags.add_argument('--article_list_file', default=None)
-    flags.add_argument('--max_articles', type=int, default=None)
     flags.add_argument('--spotlight_endpoint')
     flags.add_argument('--force_redo')
     # TODO: add max_jobs
@@ -12,10 +10,7 @@ def main():
     flags.make_parser(description='TODO')
     args = flags.parse_args()
 
-    art_set = article_set.ArticleSet(
-        path = args.article_list_file,
-        maxium = args.max_articles
-    )
+    art_set = article_set.ArticleSet()
 
     def make_commandline(articles_slice):
         job_command = ['prototype/add_spotlight/add_spotlight']

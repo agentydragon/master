@@ -8,8 +8,6 @@ from prototype.lib import flags
 zk.start()
 
 def main():
-    flags.add_argument('--article_list_file', default=None)
-    flags.add_argument('--max_articles', type=int, default=None)
     flags.add_argument('--articles_per_job', type=int)
     flags.add_argument('--local_parallelism', type=int, default=1)
     flags.make_parser(description='TODO')
@@ -35,10 +33,7 @@ def main():
         ) # or default: "04:00:00"
         return walltime_estimate
 
-    art_set = article_set.ArticleSet(
-        path = args.article_list_file,
-        maximum = args.max_articles
-    )
+    art_set = article_set.ArticleSet()
 
     mapper.launch_in_slices(
         'make-training-samples',

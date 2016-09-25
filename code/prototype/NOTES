@@ -5,10 +5,10 @@
 	bazel run //prototype/split_wiki:launch
 
 2. Add Spotlight to relevant articles
-	bazel run //prototype/add_spotlight:launch -- --article_list_file=persons --max_articles=5
+	bazel run //prototype/add_spotlight:launch -- --max_articles=5
 
 3. Add parses to relevant articles
-	bazel run //prototype/add_parses:launch -- --article_list_file=persons --max_articles=5
+	bazel run //prototype/add_parses:launch -- --max_articles=5
 
 4. Make training samples
 	bazel run //prototype/make_training_samples -- 'George Washington'

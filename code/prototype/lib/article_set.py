@@ -1,9 +1,17 @@
 import paths
+from prototype.lib import flags
+
+flags.add_argument('--article_list_file',
+                   default=paths.ARTICLE_LIST_PATH)
+flags.add_argument('--max_articles', default=None, type=int)
 
 class ArticleSet(object):
     def __init__(self, path = None, maximum = None):
         if path is None:
-            path = paths.ARTICLE_LIST_PATH
+            path = flags.parse_args().article_list_file
+
+        if maximum is None:
+            maximum = flags.parse_args().max_articles
 
         with open(path) as f:
             article_names = list(map(lambda line: line.strip(), list(f)))

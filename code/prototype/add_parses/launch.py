@@ -3,17 +3,12 @@ from prototype.lib import mapper
 from prototype.lib import article_set
 
 def main():
-    flags.add_argument('--article_list_file', default=None)
-    flags.add_argument('--max_articles', type=int, default=None)
     flags.add_argument('--articles_per_job', type=int)
     flags.make_parser(description='TODO')
     # TODO: add max_jobs
     args = flags.parse_args()
 
-    art_set = article_set.ArticleSet(
-        path = args.article_list_file,
-        maximum = args.max_articles
-    )
+    art_set = article_set.ArticleSet()
 
     def make_commandline(articles_slice)
         return ['prototype/add_parses/add_parses'] + articles_slice

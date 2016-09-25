@@ -4,16 +4,11 @@ from prototype.lib import flags
 
 import paths
 
-flags.add_argument('--max_articles', type=int, default=None)
-flags.add_argument('--article_list_file', default=None)
 flags.add_argument('--article_plaintexts_dir')
 flags.make_parser(description='TODO')
 args = flags.parse_args()
 
-art_set = article_set.ArticleSet(
-    path = args.article_list_file,
-    maximum = args.max_articles
-)
+art_set = article_set.ArticleSet()
 
 nonexistant = 0
 got_plaintext = 0

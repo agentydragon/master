@@ -95,7 +95,6 @@ def process_relation(pool, relation, count_per_relation,
     print("Produced", len(all_samples), "negatives for", relation)
 
 def main():
-    flags.add_argument('--article_list_file', default=None)
     flags.add_argument('--count_per_relation', default=10, type=int)
     flags.add_argument('--relation', action='append')
     flags.add_argument('--parallelism', default=1, type=int)
@@ -108,9 +107,7 @@ def main():
     N_COMPLETE_NEGATIVES = 1000
     N_CROSSUSED_POSITIVES = 1000
 
-    art_set = article_set.ArticleSet(
-        path = args.article_list_file
-    )
+    art_set = article_set.ArticleSet()
 
     if not args.relation:
         relations = sample_repo.all_relations()
