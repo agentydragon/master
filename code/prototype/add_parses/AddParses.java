@@ -17,7 +17,7 @@ public class AddParses {
 			JSONObject json = ArticleRepository.readArticle(title);
 
 			// Skip if already processed.
-			if (json.has("corenlp_xml")) {
+			if (json.has("corenlp_xml") && json.get("corenlp_xml") != JSONObject.NULL) {
 				System.out.println("Article already annotated");
 				return;
 			}

@@ -18,6 +18,8 @@ py_binary(
     ],
     deps = [
         "//prototype/lib:mapper_lib",
+        "//prototype/lib:flags_lib",
+        "//prototype/lib:article_set_lib",
     ],
     data = [
         ":add_parses",

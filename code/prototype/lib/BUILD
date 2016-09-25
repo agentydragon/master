@@ -68,6 +68,7 @@ java_library(
     deps = [
         "//:commons_io_commons_io",
         "//:org_json_json",
+        "//:paths_java_lib",
     ],
 )
 

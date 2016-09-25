@@ -24,6 +24,8 @@ py_binary(
     ],
     deps = [
         "//prototype/lib:article_repo_lib",
+        "//prototype/lib:article_set_lib",
+        "//prototype/lib:flags_lib",
         "//:paths_lib",
     ],
 )
