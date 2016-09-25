@@ -72,19 +72,21 @@ def main():
     #        job.kill()
     #atexit.register(kill_jobs)
 
+    wait_seconds = 60
+
     while True:
         waiting = False
         for i, job in enumerate(jobs):
             job.refresh_state()
 
             if job.state['job_state'] == 'Q':
-                print(job.get_id(), "still queued, waiting 30 seconds")
+                print(job.get_id(), "still queued, waiting %d seconds" % wait_seconds)
                 sys.stdout.flush()
                 waiting = True
                 continue
 
             if job.state['job_state'] == 'C':
-                print(job.get_id(), "completed. replacing by new job in 30 seconds.")
+                print(job.get_id(), "completed. replacing by new job in %d seconds." % wait_seconds)
                 sys.stdout.flush()
                 job.start_new()
                 waiting = True
@@ -106,7 +108,8 @@ def main():
 
         if not waiting:
             break
-        time.sleep(30)
+
+        time.sleep(wait_seconds)
 
     print("All Spotlight servers running.")
 
