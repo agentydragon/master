@@ -26,8 +26,10 @@ def copy_dataset(dataset_from, dataset_to, name):
 
 wikidata_dataset = scratch_dir + '/wikidata'
 dbpedia_sameas_dataset = scratch_dir + '/dbpedia-sameas'
-copy_dataset(wikidata_dataset_source, wikidata_dataset)
-copy_dataset(dbpedia_sameas_dataset_source, dbpedia_sameas_dataset)
+copy_dataset(wikidata_dataset_source, wikidata_dataset,
+             name="Wikidata")
+copy_dataset(dbpedia_sameas_dataset_source, dbpedia_sameas_dataset,
+             name="DBpedia owl:sameAs")
 
 print("Starting Wikidata Fuseki...", datetime.datetime.now())
 config = """
