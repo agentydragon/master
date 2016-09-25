@@ -23,11 +23,8 @@ def spawn(dataset_path,
           namespace,
           port):
     subprocess.Popen([
-        'bash',
-        '-c',
-        "cd ../jena_fuseki/apache-jena-fuseki-2.4.0; " +
-        ("./fuseki-server "
-         "--loc " + dataset_path + " " +
-         "--port " + str(port) + " " +
-         namespace)
-    ])
+        "../jena_fuseki/apache-jena-fuseki-2.4.0/fuseki-server",
+        "--loc", dataset_path,
+        "--port", str(port),
+        namespace
+    ], cwd="../jena_fuseki/apache-jena-fuseki-2.4.0")
