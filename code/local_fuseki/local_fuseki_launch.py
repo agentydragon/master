@@ -28,7 +28,8 @@ def main():
     def make_commandline(articles_slice):
         job_command = [
             '../cpulimit/cpulimit',
-            '-l', str(CORES * 100),
+            '--limit=' + str(CORES * 100),
+            '--include-children',
             'local_fuseki/local_fuseki',
         ]
         for article in articles_slice:
