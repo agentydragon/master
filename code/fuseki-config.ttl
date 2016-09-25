@@ -44,6 +44,7 @@ tdb:GraphTDB    rdfs:subClassOf  ja:Model .
     # A separate ead-only graph store endpoint:
     fuseki:serviceReadGraphStore      "get" ;      # SPARQL Graph store protocol (read only)
     fuseki:dataset                   <#dataset-wikidata> ;
+    .
 
 <#dataset-wikidata> rdf:type      tdb:DatasetTDB ;
     tdb:location "/storage/brno7-cerit/home/prvak/data/fuseki-datasets/wikidata" ;  # TODO
@@ -51,6 +52,7 @@ tdb:GraphTDB    rdfs:subClassOf  ja:Model .
     # ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "1000" ] ;
     # Make the default graph be the union of all named graphs.
     ## tdb:unionDefaultGraph true ;
+    .
 
 <#service-dbpedia-sameas> rdf:type fuseki:Service ;
     fuseki:name                       "dbpedia-sameas" ; # http://host:port/dbpedia-sameas
@@ -62,6 +64,7 @@ tdb:GraphTDB    rdfs:subClassOf  ja:Model .
     # A separate ead-only graph store endpoint:
     fuseki:serviceReadGraphStore      "get" ;      # SPARQL Graph store protocol (read only)
     fuseki:dataset                   <#dataset-dbpedia-sameas> ;
+    .
 
 <#dataset-dbpedia-sameas> rdf:type      tdb:DatasetTDB ;
     tdb:location "/storage/brno7-cerit/home/prvak/data/fuseki-datasets/dbpedia-sameas" ;  # TODO
@@ -69,4 +72,5 @@ tdb:GraphTDB    rdfs:subClassOf  ja:Model .
     # ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "1000" ] ;
     # Make the default graph be the union of all named graphs.
     ## tdb:unionDefaultGraph true ;
+    .
 
