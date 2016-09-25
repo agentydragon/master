@@ -15,7 +15,7 @@ args = flags.parse_args()
 repo = article_repo.ArticleRepo()
 
 for title in args.articles:
-    print("Spotlighting", title)
+    print("Joining", title)
 
     if not repo.article_exists(title):
         print("Doesn't exist")
