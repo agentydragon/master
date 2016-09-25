@@ -16,7 +16,8 @@ import re
 from prototype.lib import article_repo
 from prototype.lib import sentence
 
-from etaprogress.progress import ProgressBarBytes
+#from etaprogress.progress import ProgressBarBytes
+import progressbar
 import sys
 import os
 
@@ -67,11 +68,17 @@ def split_corpus(wiki_plaintext_path, target_articles=None):
         articles = 0
         regex = re.compile('^= .+ =$')
 
-        bar = ProgressBarBytes(total_size, max_width=20)
+        #bar = ProgressBarBytes(total_size, max_width=20)
+        bar = progressbar.ProgressBar(widgets=[
+            progressbar.Timer(), ' ',
+            progressbar.Percentage(), ' ',
+            progressbar.AdaptiveETA(), ' ',
+            progressbar.Bar(),
+        ], max_value = total_size, redirect_stdout=True)
 
         for line in f:
             read += len(line.encode('UTF-8'))
-            bar.numerator = read
+            # bar.numerator = read
 
             if regex.match(line):
                 if articletitle is not None:
@@ -91,11 +98,13 @@ def split_corpus(wiki_plaintext_path, target_articles=None):
                             proto = None
                         )
                         article_repository.write_article(articletitle, article)
-                    if (datetime.datetime.now() - last_report).seconds >= 1:
+                    if (datetime.datetime.now() - last_report).seconds >= 5:
                         last_report = datetime.datetime.now()
-                        print(('#%d' % articles + ' ' + message).ljust(40)[:40],
-                              bar,
-                              end='\r')
+                        print('#%d' % articles, message)
+                        bar.update(read)
+                        # print(('#%d' % articles + ' ' + message).ljust(40)[:40],
+                        #       bar,
+                        #       end='\r')
                         sys.stdout.flush()
 
 
