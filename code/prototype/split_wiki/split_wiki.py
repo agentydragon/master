@@ -15,6 +15,10 @@ import re
 from prototype.lib import article_repo
 from prototype.lib import sentence
 
+from etaprogress.progress import ProgressBarBytes
+import sys
+import os
+
 # For workstation:
 # WIKI_PLAINTEXT_FILE='/mnt/crypto/data/wiki.txt'
 # TARGET_DIR='/mnt/crypto/data/wiki-articles'
@@ -54,18 +58,28 @@ def split_corpus(wiki_plaintext_path, target_articles=None):
 
     article_repository = article_repo.ArticleRepo()
 
+    total_size = os.stat(wiki_plaintext_path).st_size
+    read = 0
+
     with io.open(wiki_plaintext_path, encoding='utf8') as f:
         articles = 0
         regex = re.compile('^= .+ =$')
+
+        bar = ProgressBarBytes(total_size, max_width=20)
+
         for line in f:
+            read += len(line.encode('UTF-8'))
+            bar.numerator = read
+
             if regex.match(line):
                 if articletitle is not None:
                     if article_repository.article_exists(articletitle):
-                        print('#%d' % articles, 'article', articletitle,
-                              'already exists')
+                        message = articletitle + ' already exists'
                         pass
                     else:
-                        print('#%d' % articles, 'writing article:', articletitle)
+                        message = 'writing: ' + articletitle
+                        sys.stdout.flush()
+
                         articletext = sanitize_article(articletext)
                         article = sentence.SavedDocument(
                             plaintext = articletext,
@@ -75,6 +89,12 @@ def split_corpus(wiki_plaintext_path, target_articles=None):
                             proto = None
                         )
                         article_repository.write_article(articletitle, article)
+                    print(('#%d' % articles + ' ' + message).ljust(40)[:40],
+                          bar,
+                          end='\r')
+                    sys.stdout.flush()
+
+
 
                 articletext = ""
                 articletitle = line.strip().replace('= ', '').replace(' =', '')
