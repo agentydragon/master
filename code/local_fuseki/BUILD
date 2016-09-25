@@ -3,6 +3,7 @@ py_library(
     srcs = [
         "config.py",
     ],
+    visibility = ["//visibility:public"],
 )
 
 py_binary(
