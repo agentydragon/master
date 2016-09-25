@@ -53,14 +53,14 @@ class Coreference(k("Coreference",
                     ["mentions", "wikidata_entity_id"])):
     def to_json(self):
         return {
-            'mentions': map(Mention.to_json, self.mentions),
+            'mentions': list(map(Mention.to_json, self.mentions)),
             'wikidata_entity_id': self.wikidata_entity_id,
         }
 
     @classmethod
     def from_json(klass, json):
         return klass(
-            mentions = map(Mention.from_json, self.mentions),
+            mentions = list(map(Mention.from_json, self.mentions)),
             wikidata_entity_id = json['wikidata_entity_id']
         )
 
@@ -100,10 +100,10 @@ class DocumentProto(k("DocumentProto", ["title", "text",
         return {
             'title': self.title,
             'text': self.text,
-            'sentences': map(DocumentSentence.to_json, self.sentences),
-            'coreferences': map(Coreference.to_json, self.coreferences),
-            'spotlight_mentions': map(SpotlightMention.to_json,
-                                      self.spotlight_mentions),
+            'sentences': list(map(DocumentSentence.to_json, self.sentences)),
+            'coreferences': list(map(Coreference.to_json, self.coreferences)),
+            'spotlight_mentions': list(map(SpotlightMention.to_json,
+                                           self.spotlight_mentions)),
         }
 
     @classmethod
@@ -111,10 +111,11 @@ class DocumentProto(k("DocumentProto", ["title", "text",
         return klass(
             title = json['title'],
             text = json['text'],
-            sentences = map(DocumentSentence.from_json, json['sentences']),
-            coreferences = map(Coreference.from_json, json['coreferences']),
-            spotlight_mentions = map(SpotlightMention.from_json,
-                                     json['spotlight_mentions']),
+            sentences = list(map(DocumentSentence.from_json, json['sentences'])),
+            coreferences = list(map(Coreference.from_json,
+                                    json['coreferences'])),
+            spotlight_mentions = list(map(SpotlightMention.from_json,
+                                          json['spotlight_mentions'])),
         )
 
     def find_spotlight_mentions_between(self, start, end):
@@ -165,7 +166,7 @@ class DocumentSentence(k("DocumentSentence", ["id", "text", "tokens"])):
         return {
             'id': self.id,
             'text': self.text,
-            'tokens': map(SentenceToken.to_json, self.tokens),
+            'tokens': list(map(SentenceToken.to_json, self.tokens)),
         }
 
     @classmethod
@@ -173,7 +174,7 @@ class DocumentSentence(k("DocumentSentence", ["id", "text", "tokens"])):
         return klass(
             id = json['id'],
             text = json['text'],
-            tokens = map(SentenceToken.from_json, json['tokens']),
+            tokens = list(map(SentenceToken.from_json, json['tokens'])),
         )
 
     def start_offset(self):
