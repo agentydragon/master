@@ -47,8 +47,8 @@ args = parser.parse_args()
 
 cmdline = [
     "prototype/make_training_samples/make_training_samples",
-    #"--wikidata_endpoint",
-    #"http://localhost:3030/wikidata/query",
+    "--wikidata_endpoint",
+    "http://localhost:3030/wikidata/query",
     "--dbpedia_endpoint",
     "http://localhost:3031/dbpedia-sameas/query",
 ]
