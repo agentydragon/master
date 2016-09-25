@@ -1,6 +1,6 @@
 from prototype.lib import sentence
 
-from xml.etree import ElementTree
+from xml import etree
 from prototype.lib import dbpedia
 
 BANNED_NERS = ['O', 'ORDINAL', 'DATE', 'NUMBER', 'DURATION']
@@ -110,7 +110,7 @@ def spotlight_to_mentions(spotlight_json):
 #                     coreference.wikidata_entity_id = wikidata_id
 #             # TODO: else?
 
-def document_to_proto(title, root, spotlight_json, plaintext):
+def document_to_proto(title, document):
     # TODO: Spotlight JSON
     """
     Args:
@@ -118,6 +118,10 @@ def document_to_proto(title, root, spotlight_json, plaintext):
         spotlight_json (dict) Spotlight's JSON response
         plaintext (str)
     """
+
+    root = etree.ElementTree.fromstring(document.corenlp_xml)
+    plaintext = document.plaintext
+    spotlight_json = document.spotlight_json
 
     document = sentence.Document(
         title = title,

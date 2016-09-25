@@ -21,9 +21,7 @@ def try_load_document(article_title):
 
     return parse_xmls_to_protos.document_to_proto(
         title = article_title,
-        root = ElementTree.fromstring(article.corenlp_xml),
-        plaintext = article.plaintext,
-        spotlight_json = article.spotlight_json
+        document = article
     )
 
 def get_samples_from_document(article_title, wikidata_client, dbpedia_client):
