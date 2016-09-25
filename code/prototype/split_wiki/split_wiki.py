@@ -70,7 +70,8 @@ def split_corpus(wiki_plaintext_path, target_articles=None):
                             plaintext = articletext,
                             title = articletitle,
                             corenlp_xml = None,
-                            spotlight_json = None
+                            spotlight_json = None,
+                            proto = None
                         )
                         article_repository.write_article(articletitle, article)
 
