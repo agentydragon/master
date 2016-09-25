@@ -28,5 +28,4 @@ def spawn(#dataset_path,
         # "--loc", dataset_path,
         "--config", config,
         "--port", str(port),
-        namespace
     ], cwd="../jena_fuseki/apache-jena-fuseki-2.4.0")
