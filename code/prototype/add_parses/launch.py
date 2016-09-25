@@ -3,7 +3,7 @@ from prototype.lib import mapper
 from prototype.lib import article_set
 
 def main():
-    flags.add_argument('--articles_per_job', type=int)
+    flags.add_argument('--articles_per_job', type=int, required=True)
     flags.make_parser(description='TODO')
     # TODO: add max_jobs
     args = flags.parse_args()

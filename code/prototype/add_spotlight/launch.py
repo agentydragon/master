@@ -5,8 +5,7 @@ from prototype.lib import spotlight
 
 def main():
     flags.add_argument('--force_redo')
-    # TODO: add max_jobs
-    flags.add_argument('--articles_per_job', type=int)
+    flags.add_argument('--articles_per_job', type=int, required=True)
     flags.make_parser(description='TODO')
     args = flags.parse_args()
 
