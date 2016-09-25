@@ -68,7 +68,7 @@ tdb:GraphTDB    rdfs:subClassOf  ja:Model .
     fuseki:name         "dbpedia-sameas" ; # http://host:port/dbpedia-sameas
     fuseki:serviceQuery "query" ;    # SPARQL query service
     fuseki:dataset      <#dataset-dbpedia-sameas> ; .
-    .
+
 <#dataset-wikidata> rdf:type tdb:DatasetTDB ; tdb:location "%s" ; .
 <#dataset-dbpedia-sameas> rdf:type tdb:DatasetTDB ; tdb:location "%s" ; .
 """ % (wikidata_dataset, dbpedia_sameas_dataset)
