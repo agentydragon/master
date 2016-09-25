@@ -13,13 +13,15 @@ def main():
     def make_commandline(articles_slice)
         return ['prototype/add_parses/add_parses'] + articles_slice
 
-    mapper.launch_in_slices('add-parses',
-                            article_names,
-                            args.articles_per_job,
-                            make_commandline,
-                            slice_to_walltime=(lambda s: return "01:00:00"),
-                            cores=4,
-                            ram='9gb')
+    mapper.launch_in_slices(
+        'add-parses',
+        article_names,
+        args.articles_per_job,
+        make_commandline,
+        slice_to_walltime=(lambda s: return "01:00:00"),
+        cores=4,
+        ram='9gb'
+    )
 
 if __name__ == '__main__':
     main()
