@@ -7,15 +7,15 @@ import argparse
 
 scratch_dir = os.environ['SCRATCHDIR']
 
-#print("Copying Wikidata to local disk...", datetime.datetime.now())
-#rv = subprocess.call([
-#    "cp",
-#    "-rv",
-#    paths.WORK_DIR + '/fuseki-datasets/wikidata',
-#    scratch_dir + '/wikidata'
-#])
-#print("Copied.")
-#assert rv == 0
+print("Copying Wikidata to local disk...", datetime.datetime.now())
+rv = subprocess.call([
+    "cp",
+    "-rv",
+    paths.WORK_DIR + '/fuseki-datasets/wikidata',
+    scratch_dir + '/wikidata'
+])
+print("Copied.")
+assert rv == 0
 
 print("Copying DBpedia to local disk...", datetime.datetime.now())
 rv = subprocess.call([
@@ -27,12 +27,12 @@ rv = subprocess.call([
 print("Copied.")
 assert rv == 0
 
-#print("Starting Wikidata Fuseki...", datetime.datetime.now())
-#fuseki.spawn(
-#    dataset_path = scratch_dir + '/wikidata',
-#    namespace = '/wikidata',
-#    port = 3030
-#)
+print("Starting Wikidata Fuseki...", datetime.datetime.now())
+fuseki.spawn(
+    dataset_path = scratch_dir + '/wikidata',
+    namespace = '/wikidata',
+    port = 3030
+)
 
 print("Starting DBpedia Fuseki...", datetime.datetime.now())
 fuseki.spawn(
