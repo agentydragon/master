@@ -7,6 +7,7 @@ py_binary(
         "//prototype/lib:pbs_util_lib",
         "//prototype/lib:mapper_lib",
         "//prototype/lib:article_set_lib",
+        "//prototype/lib:flags_lib",
     ],
     data = [
         "@cpulimit//:cpulimit_bin",
@@ -22,6 +23,7 @@ py_binary(
     deps = [
         "//thirdparty/fuseki:fuseki_lib",
         "//:paths_lib",
+        "//prototype/lib:flags_lib",
     ],
     data = [
         "//prototype/make_training_samples:make_training_samples",

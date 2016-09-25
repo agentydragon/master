@@ -12,7 +12,7 @@ def add_argument(*args, **kwargs):
     assert not frozen
     added_arguments.append((args, kwargs))
 
-def make_parser(description):
+def make_parser(description=None):
     global frozen
     global parsed
     global parser
@@ -29,8 +29,13 @@ def make_parser(description):
     return parser
 
 def parse_args():
+    global args
+    global frozen
+    global parsed
+    global parser
+
     assert frozen
     parsed = True
     if args is None:
-        args = make_parser().parse_args()
+        args = parser.parse_args()
     return args

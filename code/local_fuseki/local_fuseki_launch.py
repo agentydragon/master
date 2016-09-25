@@ -1,5 +1,5 @@
-import argparse
 from prototype.lib import mapper
+from prototype.lib import flags
 from prototype.lib import article_set
 from prototype.lib import pbs_util
 #from prototype.lib import zk
@@ -18,12 +18,10 @@ from prototype.lib import pbs_util
 def main():
     CORES=4
 
-    parser = argparse.ArgumentParser(description='TODO')
-    parser.add_argument('--article_list_file', default=None)
-    parser.add_argument('--max_articles', type=int, default=None)
-    parser.add_argument('--articles_per_job', type=int)
+    flags.add_argument('--articles_per_job', type=int)
+    flags.make_parser(description='TODO')
     # TODO: add max_jobs
-    args = parser.parse_args()
+    args = flags.parse_args()
 
     def make_commandline(articles_slice):
         job_command = [
@@ -44,10 +42,7 @@ def main():
         ) # or default: "04:00:00"
         return walltime_estimate
 
-    art_set = article_set.ArticleSet(
-        path = args.article_list_file,
-        maximum = args.max_articles
-    )
+    art_set = article_set.ArticleSet()
 
     mapper.launch_in_slices(
         'local-mts',
