@@ -18,5 +18,7 @@ py_binary(
     data = [
         ":add_spotlight",
         "//prototype/lib:mapper_lib",
+        "//prototype/lib:article_set_lib",
+        "//prototype/lib:flags_lib",
     ],
 )

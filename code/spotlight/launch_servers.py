@@ -99,7 +99,7 @@ def main():
                 client.annotate_text("Barack Obama is the president of the United States.")
             except:
                 waiting = True
-                print(job.get_id(), 'not yet OK:', sys.exc_info()[0], 'waiting 30 seconds')
+                print(job.get_id(), 'not yet OK:', sys.exc_info()[0], 'waiting %d seconds' % wait_seconds)
                 print(sys.exc_info()[1])
                 sys.stdout.flush()
                 continue

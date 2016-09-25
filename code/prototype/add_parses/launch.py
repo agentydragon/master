@@ -16,7 +16,7 @@ def main():
         return [
             '../cpulimit/cpulimit',
             '--limit=' + str(CORES * 100),
-            '--include-childer',
+            '--include-children',
             'prototype/add_parses/add_parses'
         ] + articles_slice
 

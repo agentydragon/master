@@ -4,6 +4,7 @@ import json
 import requests
 
 from prototype.lib import flags
+from prototype.lib import zk
 
 DEFAULT_PUBLIC_SPOTLIGHT_ENDPOINT = 'http://spotlight.sztaki.hu:2222/rest/annotate'
 
@@ -13,7 +14,7 @@ flags.add_argument('--spotlight_endpoint',
                          'http://spotlight.sztaki.hu:2222/rest/annotate'))
 
 def get_default_spotlight_endpoint():
-    endpoint = flags.parse_flags().spotlight_endpoint
+    endpoint = flags.parse_args().spotlight_endpoint
     if endpoint:
         return endpoint
 
@@ -26,7 +27,7 @@ def get_default_spotlight_endpoint():
     return DEFAULT_PUBLIC_SPOTLIGHT_ENDPOINT
 
 class SpotlightClient(object):
-    def __init__(self, endpoint):
+    def __init__(self, endpoint=None):
         if endpoint is None:
             endpoint = get_default_spotlight_endpoint()
         self.endpoints = endpoint.split(',')

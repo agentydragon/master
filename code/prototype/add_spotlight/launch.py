@@ -26,10 +26,10 @@ def main():
         return job_command
 
     mapper.launch_in_slices('add-spotlight',
-                            article_names,
+                            art_set.article_names,
                             args.articles_per_job,
                             make_commandline,
-                            slice_to_walltime=(lambda s: return "01:00:00"),
+                            slice_to_walltime=(lambda s: "01:00:00"),
                             cores=1,
                             ram='1gb')
 

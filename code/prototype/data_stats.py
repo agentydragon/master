@@ -20,7 +20,8 @@ fully_processed = []
 
 repo = article_repo.ArticleRepo()
 
-for title in art_set.article_names:
+bar = progressbar.ProgressBar(capture_stdout=True)
+for title in bar(art_set.article_names):
     if not repo.article_exists(title):
         nonexistant += 1
         continue

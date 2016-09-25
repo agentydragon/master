@@ -233,6 +233,9 @@ py_library(
     srcs = [
         "spotlight.py",
     ],
+    deps = [
+        ":zk_lib",
+    ],
 )
 
 py_test(
