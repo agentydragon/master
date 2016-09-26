@@ -11,10 +11,12 @@ def main():
 
     art_set = article_set.ArticleSet()
 
+    spotlight_endpoint = spotlight.get_default_spotlight_endpoint()
+
     def make_commandline(articles_slice):
         job_command = [
             'prototype/add_spotlight/add_spotlight',
-            '--spotlight_endpoint', spotlight.get_default_spotlight_endpoint(),
+            '--spotlight_endpoint', spotlight_endpoint,
         ]
 
         if args.force_redo:
@@ -25,13 +27,15 @@ def main():
 
         return job_command
 
-    mapper.launch_in_slices('add-spotlight',
-                            art_set.article_names,
-                            args.articles_per_job,
-                            make_commandline,
-                            slice_to_walltime=(lambda s: "01:00:00"),
-                            cores=1,
-                            ram='1gb')
+    mapper.launch_in_slices(
+        'add-spotlight',
+        art_set.article_names,
+        args.articles_per_job,
+        make_commandline,
+        slice_to_walltime=(lambda s: "01:00:00"),
+        cores=1,
+        ram='1gb'
+    )
 
 if __name__ == '__main__':
     main()
