@@ -10,11 +10,13 @@ def main():
     # TODO: add max_jobs
     args = flags.parse_args()
 
+    wikidata_endpoint = wikidata.get_default_endpoint_url()
+
     def make_commandline(articles_slice):
         job_command = [
             'prototype/make_training_samples/make_training_samples',
             # '--parallelism', str(args.local_parallelism),
-            '--wikidata_endpoint', wikidata.get_default_endpoint_url(),
+            '--wikidata_endpoint', wikidata_endpoint,
         ]
         for article in articles_slice:
             job_command.extend(['--articles', article])

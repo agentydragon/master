@@ -28,7 +28,7 @@ class SPARQLClient(object):
         try:
             self.client.setQuery(STANDARD_PREFIXES + query)
             results = self.client.query().convert()
-            print("Got results.")
+            print("Got %d results." % len(results['results']['bindings']))
             return results
         except (ConnectionResetError, OSError, urllib.error.URLError, SPARQLWrapper.SPARQLExceptions.EndPointInternalError) as e:
             error = e
