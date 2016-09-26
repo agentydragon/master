@@ -1,7 +1,5 @@
 from prototype.lib import sentence
-
 from xml.etree import ElementTree
-from prototype.lib import dbpedia
 
 BANNED_NERS = ['O', 'ORDINAL', 'DATE', 'NUMBER', 'DURATION']
 
@@ -55,7 +53,7 @@ def add_single_referenced_entities_to_coreferences(document):
             flush_named_entity(document, last_ner, last_ne_tokens[0],
                                last_ne_tokens[-1], sentence.id)
 
-def spotlight_to_mentions(spotlight_json):
+def spotlight_to_mentions(spotlight_json, dbpedia_client):
     mentions = []
 
     # TODO: fix?
@@ -67,12 +65,20 @@ def spotlight_to_mentions(spotlight_json):
         if not mention_json['@surfaceForm']:
             # TODO HACK?
             continue
+
+        uri = mention_json['@URI']
+        wikidata_id = dbpedia_client.dbpedia_uri_to_wikidata_id(uri)
+        if not wikidata_id:
+            print('WARN: No translation:', uri)
+
         mention = sentence.SpotlightMention(
             start_offset = int(mention_json['@offset']),
-            uri = mention_json['@URI'],
+            uri = uri,
             end_offset = None,
-            surface_form = None
+            surface_form = None,
+            wikidata_id = wikidata_id,
         )
+
         surface_form = mention_json['@surfaceForm']
         mention.end_offset = mention.start_offset + len(surface_form)
         mention.surface_form = surface_form
@@ -110,7 +116,7 @@ def spotlight_to_mentions(spotlight_json):
 #                     coreference.wikidata_entity_id = wikidata_id
 #             # TODO: else?
 
-def document_to_proto(title, document):
+def document_to_proto(title, document, dbpedia_client):
     # TODO: Spotlight JSON
     """
     Args:
@@ -128,7 +134,8 @@ def document_to_proto(title, document):
         text = plaintext,
         sentences = [],
         coreferences = [],
-        spotlight_mentions = spotlight_to_mentions(spotlight_json)
+        spotlight_mentions = spotlight_to_mentions(spotlight_json,
+                                                   dbpedia_client)
     )
     sentence_tags = root.find('document').find('sentences').findall('sentence')
     for sentence_tag in sentence_tags:

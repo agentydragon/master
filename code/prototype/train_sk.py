@@ -2,7 +2,6 @@ from prototype.lib import sample_repo
 from prototype.lib import flags
 import datetime
 from prototype.lib import article_set
-from prototype.lib import dbpedia
 from prototype.lib import sample_generation
 from prototype.lib import wikidata
 from prototype import feature_extraction
@@ -39,7 +38,6 @@ negative_samples = []
 #article_titles = set(sample.sentence.origin_article
 #                     for sample in positive_samples)
 article_titles = art_set.article_names
-dbpedia_client = dbpedia.DBpediaClient()
 for i, title in enumerate(article_titles):
     print('Getting negative samples from', title, '(', i, '/', len(article_titles), ')')
 
@@ -56,8 +54,7 @@ for i, title in enumerate(article_titles):
     from_article = []
     for sentence in art.sentences:
         sentence_wrapper = sample_generation.SentenceWrapper(art,
-                                                             sentence,
-                                                             dbpedia_client)
+                                                             sentence)
         wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
         # print('Sentence', sentence.id, ':', len(wikidata_ids), 'entities')
         for s in wikidata_ids:

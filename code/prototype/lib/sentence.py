@@ -60,7 +60,7 @@ class Coreference(k("Coreference",
     @classmethod
     def from_json(klass, json):
         return klass(
-            mentions = list(map(Mention.from_json, self.mentions)),
+            mentions = list(map(Mention.from_json, json['mentions'])),
             wikidata_entity_id = json['wikidata_entity_id']
         )
 
@@ -143,13 +143,15 @@ class DocumentProto(k("DocumentProto", ["title", "text",
 
 class SpotlightMention(k("SpotlightMention",
                          ["start_offset", "end_offset", "surface_form",
-                          "uri"])):
+                          "uri",
+                          "wikidata_id"])):
     def to_json(self):
         return {
             'start_offset': self.start_offset,
             'end_offset': self.end_offset,
             'surface_form': self.surface_form,
-            'uri': self.uri
+            'uri': self.uri,
+            'wikidata_id': self.wikidata_id
         }
 
     @classmethod
@@ -159,6 +161,7 @@ class SpotlightMention(k("SpotlightMention",
             end_offset = json['end_offset'],
             surface_form = json['surface_form'],
             uri = json['uri'],
+            wikidata_id = json['wikidata_id'],
         )
 
 class DocumentSentence(k("DocumentSentence", ["id", "text", "tokens"])):

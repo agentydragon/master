@@ -80,7 +80,6 @@ py_binary(
         "//prototype/lib:file_util_lib",
         "//prototype:feature_extraction_lib",
         "//prototype/lib:sample_repo_lib",
-        "//prototype/lib:dbpedia_lib",
         "//prototype/lib:wikidata_lib",
         "//prototype/lib:sample_generation_lib",
         "//prototype/lib:zk_lib",

@@ -44,5 +44,5 @@ print("Nonexistant", nonexistant,
       "corenlp", with_corenlp,
       "proto", with_proto,
       "fully processed", len(fully_processed))
-for name in fully_processed:
-    print(name)
+# for name in fully_processed:
+#     print(name)

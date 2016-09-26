@@ -1,9 +1,6 @@
 from prototype.lib import article_repo
 from prototype.lib import parse_xmls_to_protos
 import paths
-from prototype.lib import dbpedia
-
-dbpedia_client = dbpedia.DBpediaClient()
 
 def document_to_html(document):
     html = ""
@@ -24,7 +21,7 @@ def document_to_html(document):
 
         for mention in document.find_spotlight_mentions_between(sentence.start_offset(),
                                                                 sentence.end_offset()):
-            html += "<b>" + str(dbpedia_client.dbpedia_uri_to_wikidata_id(mention.uri)) + "</b> "
+            html += "<b>" + str(mention.wikidata_id) + "</b> "
             html += str(mention) + "<br>"
 
         for token in sentence.tokens:

@@ -1,4 +1,3 @@
-from prototype.lib import dbpedia
 from prototype import feature_extraction
 from prototype.lib import sample_generation
 from prototype.lib import wikidata
@@ -35,8 +34,6 @@ document = sample_generation.try_load_document('Albert Einstein')
 
 scored_samples = []
 
-dbpedia_client = dbpedia.DBpediaClient()
-
 for relation in classifiers:
     print('Looking for relation', relation, '...')
 
@@ -45,7 +42,6 @@ for relation in classifiers:
         sentence_wrapper = sample_generation.SentenceWrapper(
             document,
             sentence,
-            dbpedia_client = dbpedia_client
         )
         wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
 

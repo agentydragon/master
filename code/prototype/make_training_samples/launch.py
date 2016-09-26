@@ -1,6 +1,5 @@
 from prototype.lib import mapper
 from prototype.lib import article_set
-from prototype.lib import dbpedia
 from prototype.lib import wikidata
 from prototype.lib import flags
 
@@ -16,7 +15,6 @@ def main():
             'prototype/make_training_samples/make_training_samples',
             '--parallelism', str(args.local_parallelism),
             '--wikidata_endpoint', wikidata.get_default_endpoint_url(),
-            '--dbpedia_endpoint', dbpedia.get_default_endpoint_url(),
         ]
         for article in articles_slice:
             job_command.extend(['--articles', article])

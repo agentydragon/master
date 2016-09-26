@@ -2,6 +2,7 @@ import json
 import os.path
 from prototype.lib import parse_xmls_to_protos
 from prototype.lib import article_repo
+from prototype.lib import dbpedia
 import sys
 import time
 import locale
@@ -13,6 +14,7 @@ flags.make_parser()
 args = flags.parse_args()
 
 repo = article_repo.ArticleRepo()
+dbpedia_client = dbpedia.DBpediaClient()
 
 for title in args.articles:
     print("Joining", title)
@@ -38,7 +40,8 @@ for title in args.articles:
         continue
     proto = parse_xmls_to_protos.document_to_proto(
         title = title,
-        document = article_data
+        document = article_data,
+        dbpedia_client = dbpedia_client
     )
     article_data.proto = proto
     repo.write_article(title, article_data)

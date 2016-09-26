@@ -1,6 +1,5 @@
 import paths
 from xml.etree import ElementTree
-from prototype.lib import dbpedia
 from prototype.lib import article_repo
 from prototype.lib import training_sample
 import random
@@ -28,7 +27,7 @@ def try_load_document(article_title):
 
     return document.proto
 
-def get_samples_from_document(article_title, wikidata_client, dbpedia_client):
+def get_samples_from_document(article_title, wikidata_client):
     document = try_load_document(article_title)
     if not document:
         print('cannot load document')
@@ -37,7 +36,7 @@ def get_samples_from_document(article_title, wikidata_client, dbpedia_client):
     samples = {}
 
     for sentence in document.sentences:
-        sentence_wrapper = SentenceWrapper(document, sentence, dbpedia_client)
+        sentence_wrapper = SentenceWrapper(document, sentence)
         wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
 
         for s, p, o in wikidata_client.get_triples_between_entities(wikidata_ids):
@@ -54,14 +53,14 @@ def get_samples_from_document(article_title, wikidata_client, dbpedia_client):
             samples[p].append(sample)
     return samples
 
-def sample_random_entity_pair(documents, dbpedia_client):
+def sample_random_entity_pair(documents):
     while True:
         document = random.choice(documents)
 
         for i in range(5):
             # select random sentence that has at least 2 mentions in it
             sentence = random.choice(document.sentences)
-            sentence_wrapper = SentenceWrapper(document, sentence, dbpedia_client)
+            sentence_wrapper = SentenceWrapper(document, sentence)
 
             wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
             if len(wikidata_ids) < 2:
@@ -82,9 +81,9 @@ def sample_random_entity_pair(documents, dbpedia_client):
         # pick next article
         continue
 
-def sample_complete_negative(documents, wikidata_client, dbpedia_client):
+def sample_complete_negative(documents, wikidata_client):
     while True:
-        sample = sample_random_entity_pair(documents, dbpedia_client)
+        sample = sample_random_entity_pair(documents)
         if len(wikidata_client.get_holding_relations_between(sample.subject,
                                                              sample.object)) > 0:
             # skip if we happen to hit it
@@ -94,9 +93,9 @@ def sample_complete_negative(documents, wikidata_client, dbpedia_client):
             sample.positive = False
             return sample
 
-def sample_negative(documents, relation, wikidata_client, dbpedia_client):
+def sample_negative(documents, relation, wikidata_client):
     while True:
-        sample = sample_random_entity_pair(documents, dbpedia_client)
+        sample = sample_random_entity_pair(documents)
         if wikidata_client.relation_exists(sample.subject, relation, sample.object):
             # skip if we happen to hit it
             continue
@@ -106,16 +105,14 @@ def sample_negative(documents, relation, wikidata_client, dbpedia_client):
             return sample
 
 class SentenceWrapper(object):
-    def __init__(self, document, sentence, dbpedia_client):
+    def __init__(self, document, sentence):
         self.document = document
         self.sentence = sentence
-        self.dbpedia_client = dbpedia_client
 
     def find_sentence_token_idxs_of_entity(self, entity):
         mentions = []
         for mention in self.document.get_spotlight_mentions_in_sentence(self.sentence):
-            wikidata_id = self.dbpedia_client.dbpedia_uri_to_wikidata_id(mention.uri)
-            if wikidata_id == entity:
+            if mention.wikidata_id == entity:
                 mentions.append(mention)
 
         # now we have all mentions of the entity in the sentence
@@ -169,7 +166,7 @@ class SentenceWrapper(object):
     def get_sentence_wikidata_ids(self):
         wikidata_ids = set()
         for mention in self.document.get_spotlight_mentions_in_sentence(self.sentence):
-            wikidata_id = self.dbpedia_client.dbpedia_uri_to_wikidata_id(mention.uri)
+            wikidata_id = mention.wikidata_id
             if not wikidata_id:
                 continue
 
