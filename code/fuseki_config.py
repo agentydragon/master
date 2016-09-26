@@ -22,8 +22,6 @@ tdb:DatasetTDB  rdfs:subClassOf  ja:RDFDataset .
 tdb:GraphTDB    rdfs:subClassOf  ja:Model .
 
 # fuseki:serviceReadGraphStore      "get" ;      # SPARQL Graph store protocol (read only)
-# Query timeout on this dataset (1s, 1000 milliseconds)
-# ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "1000" ] ;
 
 <#service-wikidata> rdf:type fuseki:Service ;
     fuseki:name         "wikidata" ; # http://host:port/wikidata
@@ -35,6 +33,12 @@ tdb:GraphTDB    rdfs:subClassOf  ja:Model .
     fuseki:serviceQuery "query" ;    # SPARQL query service
     fuseki:dataset      <#dataset-dbpedia-sameas> ; .
 
-<#dataset-wikidata> rdf:type tdb:DatasetTDB ; tdb:location "%s" ; .
-<#dataset-dbpedia-sameas> rdf:type tdb:DatasetTDB ; tdb:location "%s" ; .
+<#dataset-wikidata> rdf:type tdb:DatasetTDB ; tdb:location "%s" ;
+    # Query timeout on this dataset (5s, 5000 milliseconds)
+    ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "5000" ] ;
+    .
+<#dataset-dbpedia-sameas> rdf:type tdb:DatasetTDB ; tdb:location "%s" ;
+    # Query timeout on this dataset (5s, 5000 milliseconds)
+    ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "5000" ] ;
+    .
 """) % (wikidata_dataset, dbpedia_sameas_dataset)
