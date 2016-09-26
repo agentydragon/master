@@ -37,6 +37,8 @@ def get_default_endpoint_url():
 class WikidataClient(object):
     def __init__(self, endpoint=None):
         self.wikidata_relations_cache = {}
+        self.forward_cache = {}
+        self.backward_cache = {}
 
         if not endpoint:
             endpoint = get_default_endpoint_url()
@@ -44,6 +46,9 @@ class WikidataClient(object):
         self.wikidata_client = sparql_client.SPARQLClient(endpoint)
 
     def collect_forward_properties(self, wikidata_id):
+        if wikidata_id in self.forward_cache:
+            return self.forward_cache[wikidata_id]
+
         # print('forward for', wikidata_id)
         results = self.wikidata_client.get_results("""
             SELECT ?rel ?other
@@ -62,10 +67,16 @@ class WikidataClient(object):
             if triple:
                 # print(triple)
                 properties.append(triple)
+
+        self.forward_cache[wikidata_id] = properties
+
         return properties
 
     # TODO DRY
     def collect_backward_properties(self, wikidata_id):
+        if wikidata_id in self.backward_cache:
+            return self.backward_cache[wikidata_id]
+
         #print('backward for', wikidata_id)
         results = self.wikidata_client.get_results("""
             SELECT ?rel ?other
@@ -83,6 +94,9 @@ class WikidataClient(object):
             if triple:
                 # print(triple)
                 properties.append(triple)
+
+        self.backward_cache[wikidata_id] = properties
+
         return properties
 
     def get_holding_relations_between(self, s, o):
@@ -91,6 +105,8 @@ class WikidataClient(object):
             WHERE { wd:%s ?rel wd:%s . }
             LIMIT %s
         """ % (s, o, LIMIT))
+
+        # TODO: cache?
 
         rels = []
         for x in results['results']['bindings']:
