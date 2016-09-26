@@ -51,10 +51,27 @@ for i, title in enumerate(article_titles):
                     if sample.sentence.origin_article == title)
     #print('positive sentence IDs:', positive_sentence_ids)
 
+
+    all_wikidata_ids = set()
+    for sentence in art.sentences:
+        sentence_wrapper = sample_generation.SentenceWrapper(art, sentence)
+        all_wikidata_ids = all_wikidata_ids.union(
+            sentence_wrapper.get_sentence_wikidata_ids()
+        )
+
+    subject_wikidata_ids = set()
+    object_wikidata_ids = set()
+    for wikidata_id in all_wikidata_ids:
+        if wikidata_client.entity_is_relation_subject(wikidata_id, relation):
+            subject_wikidata_ids.add(wikidata_id)
+        if wikidata_client.entity_is_relation_object(wikidata_id, relation):
+            object_wikidata_ids.add(wikidata_id)
+    print('%d subjects, %d objects' % (len(subject_wikidata_ids),
+                                       len(object_wikidata_ids)))
+
     from_article = []
     for sentence in art.sentences:
-        sentence_wrapper = sample_generation.SentenceWrapper(art,
-                                                             sentence)
+        sentence_wrapper = sample_generation.SentenceWrapper(art, sentence)
         wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
         # print('Sentence', sentence.id, ':', len(wikidata_ids), 'entities')
         for s in wikidata_ids:
@@ -62,19 +79,25 @@ for i, title in enumerate(article_titles):
                 if sentence_wrapper.mentions_in_sentence_overlap(s, o):
                     continue
 
-                if (sentence.id, s, o) not in positives:
-                    from_article.append(sentence_wrapper.make_training_sample(
-                        s, relation, o, positive=False))
+                if (sentence.id, s, o) in positives:
+                    continue
+
+                if ((s not in subject_wikidata_ids) and
+                        (o not in object_wikidata_ids)):
+                    continue
+
+                # TODO: subject or object must have something matching that relation
+                # (local closed-world assumption)
+                from_article.append(sentence_wrapper.make_training_sample(
+                    s, relation, o, positive=False))
     print('Collected', len(from_article))
     negative_samples.extend(from_article)
 
 
 #relation_samples = sample_repo.load_samples(relation)
+print('Positive:', len(positive_samples))
+print('Negative:', len(negative_samples))
 relation_samples = positive_samples + negative_samples
-print('Positive:', len([sample for sample in relation_samples
-                        if sample.positive]))
-print('Negative:', len([sample for sample in relation_samples
-                        if not sample.positive]))
 
 print('Collecting features...')
 

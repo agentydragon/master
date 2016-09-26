@@ -132,6 +132,18 @@ class WikidataClient(object):
 #        self.save_cache()
         return properties
 
+    def entity_is_relation_subject(self, entity, relation):
+        query = """
+            ASK { wd:%s wdp:%s ?other }
+        """ % (entity, relation)
+        return self.wikidata_client.get_results(query)['boolean']
+
+    def entity_is_relation_object(self, entity, relation):
+        query = """
+            ASK { ?other wdp:%s wd:%s }
+        """ % (relation, entity)
+        return self.wikidata_client.get_results(query)['boolean']
+
     def get_triples_between_entities(self, wikidata_ids):
         if len(wikidata_ids) == 0:
             return []
