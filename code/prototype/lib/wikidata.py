@@ -119,11 +119,16 @@ class WikidataClient(object):
     def get_triples_between_entities(self, wikidata_ids):
         # TODO: optimize
         all_triples = []
-        # TODO: optimize: can collect forward-only and do it in one query
+        # Optimize: can collect forward-only.
+        # TODO: And do it in one query.
         for entity in wikidata_ids:
-            all_triples.extend(self.get_all_triples_of_entity(entity))
-        return list(sorted(set(triple for triple in all_triples
-                        if (triple[0] in wikidata_ids) and (triple[2] in wikidata_ids))))
+            # all_triples.extend(self.get_all_triples_of_entity(entity))
+            all_triples.extend(self.collect_forward_properties(entity))
+        all_triples = set(
+            triple for triple in all_triples
+            if (triple[0] in wikidata_ids) and (triple[2] in wikidata_ids)
+        )
+        return list(sorted(all_triples))
 
 
     def fetch_label(self, entity_id):
