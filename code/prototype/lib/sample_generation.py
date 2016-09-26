@@ -35,11 +35,22 @@ def get_samples_from_document(article_title, wikidata_client):
 
     samples = {}
 
+    all_wikidata_ids = set()
+    for sentence in document.sentences:
+        sentence_wrapper = SentenceWrapper(document, sentence)
+        all_wikidata_ids = all_wikidata_ids.union(sentence_wrapper.get_sentence_wikidata_ids())
+
+    all_triples = wikidata_client.get_triples_between_entities(wikidata_ids)
+
     for sentence in document.sentences:
         sentence_wrapper = SentenceWrapper(document, sentence)
         wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
 
-        for s, p, o in wikidata_client.get_triples_between_entities(wikidata_ids):
+        # for s, p, o in wikidata_client.get_triples_between_entities(wikidata_ids):
+        for s, p, o in all_triples:
+            if (s not in wikidata_ids) or (o not in wikidata_ids):
+                continue
+
             if p not in samples:
                 samples[p] = []
 
