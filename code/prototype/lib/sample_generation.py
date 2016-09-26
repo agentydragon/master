@@ -40,7 +40,9 @@ def get_samples_from_document(article_title, wikidata_client):
         sentence_wrapper = SentenceWrapper(document, sentence)
         all_wikidata_ids = all_wikidata_ids.union(sentence_wrapper.get_sentence_wikidata_ids())
 
-    all_triples = wikidata_client.get_triples_between_entities(all_wikidata_ids)
+    all_triples = wikidata_client.get_triples_between_entities(
+        list(sorted(all_wikidata_ids))
+    )
 
     for sentence in document.sentences:
         sentence_wrapper = SentenceWrapper(document, sentence)

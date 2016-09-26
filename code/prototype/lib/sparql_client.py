@@ -20,6 +20,7 @@ class SPARQLClient(object):
     def __init__(self, endpoint):
         self.client = SPARQLWrapper.SPARQLWrapper(endpoint)
         self.client.setReturnFormat(SPARQLWrapper.JSON)
+        self.client.setRequestMethod(SPARQLWrapper.POSTDIRECTLY)
 
     def get_results(self, query, retry=4):
         query_for_printing = ' '.join(map(str.strip, query.split('\n')))
