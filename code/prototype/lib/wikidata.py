@@ -133,6 +133,9 @@ class WikidataClient(object):
         return properties
 
     def get_triples_between_entities(self, wikidata_ids):
+        if len(wikidata_ids) == 0:
+            return []
+
         x = ' '.join([('wd:%s' % wikidata_id) for wikidata_id in wikidata_ids])
         query = """
             SELECT ?s ?p ?o
