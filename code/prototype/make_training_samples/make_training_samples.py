@@ -2,7 +2,7 @@ from prototype.lib import sample_repo
 from prototype.lib import sample_generation
 from prototype.lib import wikidata
 from prototype.lib import flags
-import progressbar
+# import progressbar
 # import multiprocessing
 
 def process_article(article_title):
@@ -34,8 +34,9 @@ def main():
     # assert args.parallelism >= 1
     # if args.parallelism == 1:
     if True:
-        bar = progressbar.ProgressBar(redirect_stdout=True)
-        for article in bar(args.articles):
+        # bar = progressbar.ProgressBar(redirect_stdout=True)
+        # for article in bar(args.articles):
+        for article in args.articles:
             print(article)
             process_article(article)
     # else:
