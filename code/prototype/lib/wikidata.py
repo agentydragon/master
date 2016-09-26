@@ -133,18 +133,39 @@ class WikidataClient(object):
         return properties
 
     def get_triples_between_entities(self, wikidata_ids):
-        # TODO: optimize
-        all_triples = []
-        # Optimize: can collect forward-only.
-        # TODO: And do it in one query.
-        for entity in wikidata_ids:
-            # all_triples.extend(self.get_all_triples_of_entity(entity))
-            all_triples.extend(self.collect_forward_properties(entity))
-        all_triples = set(
-            triple for triple in all_triples
-            if (triple[0] in wikidata_ids) and (triple[2] in wikidata_ids)
-        )
-        return list(sorted(all_triples))
+        x = ' '.join(['wd:%s' for wikidata_id in wikidata_ids])
+        query = """
+            SELECT ?s ?p ?o
+            WHERE {
+                VALUES ?s { %s }
+                VALUES ?o { %s }
+                ?s ?p ?o
+            }
+        """ % (x, x)
+        results = self.wikidata_client.get_results(query)
+        triples = []
+        for x in results['results']['bindings']:
+            subject = x['s']['value']
+            rel = x['p']['value']
+            other = x['o']['value']
+            triple = wikidata_util.transform_relation(subject, rel, other)
+            if triple:
+                # print(triple)
+                triples.append(triple)
+        return triples
+
+        # # TODO: optimize
+        # all_triples = []
+        # # Optimize: can collect forward-only.
+        # # TODO: And do it in one query.
+        # for entity in wikidata_ids:
+        #     # all_triples.extend(self.get_all_triples_of_entity(entity))
+        #     all_triples.extend(self.collect_forward_properties(entity))
+        # all_triples = set(
+        #     triple for triple in all_triples
+        #     if (triple[0] in wikidata_ids) and (triple[2] in wikidata_ids)
+        # )
+        # return list(sorted(all_triples))
 
 
     def fetch_label(self, entity_id):
