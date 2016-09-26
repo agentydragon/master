@@ -36,13 +36,22 @@ def get_samples_from_document(article_title, wikidata_client):
     samples = {}
 
     all_wikidata_ids = set()
+    all_triples = []
+
     for sentence in document.sentences:
         sentence_wrapper = SentenceWrapper(document, sentence)
         all_wikidata_ids = all_wikidata_ids.union(sentence_wrapper.get_sentence_wikidata_ids())
 
-    all_triples = wikidata_client.get_triples_between_entities(
+        if len(all_wikidata_ids) >= 10:
+        all_triples = all_triples.union(wikidata_client.get_triples_between_entities(
+            list(sorted(all_wikidata_ids))
+        ))
+        all_wikidata_ids = set()
+
+    all_triples = all_triples.union(wikidata_client.get_triples_between_entities(
         list(sorted(all_wikidata_ids))
-    )
+    ))
+    all_wikidata_ids = set()
 
     for sentence in document.sentences:
         sentence_wrapper = SentenceWrapper(document, sentence)
