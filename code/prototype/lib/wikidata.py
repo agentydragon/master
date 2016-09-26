@@ -9,14 +9,20 @@ LIMIT = 100
 flags.add_argument('--wikidata_endpoint',
                    help=('Wikidata SPARQL endpoint. Example: '
                          'https://query.wikidata.org/sparql, '
-                         'http://hador:3030/wikidata/query'))
+                         'http://hador:3030/wikidata/query. '
+                         'Specify "PUBLIC" to use public endpoint.'))
 
-default_wikidata_url = 'https://query.wikidata.org/sparql'
+PUBLIC_WIKIDATA_ENDPOINT = 'https://query.wikidata.org/sparql'
 
 def get_default_endpoint_url():
     endpoint = flags.parse_args().wikidata_endpoint
+
+    if endpoint == 'PUBLIC':
+        endpoint = PUBLIC_WIKIDATA_ENDPOINT
+
     if endpoint:
         return endpoint
+
 
     zk_endpoint = zk.get_wikidata_endpoint()
     if zk_endpoint:
