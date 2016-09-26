@@ -2,6 +2,7 @@ from prototype.lib import sample_repo
 from prototype.lib import sample_generation
 from prototype.lib import wikidata
 from prototype.lib import flags
+import progressbar
 # import multiprocessing
 
 def process_article(article_title):

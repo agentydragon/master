@@ -48,7 +48,7 @@ def launch_job_for_slice(slice_index, job_name, log_base_dir,
         # TODO: parallelize on one node
         walltime=walltime_estimate,
         node_spec="nodes=1:brno:ppn=%d,mem=%s,scratch=%s" % (cores, ram, scratch),
-        job_name=job_name,
+        job_name=('%s_%d' % (job_name, slice_index)),
         job_command=job_command,
         output_path=(log_base_dir + ("/%04d.o" % slice_index)),
         error_path=(log_base_dir + ("/%04d.e" % slice_index))

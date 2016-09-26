@@ -6,5 +6,8 @@ py_library(
     data = [
         "@jena_fuseki//:everything",
     ],
+    deps = [
+        "//prototype/lib:pbs_util_lib",
+    ],
     visibility = ["//visibility:public"],
 )

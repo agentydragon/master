@@ -5,7 +5,7 @@ from prototype.lib import flags
 
 def main():
     flags.add_argument('--articles_per_job', type=int)
-    flags.add_argument('--local_parallelism', type=int, default=1)
+    # flags.add_argument('--local_parallelism', type=int, default=1)
     flags.make_parser(description='TODO')
     # TODO: add max_jobs
     args = flags.parse_args()
@@ -13,7 +13,7 @@ def main():
     def make_commandline(articles_slice):
         job_command = [
             'prototype/make_training_samples/make_training_samples',
-            '--parallelism', str(args.local_parallelism),
+            # '--parallelism', str(args.local_parallelism),
             '--wikidata_endpoint', wikidata.get_default_endpoint_url(),
         ]
         for article in articles_slice:
@@ -24,7 +24,8 @@ def main():
     def slice_to_walltime(articles_slice):
         article_count = len(articles_slice)
         walltime_estimate = round(
-            (120 * article_count / float(args.local_parallelism)) * 2 + 100
+            # (120 * article_count / float(args.local_parallelism)) * 2 + 100
+            (120 * article_count) * 2 + 100
         ) # or default: "04:00:00"
         return walltime_estimate
 
@@ -36,7 +37,7 @@ def main():
         args.articles_per_job,
         make_commandline,
         slice_to_walltime,
-        cores=max(2, args.local_parallelism)
+        cores=2 # max(2, args.local_parallelism)
     )
 
 if __name__ == '__main__':

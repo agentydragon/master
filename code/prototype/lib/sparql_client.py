@@ -22,9 +22,13 @@ class SPARQLClient(object):
         self.client.setReturnFormat(SPARQLWrapper.JSON)
 
     def get_results(self, query, retry=4):
+        print("Getting results:", query)
+
         try:
             self.client.setQuery(STANDARD_PREFIXES + query)
-            return self.client.query().convert()
+            results = self.client.query().convert()
+            print("Got results.")
+            return results
         except (ConnectionResetError, OSError, urllib.error.URLError, SPARQLWrapper.SPARQLExceptions.EndPointInternalError) as e:
             error = e
             if not retry:

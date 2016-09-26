@@ -3,6 +3,9 @@ from prototype.lib import sparql_client
 from prototype.lib import zk
 from prototype.lib import flags
 
+# TODO: somehow remove limit
+LIMIT = 100
+
 flags.add_argument('--wikidata_endpoint',
                    help=('Wikidata SPARQL endpoint. Example: '
                          'https://query.wikidata.org/sparql, '
@@ -39,7 +42,8 @@ class WikidataClient(object):
         results = self.wikidata_client.get_results("""
             SELECT ?rel ?other
             WHERE { wd:%s ?rel ?other . }
-        """ % wikidata_id)
+            LIMIT %d
+        """ % (wikidata_id, LIMIT))
 
         properties=[]
         for x in results['results']['bindings']:
@@ -60,9 +64,8 @@ class WikidataClient(object):
         results = self.wikidata_client.get_results("""
             SELECT ?rel ?other
             WHERE { ?other ?rel wd:%s . }
-            LIMIT 500
-        """ % wikidata_id)
-        # TODO: remove limit 500
+            LIMIT %d
+        """ % (wikidata_id, LIMIT))
 
         properties=[]
         for x in results['results']['bindings']:
@@ -80,9 +83,8 @@ class WikidataClient(object):
         results = self.wikidata_client.get_results("""
             SELECT ?rel
             WHERE { wd:%s ?rel wd:%s . }
-            LIMIT 500
-        """ % (s, o))
-        # TODO: remove limit 500
+            LIMIT %s
+        """ % (s, o, LIMIT))
 
         rels = []
         for x in results['results']['bindings']:

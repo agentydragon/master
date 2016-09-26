@@ -1,11 +1,3 @@
-py_library(
-    name = "config_lib",
-    srcs = [
-        "config.py",
-    ],
-    visibility = ["//visibility:public"],
-)
-
 py_binary(
     name = "local_fuseki_launch",
     srcs = [
@@ -32,7 +24,7 @@ py_binary(
         "//thirdparty/fuseki:fuseki_lib",
         "//:paths_lib",
         "//prototype/lib:flags_lib",
-        ":config_lib",
+        "//:fuseki_config_lib",
     ],
     data = [
         "//prototype/make_training_samples:make_training_samples",

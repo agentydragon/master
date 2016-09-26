@@ -5,6 +5,7 @@ py_binary(
     ],
     deps = [
         "//prototype/lib:wikidata_lib",
+        "//prototype/lib:flags_lib",
     ],
     default_python_version = "PY3",
     srcs_version = "PY3",
@@ -52,7 +53,7 @@ py_binary(
     deps = [
         "//prototype/lib:sample_repo_lib",
         "//:paths_lib",
-        "//py:wikidata_lib",
+        "//prototype/lib:wikidata_lib",
     ],
     default_python_version = "PY3",
     srcs_version = "PY3",

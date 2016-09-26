@@ -3,9 +3,7 @@ from prototype.lib import flags
 from prototype.lib import wikidata
 import json
 
-client = wikidata.WikidataClient()
-
-def show_all_relations():
+def show_all_relations(client):
     for relation in sample_repo.all_relations():
         samples = sample_repo.load_samples(relation)
         positive = list(filter(lambda sample: sample.positive, samples))
@@ -16,7 +14,7 @@ def show_all_relations():
               len(positive), "positive",
               len(negative), "negative")
 
-def show_relation(relation):
+def show_relation(client, relation):
     samples = sample_repo.load_samples(relation)
 
     html = ""
@@ -70,11 +68,13 @@ def main():
     flags.make_parser(description='TODO')
     args = flags.parse_args()
 
+    client = wikidata.WikidataClient()
+
     if args.relation:
         relation = args.relation
-        show_relation(relation)
+        show_relation(client, relation)
     else:
-        show_all_relations()
+        show_all_relations(client)
 
 if __name__ == '__main__':
     main()

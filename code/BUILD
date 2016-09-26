@@ -5,9 +5,18 @@ py_binary(
     ],
     deps = [
         "//thirdparty/fuseki:fuseki_lib",
-        "//local_fuseki:config_lib",
+        "//:fuseki_config_lib",
         "//:paths_lib",
+        "//prototype/lib:zk_lib",
     ],
+)
+
+py_library(
+    name = "fuseki_config_lib",
+    srcs = [
+        "fuseki_config.py",
+    ],
+    visibility = ["//visibility:public"],
 )
 
 py_library(

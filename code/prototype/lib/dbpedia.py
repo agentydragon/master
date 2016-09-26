@@ -42,6 +42,7 @@ class DBpediaClient(object):
             SELECT ?same
             WHERE { <%s> owl:sameAs ?same . }
         """ % uri)
+        # TODO: LIMIT 1
         wikidata_entity = None
         for x in results['results']['bindings']:
             value = x['same']['value']

@@ -21,11 +21,11 @@ def try_load_document(article_title):
         print('unspotlighted article', article_title)
         return
 
-    if not document.proto:
+    if not article.proto:
         print('unjoined article', article_title)
         return
 
-    return document.proto
+    return article.proto
 
 def get_samples_from_document(article_title, wikidata_client):
     document = try_load_document(article_title)
