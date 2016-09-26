@@ -19,9 +19,11 @@ def get_default_endpoint_url():
     if zk_endpoint:
         print("Grabbed Wikidata endpoint from ZK:", zk_endpoint)
         return ('http://%s/wikidata/query' % zk_endpoint)
-    else:
-        print("WARN: Falling back to Wikimedia Foundation's Wikidata")
-        return default_wikidata_url
+
+    raise Exception('No Wikidata endpoint available.')
+
+    # print("WARN: Falling back to Wikimedia Foundation's Wikidata")
+    # return default_wikidata_url
 
 class WikidataClient(object):
     def __init__(self, endpoint=None):

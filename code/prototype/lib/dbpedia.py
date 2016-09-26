@@ -19,9 +19,11 @@ def get_default_endpoint_url():
     if zk_endpoint:
         print("Grabbed DBpedia endpoint from ZK:", zk_endpoint)
         return ('http://%s/dbpedia-sameas/query' % zk_endpoint)
-    else:
-        print("WARN: Falling back to Wikimedia Foundation's DBpedia")
-        return default_dbpedia_url
+
+    raise Exception('No DBpedia endpoint available.')
+
+    # print("WARN: Falling back to Wikimedia Foundation's DBpedia")
+    # return default_dbpedia_url
 
 class DBpediaClient(object):
     def __init__(self, endpoint=None):

@@ -23,8 +23,10 @@ def get_default_spotlight_endpoint():
         print("Grabbed Spotlight endpoint from ZK:", zk_endpoint)
         return zk_endpoint
 
-    print("WARN: Using default public Spotlight endpoint")
-    return DEFAULT_PUBLIC_SPOTLIGHT_ENDPOINT
+    raise Exception('No Spotlight endpoint available.')
+
+    # print("WARN: Using default public Spotlight endpoint")
+    # return DEFAULT_PUBLIC_SPOTLIGHT_ENDPOINT
 
 class SpotlightClient(object):
     def __init__(self, endpoint=None):
