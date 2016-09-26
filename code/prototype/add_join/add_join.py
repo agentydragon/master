@@ -22,6 +22,9 @@ for title in args.articles:
         continue
 
     article_data = repo.load_article(title)
+    if article_data.proto:
+        print("Proto already exists")
+        continue
     if not article_data.corenlp_xml:
         print("Not parsed yet")
         continue
