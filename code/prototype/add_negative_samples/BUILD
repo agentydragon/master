@@ -9,7 +9,7 @@ py_binary(
         "//prototype/lib:training_sample_lib",
         "//prototype/lib:wikidata_lib",
         "//prototype/lib:zk_lib",
-        "//prototype/lib:args_lib",
+        "//prototype/lib:flags_lib",
     ],
     default_python_version = "PY3",
     srcs_version = "PY3",
