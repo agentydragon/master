@@ -145,7 +145,7 @@ class WikidataClient(object):
         subjects = set()
         for x in results['results']['bindings']:
             subject = x['subject']['value']
-            subjects.add(subject)
+            subjects.add(wikidata_util.wikidata_entity_url_to_entity_id(subject))
         return subjects
 
     def find_relation_objects(self, entities, relation):
@@ -161,7 +161,7 @@ class WikidataClient(object):
         objects = set()
         for x in results['results']['bindings']:
             obj = x['object']['value']
-            objects.add(obj)
+            objects.add(wikidata_util.wikidata_entity_url_to_entity_id(obj))
         return objects
 
     # subject_wikidata_ids = set()

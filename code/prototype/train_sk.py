@@ -59,11 +59,15 @@ for i, title in enumerate(article_titles):
             sentence_wrapper.get_sentence_wikidata_ids()
         )
 
-    #### LCWA
-    #### subject_wikidata_ids = wikidata_client.find_relation_subjects(all_wikidata_ids, relation)
-    #### object_wikidata_ids = wikidata_client.find_relation_objects(all_wikidata_ids, relation)
-    #### print('%d subjects, %d objects' % (len(subject_wikidata_ids),
-    ####                                    len(object_wikidata_ids)))
+    # LCWA
+    subject_wikidata_ids = wikidata_client.find_relation_subjects(all_wikidata_ids, relation)
+    object_wikidata_ids = wikidata_client.find_relation_objects(all_wikidata_ids, relation)
+    print('Subjects (%d):' % len(subject_wikidata_ids))
+    for subject in subject_wikidata_ids:
+        print('\t', subject, wikidata_client.get_name(subject))
+    print('Objects (%d):' % len(object_wikidata_ids))
+    for object in object_wikidata_ids:
+        print('\t', object, wikidata_client.get_name(object))
 
     from_article = []
     for sentence in art.sentences:
@@ -79,14 +83,14 @@ for i, title in enumerate(article_titles):
                     # This sentence is a positive sample.
                     continue
 
-                #### LCWA
-                #### subject_has_counterexample = (s in subject_wikidata_ids)
-                #### object_has_counterexample = (o in object_wikidata_ids)
-                #### has_counterexample = (subject_has_counterexample or
-                ####                       object_has_counterexample)
-                #### if not has_counterexample:
-                ####     # This sentence is skipped because of LCWA
-                ####     continue
+                # LCWA
+                subject_has_counterexample = (s in subject_wikidata_ids)
+                object_has_counterexample = (o in object_wikidata_ids)
+                has_counterexample = (subject_has_counterexample or
+                                      object_has_counterexample)
+                if not has_counterexample:
+                    # This sentence is skipped because of LCWA
+                    continue
 
                 from_article.append(sentence_wrapper.make_training_sample(
                     s, relation, o, positive=False))
