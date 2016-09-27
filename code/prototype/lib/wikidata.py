@@ -12,6 +12,9 @@ flags.add_argument('--wikidata_endpoint',
                          'http://hador:3030/wikidata/query. '
                          'Specify "PUBLIC" to use public endpoint.'))
 
+def join_entities(entities)
+    return ' '.join([('wd:%s' % wikidata_id) for wikidata_id in entities])
+
 PUBLIC_WIKIDATA_ENDPOINT = 'https://query.wikidata.org/sparql'
 
 def get_default_endpoint_url():
@@ -133,14 +136,13 @@ class WikidataClient(object):
         return properties
 
     def find_relation_subjects(self, entities, relation):
-        x = ' '.join([('wd:%s' % wikidata_id) for wikidata_id in entities])
         query = """
             SELECT DISTINCT ?subject
             WHERE {
                 VALUES ?subject { %s }
                 ?subject wdp:%s ?object
             }
-        """ % (x, relation)
+        """ % (join_entities(entities), relation)
         results = self.wikidata_client.get_results(query)
         subjects = set()
         for x in results['results']['bindings']:
@@ -149,14 +151,13 @@ class WikidataClient(object):
         return subjects
 
     def find_relation_objects(self, entities, relation):
-        x = ' '.join([('wd:%s' % wikidata_id) for wikidata_id in entities])
         query = """
             SELECT DISTINCT ?object
             WHERE {
                 VALUES ?object { %s }
                 ?subject wdp:%s ?object
             }
-        """ % (x, relation)
+        """ % (join_entities(entities), relation)
         results = self.wikidata_client.get_results(query)
         objects = set()
         for x in results['results']['bindings']:
@@ -188,7 +189,6 @@ class WikidataClient(object):
         if len(wikidata_ids) == 0:
             return []
 
-        x = ' '.join([('wd:%s' % wikidata_id) for wikidata_id in wikidata_ids])
         rels = set()
 
         query = """
@@ -197,7 +197,7 @@ class WikidataClient(object):
                 VALUES ?o { %s }
                 ?s ?p ?o
             }
-        """ % (x)
+        """ % (join_entities(wikidata_ids))
         results = self.wikidata_client.get_results(query)
         pairs = set()
         for row in results['results']['bindings']:
@@ -216,7 +216,6 @@ class WikidataClient(object):
         if len(wikidata_ids) == 0:
             return []
 
-        x = ' '.join([('wd:%s' % wikidata_id) for wikidata_id in wikidata_ids])
         rels = set()
 
         query = """
@@ -225,7 +224,7 @@ class WikidataClient(object):
                 VALUES ?s { %s }
                 ?s ?p ?o
             }
-        """ % (x)
+        """ % (join_entities(wikidata_ids))
         results = self.wikidata_client.get_results(query)
         pairs = set()
         for row in results['results']['bindings']:
@@ -244,7 +243,6 @@ class WikidataClient(object):
         if len(wikidata_ids) == 0:
             return []
 
-        x = ' '.join([('wd:%s' % wikidata_id) for wikidata_id in wikidata_ids])
         rels = set()
 
         query = """
@@ -253,7 +251,7 @@ class WikidataClient(object):
                 VALUES ?s { %s }
                 ?s ?p ?o
             }
-        """ % (x)
+        """ % (join_entities(wikidata_ids))
         results = self.wikidata_client.get_results(query)
         for row in results['results']['bindings']:
             rel = row['p']['value']
@@ -281,7 +279,7 @@ class WikidataClient(object):
         if len(wikidata_ids) == 0:
             return []
 
-        x = ' '.join([('wd:%s' % wikidata_id) for wikidata_id in wikidata_ids])
+        x = join_entities(wikidata_ids)
         query = """
             SELECT ?s ?p ?o
             WHERE {
