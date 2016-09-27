@@ -72,20 +72,6 @@ java_library(
     ],
 )
 
-java_library(
-    name = "SampleRepository",
-    srcs = [
-        "SampleRepository.java",
-        "//:TrainingSamples.java",
-    ],
-    deps = [
-        "//:paths_java_lib",
-        "//:commons_io_commons_io",
-        "//:org_json_json",
-        "//:com_google_protobuf_protobuf_java",
-    ],
-)
-
 py_library(
     name = "sentence_lib",
     srcs = [
