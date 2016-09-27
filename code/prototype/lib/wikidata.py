@@ -13,7 +13,7 @@ flags.add_argument('--wikidata_endpoint',
                          'Specify "PUBLIC" to use public endpoint.'))
 
 def join_entities(entities):
-    return ' '.join([('wd:%s' % wikidata_id) for wikidata_id in entities])
+    return ' '.join([('wd:%s' % wikidata_id) for wikidata_id in sorted(entities)])
 
 PUBLIC_WIKIDATA_ENDPOINT = 'https://query.wikidata.org/sparql'
 
