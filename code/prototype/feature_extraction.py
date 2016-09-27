@@ -1,8 +1,12 @@
+import numpy
 import matplotlib
 matplotlib.use('Agg')
 
+from scipy import sparse
 from matplotlib import pyplot
 
+import progressbar
+import datetime
 import pickle
 from prototype.lib import file_util
 from prototype.lib import article_set
@@ -139,7 +143,7 @@ def samples_to_matrix_target(samples, head_feature_dict):
     target = [target for features, target in features_labels]
     return matrix, target
 
-def split_samples_to_train_test(samples):
+def split_samples_to_train_test(relation_samples, train_articles, test_articles):
     train_samples = []
     test_samples = []
     for sample in relation_samples:
