@@ -184,6 +184,62 @@ class WikidataClient(object):
         """ % (relation, entity)
         return self.wikidata_client.get_results(query)['boolean']
 
+    def get_object_relation_pairs(self, wikidata_ids):
+        if len(wikidata_ids) == 0:
+            return []
+
+        x = ' '.join([('wd:%s' % wikidata_id) for wikidata_id in wikidata_ids])
+        rels = set()
+
+        query = """
+            SELECT ?o ?p
+            WHERE {
+                VALUES ?o { %s }
+                ?s ?p ?o
+            }
+        """ % (x)
+        results = self.wikidata_client.get_results(query)
+        pairs = set()
+        for row in results['results']['bindings']:
+            rel = row['p']['value']
+            rel = wikidata_util.normalize_relation(rel)
+            if not rel:
+                continue
+            object = row['o']['value']
+            if not wikidata_util.is_wikidata_entity_url(object):
+                continue
+            object = wikidata_util.wikidata_entity_url_to_entity_id(object)
+            pairs.append((object, rel))
+        return list(sorted(pairs))
+
+    def get_subject_relation_pairs(self, wikidata_ids):
+        if len(wikidata_ids) == 0:
+            return []
+
+        x = ' '.join([('wd:%s' % wikidata_id) for wikidata_id in wikidata_ids])
+        rels = set()
+
+        query = """
+            SELECT ?s ?p
+            WHERE {
+                VALUES ?s { %s }
+                ?s ?p ?o
+            }
+        """ % (x)
+        results = self.wikidata_client.get_results(query)
+        pairs = set()
+        for row in results['results']['bindings']:
+            rel = row['p']['value']
+            rel = wikidata_util.normalize_relation(rel)
+            if not rel:
+                continue
+            subject = row['s']['value']
+            if not wikidata_util.is_wikidata_entity_url(subject):
+                continue
+            subject = wikidata_util.wikidata_entity_url_to_entity_id(subject)
+            pairs.append((subject, rel))
+        return list(sorted(pairs))
+
     def get_all_relations_of_entities(self, wikidata_ids):
         if len(wikidata_ids) == 0:
             return []
