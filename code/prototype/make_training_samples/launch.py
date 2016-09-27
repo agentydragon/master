@@ -39,7 +39,8 @@ def main():
         args.articles_per_job,
         make_commandline,
         slice_to_walltime,
-        cores=2 # max(2, args.local_parallelism)
+        cores=2, # max(2, args.local_parallelism)
+        ram='8gb'
     )
 
 if __name__ == '__main__':
