@@ -3,6 +3,7 @@ def write_config(path, wikidata_dataset, dbpedia_sameas_dataset):
         f.write(get_config(wikidata_dataset, dbpedia_sameas_dataset))
 
 def get_config(wikidata_dataset, dbpedia_sameas_dataset):
+    # TODO: timeout as seconds
     return ("""
 @prefix fuseki: <http://jena.apache.org/fuseki#> .
 @prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -34,11 +35,11 @@ tdb:GraphTDB    rdfs:subClassOf  ja:Model .
     fuseki:dataset      <#dataset-dbpedia-sameas> ; .
 
 <#dataset-wikidata> rdf:type tdb:DatasetTDB ; tdb:location "%s" ;
-    # Query timeout on this dataset (2min, 120000 milliseconds)
-    ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "120000" ] ;
+    # Query timeout on this dataset (20min, 1200000 milliseconds)
+    ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "1200000" ] ;
     .
 <#dataset-dbpedia-sameas> rdf:type tdb:DatasetTDB ; tdb:location "%s" ;
-    # Query timeout on this dataset (2min, 120000 milliseconds)
-    ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "120000" ] ;
+    # Query timeout on this dataset (20min, 1200000 milliseconds)
+    ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "1200000" ] ;
     .
 """) % (wikidata_dataset, dbpedia_sameas_dataset)
