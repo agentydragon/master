@@ -52,6 +52,11 @@ def find_samples_in_document(title):
             )
             wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
 
+            if len(wikidata_ids) > 10:
+                # TODO: Consistently handle overlong sentences.
+                print('Overlong sentence (%d), ignoring.' % len(wikidata_ids))
+                continue
+
             sentence_samples = []
             for e1 in wikidata_ids:
                 for e2 in wikidata_ids:

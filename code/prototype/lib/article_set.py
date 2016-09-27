@@ -26,13 +26,13 @@ class ArticleSet(object):
         test = []
         calibrate = []
         for i, title in enumerate(self.article_names):
-            # 50% train 30% test 20% calibration
-            if i % 10 in (2, 3, 5, 7, 9):
+            x = (i % 100)
+
+            # 75% train 20% test 5% calibration
+            if x < 75:
                 train.append(title)
-
-            if i % 10 in (0, 1, 4):
+            elif x < 95:
                 test.append(title)
-
-            if i % 10 in (6, 8):
+            else:
                 calibrate.append(title)
         return train, test, calibrate

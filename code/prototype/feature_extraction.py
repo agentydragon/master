@@ -70,20 +70,24 @@ def sample_to_features(sample):
 def sample_to_features_label(sample):
     return (sample_to_features(sample), sample.positive)
 
-def plot_roc(fpr, tpr, auc, prefix, relation, relation_name):
+def plot_roc_general(fpr, tpr, label, output_file):
     pyplot.figure()
-    pyplot.plot(fpr, tpr, label='ROC curve -- %s %s (area = %0.2f)' % (relation,
-                                                                       relation_name,
-                                                                       auc))
+    pyplot.plot(fpr, tpr, label='ROC curve -- %s' % label)
     pyplot.plot([0, 1], [0, 1], 'k--')
     pyplot.xlim([0.0, 1.0])
     pyplot.ylim([0.0, 1.0])
     pyplot.xlabel('False Positive Rate')
     pyplot.ylabel('True Positive Rate')
     pyplot.legend(loc="lower right")
+    pyplot.savefig(output_file)
+
+def plot_roc(fpr, tpr, auc, prefix, relation, relation_name):
     d = paths.CHARTS_PATH + "/train-roc/" + relation
     file_util.ensure_dir(d)
-    pyplot.savefig(d + "/" + "roc-%s.png" % prefix)
+    plot_roc_general(fpr, tpr,
+                     label = '%s %s (area = %0.2f)' % (relation, relation_name,
+                                                       auc),
+                     output_file = d + "/" + "roc-%s.png" % prefix)
 
 def write_model(relation, clf, all_features):
     file_util.ensure_dir(paths.MODELS_PATH)
