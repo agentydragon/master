@@ -34,12 +34,14 @@ def write_relations(title, relation, samples):
     #     raise SavingError('Samples were reduced')
 
     positives = [sample for sample in samples if sample.positive]
-    with open(article_relation_to_path(title, relation, positive=True), 'w') as f:
-        json.dump({'samples': [sample.to_json() for sample in positives]}, f)
+    if len(positives) > 0:
+        with open(article_relation_to_path(title, relation, positive=True), 'w') as f:
+            json.dump({'samples': [sample.to_json() for sample in positives]}, f)
 
     negatives = [sample for sample in samples if not sample.positive]
-    with open(article_relation_to_path(title, relation, positive=False), 'w') as f:
-        json.dump({'samples': [sample.to_json() for sample in negatives]}, f)
+    if len(negatives) > 0:
+        with open(article_relation_to_path(title, relation, positive=False), 'w') as f:
+            json.dump({'samples': [sample.to_json() for sample in negatives]}, f)
 
 def write_positive_samples(relation, samples):
     with open(base_dir + '/' + relation + '/positives.json', 'w') as f:
