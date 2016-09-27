@@ -36,80 +36,82 @@ print('Training for', relation, wikidata_client.get_name(relation))
 positive_samples = sample_repo.load_positive_samples(relation)
 if args.max_pos:
     positive_samples = positive_samples[:args.max_pos]
-negative_samples = []
-
-def get_negative_samples_from_article(i, title):
-    art = sample_generation.try_load_document(title)
-    if art is None:
-        print('cannot load document')
-        return []
-
-    positives = set((sample.sentence.origin_sentence_id, sample.subject, sample.object)
-                    for sample in positive_samples
-                    if sample.sentence.origin_article == title)
-    #print('positive sentence IDs:', positive_sentence_ids)
-
-    all_wikidata_ids = set()
-    for sentence in art.sentences:
-        sentence_wrapper = sample_generation.SentenceWrapper(art, sentence)
-        all_wikidata_ids = all_wikidata_ids.union(
-            sentence_wrapper.get_sentence_wikidata_ids()
-        )
-
-    if args.world_assumption == 'LCWA':
-        # LCWA
-        subject_wikidata_ids = wikidata_client.find_relation_subjects(all_wikidata_ids, relation)
-        object_wikidata_ids = wikidata_client.find_relation_objects(all_wikidata_ids, relation)
-        # print('Subjects (%d):' % len(subject_wikidata_ids))
-        # for subject in subject_wikidata_ids:
-        #     print('\t', subject, wikidata_client.get_name(subject))
-        # print('Objects (%d):' % len(object_wikidata_ids))
-        # for object in object_wikidata_ids:
-        #     print('\t', object, wikidata_client.get_name(object))
-
-    from_article = []
-    for sentence in art.sentences:
-        sentence_wrapper = sample_generation.SentenceWrapper(art, sentence)
-        wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
-        # print('Sentence', sentence.id, ':', len(wikidata_ids), 'entities')
-        for s in wikidata_ids:
-            for o in wikidata_ids:
-                if sentence_wrapper.mentions_in_sentence_overlap(s, o):
-                    continue
-
-                if (sentence.id, s, o) in positives:
-                    # This sentence is a positive sample.
-                    continue
-
-                if args.world_assumption == 'LCWA':
-                    # LCWA
-                    subject_has_counterexample = (s in subject_wikidata_ids)
-                    object_has_counterexample = (o in object_wikidata_ids)
-                    has_counterexample = (subject_has_counterexample or
-                                          object_has_counterexample)
-                    if not has_counterexample:
-                        # This sentence is skipped because of LCWA
-                        continue
-
-                from_article.append(sentence_wrapper.make_training_sample(
-                    s, relation, o, positive=False))
-    return from_article
+#negative_samples = []
+#
+#def get_negative_samples_from_article(i, title):
+#    art = sample_generation.try_load_document(title)
+#    if art is None:
+#        print('cannot load document')
+#        return []
+#
+#    positives = set((sample.sentence.origin_sentence_id, sample.subject, sample.object)
+#                    for sample in positive_samples
+#                    if sample.sentence.origin_article == title)
+#    #print('positive sentence IDs:', positive_sentence_ids)
+#
+#    all_wikidata_ids = set()
+#    for sentence in art.sentences:
+#        sentence_wrapper = sample_generation.SentenceWrapper(art, sentence)
+#        all_wikidata_ids = all_wikidata_ids.union(
+#            sentence_wrapper.get_sentence_wikidata_ids()
+#        )
+#
+#    # if args.world_assumption == 'LCWA':
+#    #     # LCWA
+#    #     subject_wikidata_ids = wikidata_client.find_relation_subjects(all_wikidata_ids, relation)
+#    #     object_wikidata_ids = wikidata_client.find_relation_objects(all_wikidata_ids, relation)
+#    #     # print('Subjects (%d):' % len(subject_wikidata_ids))
+#    #     # for subject in subject_wikidata_ids:
+#    #     #     print('\t', subject, wikidata_client.get_name(subject))
+#    #     # print('Objects (%d):' % len(object_wikidata_ids))
+#    #     # for object in object_wikidata_ids:
+#    #     #     print('\t', object, wikidata_client.get_name(object))
+#
+#    from_article = []
+#    for sentence in art.sentences:
+#        sentence_wrapper = sample_generation.SentenceWrapper(art, sentence)
+#        wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
+#        # print('Sentence', sentence.id, ':', len(wikidata_ids), 'entities')
+#        for s in wikidata_ids:
+#            for o in wikidata_ids:
+#                if sentence_wrapper.mentions_in_sentence_overlap(s, o):
+#                    continue
+#
+#                if (sentence.id, s, o) in positives:
+#                    # This sentence is a positive sample.
+#                    continue
+#
+#                if args.world_assumption == 'LCWA':
+#                    # LCWA
+#                    subject_has_counterexample = (s in subject_wikidata_ids)
+#                    object_has_counterexample = (o in object_wikidata_ids)
+#                    has_counterexample = (subject_has_counterexample or
+#                                          object_has_counterexample)
+#                    if not has_counterexample:
+#                        # This sentence is skipped because of LCWA
+#                        continue
+#
+#                from_article.append(sentence_wrapper.make_training_sample(
+#                    s, relation, o, positive=False))
+#    return from_article
 
 #article_titles = set(sample.sentence.origin_article
 #                     for sample in positive_samples)
-article_titles = art_set.article_names
-for i, title in enumerate(article_titles):
-    from_article = get_negative_samples_from_article(i, title)
-    negative_samples.extend(from_article)
-    print('Collected', len(from_article), 'negatives from', title, '(', i, '/',
-          len(article_titles), '); got %d positives, %d negatives' %
-          (len(positive_samples), len(negative_samples)))
+#article_titles = art_set.article_names
+#for i, title in enumerate(article_titles):
+#    from_article = get_negative_samples_from_article(i, title)
+#    negative_samples.extend(from_article)
+#    print('Collected', len(from_article), 'negatives from', title, '(', i, '/',
+#          len(article_titles), '); got %d positives, %d negatives' %
+#          (len(positive_samples), len(negative_samples)))
 
 
-#relation_samples = sample_repo.load_samples(relation)
-print('Positive:', len(positive_samples))
-print('Negative:', len(negative_samples))
-relation_samples = positive_samples + negative_samples
+#print('Positive:', len(positive_samples))
+#print('Negative:', len(negative_samples))
+relation_samples = sample_repo.load_samples(relation)
+#relation_samples = positive_samples + negative_samples
+print('Positive:', len([s for s in relation_samples if s.positive]))
+print('Negative:', len([s for s in relation_samples if not s.positive]))
 
 print('Collecting features...')
 

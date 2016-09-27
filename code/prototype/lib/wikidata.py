@@ -184,6 +184,27 @@ class WikidataClient(object):
         """ % (relation, entity)
         return self.wikidata_client.get_results(query)['boolean']
 
+    def get_all_relations_of_entities(self, wikidata_ids):
+        if len(wikidata_ids) == 0:
+            return []
+
+        x = ' '.join([('wd:%s' % wikidata_id) for wikidata_id in wikidata_ids])
+        query = """
+            SELECT DISTINCT ?p
+            WHERE {
+                VALUES ?s { %s }
+                ?s ?p ?o
+            }
+        """ % (x, x)
+        results = self.wikidata_client.get_results(query)
+        rels = []
+        for x in results['results']['bindings']:
+            rel = x['p']['value']
+            rel = wikidata_util.normalize_relation(rel)
+            if rel:
+                rels.append(rel)
+        return rels
+
     def get_triples_between_entities(self, wikidata_ids):
         if len(wikidata_ids) == 0:
             return []

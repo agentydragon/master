@@ -27,17 +27,9 @@ def try_load_document(article_title):
 
     return article.proto
 
-def get_samples_from_document(article_title, wikidata_client):
-    document = try_load_document(article_title)
-    if not document:
-        print('cannot load document')
-        return
-
-    samples = {}
-
+def get_document_subgraph(document, wikidata_client):
     all_wikidata_ids = set()
     all_triples = set()
-
     WIKIDATA_IDS_PER_BATCH = 20
 
     for sentence in document.sentences:
@@ -51,31 +43,87 @@ def get_samples_from_document(article_title, wikidata_client):
             all_wikidata_ids = set()
 
     all_triples = all_triples.union(wikidata_client.get_triples_between_entities(
-        list(sorted(all_wikidata_ids))
+        all_wikidata_ids
     ))
+    return all_triples
+
+def get_all_document_entities(document):
     all_wikidata_ids = set()
+    for sentence in document.sentences:
+        sentence_wrapper = SentenceWrapper(document, sentence)
+        all_wikidata_ids = all_wikidata_ids.union(sentence_wrapper.get_sentence_wikidata_ids())
+    return all_wikidata_ids
+
+def get_document_samples(document, wikidata_client):
+    samples = []
+
+    all_triples = get_document_subgraph(document, wikidata_client)
 
     for sentence in document.sentences:
         sentence_wrapper = SentenceWrapper(document, sentence)
         wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
 
-        # for s, p, o in wikidata_client.get_triples_between_entities(wikidata_ids):
-        for s, p, o in all_triples:
-            if (s not in wikidata_ids) or (o not in wikidata_ids):
-                continue
+        sentence_relations = wikidata_client.get_all_relations_of_entities(wikidata_ids)
 
-            if p not in samples:
-                samples[p] = []
+        for relation in sentence_relations:
+            subject_wikidata_ids = wikidata_client.find_relation_subjects(wikidata_ids, relation)
+            object_wikidata_ids = wikidata_client.find_relation_objects(wikidata_ids, relation)
 
-            # Against reflexive references ("Country is in country").
-            if sentence_wrapper.mentions_in_sentence_overlap(s, o):
-                continue
+            for subject in wikidata_ids:
+                for object in wikidata_ids:
+                    # Against reflexive references ("Country is in country").
+                    if sentence_wrapper.mentions_in_sentence_overlap(subject, object):
+                        continue
 
-            print(p, s, o, sentence.text)
-            sample = sentence_wrapper.make_training_sample(s, p, o,
-                                                           positive=True)
-            samples[p].append(sample)
+                    if (subject, relation, object) in all_triples:
+                        # True relation. Not a negative.
+                        sample = sentence_wrapper.make_training_sample(
+                            subject,
+                            relation,
+                            object,
+                            positive = True
+                        )
+                        samples.append(sample)
+                        continue
+
+                    subject_has_counterexample = (subject in subject_wikidata_ids)
+                    object_has_counterexample = (object in object_wikidata_ids)
+                    has_counterexample = (subject_has_counterexample or
+                                          object_has_counterexample)
+                    if has_counterexample:
+                        # This sentence is false (LCWA)
+                        sample = sentence_wrapper.make_training_sample(
+                            subject,
+                            relation,
+                            object,
+                            positive = False
+                        )
+                        samples.append(sample)
+                        continue
+
+                    # Sentence may be either true or false.
+                    continue
+
     return samples
+
+def get_negative_samples_from_document(document, wikidata_client):
+    samples = {}
+
+    entities = get_all_document_entities(document)
+    potential_relations = wikidata_client.get_all_relations_of_entities(entities)
+
+    for sentence in document.sentences:
+        sentence_wrapper = SentenceWrapper(document, sentence)
+        wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
+
+    return samples
+
+def get_samples_from_document(article_title, wikidata_client):
+    document = try_load_document(article_title)
+    if not document:
+        print('cannot load document')
+        return
+    return get_document_samples(document, wikidata_client)
 
 def sample_random_entity_pair(documents):
     while True:
