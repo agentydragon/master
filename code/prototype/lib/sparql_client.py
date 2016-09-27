@@ -2,6 +2,7 @@ import SPARQLWrapper
 import time
 import urllib
 import urllib.error
+from prototype.lib import flags
 
 STANDARD_PREFIXES = """
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -16,6 +17,8 @@ SELECT *
 WHERE { wd:Q1 rdfs:label ?b FILTER (langMatches(lang(?desc),"en")) }
 """
 
+flags.add_argument('--log_queries', type=bool, default=False)
+
 class SPARQLClient(object):
     def __init__(self, endpoint):
         self.client = SPARQLWrapper.SPARQLWrapper(endpoint)
@@ -25,7 +28,9 @@ class SPARQLClient(object):
 
     def get_results(self, query, retry=4):
         query_for_printing = ' '.join(map(str.strip, query.split('\n')))
-        print("Getting results:", query_for_printing)
+
+        if flags.parse_args().log_queries:
+            print("Getting results:", query_for_printing)
 
         try:
             self.client.setQuery(STANDARD_PREFIXES + query)

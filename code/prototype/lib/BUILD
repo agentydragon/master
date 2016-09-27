@@ -211,6 +211,9 @@ py_library(
     srcs = [
         "sparql_client.py",
     ],
+    deps = [
+        ":flags_lib",
+    ],
     #srcs_version = "PY3",
 )
 
