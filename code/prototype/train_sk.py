@@ -77,8 +77,7 @@ for i, title in enumerate(article_titles):
                 if (sentence.id, s, o) in positives:
                     continue
 
-                if ((s not in subject_wikidata_ids) and
-                        (o not in object_wikidata_ids)):
+                if not ((s in subject_wikidata_ids) or (o in object_wikidata_ids)):
                     continue
 
                 # TODO: subject or object must have something matching that relation
