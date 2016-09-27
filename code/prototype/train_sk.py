@@ -62,12 +62,12 @@ for i, title in enumerate(article_titles):
     # LCWA
     subject_wikidata_ids = wikidata_client.find_relation_subjects(all_wikidata_ids, relation)
     object_wikidata_ids = wikidata_client.find_relation_objects(all_wikidata_ids, relation)
-    print('Subjects (%d):' % len(subject_wikidata_ids))
-    for subject in subject_wikidata_ids:
-        print('\t', subject, wikidata_client.get_name(subject))
-    print('Objects (%d):' % len(object_wikidata_ids))
-    for object in object_wikidata_ids:
-        print('\t', object, wikidata_client.get_name(object))
+    # print('Subjects (%d):' % len(subject_wikidata_ids))
+    # for subject in subject_wikidata_ids:
+    #     print('\t', subject, wikidata_client.get_name(subject))
+    # print('Objects (%d):' % len(object_wikidata_ids))
+    # for object in object_wikidata_ids:
+    #     print('\t', object, wikidata_client.get_name(object))
 
     from_article = []
     for sentence in art.sentences:
