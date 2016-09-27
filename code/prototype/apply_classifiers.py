@@ -67,7 +67,7 @@ for relation in classifiers:
             if feature not in all_features:
                 continue
             else:
-                matrix[i, all_features.index(feature)] = 1
+                matrix[i, all_features[feature]] = 1
 
     scores = clf.predict_proba(matrix)
     #print(scores)

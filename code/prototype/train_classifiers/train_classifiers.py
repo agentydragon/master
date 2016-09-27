@@ -62,8 +62,7 @@ def train_classifier_for_relation(relation, relation_name):
     clf = try_classifier('Logistic regression',
                          linear_model.LogisticRegression(verbose=True),
                          'logreg')
-    feature_extraction.write_model(relation, clf,
-                                   set(head_features_dict.keys()))
+    feature_extraction.write_model(relation, clf, head_features_dict)
 
     #try_classifier('Linear SVM',
     #               linear_model.SGDClassifier(loss='hinge', penalty='l2',
