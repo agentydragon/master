@@ -135,10 +135,10 @@ class WikidataClient(object):
     def find_relation_subjects(self, entities, relation):
         x = ' '.join([('wd:%s' % wikidata_id) for wikidata_id in entities])
         query = """
-            SELECT ?subject
+            SELECT DISTINCT ?subject
             WHERE {
                 VALUES ?subject { %s }
-                ?subject wdt:%s ?object
+                ?subject wdp:%s ?object
             }
         """ % (x, relation)
         results = self.wikidata_client.get_results(query)
@@ -151,10 +151,10 @@ class WikidataClient(object):
     def find_relation_objects(self, entities, relation):
         x = ' '.join([('wd:%s' % wikidata_id) for wikidata_id in entities])
         query = """
-            SELECT ?object
+            SELECT DISTINCT ?object
             WHERE {
                 VALUES ?object { %s }
-                ?subject wdt:%s ?object
+                ?subject wdp:%s ?object
             }
         """ % (x, relation)
         results = self.wikidata_client.get_results(query)
