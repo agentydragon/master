@@ -126,6 +126,7 @@ def get_document_samples(document, wikidata_client):
                     # Sentence may be either true or false.
                     continue
 
+    print('Document produced', len(samples), 'true+false samples.')
     return samples
 
 def get_samples_from_document(article_title, wikidata_client):
