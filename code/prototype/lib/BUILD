@@ -161,6 +161,7 @@ py_library(
         "//:paths_lib",
         ":dbpedia_lib",
         ":training_sample_lib",
+        ":relations_lib",
     ],
 )
 
@@ -235,6 +236,13 @@ py_library(
     ],
     deps = [
         ":zk_lib",
+    ],
+)
+
+py_library(
+    name = "relations_lib",
+    srcs = [
+        "relations.py",
     ],
 )
 

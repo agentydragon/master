@@ -2,6 +2,7 @@ import paths
 from xml.etree import ElementTree
 from prototype.lib import article_repo
 from prototype.lib import training_sample
+from prototype.lib import relations
 import random
 
 def try_load_document(article_title):
@@ -27,7 +28,7 @@ def try_load_document(article_title):
 
     return article.proto
 
-def get_document_subgraph(document, wikidata_client):
+def get_document_subgraph(document, wikidata_client, relations):
     all_wikidata_ids = set()
     all_triples = set()
     WIKIDATA_IDS_PER_BATCH = 20
@@ -38,12 +39,14 @@ def get_document_subgraph(document, wikidata_client):
 
         if len(all_wikidata_ids) >= WIKIDATA_IDS_PER_BATCH:
             all_triples = all_triples.union(wikidata_client.get_triples_between_entities(
-                list(sorted(all_wikidata_ids))
+                all_wikidata_ids,
+                relations = relations
             ))
             all_wikidata_ids = set()
 
     all_triples = all_triples.union(wikidata_client.get_triples_between_entities(
-        all_wikidata_ids
+        all_wikidata_ids,
+        relations = relations
     ))
     return all_triples
 
@@ -57,11 +60,21 @@ def get_all_document_entities(document):
 def get_document_samples(document, wikidata_client):
     samples = []
 
-    all_triples = get_document_subgraph(document, wikidata_client)
+    all_triples = get_document_subgraph(
+        document,
+        wikidata_client,
+        relations = relations.RELATIONS
+    )
 
     all_wikidata_ids = get_all_document_entities(document)
-    document_subject_relation_pairs = wikidata_client.get_subject_relation_pairs(all_wikidata_ids)
-    document_object_relation_pairs = wikidata_client.get_object_relation_pairs(all_wikidata_ids)
+    document_subject_relation_pairs = wikidata_client.get_subject_relation_pairs(
+        all_wikidata_ids,
+        relations = relations.RELATIONS
+    )
+    document_object_relation_pairs = wikidata_client.get_object_relation_pairs(
+        all_wikidata_ids,
+        relations = relations.RELATIONS
+    )
 
     for sentence in document.sentences:
         sentence_wrapper = SentenceWrapper(document, sentence)

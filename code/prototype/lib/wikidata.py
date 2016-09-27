@@ -15,6 +15,9 @@ flags.add_argument('--wikidata_endpoint',
 def join_entities(entities):
     return ' '.join([('wd:%s' % wikidata_id) for wikidata_id in sorted(entities)])
 
+def join_relations(relations):
+    return ' '.join([('wdp:%s' % relation_id) for relation_id in sorted(relations)])
+
 PUBLIC_WIKIDATA_ENDPOINT = 'https://query.wikidata.org/sparql'
 
 def get_default_endpoint_url():
@@ -185,7 +188,7 @@ class WikidataClient(object):
         """ % (relation, entity)
         return self.wikidata_client.get_results(query)['boolean']
 
-    def get_object_relation_pairs(self, wikidata_ids):
+    def get_object_relation_pairs(self, wikidata_ids, relations):
         if len(wikidata_ids) == 0:
             return []
 
@@ -195,9 +198,10 @@ class WikidataClient(object):
             SELECT ?o ?p
             WHERE {
                 VALUES ?o { %s }
+                VALUES ?p { %s }
                 ?s ?p ?o
             }
-        """ % (join_entities(wikidata_ids))
+        """ % (join_entities(wikidata_ids), join_relations(relations))
         results = self.wikidata_client.get_results(query)
         pairs = set()
         for row in results['results']['bindings']:
@@ -212,7 +216,7 @@ class WikidataClient(object):
             pairs.add((object, rel))
         return list(sorted(pairs))
 
-    def get_subject_relation_pairs(self, wikidata_ids):
+    def get_subject_relation_pairs(self, wikidata_ids, relations):
         if len(wikidata_ids) == 0:
             return []
 
@@ -222,9 +226,10 @@ class WikidataClient(object):
             SELECT ?s ?p
             WHERE {
                 VALUES ?s { %s }
+                VALUES ?p { %s }
                 ?s ?p ?o
             }
-        """ % (join_entities(wikidata_ids))
+        """ % (join_entities(wikidata_ids), join_relations(relations))
         results = self.wikidata_client.get_results(query)
         pairs = set()
         for row in results['results']['bindings']:
@@ -275,7 +280,7 @@ class WikidataClient(object):
 
         return rels
 
-    def get_triples_between_entities(self, wikidata_ids):
+    def get_triples_between_entities(self, wikidata_ids, relations):
         if len(wikidata_ids) == 0:
             return []
 
@@ -285,9 +290,10 @@ class WikidataClient(object):
             WHERE {
                 VALUES ?s { %s }
                 VALUES ?o { %s }
+                VALUES ?p { %s }
                 ?s ?p ?o
             }
-        """ % (x, x)
+        """ % (x, x, join_relations(relations))
         results = self.wikidata_client.get_results(query)
         triples = []
         for x in results['results']['bindings']:
