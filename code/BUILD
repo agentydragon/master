@@ -11,6 +11,17 @@ py_binary(
     ],
 )
 
+py_binary(
+    name = "get_pra_data",
+    srcs = [
+        "get_pra_data.py",
+    ],
+    deps = [
+        "//prototype/lib:wikidata_lib",
+        "//prototype/lib:flags_lib",
+    ],
+)
+
 py_library(
     name = "fuseki_config_lib",
     srcs = [

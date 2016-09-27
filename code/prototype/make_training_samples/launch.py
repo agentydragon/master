@@ -40,7 +40,7 @@ def main():
         make_commandline,
         slice_to_walltime,
         cores=2, # max(2, args.local_parallelism)
-        ram='8gb'
+        ram='16gb'
     )
 
 if __name__ == '__main__':
