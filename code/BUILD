@@ -18,6 +18,7 @@ py_binary(
     ],
     deps = [
         "//prototype/lib:wikidata_lib",
+        "//prototype/lib:wikidata_util_lib",
         "//prototype/lib:flags_lib",
     ],
 )

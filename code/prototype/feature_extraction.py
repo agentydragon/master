@@ -19,6 +19,7 @@ def window_features(prefix, indices, sample):
         idx = min(indices) - i
         if idx not in range(len(sample.sentence.tokens)):
             continue
+        token = sample.sentence.tokens[idx]
         features.add(prefix + '_window_%d_lemma_%s' % (i, token.lemma))
         word = sample.sentence.text[token.start_offset:token.end_offset].lower()
         features.add(prefix + '_window_%d_word_%s' % (i, word))
@@ -27,6 +28,7 @@ def window_features(prefix, indices, sample):
         idx = max(indices) + i
         if idx not in range(len(sample.sentence.tokens)):
             continue
+        token = sample.sentence.tokens[idx]
         features.add(prefix + '_window_%d_lemma_%s' % (i, token.lemma))
         word = sample.sentence.text[token.start_offset:token.end_offset].lower()
         features.add(prefix + '_window_%d_word_%s' % (i, word))

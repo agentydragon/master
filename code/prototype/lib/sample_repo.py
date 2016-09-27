@@ -83,8 +83,13 @@ def load_negative_samples_by_articles(relation):
     for root, subdirs, files in os.walk(base_dir + '/' + relation + '/negative'):
         for f in files:
             filename = root + '/' + f
-            with open(filename) as f:
-                batch = json.load(f)['samples']
+            try:
+                with open(filename) as f:
+                    batch = json.load(f)['samples']
+            except ValueError as e:
+                print('Cannot parse JSON file', filename, ', skipping')
+                print(e)
+                continue
             samples.extend(map(training_sample.TrainingSample.from_json, batch))
     return samples
 
