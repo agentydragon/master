@@ -5,7 +5,6 @@ from prototype.lib import flags
 
 def main():
     flags.add_argument('--articles_per_job', type=int)
-    # flags.add_argument('--local_parallelism', type=int, default=1)
     flags.make_parser(description='TODO')
     # TODO: add max_jobs
     args = flags.parse_args()
@@ -15,7 +14,6 @@ def main():
     def make_commandline(articles_slice):
         job_command = [
             'prototype/make_training_samples/make_training_samples',
-            # '--parallelism', str(args.local_parallelism),
             '--wikidata_endpoint', wikidata_endpoint,
         ]
         for article in articles_slice:

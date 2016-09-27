@@ -16,6 +16,12 @@ py_library(
     srcs = [
         "feature_extraction.py",
     ],
+    deps = [
+        "//prototype/lib:file_util_lib",
+        "//prototype/lib:article_set_lib",
+        "//:paths_lib",
+    ],
+    visibility = ["//visibility:public"],
 )
 
 py_binary(
@@ -73,25 +79,6 @@ py_binary(
 )
 
 py_binary(
-    name = "train_sk",
-    srcs = [
-        "train_sk.py",
-    ],
-    deps = [
-        "//prototype/lib:file_util_lib",
-        "//prototype:feature_extraction_lib",
-        "//prototype/lib:sample_repo_lib",
-        "//prototype/lib:wikidata_lib",
-        "//prototype/lib:sample_generation_lib",
-        "//prototype/lib:zk_lib",
-        "//prototype/lib:article_set_lib",
-        "//:paths_lib",
-    ],
-    default_python_version = "PY3",
-    srcs_version = "PY3",
-)
-
-py_binary(
     name = "apply_classifiers",
     srcs = [
         "apply_classifiers.py",
@@ -100,6 +87,7 @@ py_binary(
         "//:paths_lib",
         "//prototype:feature_extraction_lib",
         "//prototype/lib:file_util_lib",
+        "//prototype/lib:flags_lib",
         "//prototype/lib:relations_lib",
         "//prototype/lib:sample_generation_lib",
         "//prototype/lib:sample_repo_lib",

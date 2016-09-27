@@ -1,4 +1,5 @@
 from prototype import feature_extraction
+from prototype.lib import flags
 from prototype.lib import sample_generation
 from prototype.lib import wikidata
 from prototype.lib import relations
@@ -13,6 +14,9 @@ import pickle
 
 # load classifiers
 
+flags.make_parser(description='TODO')
+flags.parse_args()
+
 classifiers = {}
 
 for relation in relations.RELATIONS:
@@ -21,8 +25,9 @@ for relation in relations.RELATIONS:
             d = pickle.load(f)
 
         classifiers[relation] = d
-    except:
+    except Exception as e:
         print('Failed to load classifier for', relation, ':(')
+        print(e)
     #clf = d['classifier']
     #all_features = d['features']
 
