@@ -25,7 +25,7 @@ def main():
         article_count = len(articles_slice)
         walltime_estimate = round(
             # (120 * article_count / float(args.local_parallelism)) * 2 + 100
-            (120 * article_count) * 2 + 100
+            (15 * article_count) * 2 + 100
         ) # or default: "04:00:00"
         return walltime_estimate
 
