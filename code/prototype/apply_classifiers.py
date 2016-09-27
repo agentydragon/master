@@ -1,6 +1,7 @@
 from prototype import feature_extraction
 from prototype.lib import sample_generation
 from prototype.lib import wikidata
+from prototype.lib import relations
 from scipy import sparse
 from sklearn import cross_validation
 from sklearn import linear_model
@@ -11,19 +12,10 @@ import paths
 import pickle
 
 # load classifiers
-relations = ['P106', # occupation,
-             'P102', # member of political party
-             'P27', # country of citizenship
-             'P108', # employer
-             'P25', # mother
-             'P22', # father
-             'P7', # brother
-             'P40', # child
-             ]
 
 classifiers = {}
 
-for relation in relations:
+for relation in relations.RELATIONS:
     try:
         with open(paths.MODELS_PATH + "/" + relation + ".pkl", "rb") as f:
             d = pickle.load(f)

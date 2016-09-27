@@ -100,6 +100,7 @@ py_binary(
         "//:paths_lib",
         "//prototype:feature_extraction_lib",
         "//prototype/lib:file_util_lib",
+        "//prototype/lib:relations_lib",
         "//prototype/lib:sample_generation_lib",
         "//prototype/lib:sample_repo_lib",
         "//prototype/lib:wikidata_lib",
