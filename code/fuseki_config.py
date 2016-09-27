@@ -34,11 +34,11 @@ tdb:GraphTDB    rdfs:subClassOf  ja:Model .
     fuseki:dataset      <#dataset-dbpedia-sameas> ; .
 
 <#dataset-wikidata> rdf:type tdb:DatasetTDB ; tdb:location "%s" ;
-    # Query timeout on this dataset (5s, 10000 milliseconds)
-    ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "10000" ] ;
+    # Query timeout on this dataset (2min, 120000 milliseconds)
+    ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "120000" ] ;
     .
 <#dataset-dbpedia-sameas> rdf:type tdb:DatasetTDB ; tdb:location "%s" ;
-    # Query timeout on this dataset (5s, 10000 milliseconds)
-    ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "10000" ] ;
+    # Query timeout on this dataset (2min, 120000 milliseconds)
+    ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "120000" ] ;
     .
 """) % (wikidata_dataset, dbpedia_sameas_dataset)
