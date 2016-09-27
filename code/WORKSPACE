@@ -38,7 +38,15 @@ new_http_archive(
     name = "jena_fuseki",
     url = "http://mirror.dkm.cz/apache/jena/binaries/apache-jena-fuseki-2.4.0.tar.gz",
     sha256 = "8b4299c35374bba47c6f9644166c069c243b08eb600a71f66c3c9cc2ec7e594a",
-    build_file = "BUILD.jena_fuseki",
+    build_file_content = """
+filegroup(
+    name = "everything",
+    srcs = glob(
+	include = ["**/*"]
+    ),
+    visibility = ["//visibility:public"],
+)
+""",
 )
 
 new_git_repository(

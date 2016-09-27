@@ -1,7 +1,0 @@
-filegroup(
-    name = "everything",
-    srcs = glob(
-	include = ["**/*"]
-    ),
-    visibility = ["//visibility:public"],
-)
