@@ -12,6 +12,7 @@ def train_classifier_for_relation(relation, relation_name):
     print('Training classifier for relation:',
           relation, relation_name)
 
+    print('Loading samples...')
     relation_samples = sample_repo.load_samples(relation)
     positive_count = len([s for s in relation_samples if s.positive])
     negative_count = len([s for s in relation_samples if not s.positive])
