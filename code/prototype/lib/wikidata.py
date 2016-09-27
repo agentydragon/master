@@ -189,20 +189,36 @@ class WikidataClient(object):
             return []
 
         x = ' '.join([('wd:%s' % wikidata_id) for wikidata_id in wikidata_ids])
+        rels = set()
+
         query = """
             SELECT DISTINCT ?p
             WHERE {
                 VALUES ?s { %s }
                 ?s ?p ?o
             }
-        """ % (x, x)
+        """ % (x)
         results = self.wikidata_client.get_results(query)
-        rels = []
-        for x in results['results']['bindings']:
-            rel = x['p']['value']
+        for row in results['results']['bindings']:
+            rel = row['p']['value']
             rel = wikidata_util.normalize_relation(rel)
             if rel:
-                rels.append(rel)
+                rels.add(rel)
+
+        query = """
+            SELECT DISTINCT ?p
+            WHERE {
+                VALUES ?o { %s }
+                ?s ?p ?o
+            }
+        """ % (x)
+        results = self.wikidata_client.get_results(query)
+        for row in results['results']['bindings']:
+            rel = row['p']['value']
+            rel = wikidata_util.normalize_relation(rel)
+            if rel:
+                rels.add(rel)
+
         return rels
 
     def get_triples_between_entities(self, wikidata_ids):

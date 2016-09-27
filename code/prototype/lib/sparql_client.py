@@ -25,7 +25,7 @@ class SPARQLClient(object):
 
     def get_results(self, query, retry=4):
         query_for_printing = ' '.join(map(str.strip, query.split('\n')))
-        # print("Getting results:", query_for_printing)
+        print("Getting results:", query_for_printing)
 
         try:
             self.client.setQuery(STANDARD_PREFIXES + query)
