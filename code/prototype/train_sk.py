@@ -16,6 +16,7 @@ from sklearn import metrics
 from sklearn import naive_bayes
 from sklearn import cross_validation
 from sklearn import linear_model
+import progressbar
 
 flags.add_argument('--relation', default='P25')
 flags.add_argument('--max_pos', default=None, type=int)
@@ -149,7 +150,8 @@ def samples_to_matrix_target(samples):
     rows = []
     cols = []
     data = []
-    for i, thing in enumerate(things):
+    bar = progressbar.ProgressBar()
+    for i, thing in bar(enumerate(things)):
         sample_features, label = thing
         f = set(sample_features) & dcts.keys()
         rows.extend([i] * len(f))
