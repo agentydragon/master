@@ -59,10 +59,11 @@ for i, title in enumerate(article_titles):
             sentence_wrapper.get_sentence_wikidata_ids()
         )
 
-    subject_wikidata_ids = wikidata_client.find_relation_subjects(all_wikidata_ids, relation)
-    object_wikidata_ids = wikidata_client.find_relation_objects(all_wikidata_ids, relation)
-    print('%d subjects, %d objects' % (len(subject_wikidata_ids),
-                                       len(object_wikidata_ids)))
+    #### LCWA
+    #### subject_wikidata_ids = wikidata_client.find_relation_subjects(all_wikidata_ids, relation)
+    #### object_wikidata_ids = wikidata_client.find_relation_objects(all_wikidata_ids, relation)
+    #### print('%d subjects, %d objects' % (len(subject_wikidata_ids),
+    ####                                    len(object_wikidata_ids)))
 
     from_article = []
     for sentence in art.sentences:
@@ -75,13 +76,18 @@ for i, title in enumerate(article_titles):
                     continue
 
                 if (sentence.id, s, o) in positives:
+                    # This sentence is a positive sample.
                     continue
 
-                if not ((s in subject_wikidata_ids) or (o in object_wikidata_ids)):
-                    continue
+                #### LCWA
+                #### subject_has_counterexample = (s in subject_wikidata_ids)
+                #### object_has_counterexample = (o in object_wikidata_ids)
+                #### has_counterexample = (subject_has_counterexample or
+                ####                       object_has_counterexample)
+                #### if not has_counterexample:
+                ####     # This sentence is skipped because of LCWA
+                ####     continue
 
-                # TODO: subject or object must have something matching that relation
-                # (local closed-world assumption)
                 from_article.append(sentence_wrapper.make_training_sample(
                     s, relation, o, positive=False))
     print('Collected', len(from_article), 'negative training samples from', title)
