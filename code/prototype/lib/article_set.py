@@ -21,12 +21,18 @@ class ArticleSet(object):
 
         self.article_names = article_names
 
-    def split_train_test(self):
+    def split_train_test_calibrate(self):
         train = []
         test = []
+        calibrate = []
         for i, title in enumerate(self.article_names):
-            if i % 10 in (2, 3, 5, 7): # 40% test 60% train
-                test.append(title)
-            else:
+            # 50% train 30% test 20% calibration
+            if i % 10 in (2, 3, 5, 7, 9):
                 train.append(title)
-        return train, test
+
+            if i % 10 in (0, 1, 4):
+                test.append(title)
+
+            if i % 10 in (6, 8):
+                calibrate.append(title)
+        return train, test, calibrate

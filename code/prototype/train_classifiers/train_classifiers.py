@@ -29,7 +29,7 @@ def train_classifier_for_relation(relation, relation_name):
 
     print('Splitting train/test...')
 
-    train_articles, test_articles = article_set.ArticleSet().split_train_test()
+    train_articles, test_articles, calibrate_articles = article_set.ArticleSet().split_train_test_calibrate()
     train_samples, test_samples = feature_extraction.split_samples_to_train_test(
         relation_samples,
         train_articles = train_articles,
