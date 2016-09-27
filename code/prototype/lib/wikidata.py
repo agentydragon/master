@@ -209,7 +209,7 @@ class WikidataClient(object):
             if not wikidata_util.is_wikidata_entity_url(object):
                 continue
             object = wikidata_util.wikidata_entity_url_to_entity_id(object)
-            pairs.append((object, rel))
+            pairs.add((object, rel))
         return list(sorted(pairs))
 
     def get_subject_relation_pairs(self, wikidata_ids):
@@ -237,7 +237,7 @@ class WikidataClient(object):
             if not wikidata_util.is_wikidata_entity_url(subject):
                 continue
             subject = wikidata_util.wikidata_entity_url_to_entity_id(subject)
-            pairs.append((subject, rel))
+            pairs.add((subject, rel))
         return list(sorted(pairs))
 
     def get_all_relations_of_entities(self, wikidata_ids):
