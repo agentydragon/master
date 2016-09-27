@@ -85,7 +85,7 @@ for i, title in enumerate(article_titles):
                 # (local closed-world assumption)
                 from_article.append(sentence_wrapper.make_training_sample(
                     s, relation, o, positive=False))
-    print('Collected', len(from_article))
+    print('Collected', len(from_article), 'negative training samples from', title)
     negative_samples.extend(from_article)
 
 
