@@ -40,5 +40,6 @@ py_binary(
     ],
     deps = [
         "//prototype/lib:sample_repo_lib",
+        "//prototype/lib:relations_lib",
     ],
 )
