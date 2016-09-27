@@ -59,24 +59,37 @@ def get_document_samples(document, wikidata_client):
 
     all_triples = get_document_subgraph(document, wikidata_client)
 
+    all_wikidata_ids = get_all_document_entities(document)
+    document_subject_relation_pairs = wikidata_client.get_subject_relation_pairs(all_wikidata_ids)
+    document_object_relation_pairs = wikidata_client.get_object_relation_pairs(all_wikidata_ids)
+
     for sentence in document.sentences:
         sentence_wrapper = SentenceWrapper(document, sentence)
         wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
 
+        sentence_subject_relation_pairs = [(subject, relation)
+                                           for subject, relation in document_subject_relation_pairs
+                                           if subject in wikidata_ids]
+        sentence_object_relation_pairs = [(object, relation)
+                                           for object, relation in document_object_relation_pairs
+                                           if object in wikidata_ids]
+
 #        sentence_relations = wikidata_client.get_all_relations_of_entities(wikidata_ids)
 #
-        subject_relation_pairs = wikidata_client.get_subject_relation_pairs(wikidata_ids)
-        object_relation_pairs = wikidata_client.get_object_relation_pairs(wikidata_ids)
+        # subject_relation_pairs = wikidata_client.get_subject_relation_pairs(wikidata_ids)
+        # object_relation_pairs = wikidata_client.get_object_relation_pairs(wikidata_ids)
         sentence_relations = []
-        sentence_relations += list(set(relation for subject, relation in subject_relation_pairs))
-        sentence_relations += list(set(relation for object, relation in object_relation_pairs))
+        sentence_relations += list(set(relation for subject, relation in
+                                       sentence_subject_relation_pairs))
+        sentence_relations += list(set(relation for object, relation in
+                                       sentence_object_relation_pairs))
         sentence_relations = set(sentence_relations)
 
         for relation in sentence_relations:
             # subject_wikidata_ids = wikidata_client.find_relation_subjects(wikidata_ids, relation)
             # object_wikidata_ids = wikidata_client.find_relation_objects(wikidata_ids, relation)
-            subject_wikidata_ids = list(set(subject for subject, r in subject_relation_pairs if r == relation))
-            object_wikidata_ids = list(set(object for object, r in object_relation_pairs if r == relation))
+            subject_wikidata_ids = list(set(subject for subject, r in sentence_subject_relation_pairs if r == relation))
+            object_wikidata_ids = list(set(object for object, r in sentence_object_relation_pairs if r == relation))
 
             for subject in wikidata_ids:
                 for object in wikidata_ids:
