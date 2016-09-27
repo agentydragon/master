@@ -59,13 +59,8 @@ for i, title in enumerate(article_titles):
             sentence_wrapper.get_sentence_wikidata_ids()
         )
 
-    subject_wikidata_ids = set()
-    object_wikidata_ids = set()
-    for wikidata_id in all_wikidata_ids:
-        if wikidata_client.entity_is_relation_subject(wikidata_id, relation):
-            subject_wikidata_ids.add(wikidata_id)
-        if wikidata_client.entity_is_relation_object(wikidata_id, relation):
-            object_wikidata_ids.add(wikidata_id)
+    subject_wikidata_ids = wikidata_client.find_relation_subjects(all_wikidata_ids, relation)
+    object_wikidata_ids = wikidata_client.find_relation_objects(all_wikidata_ids, relation)
     print('%d subjects, %d objects' % (len(subject_wikidata_ids),
                                        len(object_wikidata_ids)))
 

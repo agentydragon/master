@@ -132,6 +132,46 @@ class WikidataClient(object):
 #        self.save_cache()
         return properties
 
+    def find_relation_subjects(self, entities, relation):
+        x = ' '.join([('wd:%s' % wikidata_id) for wikidata_id in entities])
+        query = """
+            SELECT ?subject
+            WHERE {
+                VALUES ?subject { %s }
+                ?subject wdt:%s ?object
+            }
+        """ % (x, relation)
+        results = self.wikidata_client.get_results(query)
+        subjects = set()
+        for x in results['results']['bindings']:
+            subject = x['subject']['value']
+            subjects.add(subject)
+        return subjects
+
+    def find_relation_objects(self, entities, relation):
+        x = ' '.join([('wd:%s' % wikidata_id) for wikidata_id in entities])
+        query = """
+            SELECT ?object
+            WHERE {
+                VALUES ?object { %s }
+                ?subject wdt:%s ?object
+            }
+        """ % (x, relation)
+        results = self.wikidata_client.get_results(query)
+        objects = set()
+        for x in results['results']['bindings']:
+            obj = x['object']['value']
+            objects.add(obj)
+        return objects
+
+    # subject_wikidata_ids = set()
+    # object_wikidata_ids = set()
+    # for wikidata_id in all_wikidata_ids:
+    #     if wikidata_client.entity_is_relation_subject(wikidata_id, relation):
+    #         subject_wikidata_ids.add(wikidata_id)
+    #     if wikidata_client.entity_is_relation_object(wikidata_id, relation):
+    #         object_wikidata_ids.add(wikidata_id)
+
     def entity_is_relation_subject(self, entity, relation):
         query = """
             ASK { wd:%s wdp:%s ?other }
