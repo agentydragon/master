@@ -35,7 +35,7 @@ def add_labels_to_predictions(predictions, wikidata_client):
         if entity in labels:
             return labels[entity]
         else:
-            return wikidata_client.get_name(entity)
+            return (wikidata_client.get_name(entity) or '??')
 
     for prediction in predictions:
         prediction.subject_label = get_name(prediction.subject)
@@ -88,7 +88,7 @@ def write_predictions(predictions, tsv_path):
                 prediction.relation_label,
                 prediction.object_label,
                 truth
-            ]))
+            ]) + '\n')
 
 def load_samples(articles):
     all_samples = []
@@ -109,6 +109,7 @@ def main():
     flags.add_argument('--article', action='append')
     flags.add_argument('--output_tsv', required=True)
     flags.add_argument('--score_cutoff')
+    flags.add_argument('--n_articles', type=int)
     flags.make_parser(description='TODO')
     args = flags.parse_args()
 
@@ -120,8 +121,11 @@ def main():
         # TODO: make some sense of the sets
         art_set = article_set.ArticleSet()
         train, test, calibrate = art_set.split_train_test_calibrate()
-        # articles = test
-        articles = calibrate
+        articles = test
+        # articles = calibrate
+
+    if args.n_articles:
+        articles = articles[:args.n_articles]
 
     all_samples = load_samples(articles)
     predictions = []
@@ -151,7 +155,7 @@ def main():
         for subject, object in bar(by_entities):
             score = fuser.predict_proba(by_entities[(subject, object)])
 
-            if args.score_cutoff and score < args.score_cutoff:
+            if args.score_cutoff and score < float(args.score_cutoff):
                 continue
 
             predictions.append(Prediction(
