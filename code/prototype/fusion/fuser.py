@@ -38,5 +38,5 @@ class Fuser(object):
             }, f)
 
     def predict_proba(self, sentence_scores):
-        features = sentence_scores_to_features(numpy.array(sentence_scores))
-        return self.classifier.predict_proba(features)[0][1]
+        features = sentence_scores_to_features(sentence_scores)
+        return self.classifier.predict_proba([features])[0][1]
