@@ -38,9 +38,9 @@ py_binary(
 )
 
 py_binary(
-    name = "visualize",
+    name = "visualize_article",
     srcs = [
-        "visualize.py",
+        "visualize_article.py",
     ],
     deps = [
         "//prototype/lib:article_repo_lib",
