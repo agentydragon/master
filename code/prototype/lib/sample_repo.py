@@ -43,6 +43,20 @@ def write_relations(title, relation, samples):
         with open(article_relation_to_path(title, relation, positive=False), 'w') as f:
             json.dump({'samples': [sample.to_json() for sample in negatives]}, f)
 
+def load_document_samples(relations, title):
+    samples = []
+    for relation in relations:
+        path = article_relation_to_path(title, relation, positive=False)
+        if os.path.isfile(path):
+            with open(path) as f:
+                samples.extend(list(map(training_sample.TrainingSample.from_json, json.load(f)['samples'])))
+
+        path = article_relation_to_path(title, relation, positive=True)
+        if os.path.isfile(path):
+            with open(path) as f:
+                samples.extend(list(map(training_sample.TrainingSample.from_json, json.load(f)['samples'])))
+    return samples
+
 def write_positive_samples(relation, samples):
     with open(base_dir + '/' + relation + '/positives.json', 'w') as f:
         json.dump({'samples': [sample.to_json() for sample in samples]}, f)

@@ -189,6 +189,11 @@ class WikidataClient(object):
         return self.wikidata_client.get_results(query)['boolean']
 
     def get_object_relation_pairs(self, wikidata_ids, relations):
+        """
+        Returns:
+            list((Object, Relation)) such that there exists a Subject
+            such that (Subject, Relation, Object) is a true triple.
+        """
         if len(wikidata_ids) == 0:
             return []
 
@@ -217,6 +222,11 @@ class WikidataClient(object):
         return list(sorted(pairs))
 
     def get_subject_relation_pairs(self, wikidata_ids, relations):
+        """
+        Returns:
+            list((Subject, Relation)) such that there exists an Object
+            such that (Subject, Relation, Object) is a true triple.
+        """
         if len(wikidata_ids) == 0:
             return []
 

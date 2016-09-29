@@ -1,5 +1,4 @@
 import json
-import progressbar
 from prototype import feature_extraction
 from prototype.lib import flags
 from prototype.lib import article_set
@@ -15,21 +14,38 @@ import numpy
 import paths
 import pickle
 
-# load classifiers
-
-flags.add_argument('--json_in', required=True)
-flags.make_parser(description='TODO')
-args = flags.parse_args()
-
-with open(args.json_in, 'r') as f:
-    by_relation = json.load(f)
-
 def sentence_scores_to_features(sentence_scores):
-    return [
-        math.log(len(sentence_scores)),
-        math.sqrt(len(sentence_scores)),
+    features = [
+        # math.log(len(sentence_scores)),
+        # math.sqrt(len(sentence_scores)),
         sum(sentence_scores) / len(sentence_scores),
     ]
+    # TODO: Idea: share of sentences with p>=X for different values of X
+    return features
+
+def show_certainty_histogram(samples):
+    certainties = []
+    for sample in samples:
+        for certainty in sample:
+            certainties.append(certainty)
+
+    certainties.sort()
+
+    for p in 10, 50, 90:
+        print('Percentile', p, ':', numpy.percentile(certainties, p))
+
+def show_support_count_histogram(samples):
+    histogram = {}
+    for sample in samples:
+        length = len(sample)
+        if length not in histogram:
+            histogram[length] = 0
+        histogram[length] += 1
+    total = sum(histogram.values())
+    for length in sorted(histogram.keys()):
+        count = histogram[length]
+        percentage = (100.0 * count / total)
+        print(('%d' % length).ljust(5), count) # "%.2f" % percentage)
 
 def train_relation_fuser(relation, samples):
     positive_sentence_scores = samples['true']
@@ -37,6 +53,15 @@ def train_relation_fuser(relation, samples):
 
     features = []
     labels = []
+
+    print('Positive support count histogram:')
+    show_support_count_histogram(positive_sentence_scores)
+    print('Positive certainty histogram:')
+    show_certainty_histogram(positive_sentence_scores)
+    print('Negative support count histogram:')
+    show_support_count_histogram(negative_sentence_scores)
+    print('Negative certainty histogram:')
+    show_certainty_histogram(negative_sentence_scores)
 
     for sample in positive_sentence_scores:
         features.append(sentence_scores_to_features(sample))
@@ -69,6 +94,22 @@ def train_relation_fuser(relation, samples):
         paths.CHARTS_PATH + '/' + relation + '.png'
     )
 
-for relation in relations.RELATIONS:
-    samples = by_relation[relation]
-    train_relation_fuser(relation, samples)
+def main():
+    flags.add_argument('--relation', action='append')
+    flags.make_parser(description='TODO')
+    args = flags.parse_args()
+
+    if args.relation:
+        run_on = args.relation
+    else:
+        run_on = relations.RELATIONS
+
+    for relation in run_on:
+        input_file = paths.WORK_DIR + '/fuser_data/' + relation + '.json'
+        with open(input_file, 'r') as f:
+            relation_data = json.load(f)
+        samples = relation_data
+        train_relation_fuser(relation, samples)
+
+if __name__ == '__main__':
+    main()

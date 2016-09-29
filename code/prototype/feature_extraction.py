@@ -6,10 +6,8 @@ from scipy import sparse
 from matplotlib import pyplot
 
 import progressbar
-import datetime
 import pickle
 from prototype.lib import file_util
-from prototype.lib import article_set
 import paths
 
 def sentence_bag_of_words_features(sample):
@@ -118,32 +116,44 @@ def get_head_features(feature_counts, relation_samples):
         dcts[f] = i
     return dcts
 
-def samples_to_matrix_target(samples, head_feature_dict):
+def samples_to_matrix(samples, head_feature_dict):
+    verbose = (len(samples) > 10000)
+
+    if verbose:
+        print('converting', len(samples), 'samples to matrix,',
+              len(head_feature_dict), 'features')
     features_labels = samples_to_features_labels(samples)
-    # matrix = sparse.lil_matrix((len(features_labels), len(all_features)), dtype=numpy.int8)
-    # matrix = sparse.coo_matrix((len(features_labels), len(all_features)), dtype=numpy.int8)
-
-    print('converting', len(samples), 'samples to matrix,',
-          len(head_feature_dict), 'features')
-    fullstart = datetime.datetime.now()
-    start = datetime.datetime.now()
-
     rows = []
     cols = []
     data = []
-    bar = progressbar.ProgressBar()
-    for i, features_label in bar(enumerate(features_labels)):
+
+    if verbose:
+        bar = progressbar.ProgressBar()
+        enum = enumerate(bar(features_labels))
+    else:
+        enum = enumerate(features_labels)
+
+    for i, features_label in enum:
         sample_features, label = features_label
         f = set(sample_features) & head_feature_dict.keys()
         rows.extend([i] * len(f))
         cols.extend(head_feature_dict[x] for x in f)
         data.extend([1] * len(f))
-
+    # matrix = sparse.lil_matrix((len(features_labels), len(all_features)),
+    #                            dtype=numpy.int8)
+    # matrix = sparse.coo_matrix((len(features_labels), len(all_features)),
+    #                            dtype=numpy.int8)
     matrix = sparse.coo_matrix(
         (data, (rows, cols)),
         shape=(len(features_labels), len(head_feature_dict)),
         dtype=numpy.int8
     )
+    return matrix
+
+def samples_to_matrix_target(samples, head_feature_dict):
+    features_labels = samples_to_features_labels(samples)
+
+    matrix = samples_to_matrix(samples, head_feature_dict)
     target = [target for features, target in features_labels]
     return matrix, target
 
@@ -162,8 +172,6 @@ def split_samples_to_train_test(relation_samples, train_articles, test_articles)
 # X_train, X_test, y_train, y_test = cross_validation.train_test_split(
 #     matrix, target, test_size=0.33, random_state=42)
 
-
-#
 #        positive_probs = []
 #        negative_probs = []
 #        scores = clf.predict_proba(X_train)
