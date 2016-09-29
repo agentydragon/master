@@ -3,6 +3,8 @@ from prototype.lib import sparql_client
 from prototype.lib import zk
 from prototype.lib import flags
 
+import progressbar
+
 # TODO: somehow remove limit
 LIMIT = 100
 
@@ -350,12 +352,37 @@ class WikidataClient(object):
 #        self.save_cache()
         return name
 
+    def get_true_subset(self, triples):
+        triples = list(sorted(triples))
+        BATCH_SIZE = 800
+        true_triples = set()
+
+        r = range(0, len(triples), BATCH_SIZE)
+        bar = progressbar.ProgressBar()
+        for i in bar(r):
+            batch_triples = triples[i:i+BATCH_SIZE]
+            batch_entities = set()
+            batch_relations = set()
+
+            for subject, relation, object in batch_triples:
+                batch_entities.add(subject)
+                batch_relations.add(relation)
+                batch_entities.add(object)
+
+            # TODO: split left and right side (might be important)
+            true_batch_triples = self.get_triples_between_entities(batch_entities, batch_relations)
+            true_triples = true_triples.union(true_batch_triples)
+
+        return list(sorted(true_triples))
+
     def get_names(self, ids):
         labels = {}
         ids = list(sorted(ids))
 
-        for i in range(0, len(ids), 20):
-            ids_batch = ids[i:i+20]
+        batch_size = 100
+
+        for i in range(0, len(ids), batch_size):
+            ids_batch = ids[i:i+batch_size]
 
             ids_string = join_entities(ids_batch)
             results = self.wikidata_client.get_results("""

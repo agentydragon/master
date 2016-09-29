@@ -57,6 +57,32 @@ def get_all_document_entities(document):
         all_wikidata_ids = all_wikidata_ids.union(sentence_wrapper.get_sentence_wikidata_ids())
     return all_wikidata_ids
 
+def get_all_document_samples(document):
+    samples = []
+
+    all_wikidata_ids = get_all_document_entities(document)
+
+    for sentence in document.sentences:
+        sentence_wrapper = SentenceWrapper(document, sentence)
+        wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
+
+        for subject in wikidata_ids:
+            for object in wikidata_ids:
+                # Against reflexive references ("Country is in country").
+                if sentence_wrapper.mentions_in_sentence_overlap(subject, object):
+                    continue
+
+                sample = sentence_wrapper.make_training_sample(
+                    s = subject,
+                    relation = None,
+                    o = object,
+                    positive = None
+                )
+                samples.append(sample)
+
+    # print('Document produced', len(samples), 'unlabeled samples.')
+    return samples
+
 def get_document_samples(document, wikidata_client):
     samples = []
 
