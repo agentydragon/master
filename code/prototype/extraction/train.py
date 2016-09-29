@@ -1,5 +1,5 @@
 from prototype.lib import sample_repo
-from prototype import feature_extraction
+from prototype.extraction import feature_extraction
 import random
 import nltk
 import nltk.classify.decisiontree

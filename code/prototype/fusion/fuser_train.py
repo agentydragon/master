@@ -1,27 +1,14 @@
 import json
-from prototype import feature_extraction
 from prototype.lib import flags
-from prototype.lib import article_set
-from prototype.lib import sample_generation
-from prototype.lib import wikidata
 from prototype.lib import relations
-from scipy import sparse
+from prototype.lib import plot
+from prototype.fusion import fuser
 from sklearn import linear_model
 from sklearn import metrics
 from sklearn import cross_validation
 import math
 import numpy
 import paths
-import pickle
-
-def sentence_scores_to_features(sentence_scores):
-    features = [
-        # math.log(len(sentence_scores)),
-        # math.sqrt(len(sentence_scores)),
-        sum(sentence_scores) / len(sentence_scores),
-    ]
-    # TODO: Idea: share of sentences with p>=X for different values of X
-    return features
 
 def show_certainty_histogram(samples):
     certainties = []
@@ -64,14 +51,15 @@ def train_relation_fuser(relation, samples):
     show_certainty_histogram(negative_sentence_scores)
 
     for sample in positive_sentence_scores:
-        features.append(sentence_scores_to_features(sample))
+        features.append(fuser.sentence_scores_to_features(sample))
         labels.append(1)
 
     for sample in negative_sentence_scores:
-        features.append(sentence_scores_to_features(sample))
+        features.append(fuser.sentence_scores_to_features(sample))
         labels.append(0)
 
     # train-test split
+    # TODO: Separate out the sets?
     X_train, X_test, y_train, y_test = cross_validation.train_test_split(
         features, labels, test_size=0.33, random_state=42)
 
@@ -87,12 +75,18 @@ def train_relation_fuser(relation, samples):
     predicted = clf.predict(X_test)
     print("%s accuracy:" % relation, numpy.mean(predicted == y_test))
 
-    feature_extraction.plot_roc_general(
+    plot.plot_roc_general(
         fpr,
         tpr,
         '%s (area = %.02f)' % (relation, auc),
         paths.CHARTS_PATH + '/' + relation + '.png'
     )
+
+    f = fuser.Fuser(
+        relation = relation,
+        classifier = clf,
+    )
+    f.save()
 
 def main():
     flags.add_argument('--relation', action='append')
@@ -105,7 +99,7 @@ def main():
         run_on = relations.RELATIONS
 
     for relation in run_on:
-        input_file = paths.WORK_DIR + '/fuser_data/' + relation + '.json'
+        input_file = fuser.FUSER_TRAINING_DATA_PATH + '/' + relation + '.json'
         with open(input_file, 'r') as f:
             relation_data = json.load(f)
         samples = relation_data

@@ -1,32 +1,21 @@
 import json
 import progressbar
-from prototype import feature_extraction
+from prototype.extraction import model as model_lib
+from prototype.fusion import fuser as fuser_lib
 from prototype.lib import file_util
 from prototype.lib import flags
 from prototype.lib import article_set
 from prototype.lib import sample_repo
 from prototype.lib import sample_generation
 from prototype.lib import relations
-import paths
-import pickle
 
-def load_classifier(relation):
-    print("Loading classifiers.")
-    try:
-        with open(paths.MODELS_PATH + "/" + relation + ".pkl", "rb") as f:
-            return pickle.load(f)
-    except Exception as e:
-        print('Failed to load classifier for', relation, ':(')
-        print(e)
-        return None
-
-def find_samples_in_document(relation, classifier, title):
+def find_samples_in_document(relation, title):
     scored_samples = []
     # print('Processing document:', title)
     document = sample_generation.try_load_document(title)
     if not document:
-        print('Cannot load :(')
-        return
+        print('Cannot load document', title, ':(')
+        return []
 
     document_samples = sample_repo.load_document_samples(
         relations = [relation],
@@ -82,27 +71,25 @@ def main():
 
     for relation in relations.RELATIONS:
         print('Making fuser training data for', relation)
-        classifier = load_classifier(relation)
-        if not classifier:
-            print('Skipping relation, cannot load classifier')
+
+        print("Loading model for %s." % relation)
+        try:
+            model = model_lib.Model.load(relation)
+        except Exception as e:
+            print('Failed to load model for', relation, ':(')
+            print(e)
+            print('Skipping relation, cannot load model')
             continue
 
         all_samples = []
         bar = progressbar.ProgressBar(redirect_stdout=True)
         for article in bar(articles):
-            samples = find_samples_in_document(relation, classifier, article)
+            samples = find_samples_in_document(relation, article)
             if samples:
                 all_samples.extend(samples)
 
-        clf = classifier['classifier']
-        head_feature_dict = classifier['features']
-        matrix = feature_extraction.samples_to_matrix(
-            all_samples,
-            head_feature_dict
-        )
-
         scored_samples = []
-        scores = clf.predict_proba(matrix)
+        scores = model.predict_proba(all_samples)
         for i, sample in enumerate(all_samples):
             s = sample.subject
             r = sample.relation
@@ -112,7 +99,7 @@ def main():
             scored_samples.append((float(score[1]), sample))
 
         by_relation = show_assertion_support(relation, scored_samples)
-        output_dir = paths.WORK_DIR + '/fuser_data'
+        output_dir = fuser_lib.FUSER_TRAINING_DATA_PATH
         file_util.ensure_dir(output_dir)
         output_file = output_dir + '/' + relation + '.json'
         with open(output_file, 'w') as f:

@@ -218,6 +218,16 @@ py_library(
 )
 
 py_library(
+    name = "plot_lib",
+    srcs = [
+        "plot.py",
+    ],
+    deps = [
+	"//:paths_lib",
+    ],
+)
+
+py_library(
     name = "spotlight_lib",
     #srcs_version = "PY3",
     srcs = [

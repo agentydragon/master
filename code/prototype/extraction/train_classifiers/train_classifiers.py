@@ -1,6 +1,8 @@
-from prototype import feature_extraction
+from prototype.extraction import feature_extraction
+from prototype.extraction import model as model_lib
 from prototype.lib import article_set
 from prototype.lib import flags
+from prototype.lib import plot
 from prototype.lib import sample_repo
 from prototype.lib import wikidata
 from sklearn import linear_model
@@ -51,8 +53,9 @@ def train_classifier_for_relation(relation, relation_name):
         auc = metrics.auc(fpr, tpr)
         print("%s AUC:" % name, auc)
 
-        feature_extraction.plot_roc(fpr, tpr, auc, prefix, relation=relation,
-                                    relation_name=relation_name)
+        plot.plot_roc(fpr, tpr, auc, prefix,
+                      relation=relation,
+                      relation_name=relation_name)
 
         predicted = clf.predict(X_test)
         print("%s accuracy:" % name, numpy.mean(predicted == y_test))
@@ -62,7 +65,8 @@ def train_classifier_for_relation(relation, relation_name):
     clf = try_classifier('Logistic regression',
                          linear_model.LogisticRegression(verbose=True),
                          'logreg')
-    feature_extraction.write_model(relation, clf, head_features_dict)
+    model = model_lib.Model(clf, head_features_dict, relation)
+    model.save()
 
     #try_classifier('Linear SVM',
     #               linear_model.SGDClassifier(loss='hinge', penalty='l2',

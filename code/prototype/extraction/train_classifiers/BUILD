@@ -4,8 +4,9 @@ py_binary(
         "train_classifiers.py",
     ],
     deps = [
-        "//:paths_lib",
-        "//prototype:feature_extraction_lib",
+        "//prototype/extraction:feature_extraction_lib",
+        "//prototype/extraction:model_lib",
+        "//prototype/lib:plot_lib",
         "//prototype/lib:file_util_lib",
         "//prototype/lib:sample_repo_lib",
         "//prototype/lib:wikidata_lib",
