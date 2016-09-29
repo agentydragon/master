@@ -36,6 +36,7 @@ subprocess.call([
     "interlanguage-links_en.ttl.bz2"
 ])
 
+# TODO: Needs lots of RAM and scratch space
 print("loading...")
 jena.load_ttl_file(
     dataset_path,
