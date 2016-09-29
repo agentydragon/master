@@ -166,3 +166,5 @@ Zookeeper:
 
 	/user/prvak/thesis/spotlight-annotators:
 		list of annotator URLs (e.g., http://lex5.ncbr.muni.cz:2222/rest/annotate,http://lex6.ncbr.muni.cz:2223/rest/annotate)
+
+bazel run @pra//:experiment_runner -- /storage/brno7-cerit/home/prvak/data/pra/prvak

@@ -1,4 +1,24 @@
-# TODO: want commons_cli_commons_cli
+git_repository(
+    name = "io_bazel_rules_scala",
+    remote = "https://github.com/bazelbuild/rules_scala.git",
+    commit = "bdd5e298b95a2a0bb05bf520e787069dcba1d6e9", # update this as needed
+)
+git_repository(
+    name = "io_bazel",
+    remote = "git://github.com/bazelbuild/bazel.git",
+    tag = "0.3.1",
+)
+
+load("@io_bazel_rules_scala//scala:scala.bzl", "scala_repositories")
+scala_repositories()
+
+# PRA
+new_git_repository(
+    name = "pra",
+    commit = "f72d25d94ac69487f6cd6a5a430fc4b3ed370d59",
+    remote = "https://github.com/matt-gardner/pra",
+    build_file = "BUILD.pra",
+)
 
 # Stanford CoreNLP
 http_jar(
