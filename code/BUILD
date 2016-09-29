@@ -17,9 +17,11 @@ py_binary(
         "get_pra_data.py",
     ],
     deps = [
+	"//:paths_lib",
         "//prototype/lib:wikidata_lib",
         "//prototype/lib:wikidata_util_lib",
         "//prototype/lib:flags_lib",
+        "//prototype/lib:file_util_lib",
     ],
 )
 
