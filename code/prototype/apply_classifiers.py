@@ -4,10 +4,6 @@ from prototype.lib import sample_generation
 from prototype.lib import wikidata
 from prototype.lib import relations
 from scipy import sparse
-from sklearn import cross_validation
-from sklearn import linear_model
-from sklearn import metrics
-from sklearn import naive_bayes
 import numpy
 import paths
 import pickle
