@@ -1,4 +1,5 @@
 import paths
+import numpy
 from prototype.lib import file_util
 import pickle
 
@@ -37,5 +38,5 @@ class Fuser(object):
             }, f)
 
     def predict_proba(self, sentence_scores):
-        features = sentence_scores_to_features(sample)
-        return self.classifier.predict(features)
+        features = sentence_scores_to_features(numpy.array(sentence_scores))
+        return self.classifier.predict_proba(features)[0][1]

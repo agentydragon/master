@@ -1,12 +1,13 @@
 py_library(
     name = "fuser_lib",
     srcs = [
-	"fuser.py",
+        "fuser.py",
     ],
     deps = [
         "//prototype/lib:file_util_lib",
-	"//:paths_lib",
+        "//:paths_lib",
     ],
+    visibility = ["//visibility:public"],
 )
 
 py_binary(
