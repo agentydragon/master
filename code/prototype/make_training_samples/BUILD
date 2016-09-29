@@ -34,9 +34,9 @@ py_binary(
 )
 
 py_binary(
-    name = "join_positives",
+    name = "join",
     srcs = [
-        "join_positives.py",
+        "join.py",
     ],
     deps = [
         "//prototype/lib:sample_repo_lib",
