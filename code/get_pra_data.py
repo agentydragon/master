@@ -117,8 +117,6 @@ def main():
     flags.make_parser(description='TODO')
     args = flags.parse_args()
 
-    property_string = ', '.join(INFORMATIVE_RELATIONS)
-
 #    for property in properties:
 #        # propparts.append('wdp:P%s' % property)
 #        propparts.append('{ ?a wdp:P%s ?b }' % property)
@@ -138,7 +136,7 @@ def main():
     all_relations_file = PRA_ROOT + '/triples-all'
     with open(all_relations_file, 'w') as f:
         for subject, relation, object in triples:
-            f.write("%s %s %s\n" % (subject, relation, object))
+            f.write("%s\t%s\t%s\n" % (subject, relation, object))
 
     for relation in EXPORTED_RELATIONS:
         print('Splitting out', relation, '...')
@@ -147,10 +145,15 @@ def main():
         file_util.ensure_dir(directory)
         f = open(directory + relation, 'w')
 
-        for subject, r, object in triples:
+        relation_triples = [(subject, r, object)
+                            for subject, r, object in triples
+                            if r == relation]
+        assert len(relation_triples) > 0
+        for subject, r, object in relation_triples:
             if r != relation:
                 continue
-            f.write("%s %s %s\n" % (subject, relation, object))
+            # f.write("%s %s %s\n" % (subject, relation, object))
+            f.write("%s\t%s\t1\n" % (subject, object))
         f.close()
 
     random.shuffle(triples)
@@ -158,6 +161,8 @@ def main():
     directory = PRA_ROOT + '/prvak/experiment_specs'
     file_util.ensure_dir(directory)
     with open(directory + '/prv1.json', 'w') as f:
+        property_string = ', '.join(map(lambda r: '"' + r + '"',
+                                        INFORMATIVE_RELATIONS))
         f.write("""
     {
         "graph": {
@@ -184,12 +189,12 @@ def main():
     print('Writing background...')
     with open(PRA_ROOT + '/triples-random-background', 'w') as f:
         for subject, relation, object in triples[:N_BACKGROUND]:
-            f.write("%s %s %s\n" % (subject, relation, object))
+            f.write("%s\t%s\t%s\n" % (subject, relation, object))
 
     print('Writing traintest...')
     with open(PRA_ROOT + '/triples-random-traintest', 'w') as f:
         for subject, relation, object in triples[N_BACKGROUND:]:
-            f.write("%s %s %s\n" % (subject, relation, object))
+            f.write("%s\t%s\t%s\n" % (subject, relation, object))
 
 if __name__ == '__main__':
     main()
