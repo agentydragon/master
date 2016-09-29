@@ -1,73 +1,76 @@
-NOTE: must use python 2.7
+Requirements
+===
 
-pip install --upgrade setuptools --user
+All Python code uses Python 3.
 
-hador.ics.muni.cz: Hadoop frontend
+```
+pip install --user requests SPARQLWrapper protobuf nltk gflags scikit-learn kazoo etaprogress matplotlib
+```
 
-export HADOOP_CLASSPATH=/storage/brno7-cerit/home/prvak/bin/stanford-english-corenlp-2016-01-10-models.jar
-hadoop jar /storage/brno7-cerit/home/prvak/bin/CoreNLP_deploy.jar /user/prvak/wiki-splits /user/prvak/article-parse-xmls-200 200
 
-module add python34-modules-gcc
-module add jdk-8
-pip install requests SPARQLWrapper protobuf nltk gflags scikit-learn kazoo etaprogress --user ## matplotlib cairocffi --user
-
-qsub -l walltime=4:00:00 -l nodes=1:ppn=1,mem=1gb -m abe metacentrum_prepare.sh
-
-# interactive for Spotlight
-qsub -l walltime=4:00:00 -l nodes=1:ppn=16,mem=16gb -I
-	# (run spotlight)
-
-# interactive for Fuseki
-qsub -l walltime=4:00:00 -l nodes=1:ppn=4,mem=32gb -I
-
-qsub -l walltime=24h -l nodes=1:mem=2gb -m abe annotate_coreferences
-
-# load Wikidata into Fuseki
-# TODO: more CPUs?
-# 4 GB is not enough.
-
-# qsub -l walltime=48h -l nodes=1:ppn=4,mem=16gb:brno -m abe wikidata_into_fuseki.sh
-#	=> 48h is not enough
-qsub -l walltime=96h -l nodes=1:ppn=4,mem=16gb:brno -m abe wikidata_into_fuseki.sh
-	=> 12192098.arien.ics.muni.cz
-	# data phase finished
-	# index phase ran out of memory
-
-qsub -l walltime=24h -l nodes=1:ppn=4,mem=32gb:brno -m abe wikidata_into_fuseki.sh
-	=> 12216763.arien.ics.muni.cz
-
-export TMPDIR=$SCRATCHDIR
-./wikidata_into_fuseki.sh (or split into load / index phase)
-
-# -m e: send mail when job terminates
-
-# Download dependencies.
-qsub -l walltime=4:00:00 -l nodes=1:ppn=1,mem=1gb -m e metacentrum-prepare.sh
-
-# Split wiki.
-qsub -l walltime=24:00:00 -l nodes=1:brno:ppn=1,mem=1gb -m abe metacentrum_split_wiki.sh
-
-# NLPize articles.
-# qsub -l walltime=1:00:00 -l nodes=1:ppn=4,mem=8gb -m e nlpize_articles.sh
-# qsub -l walltime=24:00:00 -l nodes=1:ppn=8,mem=96gb -m e nlpize_articles.sh
-qsub -l walltime=48:00:00 -l nodes=1:ppn=32,mem=320gb -m e nlpize_articles.sh
-
-# Spotlight.
-qsub -l walltime=1:00:00 -l nodes=1:ppn=1,mem=1gb -m e metacentrum_spotlight.sh
-
+PRA
+==
 # to run PRA: (instructions for downloading dataset etc.: http://rtw.ml.cmu.edu/emnlp2015_sfe/)
 ~/bin/sbt 'run examples sfe_bfs_pra_anyrel'  # select 1
 ~/bin/sbt 'run examples sfe_bfs_pra_anyrel'  # select 2
 
 ~/bin/sbt 'run prvak'
 
+Using PBS
+===
+
+```
 # kill PBS job:
 qstat -u prvak
 qdel 1309042.wagap.cerit-sc.cz
+```
 
 PBS dependency lists: http://beige.ucs.indiana.edu/I590/node45.html
 
 qsub -W depend=afterok:$FIRSTJOBID
+
+
+Useful commands
+===
+How to build protobuf files:
+
+```
+genrule(
+    name = "sentence_proto",
+    srcs = [
+	"sentence.proto",
+    ],
+    outs = [
+	"sentence_pb2.py",
+	"Sentence.java",
+    ],
+    visibility = ["//visibility:public"],
+    cmd = "protoc -I=. " +
+	"--python_out=$(GENDIR)/ " +
+	"--java_out=$(GENDIR)/ " +
+	"$(location :sentence.proto)"
+)
+```
+
+To download charts:
+```
+scp -r hador.ics.muni.cz:/storage/brno7-cerit/home/prvak/charts
+```
+
+Zookeeper files
+===
+
+`/user/prvak/thesis/wikidata-service`: contains `hostname:port` of Wikidata
+Fuseki (e.g., `hador:3030`)
+
+`/user/prvak/thesis/dbpedia-service`: contains `hostname:port` of DBpedia
+Fuseki (e.g., `hador:3030`)
+
+`/user/prvak/thesis/spotlight-annotators`: list of annotator URLs (e.g.,
+`http://lex5.ncbr.muni.cz:2222/rest/annotate,http://lex6.ncbr.muni.cz:2223/rest/annotate`)
+
+Various tidbits
+===
 
 Fuseki:
 	544253967G
@@ -86,12 +89,6 @@ English wikipedia: 5,213,378 articles
 	parallelized in 100 jobs: takes 2606 hours
 	parallelized in 1000 jobs: takes 260 hours, ~10 days
 	parallelized in 10000 jobs: takes ~1 day
-
-bazel run //src/tools/generate_workspace -- \
-	--artifact=org.apache.hadoop:hadoop-common:2.6.2 \
-	--artifact=org.apache.hadoop:hadoop-mapreduce-client-core:2.6.2 \
-	--artifact=edu.stanford.nlp:stanford-corenlp:3.6.0 \
-	--artifact=edu.stanford.nlp:stanford-corenlp:models:3.6.0 \
 
 tdbloader: more RAM improves speed!
 	I want an in-memory TDB database...!
@@ -128,41 +125,46 @@ hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -input /user/prvak/wik
 chmod +x hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -input /user/prvak/wiki-processed-sub-0.001 -output /user/prvak/wiki-samples-sub-0.001 -mapper mr_generate_training_samples.py -file annotate_coreferences.py -file dbpedia.py -file file_util.py -file get_training_samples.py -file json_cache.py -file parse_xmls_to_protos.py -file paths.py -file relations.py -file bazel-genfiles/sentence_pb2.py -file sparql_client.py -file bazel-genfiles/training_samples_pb2.py -file wikidata_util.py -file mr_generate_training_samples.py
 
 
-# TODO:
-	# (launch Spotlight)
-	# 1/100 Wikipedie
-	# launch on hador
-	export HADOOP_CLASSPATH=/storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/DocumentProcessor_deploy.jar
-	hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/DocumentProcessor.jar DocumentProcessor -D spotlight_server=http://hador:2222/rest/annotate -D mapreduce.input.fileinputformat.split.maxsize=1000000 -D mapreduce.map.java.opts=-Xmx8000m -D mapreduce.map.memory.mb=9000 -D mapreduce.task.timeout=6000000 /user/prvak/wiki-splits-sub-0.001 /user/prvak/wiki-processed-sub-0.001
-	# has very long bootup
+export HADOOP_CLASSPATH=/storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/DocumentProcessor_deploy.jar
+hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/DocumentProcessor.jar DocumentProcessor -D spotlight_server=http://hador:2222/rest/annotate -D mapreduce.input.fileinputformat.split.maxsize=1000000 -D mapreduce.map.java.opts=-Xmx8000m -D mapreduce.map.memory.mb=9000 -D mapreduce.task.timeout=6000000 /user/prvak/wiki-splits-sub-0.001 /user/prvak/wiki-processed-sub-0.001
 
+hador.ics.muni.cz: Hadoop frontend
 
-How to build protobuf files:
-	genrule(
-	    name = "sentence_proto",
-	    srcs = [
-		"sentence.proto",
-	    ],
-	    outs = [
-		"sentence_pb2.py",
-		"Sentence.java",
-	    ],
-	    visibility = ["//visibility:public"],
-	    cmd = "protoc -I=. " +
-		"--python_out=$(GENDIR)/ " +
-		"--java_out=$(GENDIR)/ " +
-		"$(location :sentence.proto)"
-	)
+export HADOOP_CLASSPATH=/storage/brno7-cerit/home/prvak/bin/stanford-english-corenlp-2016-01-10-models.jar
+hadoop jar /storage/brno7-cerit/home/prvak/bin/CoreNLP_deploy.jar /user/prvak/wiki-splits /user/prvak/article-parse-xmls-200 200
 
-to download charts:
-	scp -r hador.ics.muni.cz:/storage/brno7-cerit/home/prvak/charts
+module add python34-modules-gcc
+module add jdk-8
 
-Zookeeper:
-	/user/prvak/thesis/wikidata-service:
-		contains hostname:port of Wikidata Fuseki (e.g., hador:3030)
+qsub -l walltime=4:00:00 -l nodes=1:ppn=1,mem=1gb -m abe metacentrum_prepare.sh
 
-	/user/prvak/thesis/dbpedia-service:
-		contains hostname:port of DBpedia Fuseki (e.g., hador:3030)
+# interactive for Spotlight
+qsub -l walltime=4:00:00 -l nodes=1:ppn=16,mem=16gb -I
+	# (run spotlight)
 
-	/user/prvak/thesis/spotlight-annotators:
-		list of annotator URLs (e.g., http://lex5.ncbr.muni.cz:2222/rest/annotate,http://lex6.ncbr.muni.cz:2223/rest/annotate)
+# interactive for Fuseki
+qsub -l walltime=4:00:00 -l nodes=1:ppn=4,mem=32gb -I
+
+qsub -l walltime=24h -l nodes=1:mem=2gb -m abe annotate_coreferences
+
+# load Wikidata into Fuseki
+# TODO: more CPUs?
+# 4 GB is not enough.
+
+qsub -l walltime=96h -l nodes=1:ppn=4,mem=16gb:brno -m abe wikidata_into_fuseki.sh
+	=> 12192098.arien.ics.muni.cz
+	(48h is not enough to insert Wikidata into Fuseki; index phase needs
+	more than 16 GB, and scratch space.)
+	# data phase finished
+	# index phase ran out of memory
+
+export TMPDIR=$SCRATCHDIR
+./wikidata_into_fuseki.sh (or split into load / index phase)
+
+# -m e: send mail when job terminates
+
+# Download dependencies.
+qsub -l walltime=4:00:00 -l nodes=1:ppn=1,mem=1gb -m e metacentrum-prepare.sh
+
+# Split wiki.
+qsub -l walltime=24:00:00 -l nodes=1:brno:ppn=1,mem=1gb -m abe metacentrum_split_wiki.sh
