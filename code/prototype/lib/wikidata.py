@@ -45,6 +45,7 @@ class WikidataClient(object):
         self.wikidata_relations_cache = {}
         self.forward_cache = {}
         self.backward_cache = {}
+        self.name_cache = {}
 
         if not endpoint:
             endpoint = get_default_endpoint_url()
@@ -342,19 +343,42 @@ class WikidataClient(object):
 
     def get_entity_name(self, entity_id):
 #        self.load_cache()
-#        if entity_id in self.name_cache:
-#            return self.name_cache[entity_id]
+        if entity_id in self.name_cache:
+            return self.name_cache[entity_id]
         name = self.fetch_label(entity_id)
-#        self.name_cache[entity_id] = name
+        self.name_cache[entity_id] = name
 #        self.save_cache()
         return name
 
+    def get_names(self, ids):
+        labels = {}
+        ids = list(sorted(ids))
+
+        for i in range(0, len(ids), 20):
+            ids_batch = ids[i:i+20]
+
+            ids_string = join_entities(ids_batch)
+            results = self.wikidata_client.get_results("""
+                SELECT ?x ?label
+                WHERE {
+                    VALUES ?x { %s }
+                    ?x rdfs:label ?label .
+                    FILTER (langMatches(lang(?label),"en"))
+                }
+            """ % ids_string)
+            for row in results['results']['bindings']:
+                entity = wikidata_util.wikidata_entity_url_to_entity_id(row['x']['value'])
+                label = row['label']['value']
+                labels[entity] = label
+                self.name_cache[entity] = label
+        return labels
+
     def get_name(self, property_id):
 #        self.load_cache()
-#        if property_id in self.name_cache:
-#            return self.name_cache[property_id]
+        if property_id in self.name_cache:
+            return self.name_cache[property_id]
         name = self.fetch_label(property_id)
-#        self.name_cache[property_id] = name
+        self.name_cache[property_id] = name
 #        self.save_cache()
         return name
 
