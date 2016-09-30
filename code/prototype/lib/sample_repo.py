@@ -6,6 +6,8 @@ import os.path
 from prototype.lib import article_repo
 from prototype.lib import training_sample
 
+import progressbar
+
 class SavingError(Exception):
     pass
 
@@ -57,13 +59,12 @@ def load_document_samples(relations, title):
                 samples.extend(list(map(training_sample.TrainingSample.from_json, json.load(f)['samples'])))
     return samples
 
-def write_positive_samples(relation, samples):
-    with open(base_dir + '/' + relation + '/positives.json', 'w') as f:
-        json.dump({'samples': [sample.to_json() for sample in samples]}, f)
-
-def write_negative_samples(relation, samples):
-    with open(base_dir + '/' + relation + '/negatives.json', 'w') as f:
-        json.dump({'samples': [sample.to_json() for sample in samples]}, f)
+def load_documents_samples(relation, documents):
+    samples = []
+    bar = progressbar.ProgressBar()
+    for document in bar(documents):
+        samples.extend(load_document_samples([relation], document))
+    return samples
 
 def write_article(title, samples):
     by_relation = {}
@@ -75,47 +76,3 @@ def write_article(title, samples):
 
     for relation in by_relation:
         write_relations(title, relation, by_relation[relation])
-
-def load_positive_samples(relation):
-    with open(base_dir + '/' + relation + '/positives.json') as f:
-        batch = json.load(f)['samples']
-        return list(map(training_sample.TrainingSample.from_json, batch))
-
-def load_negative_samples(relation):
-    with open(base_dir + '/' + relation + '/negatives.json') as f:
-        batch = json.load(f)['samples']
-        return list(map(training_sample.TrainingSample.from_json, batch))
-
-def load_samples(relation):
-    samples = []
-    samples.extend(load_positive_samples(relation))
-    samples.extend(load_negative_samples(relation))
-    return samples
-
-def load_negative_samples_by_articles(relation):
-    samples = []
-    for root, subdirs, files in os.walk(base_dir + '/' + relation + '/negative'):
-        for f in files:
-            filename = root + '/' + f
-            try:
-                with open(filename) as f:
-                    batch = json.load(f)['samples']
-            except ValueError as e:
-                print('Cannot parse JSON file', filename, ', skipping')
-                print(e)
-                continue
-            samples.extend(map(training_sample.TrainingSample.from_json, batch))
-    return samples
-
-def load_positive_samples_by_articles(relation):
-    samples = []
-    for root, subdirs, files in os.walk(base_dir + '/' + relation + '/positive'):
-        for f in files:
-            filename = root + '/' + f
-            with open(filename) as f:
-                batch = json.load(f)['samples']
-            samples.extend(map(training_sample.TrainingSample.from_json, batch))
-    return samples
-
-def all_relations():
-    return list(sorted(os.listdir(base_dir)))

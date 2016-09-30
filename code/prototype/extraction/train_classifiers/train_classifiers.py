@@ -10,39 +10,41 @@ from sklearn import metrics
 import numpy
 
 def train_classifier_for_relation(relation, relation_name):
-    print('Training classifier for relation:',
-          relation, relation_name)
+    print('Training extractor for', relation, relation_name)
+
+    art_set = article_set.ArticleSet()
+    train_articles, test_articles, calibrate_articles = art_set.split_train_test_calibrate()
 
     print('Loading samples...')
-    relation_samples = sample_repo.load_samples(relation)
-    positive_count = len([s for s in relation_samples if s.positive])
-    negative_count = len([s for s in relation_samples if not s.positive])
-    print('Positive:', positive_count)
-    print('Negative:', negative_count)
+    train_samples = sample_repo.load_documents_samples(relation, train_articles)
+    positive_count = len([s for s in train_samples if s.positive])
+    negative_count = len([s for s in train_samples if not s.positive])
+    print('Positive in train:', positive_count)
+    print('Negative in train:', negative_count)
+
+    test_samples = sample_repo.load_documents_samples(relation, test_articles)
 
     if positive_count < 10 or negative_count < 10:
         print('Too few samples to train for', relation, '.')
         return
 
-    print('Collecting features...')
-    things = feature_extraction.samples_to_features_labels(relation_samples)
-    feature_counts = feature_extraction.get_feature_counts(things)
-    head_features_dict = feature_extraction.get_head_features(feature_counts, relation_samples)
-
-    print('Splitting train/test...')
-
-    train_articles, test_articles, calibrate_articles = article_set.ArticleSet().split_train_test_calibrate()
-    train_samples, test_samples = feature_extraction.split_samples_to_train_test(
-        relation_samples,
-        train_articles = train_articles,
-        test_articles = test_articles
+    print('Selecting head features...')
+    features_labels = feature_extraction.samples_to_all_features(train_samples)
+    feature_counts = feature_extraction.get_feature_counts(features_labels)
+    head_features_dict = feature_extraction.get_head_features(
+        feature_counts,
+        train_samples
     )
 
     print('Converting to feature matrix...')
-    X_train, y_train = feature_extraction.samples_to_matrix_target(train_samples, head_features_dict)
-    X_test, y_test = feature_extraction.samples_to_matrix_target(test_samples, head_features_dict)
-
-    print('Splitting and training.')
+    X_train, y_train = feature_extraction.samples_to_matrix_target(
+        train_samples,
+        head_features_dict
+    )
+    X_test, y_test = feature_extraction.samples_to_matrix_target(
+        test_samples,
+        head_features_dict
+    )
 
     def try_classifier(name, classifier, prefix):
         print('Training %s...' % name)
@@ -93,4 +95,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

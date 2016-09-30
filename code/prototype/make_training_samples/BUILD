@@ -32,14 +32,3 @@ py_binary(
     default_python_version = "PY3",
     srcs_version = "PY3",
 )
-
-py_binary(
-    name = "join",
-    srcs = [
-        "join.py",
-    ],
-    deps = [
-        "//prototype/lib:sample_repo_lib",
-        "//prototype/lib:relations_lib",
-    ],
-)

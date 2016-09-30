@@ -62,13 +62,13 @@ def sample_to_features(sample):
 def sample_to_features_label(sample):
     return (sample_to_features(sample), sample.positive)
 
-def samples_to_features_labels(samples):
-    return list(map(sample_to_features_label, samples))
+def samples_to_all_features(samples):
+    return map(sample_to_features, samples)
 
-def get_feature_counts(features_labels):
+def get_feature_counts(features):
     all_features = {}
     print("Counting features...")
-    for sample_features, label in features_labels:
+    for sample_features in features:
         for feature in sample_features:
             if feature not in all_features:
                 all_features[feature] = 0
@@ -92,19 +92,17 @@ def samples_to_matrix(samples, head_feature_dict):
     if verbose:
         print('converting', len(samples), 'samples to matrix,',
               len(head_feature_dict), 'features')
-    features_labels = samples_to_features_labels(samples)
+    features = samples_to_all_features(samples)
     rows = []
     cols = []
     data = []
 
+    enum = features
     if verbose:
-        bar = progressbar.ProgressBar()
-        enum = enumerate(bar(features_labels))
-    else:
-        enum = enumerate(features_labels)
+        bar = progressbar.ProgressBar(max_value = len(samples))
+        enum = bar(enum)
 
-    for i, features_label in enum:
-        sample_features, label = features_label
+    for i, sample_features in enumerate(enum):
         f = set(sample_features) & head_feature_dict.keys()
         rows.extend([i] * len(f))
         cols.extend(head_feature_dict[x] for x in f)
@@ -115,27 +113,15 @@ def samples_to_matrix(samples, head_feature_dict):
     #                            dtype=numpy.int8)
     matrix = sparse.coo_matrix(
         (data, (rows, cols)),
-        shape=(len(features_labels), len(head_feature_dict)),
+        shape=(len(samples), len(head_feature_dict)),
         dtype=numpy.int8
     )
     return matrix
 
 def samples_to_matrix_target(samples, head_feature_dict):
-    features_labels = samples_to_features_labels(samples)
-
     matrix = samples_to_matrix(samples, head_feature_dict)
-    target = [target for features, target in features_labels]
+    target = [sample.positive for sample in samples]
     return matrix, target
-
-def split_samples_to_train_test(relation_samples, train_articles, test_articles):
-    train_samples = []
-    test_samples = []
-    for sample in relation_samples:
-        if sample.sentence.origin_article in train_articles:
-            train_samples.append(sample)
-        if sample.sentence.origin_article in test_articles:
-            test_samples.append(sample)
-    return train_samples, test_samples
 
 # Split normally:
 # matrix, target = feature_extraction.samples_to_matrix_target(relation_samples, head_feature_dict)
