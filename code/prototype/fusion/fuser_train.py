@@ -1,7 +1,9 @@
 import json
+import datetime
 from prototype.lib import flags
 from prototype.lib import relations
 from prototype.lib import plot
+from prototype.lib import file_util
 from prototype.fusion import fuser
 from sklearn import linear_model
 from sklearn import metrics
@@ -34,7 +36,7 @@ def show_support_count_histogram(samples):
         percentage = (100.0 * count / total)
         print(('%d' % length).ljust(5), count) # "%.2f" % percentage)
 
-def train_relation_fuser(relation, samples):
+def train_relation_fuser(relation, samples, chart_dir):
     positive_sentence_scores = samples['true']
     negative_sentence_scores = samples['false']
 
@@ -79,7 +81,7 @@ def train_relation_fuser(relation, samples):
         fpr,
         tpr,
         '%s (area = %.02f)' % (relation, auc),
-        paths.CHARTS_PATH + '/' + relation + '.png'
+        chart_dir + '/' + relation + '.png'
     )
 
     f = fuser.Fuser(
@@ -98,12 +100,16 @@ def main():
     else:
         run_on = relations.RELATIONS
 
+    chart_dir = paths.CHARTS_PATH + '/fusion/' + datetime.datetime.now().strftime('%Y%m%d-%H%M')
+    file_util.ensure_dir(chart_dir)
+
     for relation in run_on:
         input_file = fuser.FUSER_TRAINING_DATA_PATH + '/' + relation + '.json'
         with open(input_file, 'r') as f:
             relation_data = json.load(f)
         samples = relation_data
-        train_relation_fuser(relation, samples)
+        train_relation_fuser(relation, samples,
+                             chart_dir = chart_dir)
 
 if __name__ == '__main__':
     main()

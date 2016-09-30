@@ -56,9 +56,15 @@ def show_assertion_support(relation, scored_samples):
 
 def main():
     flags.add_argument('--article', action='append')
+    flags.add_argument('--relation', action='append')
     # flags.add_argument('--json_out', required=True)
     flags.make_parser(description='TODO')
     args = flags.parse_args()
+
+    if args.relation:
+        run_on_relations = args.relation
+    else:
+        run_on_relations = relations.RELATIONS
 
     if args.article:
         articles = args.article
@@ -69,7 +75,7 @@ def main():
         # articles = calibrate[:100]
         articles = calibrate
 
-    for relation in relations.RELATIONS:
+    for relation in run_on_relations:
         print('Making fuser training data for', relation)
 
         print("Loading model for %s." % relation)

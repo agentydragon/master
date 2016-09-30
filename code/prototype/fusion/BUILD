@@ -40,6 +40,7 @@ py_binary(
         "//prototype/lib:article_set_lib",
         "//prototype/lib:flags_lib",
         "//prototype/lib:relations_lib",
+        "//prototype/lib:file_util_lib",
         "//prototype/lib:sample_generation_lib",
         "//prototype/lib:sample_repo_lib",
         "//prototype/lib:wikidata_lib",
