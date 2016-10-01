@@ -1,4 +1,5 @@
 import progressbar
+import itertools
 from prototype.extraction import model as model_lib
 from prototype.extraction import feature_extraction
 from prototype.fusion import fuser as fuser_lib
@@ -8,87 +9,9 @@ from prototype.lib import article_set
 from prototype.lib import sample_repo
 from prototype.lib import sample_generation
 from prototype.lib import relations
-from prototype.lib import wikidata
 # import paths
 
-import recordclass
-
-Prediction = recordclass.recordclass(
-    "Prediction",
-    ["score", "subject", "relation", "object",
-     "subject_label", "relation_label", "object_label",
-     "truth"]
-)
-
-def add_labels_to_predictions(predictions, wikidata_client):
-    print('Adding labels...')
-    to_label = set()
-    for prediction in predictions:
-        to_label = to_label.union({
-            prediction.subject,
-            prediction.relation,
-            prediction.object
-        })
-    labels = wikidata_client.get_names(to_label)
-
-    def get_name(entity):
-        if entity in labels:
-            return labels[entity]
-        else:
-            return (wikidata_client.get_name(entity) or '??')
-
-    for prediction in predictions:
-        prediction.subject_label = get_name(prediction.subject)
-        prediction.relation_label = get_name(prediction.relation)
-        prediction.object_label = get_name(prediction.object)
-
-def add_ground_truth_to_predictions(predictions, wikidata_client):
-    subjects = {prediction.subject for prediction in predictions}
-    relations = {prediction.relation for prediction in predictions}
-    print('Looking for counterexamples...')
-    subject_relation_pairs = wikidata_client.get_subject_relation_pairs(
-        subjects,
-        relations
-    )
-
-    triples = [(p.subject, p.relation, p.object) for p in predictions]
-    print('Validating predictions...')
-    true_triples = wikidata_client.get_true_subset(triples)
-
-    for prediction in predictions:
-        if ((prediction.subject, prediction.relation, prediction.object)
-                in true_triples):
-            # truth
-            truth = True
-        elif (prediction.subject, prediction.relation) in subject_relation_pairs:
-            # subject has that relation with something else; false
-            truth = False
-        else:
-            truth = '?'
-        prediction.truth = truth
-
-def write_predictions(predictions, tsv_path):
-    with open(tsv_path, 'w') as f:
-        for prediction in predictions:
-            if prediction.truth == True:
-                truth = '+'
-            elif prediction.truth == False:
-                truth = '-'
-            elif prediction.truth == '?':
-                truth = '?'
-            else:
-                raise
-
-            f.write('\t'.join([
-                "%.4f" % prediction.score,
-                prediction.subject,
-                prediction.relation,
-                prediction.object,
-                prediction.subject_label,
-                prediction.relation_label,
-                prediction.object_label,
-                truth
-            ]) + '\n')
+from prototype.eval import prediction
 
 def load_samples(articles):
     all_samples = []
@@ -113,8 +36,6 @@ def main():
     flags.make_parser(description='TODO')
     args = flags.parse_args()
 
-    wikidata_client = wikidata.WikidataClient()
-
     if args.article:
         articles = args.article
     else:
@@ -130,8 +51,10 @@ def main():
     all_samples = load_samples(articles)
     predictions = []
 
-    for relation in relations.RELATIONS:
-        print("Loading model for %s." % relation)
+    for i, relation in enumerate(relations.RELATIONS):
+        print("Loading model for %s (%d of %d)." % (
+            relation, (i + 1), len(relations.RELATIONS)
+        ))
         try:
             model = model_lib.Model.load(relation)
         except Exception as e:
@@ -158,7 +81,7 @@ def main():
             if args.score_cutoff and score < float(args.score_cutoff):
                 continue
 
-            predictions.append(Prediction(
+            predictions.append(prediction.Prediction(
                 score = score,
                 subject = subject,
                 relation = relation,
@@ -166,12 +89,10 @@ def main():
                 subject_label = None,
                 relation_label = None,
                 object_label = None,
-                truth = None
+                truth = '?'
             ))
 
-    add_labels_to_predictions(predictions, wikidata_client)
-    add_ground_truth_to_predictions(predictions, wikidata_client)
-    write_predictions(predictions, args.output_tsv)
+    prediction.write_predictions(predictions, args.output_tsv)
 
 if __name__ == '__main__':
     main()

@@ -1,15 +1,8 @@
 from prototype.lib import flags
+from prototype.eval import prediction
 
 import random
-import recordclass
 import progressbar
-
-Prediction = recordclass.recordclass(
-    "Prediction",
-    ["score", "subject", "relation", "object",
-     "subject_label", "relation_label", "object_label",
-     "truth"]
-)
 
 def select_predictions(predictions, min_score=None, max_score=None):
     return [p for p in predictions
@@ -17,9 +10,9 @@ def select_predictions(predictions, min_score=None, max_score=None):
                 ((max_score is None) or p.score <= max_score))]
 
 def show_calibration(predictions):
-    positives = [prediction for prediction in predictions if prediction.truth == True]
-    negatives = [prediction for prediction in predictions if prediction.truth == False]
-    unknowns = [prediction for prediction in predictions if prediction.truth == '?']
+    positives = [p for p in predictions if p.truth == True]
+    negatives = [p for p in predictions if p.truth == False]
+    unknowns = [p for p in predictions if p.truth == '?']
 
     print('%d positives, %d negatives, %d unknowns' %
           (len(positives), len(negatives), len(unknowns)))
@@ -37,7 +30,7 @@ def show_calibration(predictions):
             continue
         neg_samples = random.sample(negatives, select_negatives)
 
-        scores = [prediction.score for prediction in pos_samples + neg_samples]
+        scores = [p.score for p in pos_samples + neg_samples]
         avg_score = sum(scores) / len(scores)
 
         print('%.2f positive %.2f negative:' % (threshold, (1.0 - threshold)),
@@ -45,20 +38,24 @@ def show_calibration(predictions):
 
     print()
 
-    thresholds = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-    for i in range(len(thresholds) - 1):
-        min_score, max_score = thresholds[i], thresholds[i + 1]
-        predicts = select_predictions(predictions,
-                                      min_score = min_score,
-                                      max_score = max_score)
-        true = len([p for p in predicts if p.truth == True])
-        false = len([p for p in predicts if p.truth == False])
-        if true + false == 0:
-            print('[%.2f;%.2f]: no predictions in this range' %
-                  (min_score, max_score))
-        else:
-            print('[%.2f;%.2f]: %.2f%% true' %
-                  (min_score, max_score, 100 * float(true) / (true + false)))
+    def show_threshold_calibration(thresholds):
+        for i in range(len(thresholds) - 1):
+            min_score, max_score = thresholds[i], thresholds[i + 1]
+            predicts = select_predictions(predictions,
+                                          min_score = min_score,
+                                          max_score = max_score)
+            true = len([p for p in predicts if p.truth == True])
+            false = len([p for p in predicts if p.truth == False])
+            if true + false == 0:
+                print('[%.2f;%.2f]: no predictions in this range' %
+                      (min_score, max_score))
+            else:
+                print('[%.2f;%.2f]: %.2f%% true (%d true %d false)' %
+                      (min_score, max_score, 100 * float(true) / (true + false),
+                       true, false))
+
+    show_threshold_calibration([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+    show_threshold_calibration([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
 
     # TODO: What's the average truth-ness of prediction with scores [0.2;0.3)?
 
@@ -70,49 +67,32 @@ def show_counts(predictions):
 def main():
     flags.add_argument('--article', action='append')
     flags.add_argument('--prediction_tsv', required=True)
-    flags.add_argument('--show_all_predictions', type=bool)
+    flags.add_argument('--show_above_threshold', type=float)
     flags.add_argument('--show_calibration', type=bool)
     flags.add_argument('--show_counts', type=bool)
     flags.make_parser(description='TODO')
     args = flags.parse_args()
 
-    with open(args.prediction_tsv, 'r') as f:
-        predictions = []
-        for line in f:
-            score, subject, relation, object, subject_label, relation_label, object_label, truth = line.strip().split('\t')
+    predictions = prediction.load_predictions(args.prediction_tsv)
 
-            if truth == '+':
-                truth = True
-            elif truth == '-':
-                truth = False
-            elif truth == '?':
-                truth = '?'
-            else:
-                raise
+    if args.show_above_threshold:
+        print('Predictions above %.4f:' % args.show_above_threshold)
+        for p in select_predictions(predictions,
+                                    min_score=args.show_above_threshold):
+            print('\t'.join([
+                p.subject_label,
+                p.relation_label,
+                p.object_label,
+                '%.4f' % (p.score),
+                str(p.truth),
+            ]))
+        print()
 
-            prediction = Prediction(
-                score = float(score),
-                subject = subject,
-                relation = relation,
-                object = object,
-                subject_label = subject_label,
-                relation_label = relation_label,
-                object_label = object_label,
-                truth = truth
-            )
-            predictions.append(prediction)
+    if args.show_calibration:
+        show_calibration(predictions)
 
-        if args.show_all_predictions:
-            for prediction in predictions:
-                print(prediction.subject_label, prediction.relation_label,
-                      prediction.object_label, prediction.score,
-                      prediction.truth)
-
-        if args.show_calibration:
-            show_calibration(predictions)
-
-        if args.show_counts:
-            show_counts(predictions)
+    if args.show_counts:
+        show_counts(predictions)
 
 if __name__ == '__main__':
     main()

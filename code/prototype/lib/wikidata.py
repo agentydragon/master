@@ -377,11 +377,19 @@ class WikidataClient(object):
 
     def get_names(self, ids):
         labels = {}
+        bar = progressbar.ProgressBar()
+
+        # for x in bar(ids):
+        #     label = self.get_name(x)
+        #     if label:
+        #         labels[x] = label
+        # return label
+
         ids = list(sorted(ids))
 
-        batch_size = 100
+        batch_size = 50
 
-        for i in range(0, len(ids), batch_size):
+        for i in bar(range(0, len(ids), batch_size)):
             ids_batch = ids[i:i+batch_size]
 
             ids_string = join_entities(ids_batch)

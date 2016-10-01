@@ -59,9 +59,6 @@ def sample_to_features(sample):
 
     return features
 
-def sample_to_features_label(sample):
-    return (sample_to_features(sample), sample.positive)
-
 def samples_to_all_features(samples):
     return map(sample_to_features, samples)
 
@@ -95,24 +92,28 @@ def samples_to_matrix(samples, head_feature_dict):
     features = samples_to_all_features(samples)
     rows = []
     cols = []
-    data = []
+    #data = []
 
     enum = features
     if verbose:
         bar = progressbar.ProgressBar(max_value = len(samples))
         enum = bar(enum)
 
+    key_set = set(head_feature_dict.keys())
     for i, sample_features in enumerate(enum):
-        f = set(sample_features) & head_feature_dict.keys()
+        f = set(sample_features) & key_set
         rows.extend([i] * len(f))
         cols.extend(head_feature_dict[x] for x in f)
-        data.extend([1] * len(f))
+        #data.extend([1] * len(f))
     # matrix = sparse.lil_matrix((len(features_labels), len(all_features)),
     #                            dtype=numpy.int8)
     # matrix = sparse.coo_matrix((len(features_labels), len(all_features)),
     #                            dtype=numpy.int8)
+    #data = (1 for _ in range(len(rows)))
+    data = [1] * len(rows)
     matrix = sparse.coo_matrix(
-        (data, (rows, cols)),
+        (data,
+         (rows, cols)),
         shape=(len(samples), len(head_feature_dict)),
         dtype=numpy.int8
     )

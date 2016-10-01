@@ -3,6 +3,7 @@ import time
 import urllib
 import urllib.error
 from prototype.lib import flags
+import http.client
 
 STANDARD_PREFIXES = """
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -39,7 +40,9 @@ class SPARQLClient(object):
                 # print("Got %d results." % len(results['results']['bindings']))
                 pass
             return results
-        except (ConnectionResetError, OSError, urllib.error.URLError, SPARQLWrapper.SPARQLExceptions.EndPointInternalError) as e:
+        except (ConnectionResetError, OSError, urllib.error.URLError,
+                SPARQLWrapper.SPARQLExceptions.EndPointInternalError,
+                http.client.BadStatusLine) as e:
             error = e
             if not retry:
                 raise
