@@ -24,19 +24,6 @@ py_library(
 )
 
 py_binary(
-    name = "train",
-    srcs = [
-        "train.py",
-    ],
-    deps = [
-        ":feature_extraction_lib",
-        "//prototype/lib:sample_repo_lib",
-    ],
-    default_python_version = "PY3",
-    srcs_version = "PY3",
-)
-
-py_binary(
     name = "apply_classifiers",
     srcs = [
         "apply_classifiers.py",
