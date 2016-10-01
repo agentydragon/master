@@ -1,0 +1,150 @@
+Predictions above 0.5000:
+Tancred Ibsen	occupation	Film director	0.6061	True
+mathematician	occupation	Film director	0.6201	?
+cricket	occupation	Film director	0.5030	?
+astronaut	occupation	Film director	0.6339	?
+Northumberland	occupation	Film director	0.5913	?
+Richard Wagner	occupation	theatre director	0.6012	True
+Benjamin Franklin	occupation	Film director	0.6355	False
+The Boys	occupation	Film director	0.6297	?
+Michael Cimino	occupation	Screenwriter	0.5789	True
+Argentina	occupation	Turkish	0.5036	?
+dwarfism	occupation	Film director	0.6188	?
+John Anderson	occupation	Film director	0.6327	False
+Paralympic Games	occupation	Film director	0.5913	?
+Argentina	occupation	Portuguese	0.5317	?
+Scotland	occupation	Film director	0.5064	?
+Bahman Ghobadi	occupation	Film director	0.5961	True
+Michael P. Anderson	occupation	Film director	0.6120	False
+Alejandro ortiz	occupation	Film director	0.6315	False
+Valerio Zurlini	occupation	Film director	0.5783	True
+Building 429	occupation	Film director	0.6330	?
+William Friedkin	occupation	Screenwriter	0.5645	True
+swimming	occupation	Film director	0.6229	?
+Shunji Iwai	occupation	independent film	0.6120	False
+Johann Grueber	occupation	astronomer	0.6144	True
+Patton	occupation	Film director	0.6372	?
+Michael Jackson	occupation	Film director	0.5913	True
+Sergio Castellitto	occupation	cinema of Italy	0.6103	False
+Simon Wells	occupation	Film director	0.5540	True
+Lillebil Ibsen	occupation	Film director	0.5637	False
+African American	occupation	Film director	0.6111	?
+Michael Andersson	occupation	Film director	0.6283	False
+Carlo Lizzani	occupation	Screenwriter	0.5538	True
+Carlo Ludovico Bragaglia	occupation	Film director	0.5983	True
+first-class cricket	occupation	Film director	0.5673	?
+Carlo Lizzani	occupation	Film director	0.5292	True
+Altered Images	occupation	Film director	0.6310	?
+María Kodama	occupation	Japan	0.5167	False
+soccer	occupation	Film director	0.6326	?
+Michael Anderson, Jr.	occupation	Film director	0.6320	False
+Christian rock	occupation	Film director	0.5527	?
+Alexis Texas	occupation	pornographic actor	0.5919	True
+Sergio Corbucci	occupation	Film director	0.5632	True
+Papillon	occupation	Film director	0.6365	?
+West Virginia	member of political party	Tennessee	0.5107	?
+John E. Sweeney	member of political party	Republican Party	0.5036	True
+Jacob Zuma	member of political party	Zulu people	0.5159	False
+West Virginia	member of political party	Washington, D.C.	0.5075	?
+Patricia Morris	member of political party	Conservative Party	0.5088	?
+West Virginia	member of political party	Vermont	0.5032	?
+Sheldon Whitehouse	member of political party	Vermont	0.5046	False
+West Virginia	member of political party	Maryland	0.5187	?
+Sheldon Whitehouse	member of political party	Washington, D.C.	0.5086	False
+Sheldon Whitehouse	member of political party	Tennessee	0.5116	False
+Sheldon Whitehouse	member of political party	Maryland	0.5197	False
+Sheldon Whitehouse	member of political party	Illinois	0.5169	False
+Sheldon Whitehouse	member of political party	Wisconsin	0.5036	False
+Sheldon Whitehouse	member of political party	Iowa	0.5142	False
+Chen Jieru	country of citizenship	Shilin Official Residence	0.5204	False
+José Luis Rodríguez Zapatero	country of citizenship	Venezuela	0.5006	False
+Brian Baker	country of citizenship	United States	0.5287	True
+Virgil Goode	country of citizenship	African American	0.5435	False
+Albert II of Belgium	country of citizenship	Emir	0.5296	False
+Lawrence Ferlinghetti	country of citizenship	United States	0.5471	True
+United Arab Emirates	country of citizenship	Emir	0.5037	?
+William Anders	country of citizenship	United States Air Force	0.5134	False
+Liberation Tigers of Tamil Eelam	country of citizenship	United States	0.5349	?
+United Arab Emirates	country of citizenship	Princely Family of Liechtenstein	0.5414	?
+1 fille & 4 types	country of citizenship	All My Children	0.5632	?
+Brian Baker	country of citizenship	Canada	0.5187	False
+Vladimir Putin	country of citizenship	Greece	0.5075	False
+Abdirashid Ali Shermarke	country of citizenship	Islamism	0.5161	False
+Muhammad Rafiq Tarar	country of citizenship	Pakistan	0.5113	True
+Dave Brubeck	country of citizenship	Africa	0.5357	False
+Brian Edmund Baker	country of citizenship	Australia	0.5184	False
+Henri Matisse	country of citizenship	French	0.5004	False
+1 fille & 4 types	country of citizenship	D'elles	0.5305	?
+Albert II of Belgium	country of citizenship	Princely Family of Liechtenstein	0.5538	False
+1 fille & 4 types	country of citizenship	D'eux	0.5458	?
+1 fille & 4 types	country of citizenship	Camelot	0.5478	?
+Pauline Kael	country of citizenship	Daily Express	0.5225	False
+Bryan Baker	country of citizenship	United States	0.5209	True
+1 fille & 4 types	country of citizenship	Unison	0.5253	?
+Albert II of Belgium	country of citizenship	Hebrew	0.5126	False
+S'il suffisait d'aimer	country of citizenship	Marsupilami	0.5175	?
+treason	country of citizenship	Saudi Arabia	0.5045	?
+Pauline Kael	country of citizenship	Creepy	0.5063	False
+Chile	country of citizenship	Cagliari	0.5039	?
+1 fille & 4 types	country of citizenship	Marsupilami	0.5662	?
+Hans-Adam II, Prince of Liechtenstein	country of citizenship	Princely Family of Liechtenstein	0.5436	False
+Holy Week	country of citizenship	French	0.5093	?
+Peter Dutton	country of citizenship	Australia	0.5039	True
+Italian Communist Party	country of citizenship	United States	0.5545	?
+Brian Baker	country of citizenship	Australia	0.5523	False
+Fanny Blankers-Koen Games	country of citizenship	United Kingdom	0.5258	?
+Hugo Banzer	country of citizenship	Bolivia	0.5070	True
+Pioneer movement	country of citizenship	Ghana	0.5289	?
+Philipp Rösler	country of citizenship	Germany	0.5234	True
+1 fille & 4 types	country of citizenship	Celine Dion	0.5589	?
+All My Children	country of citizenship	Marsupilami	0.5106	?
+Patricia A. Butenis	country of citizenship	United States	0.5512	True
+Mahinda Rajapaksa	country of citizenship	United States	0.5617	False
+Hans-Adam II, Prince of Liechtenstein	country of citizenship	Emir	0.5084	False
+Konrad Adenauer	country of citizenship	East Germany	0.5291	False
+Tamim bin Hamad Al Thani	country of citizenship	Princely Family of Liechtenstein	0.5289	False
+Eurocommunism	country of citizenship	United States	0.5010	?
+Bryan Baker	country of citizenship	Australia	0.5484	False
+One Heart	country of citizenship	Marsupilami	0.5169	?
+1 fille & 4 types	country of citizenship	Incognito tournée	0.5543	?
+Daniel François Malan	country of citizenship	South Africa	0.5091	True
+Stefanie Heinzmann	country of citizenship	Act of Parliament	0.5169	False
+Mohammed bin Rashid Al Maktoum	country of citizenship	Princely Family of Liechtenstein	0.5235	False
+Mehmed VI	country of citizenship	Ottoman Empire	0.5479	True
+Bryan Baker	country of citizenship	Canada	0.5093	False
+Hugh Capet of France	country of citizenship	France in the Middle Ages	0.5178	False
+Mao Zedong	country of citizenship	United States	0.5459	False
+
+2760 positives, 47692 negatives, 779748 unknowns
+0.00 positive 1.00 negative: average score 0.0210
+0.10 positive 0.90 negative: average score 0.0181
+0.20 positive 0.80 negative: average score 0.0214
+0.30 positive 0.70 negative: average score 0.0252
+0.40 positive 0.60 negative: average score 0.0365
+0.50 positive 0.50 negative: average score 0.0443
+0.60 positive 0.40 negative: average score 0.0470
+0.70 positive 0.30 negative: average score 0.0520
+0.80 positive 0.20 negative: average score 0.0527
+0.90 positive 0.10 negative: average score 0.0523
+1.00 positive 0.00 negative: average score 0.0616
+
+[0.00;0.10]: 4.80% true (2345 true 46482 false)
+[0.10;0.20]: 23.33% true (195 true 641 false)
+[0.20;0.30]: 24.45% true (89 true 275 false)
+[0.30;0.40]: 29.53% true (57 true 136 false)
+[0.40;0.50]: 29.88% true (49 true 115 false)
+[0.50;0.60]: 37.29% true (22 true 37 false)
+[0.60;0.70]: 27.27% true (3 true 8 false)
+[0.70;0.80]: no predictions in this range
+[0.80;0.90]: no predictions in this range
+[0.90;1.00]: no predictions in this range
+[0.00;0.20]: 5.11% true (2540 true 47122 false)
+[0.20;0.40]: 26.21% true (146 true 411 false)
+[0.40;0.60]: 31.84% true (71 true 152 false)
+[0.60;0.80]: 27.27% true (3 true 8 false)
+[0.80;1.00]: no predictions in this range
+Number of predictions above 0.1 : 3492
+Number of predictions above 0.5 : 115
+Number of predictions above 0.9 : 0
+Number of predictions above 0.95 : 0
+Number of predictions above 0.99 : 0
