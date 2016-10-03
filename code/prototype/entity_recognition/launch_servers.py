@@ -1,7 +1,7 @@
 # TODO: declare as dependency!
 
 #import atexit
-from prototype.lib import spotlight
+from prototype.entity_recognition import spotlight
 from prototype.lib import pbs_util
 from prototype.lib import zk
 import paths
@@ -24,7 +24,7 @@ class Job(object):
 
         port = self.i + 2222
         SCRIPT = (
-            "../cpulimit/cpulimit -l %d thirdparty/spotlight/spotlight %d" %
+            "../cpulimit/cpulimit -l %d prototype/entity_recognition/spotlight %d" %
             (CORES * 100, port)
         )
         # 4: not enough

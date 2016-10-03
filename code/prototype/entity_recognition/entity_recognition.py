@@ -1,15 +1,6 @@
-#!/usr/bin/python3
-
-"""
-Usage:
-    bazel run :add_spotlight \
-        --article=(...) \
-        --article=(...)
-"""
-
 import json
 import os.path
-from prototype.lib import spotlight
+from prototype.entity_recognition import spotlight
 from prototype.lib import article_repo
 import sys
 import time

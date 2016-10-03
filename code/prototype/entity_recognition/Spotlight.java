@@ -14,6 +14,6 @@ public class Spotlight {
 		} else {
 			port = "2222";
 		}
-		Server.main(new String[]{"thirdparty/spotlight/en", "http://localhost:" + port + "/rest"});
+		Server.main(new String[]{"prototype/entity_recognition/en", "http://localhost:" + port + "/rest"});
 	}
 }

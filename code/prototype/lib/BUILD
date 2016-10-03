@@ -228,33 +228,10 @@ py_library(
 )
 
 py_library(
-    name = "spotlight_lib",
-    #srcs_version = "PY3",
-    srcs = [
-        "spotlight.py",
-    ],
-    deps = [
-        ":zk_lib",
-    ],
-)
-
-py_library(
     name = "relations_lib",
     srcs = [
         "relations.py",
     ],
-)
-
-py_test(
-    name = "spotlight_test",
-    srcs = [
-        "spotlight_test.py",
-    ],
-    deps = [
-        ":spotlight_lib",
-    ],
-    srcs_version = "PY3",
-    default_python_version = "PY3",
 )
 
 py_test(

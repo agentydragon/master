@@ -1,7 +1,7 @@
 from prototype.lib import flags
 from prototype.lib import article_set
 from prototype.lib import mapper
-from prototype.lib import spotlight
+from prototype.entity_recognition import spotlight
 
 def main():
     flags.add_argument('--force_redo')
@@ -15,7 +15,7 @@ def main():
 
     def make_commandline(articles_slice):
         job_command = [
-            'prototype/add_spotlight/add_spotlight',
+            'prototype/entity_recognition/entity_recognition',
             '--spotlight_endpoint', spotlight_endpoint,
         ]
 
