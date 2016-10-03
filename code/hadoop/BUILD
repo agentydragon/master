@@ -119,51 +119,9 @@ java_test(
 )
 
 java_library(
-    name = "ParseXmlsToProtos",
-    srcs = [
-        "ParseXmlsToProtos.java",
-        "//:Sentence.java",
-    ],
-    deps = [
-        "//:com_google_protobuf_protobuf_java",
-        "@javax_xml_parsers_jaxp_api//jar",
-    ],
-)
-
-java_library(
-    name = "AnnotateCoreferences",
-    srcs = [
-        "AnnotateCoreferences.java",
-        "//:Sentence.java",
-    ],
-    deps = [
-        ":DBpediaClient",
-        "//:com_google_protobuf_protobuf_java",
-        "//:org_json_json",
-        "//:log4j_log4j",
-    ],
-)
-
-java_library(
     name = "Relations",
     srcs = [
         "Relations.java",
-    ],
-)
-
-java_library(
-    name = "GetTrainingSamples",
-    srcs = [
-        "GetTrainingSamples.java",
-        "//:Sentence.java",
-        "//:TrainingSamples.java",
-    ],
-    deps = [
-        "//:com_google_protobuf_protobuf_java",
-        "//:org_json_json",
-        ":WikidataClient",
-        ":Relations",
-        "//:log4j_log4j",
     ],
 )
 
@@ -179,89 +137,6 @@ java_library(
         # NOTE: undeclared deps >[
         "//:org_apache_httpcomponents_httpcore",
         "//:org_apache_httpcomponents_httpclient",
-    ],
-)
-
-java_test(
-    name = "ParseXmlsToProtosTest",
-    srcs = [
-        "ParseXmlsToProtosTest.java",
-        "//:Sentence.java",
-    ],
-    deps = [
-        ":ParseXmlsToProtos",
-        "//:com_google_protobuf_protobuf_java",
-        "@javax_xml_parsers_jaxp_api//jar",
-    ],
-    data = [
-        "//testdata:Obama.txt.out",
-        "//testdata:Obama.txt",
-    ],
-    test_class = "ParseXmlsToProtosTest",
-)
-
-java_library(
-    name = "GenerateTrainingSamples",
-    srcs = [
-        "GenerateTrainingSamples.java",
-        "//:Sentence.java",
-        "//:TrainingSamples.java",
-    ],
-    deps = [
-        "//:org_json_json",
-        ":WikidataClient",
-        ":GetTrainingSamples",
-        ":AnnotateCoreferences",
-        ":ParseXmlsToProtos",
-        "//:log4j_log4j",
-        "//:com_google_protobuf_protobuf_java",
-    ],
-)
-
-java_library(
-    name = "GenerateTrainingSamplesMapper",
-    srcs = [
-        "GenerateTrainingSamplesMapper.java",
-        "//:TrainingSamples.java",
-    ],
-    deps = [
-        ":GenerateTrainingSamples",
-        "//:org_apache_hadoop_hadoop_common",
-        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
-        "//:org_json_json",
-    ]
-)
-
-java_test(
-    name = "GenerateTrainingSamplesMapperTest",
-    srcs = [
-        "GenerateTrainingSamplesMapperTest.java",
-    ],
-    deps = [
-        ":GenerateTrainingSamplesMapper",
-        ":WikidataClient",
-        ":DocumentProcessorMapper",
-        ":ParseXmlsToProtos",
-        "//:log4j_log4j",
-    ],
-    data = [
-        "//testdata:tharde.json",
-        "//testdata:obama-short.json",
-    ],
-    test_class = "GenerateTrainingSamplesMapperTest",
-    timeout = "eternal",
-)
-
-java_binary(
-    name = "GenerateTrainingSamplesMain",
-    srcs = [
-        "GenerateTrainingSamplesMain.java",
-    ],
-    main_class = "GenerateTrainingSamplesMain",
-    deps = [
-        ":GenerateTrainingSamplesMapper",
-        "//:org_apache_hadoop_hadoop_common",
-        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
     ],
 )
 
@@ -290,6 +165,7 @@ java_library(
     ],
     deps = [
         ":SpotlightConnection",
+        ":CoreNLPInterface",
         "//:org_apache_hadoop_hadoop_common",
         "//:org_apache_hadoop_hadoop_mapreduce_client_core",
         "//:edu_stanford_nlp_stanford_corenlp",
