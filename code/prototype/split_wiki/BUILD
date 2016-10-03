@@ -20,16 +20,6 @@ py_binary(
     ],
 )
 
-py_test(
-    name = "split_wiki_test",
-    srcs = [
-        "split_wiki_test.py",
-    ],
-    deps = [
-        ":split_wiki_lib",
-    ],
-)
-
 py_binary(
     name = "launch",
     srcs = [

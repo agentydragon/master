@@ -15,7 +15,7 @@ barack_obama = 'Q76'
 united_states = 'Q30'
 potus = 'Q11696'
 
-client = wikidata.WikidataClient()
+client = wikidata.WikidataClient(wikidata.PUBLIC_WIKIDATA_ENDPOINT)
 triples = client.get_all_triples_of_entity(michelle_obama)
 
 # wdt:P26 wd:Q76

@@ -34,7 +34,9 @@ def parse_args():
     global parsed
     global parser
 
-    assert frozen
+    if not frozen:
+        make_parser(description='No description provided')
+
     parsed = True
     if args is None:
         args = parser.parse_args()

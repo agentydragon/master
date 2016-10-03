@@ -90,8 +90,6 @@ py_library(
     name = "parse_xmls_to_protos_lib",
     srcs = [
         "parse_xmls_to_protos.py",
-        #"//:sentence_pb2.py",
-        ":dbpedia_lib",
     ],
     deps = [
         ":sentence_lib",
@@ -128,6 +126,8 @@ py_test(
     ],
     deps = [
         ":parse_xmls_to_protos_lib",
+        ":dbpedia_lib",
+        ":sentence_lib",
     ],
     data = [
         "//testdata:Obama.txt",
@@ -252,6 +252,18 @@ py_test(
     ],
     deps = [
         ":spotlight_lib",
+    ],
+    srcs_version = "PY3",
+    default_python_version = "PY3",
+)
+
+py_test(
+    name = "article_repo_test",
+    srcs = [
+        "article_repo_test.py",
+    ],
+    deps = [
+        ":article_repo_lib",
     ],
     srcs_version = "PY3",
     default_python_version = "PY3",

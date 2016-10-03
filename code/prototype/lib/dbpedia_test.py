@@ -2,7 +2,7 @@ import sys
 
 from prototype.lib import dbpedia
 
-client = dbpedia.DBpediaClient()
+client = dbpedia.DBpediaClient(endpoint=dbpedia.PUBLIC_DBPEDIA_ENDPOINT)
 
 wikidata_id = client.dbpedia_uri_to_wikidata_id('http://dbpedia.org/resource/Barack_Obama')
 print(wikidata_id)

@@ -8,7 +8,7 @@ flags.add_argument('--dbpedia_endpoint',
                          'Example: http://dbpedia.org/sparql, '
                          'http://hador:3030/wikidata/query'))
 
-default_dbpedia_url = 'http://dbpedia.org/sparql'
+PUBLIC_DBPEDIA_ENDPOINT = 'http://dbpedia.org/sparql'
 
 def get_default_endpoint_url():
     endpoint = flags.parse_args().dbpedia_endpoint
@@ -23,7 +23,7 @@ def get_default_endpoint_url():
     raise Exception('No DBpedia endpoint available.')
 
     # print("WARN: Falling back to Wikimedia Foundation's DBpedia")
-    # return default_dbpedia_url
+    # return PUBLIC_DBPEDIA_ENDPOINT
 
 class DBpediaClient(object):
     def __init__(self, endpoint=None):
