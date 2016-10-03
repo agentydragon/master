@@ -12,6 +12,3 @@
 
 4. Make training samples for distant supervision (both positive and negative)
 	bazel run //prototype/make_training_samples
-
-5. Join
-	bazel run //prototype/make_training_samples:join
