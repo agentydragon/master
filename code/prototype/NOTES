@@ -8,7 +8,7 @@
 	bazel run //prototype/entity_recognition:launch -- --max_articles=5
 
 3. Add parses to relevant articles
-	bazel run //prototype/add_parses:launch -- --max_articles=5
+	bazel run //prototype/parse:launch -- --max_articles=5
 
 4. Make training samples for distant supervision (both positive and negative)
 	bazel run //prototype/make_training_samples

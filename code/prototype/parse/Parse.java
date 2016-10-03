@@ -2,7 +2,7 @@ import org.json.*;
 import java.io.*;
 import java.lang.*;
 
-public class AddParses {
+public class Parse {
 	private CoreNLPInterface corenlpInterface = new CoreNLPInterface();
 
 	private void processArticle(String title) {
@@ -40,6 +40,6 @@ public class AddParses {
 	}
 
 	public static void main(String[] args) {
-		new AddParses().run(args);
+		new Parse().run(args);
 	}
 }

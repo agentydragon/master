@@ -1,12 +1,12 @@
 java_binary(
-    name = "add_parses",
+    name = "parse",
     srcs = [
-        "AddParses.java",
+        "Parse.java",
     ],
-    main_class = "AddParses",
+    main_class = "Parse",
     deps = [
+        ":CoreNLPInterface",
         "//prototype/lib:ArticleRepository",
-        "//hadoop:CoreNLPInterface",
         "//:org_json_json",
     ],
 )
@@ -22,7 +22,20 @@ py_binary(
         "//prototype/lib:article_set_lib",
     ],
     data = [
-        ":add_parses",
+        ":parse",
         "@cpulimit//:cpulimit_bin",
     ],
+)
+
+java_library(
+    name = "CoreNLPInterface",
+    srcs = [
+        "CoreNLPInterface.java",
+    ],
+    deps = [
+        "//:edu_stanford_nlp_stanford_corenlp",
+        "@corenlp_models//jar",
+        "@corenlp_srparser_model//jar",
+    ],
+    visibility = ["//visibility:public"],
 )

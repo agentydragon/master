@@ -30,34 +30,6 @@ java_binary(
 )
 
 java_library(
-    name = "CoreNLPInterface",
-    srcs = [
-        "CoreNLPInterface.java",
-    ],
-    deps = [
-        "//:edu_stanford_nlp_stanford_corenlp",
-        # TODO: must be installed separately
-        "@corenlp_models//jar",
-        "@corenlp_srparser_model//jar",
-        # TODO: what about models?
-        # "//:org_apache_hadoop_hadoop_mapreduce_client_core",
-    ],
-)
-
-java_binary(
-    name = "CoreNLP",
-    srcs = [
-        "CoreNLP.java",
-    ],
-    main_class = "CoreNLP",
-    deps = [
-        "//:org_apache_hadoop_hadoop_common",
-        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
-        ":CoreNLPInterface",
-    ],
-)
-
-java_library(
     name = "RandomSelectorMapper",
     srcs = [
         "RandomSelectorMapper.java",
@@ -150,11 +122,7 @@ java_binary(
         ":DocumentProcessorMapper",
         "//:org_apache_hadoop_hadoop_common",
         "//:org_apache_hadoop_hadoop_mapreduce_client_core",
-        "//:edu_stanford_nlp_stanford_corenlp",
         "//:commons_io_commons_io",
-        # TODO: must be installed separately
-        "@corenlp_models//jar",
-        "@corenlp_srparser_model//jar",
     ],
 )
 
@@ -165,13 +133,9 @@ java_library(
     ],
     deps = [
         ":SpotlightConnection",
-        ":CoreNLPInterface",
+        "//prototype/parse:CoreNLPInterface",
         "//:org_apache_hadoop_hadoop_common",
         "//:org_apache_hadoop_hadoop_mapreduce_client_core",
-        "//:edu_stanford_nlp_stanford_corenlp",
-        # TODO: must be installed separately
-        "@corenlp_models//jar",
-        "@corenlp_srparser_model//jar",
         "//:org_json_json",
     ],
 )
@@ -195,5 +159,18 @@ java_library(
         "SpotlightConnection.java",
         "SpotlightSingleConnection.java",
         "SpotlightPooledConnection.java",
+    ],
+)
+
+java_binary(
+    name = "CoreNLP",
+    srcs = [
+        "CoreNLP.java",
+    ],
+    main_class = "CoreNLP",
+    deps = [
+        "//:org_apache_hadoop_hadoop_common",
+        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
+        "//prototype/parse:CoreNLPInterface",
     ],
 )

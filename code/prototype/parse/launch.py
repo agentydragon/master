@@ -17,7 +17,7 @@ def main():
             '../cpulimit/cpulimit',
             '--limit=' + str(CORES * 100),
             '--include-children',
-            'prototype/add_parses/add_parses'
+            'prototype/parse/parse'
         ] + articles_slice
 
     mapper.launch_in_slices(
