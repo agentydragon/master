@@ -27,7 +27,6 @@ py_binary(
     ],
     data = [
         ":train_classifiers",
-        "@cpulimit//:cpulimit_bin",
     ],
     default_python_version = "PY3",
     srcs_version = "PY3",

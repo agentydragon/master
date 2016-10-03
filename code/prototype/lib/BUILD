@@ -161,6 +161,9 @@ py_library(
         ":file_util_lib",
         ":pbs_util_lib",
     ],
+    data = [
+        "@cpulimit//:cpulimit_bin",
+    ],
 )
 
 py_library(

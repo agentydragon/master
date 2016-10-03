@@ -23,7 +23,6 @@ py_binary(
     ],
     data = [
         ":parse",
-        "@cpulimit//:cpulimit_bin",
     ],
 )
 

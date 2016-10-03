@@ -8,15 +8,8 @@ def main():
     flags.make_parser(description='TODO')
     args = flags.parse_args()
 
-    CORES = 16
-
     def make_commandline(relations_slice):
-        job_command = [
-            '../cpulimit/cpulimit',
-            '--limit=' + str(CORES * 100),
-            '--include-children',
-            'prototype/train_classifiers/train_classifiers',
-        ]
+        job_command = ['prototype/train_classifiers/train_classifiers']
         for relation in relations_slice:
             job_command.extend(['--relation', relation])
         return job_command
@@ -32,7 +25,7 @@ def main():
         args.relations_per_job,
         make_commandline,
         slice_to_walltime,
-        cores=CORES,
+        cores=16,
         ram='8gb'
     )
 

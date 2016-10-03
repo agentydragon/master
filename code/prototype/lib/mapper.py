@@ -30,12 +30,21 @@ def launch_in_slices(job_name, items, slice_size,
         if walltime is None:
             walltime = "04:00:00"
 
-        launch_job_for_slice(i, job_name, log_base_dir,
-                             slice_to_commandline(slice_items),
-                             walltime_estimate=str(walltime),
-                             cores=cores,
-                             ram=ram,
-                             scratch=scratch)
+        commandline = slice_to_commandline(slice_items)
+        commandline = [
+            '../cpulimit/cpulimit',
+            '--limit=' + str(CORES * 100),
+            '--include-children',
+        ] + commandline
+
+        launch_job_for_slice(
+            i, job_name, log_base_dir,
+            commandline,
+            walltime_estimate=str(walltime),
+            cores=cores,
+            ram=ram,
+            scratch=scratch
+        )
 
 
 def launch_job_for_slice(slice_index, job_name, log_base_dir,
