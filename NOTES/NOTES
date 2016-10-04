@@ -98,3 +98,48 @@ Stash:
 
 job monitoring: pbsmon
 	http://metavo.metacentrum.cz/pbsmon2/person
+
+2016-10-04
+	https://everest.hds.utc.fr/doku.php?id=en:2and3ways
+	https://everest.hds.utc.fr/doku.php?id=en:transe
+
+	Hadoop, Pig (programming tool), Spark, Flume (jako v Googlu?), Oozie (workflow scheduling), Storm
+	list of properties: https://www.wikidata.org/wiki/Wikidata:List_of_properties/en
+
+	brmson GitHub: brmson/label-lookup
+
+	GPU stroje na Metacentru:
+		https://wiki.metacentrum.cz/wiki/GPU_stroje
+
+		Java relation extraction: jSRE
+		matt-gardner/pra
+		http://rtw.ml.cmu.edu/emnlp2015_sfe/
+		http://www.akbc.ws/2014 (conference on automated knowledge base completion)
+		https://www.suchanek.name/work/publications/
+			(Fabian M. Suchanek - AKBC papers)
+		AKBC 2016: http://www.akbc.ws/2016/index.html
+
+		TAC-KBP (https://tac.nist.gov/2015/KBP/)
+			(Text Analysis Conference - Knowledge Base Population)
+			cold start tools and resources: https://tac.nist.gov/2015/KBP/ColdStart/tools.html
+			https://github.com/jamesmayfield/ColdStart
+			https://tac.nist.gov/2016/KBP/
+
+		Reasoning with Neural Tensor Networks for Knowledge Base Completion
+			http://www.socher.org/index.php/Main/ReasoningWithNeuralTensorNetworksForKnowledgeBaseCompletion
+
+		Knowledge Graph Refinement: A Survey of Approaches and Evaluation Methods
+			http://www.semantic-web-journal.net/content/knowledge-graph-refinement-survey-approaches-and-evaluation-methods
+
+		Microsofti dataset:
+			https://www.microsoft.com/en-us/download/details.aspx?id=52312
+
+	save test+train matrices? (what can I depend on?)
+
+	TODO: subprocess.call should always check rv
+	use Hadoop tools?
+
+	http://rtw.ml.cmu.edu/emnlp2015_sfe/
+
+	Fuseki: "address already in use" when starting >once on 1 machine
+		+ Fuseki must use distinct (run) dirs...
