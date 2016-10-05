@@ -6,6 +6,7 @@ py_binary(
     deps = [
         "//prototype/lib:wikidata_lib",
         "//prototype/lib:flags_lib",
+        "//:paths_lib",
     ],
     default_python_version = "PY3",
     srcs_version = "PY3",
