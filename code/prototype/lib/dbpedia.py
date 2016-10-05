@@ -18,7 +18,7 @@ def get_default_endpoint_url():
     zk_endpoint = zk.get_dbpedia_endpoint()
     if zk_endpoint:
         print("Grabbed DBpedia endpoint from ZK:", zk_endpoint)
-        return ('http://%s/dbpedia-sameas/query' % zk_endpoint)
+        return zk_endpoint
 
     raise Exception('No DBpedia endpoint available.')
 

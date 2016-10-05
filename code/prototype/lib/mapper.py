@@ -20,7 +20,6 @@ def launch_in_slices(job_name, items, slice_size,
     log_base_dir = paths.LOG_PATH + "/" + job_name + "/" + now.strftime('%Y%m%d-%H%M%S')
     file_util.ensure_dir(log_base_dir)
 
-
     for i, slice_items in enumerate(slices):
         if slice_to_walltime:
             walltime = slice_to_walltime(slice_items)

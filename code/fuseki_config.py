@@ -1,8 +1,8 @@
-def write_config(path, wikidata_dataset, dbpedia_sameas_dataset):
+def write_config(path, dataset):
     with open(path, 'w') as f:
-        f.write(get_config(wikidata_dataset, dbpedia_sameas_dataset))
+        f.write(get_config(dataset))
 
-def get_config(wikidata_dataset, dbpedia_sameas_dataset):
+def get_config(dataset):
     # TODO: timeout as seconds
     return ("""
 @prefix fuseki: <http://jena.apache.org/fuseki#> .
@@ -13,7 +13,7 @@ def get_config(wikidata_dataset, dbpedia_sameas_dataset):
 @prefix :       <#> .
 
 [] rdf:type fuseki:Server ;
-   fuseki:services (<#service-wikidata> <#service-dbpedia-sameas>) .
+   fuseki:services (<#service-merged>) .
 
 # Declaration additional assembler items.
 [] ja:loadClass "org.apache.jena.tdb.TDB" .
@@ -24,22 +24,13 @@ tdb:GraphTDB    rdfs:subClassOf  ja:Model .
 
 # fuseki:serviceReadGraphStore      "get" ;      # SPARQL Graph store protocol (read only)
 
-<#service-wikidata> rdf:type fuseki:Service ;
-    fuseki:name         "wikidata" ; # http://host:port/wikidata
+<#service-merged> rdf:type fuseki:Service ;
+    fuseki:name         "merged" ; # http://host:port/merged
     fuseki:serviceQuery "query" ;    # SPARQL query service
-    fuseki:dataset      <#dataset-wikidata> ; .
+    fuseki:dataset      <#dataset-merged> ; .
 
-<#service-dbpedia-sameas> rdf:type fuseki:Service ;
-    fuseki:name         "dbpedia-sameas" ; # http://host:port/dbpedia-sameas
-    fuseki:serviceQuery "query" ;    # SPARQL query service
-    fuseki:dataset      <#dataset-dbpedia-sameas> ; .
-
-<#dataset-wikidata> rdf:type tdb:DatasetTDB ; tdb:location "%s" ;
+<#dataset-merged> rdf:type tdb:DatasetTDB ; tdb:location "%s" ;
     # Query timeout on this dataset (20min, 1200000 milliseconds)
     ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "1200000" ] ;
     .
-<#dataset-dbpedia-sameas> rdf:type tdb:DatasetTDB ; tdb:location "%s" ;
-    # Query timeout on this dataset (20min, 1200000 milliseconds)
-    ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "1200000" ] ;
-    .
-""") % (wikidata_dataset, dbpedia_sameas_dataset)
+""") % (dataset)

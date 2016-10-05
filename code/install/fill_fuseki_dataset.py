@@ -3,7 +3,7 @@ from prototype.lib import file_util
 import subprocess
 import paths
 
-dataset_path = paths.WORK_DIR + '/fuseki-datasets/dbpedia-sameas'
+dataset_path = paths.WORK_DIR + '/fuseki-datasets/merged'
 
 print("cleaning output")
 subprocess.call([
@@ -40,5 +40,6 @@ subprocess.call([
 print("loading...")
 jena.load_ttl_file(
     dataset_path,
-    ttl_file_path="interlanguage-links_en.ttl"
+    ttl_file_paths=[paths.WIKIDATA_TTL_DUMP_FILE,
+                    "interlanguage-links_en.ttl"]
 )

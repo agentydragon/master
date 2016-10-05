@@ -12,13 +12,27 @@ sh_binary(
 )
 
 py_binary(
-    name = "fill_dbpedia",
+    name = "fill_fuseki_dataset",
     srcs = [
-        "fill_dbpedia.py",
+        "fill_fuseki_dataset.py",
     ],
     deps = [
         "//thirdparty/jena:jena_lib",
         "//prototype/lib:file_util_lib",
         "//:paths_lib",
+    ],
+)
+
+py_binary(
+    name = "launch_fill_fuseki_dataset",
+    srcs = [
+        "launch_fill_fuseki_dataset.py",
+    ],
+    deps = [
+        "//prototype/lib:pbs_util_lib",
+        "//:paths_lib",
+    ],
+    data = [
+        ":fill_fuseki_dataset",
     ],
 )

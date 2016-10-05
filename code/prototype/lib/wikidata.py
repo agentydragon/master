@@ -35,7 +35,7 @@ def get_default_endpoint_url():
     zk_endpoint = zk.get_wikidata_endpoint()
     if zk_endpoint:
         print("Grabbed Wikidata endpoint from ZK:", zk_endpoint)
-        return ('http://%s/wikidata/query' % zk_endpoint)
+        return zk_endpoint
 
     raise Exception('No Wikidata endpoint available.')
 
