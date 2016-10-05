@@ -172,6 +172,10 @@ py_library(
     srcs = [
         "pbs_util.py",
     ],
+    deps = [
+        "//:paths_lib",
+        ":file_util_lib",
+    ],
 )
 
 py_library(

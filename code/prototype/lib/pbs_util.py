@@ -1,6 +1,9 @@
 import subprocess
 import shlex
 import sys
+from prototype.lib import file_util
+import paths
+import datetime
 
 JOBSCRIPT_HEADER = """
 #!/bin/bash
@@ -65,25 +68,34 @@ def launch(walltime, node_spec, job_name, script, error_path=None, output_path=N
     qsub_command = ['qsub',
                     '-l', 'walltime=' + walltime,
                     '-l', node_spec,
-                    '-m', 'abe',
+                    '-m', 'abe', # Send mail when job terminates.
                     '-N', job_name
                     ]
-    if error_path:
-        qsub_command.extend(['-e', error_path])
-    if output_path:
-        qsub_command.extend(['-o', output_path])
+    now = datetime.datetime.now()
+    basedir = paths.LOG_PATH + "/" + job_name + "/" + now.strftime("%Y%m%d-%H%M%S")
+    file_util.ensure_dir(basedir)
+
+    if error_path is None:
+        error_path = basedir + "/stderr"
+    if output_path is None:
+        output_path = basedir + "/stderr"
+
+    qsub_command.extend(['-e', error_path])
+    qsub_command.extend(['-o', output_path])
     # print(qsub_command)
     job_script = (JOBSCRIPT_HEADER + script)
 
-    js_path = job_name + '.sh'
+    js_path = basedir + "/" + job_name + '.sh'
     with open(js_path, 'w') as jobscript_file:
         jobscript_file.write(job_script)
     #print(job_script)
 
     qsub_command.append(js_path)
-    popen = subprocess.Popen(qsub_command,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
+    popen = subprocess.Popen(
+        qsub_command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
     stdoutdata, stderrdata = popen.communicate()
     stdoutdata = stdoutdata.decode('utf-8')
     stderrdata = stderrdata.decode('utf-8')
@@ -94,8 +106,17 @@ def launch(walltime, node_spec, job_name, script, error_path=None, output_path=N
         sys.exit(1)
     return Job(stdoutdata.strip())
 
+# TODO: select error_path and output_path by default
 def launch_job(walltime, node_spec, job_name, job_command,
                error_path=None, output_path=None):
+    assert isinstance(job_command, list)
+
     command = ' '.join(map(shlex.quote, job_command))
-    return launch(walltime, node_spec, job_name, command,
-                  error_path=error_path, output_path=output_path)
+    return launch(
+        walltime,
+        node_spec,
+        job_name,
+        command,
+        error_path=error_path,
+        output_path=output_path
+    )
