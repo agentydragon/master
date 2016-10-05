@@ -1,6 +1,5 @@
 import json
 import os.path
-from prototype.lib import parse_xmls_to_protos
 from prototype.lib import article_repo
 from prototype.lib import dbpedia
 import sys
@@ -23,26 +22,18 @@ for title in args.articles:
         print("Doesn't exist")
         continue
 
-    article_data = repo.load_article(title)
-    if article_data.proto:
-        print("Proto already exists")
-        continue
-    if not article_data.corenlp_xml:
+    document = repo.load_article(title)
+    if not document.corenlp_xml:
         print("Not parsed yet")
         continue
-    if not article_data.spotlight_json:
+    if not document.spotlight_json:
         print("Not Spotlighted yet")
         continue
     # Skip if already done.
-    plaintext = article_data.plaintext
+    plaintext = document.plaintext
     if plaintext.strip() == '':
         print("Empty article")
         continue
-    proto = parse_xmls_to_protos.document_to_proto(
-        title = title,
-        document = article_data,
-        dbpedia_client = dbpedia_client
-    )
-    article_data.proto = proto
-    repo.write_article(title, article_data)
+    document.add_proto_to_document(dbpedia_client = dbpedia_client)
+    repo.write_article(title, document)
     print("Done")

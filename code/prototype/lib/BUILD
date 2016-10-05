@@ -87,16 +87,6 @@ py_library(
 )
 
 py_library(
-    name = "parse_xmls_to_protos_lib",
-    srcs = [
-        "parse_xmls_to_protos.py",
-    ],
-    deps = [
-        ":sentence_lib",
-    ],
-)
-
-py_library(
     name = "dbpedia_lib",
     srcs = [
         "dbpedia.py",
@@ -125,7 +115,6 @@ py_test(
         "parse_xmls_to_protos_test.py",
     ],
     deps = [
-        ":parse_xmls_to_protos_lib",
         ":dbpedia_lib",
         ":sentence_lib",
     ],

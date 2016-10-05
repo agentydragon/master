@@ -42,9 +42,5 @@ def document_to_html(document):
     return html
 
 article_repository = article_repo.ArticleRepo()
-article = article_repository.load_article("Douglas Adams")
-proto = parse_xmls_to_protos.document_to_proto(
-    title = "Douglas Adams",
-    document = article
-)
-print(document_to_html(proto))
+document = article_repository.load_article("Douglas Adams")
+print(document_to_html(document))

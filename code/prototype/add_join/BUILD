@@ -5,7 +5,6 @@ py_binary(
     ],
     deps = [
         "//:paths_lib",
-        "//prototype/lib:parse_xmls_to_protos_lib",
         "//prototype/lib:article_repo_lib",
         "//prototype/lib:dbpedia_lib",
     ],

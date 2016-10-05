@@ -1,7 +1,6 @@
 import json
 from prototype.lib import dbpedia
 from prototype.lib import sentence
-from prototype.lib import parse_xmls_to_protos
 
 dbpedia_client = dbpedia.DBpediaClient(dbpedia.PUBLIC_DBPEDIA_ENDPOINT)
 
@@ -12,17 +11,20 @@ with open('testdata/Obama.txt') as f:
 with open('testdata/Obama.spotlight.json') as f:
     spotlight_json = json.load(f)
 
-document_proto = parse_xmls_to_protos.document_to_proto(
+document = sentence.SavedDocument(
+    plaintext = plaintext,
+    corenlp_xml = corenlp_xml,
+    spotlight_json = spotlight_json,
+    proto = None,
     title = 'hello',
-    document = sentence.SavedDocument(
-        plaintext = plaintext,
-        corenlp_xml = corenlp_xml,
-        spotlight_json = spotlight_json,
-        proto = None,
-        title = 'hello'
-    ),
-    dbpedia_client = dbpedia_client
+
+    sentences = None,
+    coreferences = None,
+    spotlight_mentions = None,
 )
 
-print(str(document_proto))
+document.add_proto_to_document(dbpedia_client)
+print(str(document.sentences))
+print(str(document.coreferences))
+print(str(document.spotlight_mentions))
 # TODO

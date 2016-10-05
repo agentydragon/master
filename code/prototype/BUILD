@@ -32,7 +32,6 @@ py_binary(
     ],
     deps = [
         "//prototype/lib:article_repo_lib",
-        "//prototype/lib:parse_xmls_to_protos_lib",
         "//:paths_lib",
     ],
     default_python_version = "PY3",
