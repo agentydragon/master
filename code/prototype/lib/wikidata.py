@@ -59,18 +59,18 @@ class WikidataClient(object):
             return self.forward_cache[wikidata_id]
 
         # print('forward for', wikidata_id)
-        results = self.wikidata_client.get_results("""
+        results = self.wikidata_client.get_result_values("""
             SELECT ?rel ?other
             WHERE { wd:%s ?rel ?other . }
             LIMIT %d
         """ % (wikidata_id, LIMIT))
 
         properties=[]
-        for x in results['results']['bindings']:
+        for x in results:
             # print(x)
             subject = wikidata_util.wikidata_entity_prefix + wikidata_id
-            rel = x['rel']['value']
-            other = x['other']['value']
+            rel = x['rel']
+            other = x['other']
 
             triple = wikidata_util.transform_relation(subject, rel, other)
             if triple:
@@ -87,16 +87,16 @@ class WikidataClient(object):
             return self.backward_cache[wikidata_id]
 
         #print('backward for', wikidata_id)
-        results = self.wikidata_client.get_results("""
+        results = self.wikidata_client.get_result_values("""
             SELECT ?rel ?other
             WHERE { ?other ?rel wd:%s . }
             LIMIT %d
         """ % (wikidata_id, LIMIT))
 
         properties=[]
-        for x in results['results']['bindings']:
-            rel = x['rel']['value']
-            other = x['other']['value']
+        for x in results:
+            rel = x['rel']
+            other = x['other']
             subject = wikidata_util.wikidata_entity_prefix + wikidata_id
 
             triple = wikidata_util.transform_relation(other, rel, subject)
@@ -109,7 +109,7 @@ class WikidataClient(object):
         return properties
 
     def get_holding_relations_between(self, s, o):
-        results = self.wikidata_client.get_results("""
+        results = self.wikidata_client.get_result_values("""
             SELECT ?rel
             WHERE { wd:%s ?rel wd:%s . }
             LIMIT %s
@@ -118,8 +118,8 @@ class WikidataClient(object):
         # TODO: cache?
 
         rels = []
-        for x in results['results']['bindings']:
-            rel = x['rel']['value']
+        for x in results:
+            rel = x['rel']
             rel = wikidata_util.normalize_relation(rel)
             if rel is not None:
                 rels.append(rel)
@@ -149,10 +149,10 @@ class WikidataClient(object):
                 ?subject wdp:%s ?object
             }
         """ % (join_entities(entities), relation)
-        results = self.wikidata_client.get_results(query)
+        results = self.wikidata_client.get_result_values(query)
         subjects = set()
-        for x in results['results']['bindings']:
-            subject = x['subject']['value']
+        for x in results:
+            subject = x['subject']
             subjects.add(wikidata_util.wikidata_entity_url_to_entity_id(subject))
         return subjects
 
@@ -164,10 +164,10 @@ class WikidataClient(object):
                 ?subject wdp:%s ?object
             }
         """ % (join_entities(entities), relation)
-        results = self.wikidata_client.get_results(query)
+        results = self.wikidata_client.get_result_values(query)
         objects = set()
-        for x in results['results']['bindings']:
-            obj = x['object']['value']
+        for x in results:
+            obj = x['object']
             objects.add(wikidata_util.wikidata_entity_url_to_entity_id(obj))
         return objects
 
@@ -210,14 +210,14 @@ class WikidataClient(object):
                 ?s ?p ?o
             }
         """ % (join_entities(wikidata_ids), join_relations(relations))
-        results = self.wikidata_client.get_results(query)
+        results = self.wikidata_client.get_result_values(query)
         pairs = set()
-        for row in results['results']['bindings']:
-            rel = row['p']['value']
+        for row in results:
+            rel = row['p']
             rel = wikidata_util.normalize_relation(rel)
             if not rel:
                 continue
-            object = row['o']['value']
+            object = row['o']
             if not wikidata_util.is_wikidata_entity_url(object):
                 continue
             object = wikidata_util.wikidata_entity_url_to_entity_id(object)
@@ -243,14 +243,14 @@ class WikidataClient(object):
                 ?s ?p ?o
             }
         """ % (join_entities(wikidata_ids), join_relations(relations))
-        results = self.wikidata_client.get_results(query)
+        results = self.wikidata_client.get_result_values(query)
         pairs = set()
-        for row in results['results']['bindings']:
-            rel = row['p']['value']
+        for row in results:
+            rel = row['p']
             rel = wikidata_util.normalize_relation(rel)
             if not rel:
                 continue
-            subject = row['s']['value']
+            subject = row['s']
             if not wikidata_util.is_wikidata_entity_url(subject):
                 continue
             subject = wikidata_util.wikidata_entity_url_to_entity_id(subject)
@@ -270,9 +270,9 @@ class WikidataClient(object):
                 ?s ?p ?o
             }
         """ % (join_entities(wikidata_ids))
-        results = self.wikidata_client.get_results(query)
-        for row in results['results']['bindings']:
-            rel = row['p']['value']
+        results = self.wikidata_client.get_result_values(query)
+        for row in results:
+            rel = row['p']
             rel = wikidata_util.normalize_relation(rel)
             if rel:
                 rels.add(rel)
@@ -284,9 +284,9 @@ class WikidataClient(object):
                 ?s ?p ?o
             }
         """ % (x)
-        results = self.wikidata_client.get_results(query)
-        for row in results['results']['bindings']:
-            rel = row['p']['value']
+        results = self.wikidata_client.get_result_values(query)
+        for row in results:
+            rel = row['p']
             rel = wikidata_util.normalize_relation(rel)
             if rel:
                 rels.add(rel)
@@ -307,12 +307,12 @@ class WikidataClient(object):
                 ?s ?p ?o
             }
         """ % (x, x, join_relations(relations))
-        results = self.wikidata_client.get_results(query)
+        results = self.wikidata_client.get_result_values(query)
         triples = []
-        for x in results['results']['bindings']:
-            subject = x['s']['value']
-            rel = x['p']['value']
-            other = x['o']['value']
+        for x in results:
+            subject = x['s']
+            rel = x['p']
+            other = x['o']
             triple = wikidata_util.transform_relation(subject, rel, other)
             if triple:
                 # print(triple)
@@ -334,14 +334,14 @@ class WikidataClient(object):
 
 
     def fetch_label(self, entity_id):
-        results = self.wikidata_client.get_results("""
+        results = self.wikidata_client.get_result_values("""
             SELECT ?label
             WHERE { wd:%s rdfs:label ?label . FILTER (langMatches(lang(?label),"en")) }
         """ % entity_id)
-        if len(results['results']['bindings']) == 0:
+        if len(results) == 0:
             return None
         else:
-            return results['results']['bindings'][0]['label']['value']
+            return results[0]['label']
 
     def get_entity_name(self, entity_id):
 #        self.load_cache()
@@ -393,7 +393,7 @@ class WikidataClient(object):
             ids_batch = ids[i:i+batch_size]
 
             ids_string = join_entities(ids_batch)
-            results = self.wikidata_client.get_results("""
+            results = self.wikidata_client.get_result_values("""
                 SELECT ?x ?label
                 WHERE {
                     VALUES ?x { %s }
@@ -401,9 +401,9 @@ class WikidataClient(object):
                     FILTER (langMatches(lang(?label),"en"))
                 }
             """ % ids_string)
-            for row in results['results']['bindings']:
-                entity = wikidata_util.wikidata_entity_url_to_entity_id(row['x']['value'])
-                label = row['label']['value']
+            for row in results:
+                entity = wikidata_util.wikidata_entity_url_to_entity_id(row['x'])
+                label = row['label']
                 labels[entity] = label
                 self.name_cache[entity] = label
         return labels
