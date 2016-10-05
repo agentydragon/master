@@ -32,7 +32,7 @@ def launch_in_slices(job_name, items, slice_size,
         commandline = slice_to_commandline(slice_items)
         commandline = [
             '../cpulimit/cpulimit',
-            '--limit=' + str(CORES * 100),
+            '--limit=' + str(cores * 100),
             '--include-children',
         ] + commandline
 
