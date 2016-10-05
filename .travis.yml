@@ -19,5 +19,5 @@ before_install:
 script:
   - cp ci/bazelrc code/.bazelrc
   - cd code
-  - bazel test //prototype/lib:all
+  - bazel test --test_output=streamed //prototype/lib:all
 #  - bazel test //...
