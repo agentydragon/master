@@ -143,3 +143,19 @@ job monitoring: pbsmon
 
 	Fuseki: "address already in use" when starting >once on 1 machine
 		+ Fuseki must use distinct (run) dirs...
+
+implementation:
+	https://minhlab.wordpress.com/2014/12/01/knowledge-base-completion-101/ -- artificial sample and learning
+
+https://github.com/alexandres/lexvec
+
+http://research.microsoft.com/en-us/downloads/3a9bf02d-b791-4e95-b88d-389feef3e421/
+	knowledge base completion dataset
+
+http://benjaminbolte.com/blog/2016/keras-language-modeling.html
+
+18548 seconds for TDB builk loader
+
+TODO: shard by md5?
+
+eClub Slack: https://eclubcvut.slack.com/messages
