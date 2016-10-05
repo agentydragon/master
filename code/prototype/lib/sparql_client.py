@@ -1,16 +1,32 @@
 import SPARQLWrapper
+import re
 import time
 import urllib
 import urllib.error
 from prototype.lib import flags
 import http.client
 
-STANDARD_PREFIXES = """
-PREFIX owl: <http://www.w3.org/2002/07/owl#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX wd: <http://www.wikidata.org/entity/>
-PREFIX wdp: <http://www.wikidata.org/prop/direct/>
-"""
+PREFIXES = {
+    'owl': 'http://www.w3.org/2002/07/owl#',
+    'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
+    'wd': 'http://www.wikidata.org/entity/',
+    'wdp': 'http://www.wikidata.org/prop/direct/',
+    'dbr': 'http://dbpedia.org/resource/',
+}
+
+STANDARD_PREFIXES = ""
+for key, url in PREFIXES.items():
+    STANDARD_PREFIXES += "PREFIX %s: <%s>\n" % (key, url)
+
+r = re.compile('^[a-zA-Z_]*$')
+
+def url_to_query(url):
+    for key, prefix in PREFIXES.items():
+        if url.startswith(prefix):
+            suffix = url[len(prefix):]
+            if r.match(suffix):
+                return key + ':' + suffix
+    return '<%s>' % url
 
 """
 # get entity name

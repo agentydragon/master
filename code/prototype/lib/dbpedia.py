@@ -35,6 +35,7 @@ class DBpediaClient(object):
         self.dbpedia_client = sparql_client.SPARQLClient(endpoint)
 
     def dbpedia_uris_to_wikidata_ids(self, uris):
+        uris = list(sorted(uris))
         to_fetch = []
         result = {}
         for uri in uris:
@@ -44,23 +45,25 @@ class DBpediaClient(object):
                 to_fetch.append(uri)
 
         # TODO: Batching?
+        batch_size = 100
+        for i in range(0, len(to_fetch), batch_size):
+            uri_batch = to_fetch[i:i+batch_size]
 
-        uris_list = ' '.join(('<%s>' % uri) for uri in uris)
-        results = self.dbpedia_client.get_result_values("""
-            SELECT ?entity ?same
-            WHERE {
-                VALUES ?entity { %s } .
-                ?entity owl:sameAs ?same .
-            }
-        """ % (uris_list))
-        for row in results:
-            uri = x['entity']
-            value = x['same']
-            if wikidata_util.is_wikidata_entity_url(value):
-                wikidata_entity = wikidata_util.wikidata_entity_url_to_entity_id(value)
-                assert uri not in result
-                result[uri] = wikidata_entity
-                self.dbpedia_to_wikidata_cache[uri] = wikidata_entity
+            uris_list = ' '.join(map(sparql_client.url_to_query, uri_batch))
+            results = self.dbpedia_client.get_result_values("""
+                SELECT ?entity ?same
+                WHERE {
+                    VALUES ?entity { %s } .
+                    ?entity owl:sameAs ?same .
+                }
+            """ % (uris_list))
+            for row in results:
+                uri, value = row['entity'], row['same']
+                if wikidata_util.is_wikidata_entity_url(value):
+                    wikidata_entity = wikidata_util.wikidata_entity_url_to_entity_id(value)
+                    assert uri not in result
+                    result[uri] = wikidata_entity
+                    self.dbpedia_to_wikidata_cache[uri] = wikidata_entity
         return result
 
     def dbpedia_uri_to_wikidata_id(self, uri):
