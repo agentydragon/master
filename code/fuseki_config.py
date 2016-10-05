@@ -21,7 +21,7 @@ def get_config(datasets):
         [] rdf:type fuseki:Server ;
            fuseki:services ("""
 
-   for dataset_name in datasets:
+    for dataset_name in datasets:
        config += (" <#service-%s>" % dataset_name)
 
     config += """) .  """
