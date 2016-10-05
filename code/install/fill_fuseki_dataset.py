@@ -7,6 +7,9 @@ import sys
 import subprocess
 import os.path
 
+import os
+assert 'SCRATCHDIR' in os.environ
+
 # print("downloading json dump")
 # WIKIDATA_JSON_DUMP_URL = 'https://dumps.wikimedia.org/wikidatawiki/entities/' + WIKIDATA_DUMP_DATE + '/' + WIKIDATA_JSON_DUMP_FILENAME
 # wget.download(
