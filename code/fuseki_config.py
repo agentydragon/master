@@ -29,16 +29,16 @@ def get_config(datasets):
     for dataset_name, dataset_path in datasets.items():
         config += ("""
             <#service-%(dataset_name)s> rdf:type fuseki:Service ;
-                fuseki:name         "%(dataset_name)" ; # http://host:port/dsname/query
+                fuseki:name         "%(dataset_name)s" ; # http://host:port/dsname/query
                 fuseki:serviceQuery "query" ;
-                fuseki:dataset      <#dataset-%(dataset_name)> ; .
+                fuseki:dataset      <#dataset-%(dataset_name)s> ; .
 
-            <#dataset-%(dataset_name)> rdf:type tdb:DatasetTDB ; tdb:location "%(dataset_path)s" ;
+            <#dataset-%(dataset_name)s> rdf:type tdb:DatasetTDB ; tdb:location "%(dataset_path)s" ;
                 ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "%(timeout_ms)d" ] ;
                 .
                 """ % {
                     'dataset_name': dataset_name,
                     'dataset_path': dataset_path,
-                    'timeout_ms': 20 * 60 * 1000,  # 20 minutes
+                    'timeout_ms': (20 * 60 * 1000),  # 20 minutes
                 })
     return config
