@@ -5,7 +5,7 @@ parser.add_argument('--sh_out', required=True)
 parser.add_argument('--java_out', required=True)
 args = parser.parse_args()
 
-# Generates paths.py and paths.sh.
+# Generates paths.py, Paths.java and paths.sh.
 
 storage_node = "brno7-cerit"
 storage_root = "/storage/" + storage_node
