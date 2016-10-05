@@ -1,5 +1,4 @@
 from prototype.lib import article_repo
-from prototype.lib import parse_xmls_to_protos
 import paths
 
 def document_to_html(document):
