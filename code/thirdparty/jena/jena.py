@@ -8,7 +8,7 @@ def load_ttl_file(dataset_path, ttl_file_paths):
         dataset_path
     ] + ttl_file_paths
 
-    subprocess.call(commandline, env={
-        'JVM_ARGS': '-Xmx22000M',
-        'TMPDIR': os.environ['SCRATCHDIR']
-    })
+    env = dict(os.environ)
+    env['JVM_ARGS'] = '-Xmx22000M'
+    env['TMPDIR'] = os.environ['SCRATCHDIR']
+    subprocess.call(commandline, env=env)
