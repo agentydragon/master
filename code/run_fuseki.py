@@ -6,15 +6,20 @@ from prototype.lib import zk
 
 # NOTE: must be absolute path
 config_file_path = '/tmp/fuseki-config.ttl'
-fuseki_config.write_config(config_file_path,
-                           # '/scratch/prvak/wikidata',
-                           paths.WORK_DIR + '/fuseki-datasets/merged')
+fuseki_config.write_config(
+    config_file_path,
+    datasets = {
+        'wikidata': '/scratch/prvak/wikidata',
+        'dbpedia-sameas': paths.WORK_DIR + '/fuseki-datasets/dbpedia-sameas',
+        # TODO: 'merged' when we merge it
+    },
+)
 
 # TODO: not really Hador...
-zk.set_wikidata_endpoint('http://hador:3030/merged/query')
-zk.set_dbpedia_endpoint('http://hador:3030/merged/query')
+zk.set_wikidata_endpoint('http://hador:3030/wikidata/query')
+zk.set_dbpedia_endpoint('http://hador:3030/dbpedia-sameas/query')
 
-print("Starting Wikidata Fuseki...", datetime.datetime.now())
+print("Starting Fuseki...", datetime.datetime.now())
 fuseki.serve_forever(
     config = config_file_path,
     port = 3030
