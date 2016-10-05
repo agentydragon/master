@@ -247,15 +247,22 @@ class SpotlightMention(k("SpotlightMention",
             print("WARN: no resources returned by Spotlight")
             return []
 
+        dbpedia_uris = set(mention_json['@URI']
+                           for mention_json
+                           in spotlight_json['Resources'])
+        dbpedia_uri_to_wikidata_id = dbpedia_client.dbpedia_uris_to_wikidata_ids(dbpedia_uris)
+
         for mention_json in spotlight_json['Resources']:
             if not mention_json['@surfaceForm']:
                 # TODO HACK?
                 continue
 
             uri = mention_json['@URI']
-            wikidata_id = dbpedia_client.dbpedia_uri_to_wikidata_id(uri)
-            if not wikidata_id:
+            if uri in dbpedia_uri_to_wikidata_id:
+                wikidata_id = dbpedia_uri_to_wikidata_id[uri]
+            else:
                 print('WARN: No translation:', uri)
+                wikidata_id = None
 
             mention = klass(
                 start_offset = int(mention_json['@offset']),
