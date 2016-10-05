@@ -1,10 +1,11 @@
 from prototype.lib import article_repo
+from prototype.lib import flags
 import paths
 
 def document_to_html(document):
     html = ""
     html += "<pre>"
-    html += document.text
+    html += document.plaintext
     html += "</pre>"
     html += ""
 
@@ -40,6 +41,13 @@ def document_to_html(document):
 
     return html
 
-article_repository = article_repo.ArticleRepo()
-document = article_repository.load_article("Douglas Adams")
-print(document_to_html(document))
+def main():
+    flags.add_argument('--output_html', required=True)
+    article_repository = article_repo.ArticleRepo()
+    document = article_repository.load_article("Douglas Adams")
+
+    with open(flags.parse_args().output_html, 'w') as f:
+        f.write(document_to_html(document))
+
+if __name__ == '__main__':
+    main()
