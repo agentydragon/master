@@ -43,7 +43,7 @@ python.write(
     'MODELS_PATH = "' + models_path + '"\n'
     '\n'
     # TODO: hack
-    'ARTICLE_LIST_PATH = "' + (storage_home + "/master/code/prototype/persons") + '"\n'
+    'ARTICLE_LIST_PATH = "' + (work_dir + "/articles.tsv") + '"\n'
     '\n'
     'DUMP_DIR = "' + dump_dir + '"\n'
     '\n'

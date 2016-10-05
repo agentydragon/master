@@ -14,7 +14,12 @@ class ArticleSet(object):
             maximum = flags.parse_args().max_articles
 
         with open(path) as f:
-            article_names = list(map(lambda line: line.strip(), list(f)))
+            article_names = []
+            for line in f:
+                line = line.strip()
+                name, id, wikipedia_page = line.split("\t")
+                # TODO: Use wikipedia_page instead.
+                article_names.append(name)
 
         if maximum is not None:
             article_names = article_names[:maximum]
