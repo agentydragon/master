@@ -51,18 +51,16 @@ class Mention(k("Mention",
         )
 
 class Coreference(k("Coreference",
-                    ["mentions", "wikidata_entity_id"])):
+                    ["mentions"])):
     def to_json(self):
         return {
             'mentions': list(map(Mention.to_json, self.mentions)),
-            'wikidata_entity_id': self.wikidata_entity_id,
         }
 
     @classmethod
     def from_json(klass, json):
         return klass(
             mentions = list(map(Mention.from_json, json['mentions'])),
-            wikidata_entity_id = json['wikidata_entity_id']
         )
 
 class SavedDocument(k("SavedDocument", [
@@ -198,7 +196,6 @@ class SavedDocument(k("SavedDocument", [
         for coreference_tag in coreference_tags:
             coreference = Coreference(
                 mentions = [],
-                wikidata_entity_id = None
             )
             self.coreferences.append(coreference)
 
