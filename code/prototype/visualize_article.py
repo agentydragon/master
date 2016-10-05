@@ -80,6 +80,16 @@ def document_to_html(document):
     html += "<h2>Coreferences</h2>"
     for i, coreference in enumerate(document.coreferences):
         html += "<h3><a name='coreference_%d'>Coreference %d</a></h3>" % (i, i)
+
+        wikidata_ids = set()
+        for mention in coreference.mentions:
+            mention_start = document.get_mention_start(mention)
+            mention_end = document.get_mention_end(mention)
+            for resource in document.find_spotlight_mentions_between(mention_start, mention_end):
+                if resource.wikidata_id:
+                    wikidata_ids.add(resource.wikidata_id)
+        html += "<b>Wikidata IDs:</b> %s<br>" % (", ".join(sorted(wikidata_ids)))
+
         for mention in coreference.mentions:
             html += "<i>" + str(mention) + "</i>: "
             mention_start = document.get_mention_start(mention)
