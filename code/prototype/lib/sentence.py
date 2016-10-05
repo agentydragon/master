@@ -85,11 +85,11 @@ class SavedDocument(k("SavedDocument", [
             'spotlight_json': self.spotlight_json,
         }
 
-        if self.sentences:
+        if self.sentences is not None:
             json['sentences'] = list(map(DocumentSentence.to_json, self.sentences))
-        if self.coreferences:
+        if self.coreferences is not None:
             json['coreferences'] = list(map(Coreference.to_json, self.coreferences))
-        if self.spotlight_mentions:
+        if self.spotlight_mentions is not None:
             json['spotlight_mentions'] = list(map(SpotlightMention.to_json, self.spotlight_mentions))
 
         return json
