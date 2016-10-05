@@ -16,25 +16,32 @@ args = flags.parse_args()
 wikidata_client = wikidata.WikidataClient()
 print("Looking for %d persons..." % args.num_persons)
 
-# ?person instance-of human
-results = wikidata_client.wikidata_client.get_results("""
+results = wikidata_client.wikidata_client.get_result_values("""
     SELECT *
-    WHERE { ?person wdp:P31 wd:Q5
-          . ?person rdfs:label ?label
-          . FILTER (lang(?label) = "en") }
+    WHERE {
+        # instance-of human
+        ?person wdp:P31 wd:Q5 .
+
+        ?person rdfs:label ?label .
+        FILTER (lang(?label) = "en")
+    }
     LIMIT %d
 """ % args.num_persons)
-results = results['results']['bindings']
+
+#         ?person owl:sameAs ?dbpedia_person .
+#         ?dbpedia_person foaf:isPrimaryTopicOf ?wikipedia_page .
+
 bar = progressbar.ProgressBar()
-names = set()
+persons = set()
 for row in bar(results):
-    # print(row['person']['value'], row['label']['value'], row['label'])
-    names.add(row['label']['value']) # add: because of multiplicities
+    id = wikidata_util.wikidata_entity_url_to_entity_id(row['person'])
+    name = row['label']
+#    wikipedia_page = row['wikipedia_page']
+    wikipedia_page = '???'
+    persons.add((name, id, wikipedia_page)) # add: because of multiplicities
 
-    # id = wikidata_util.wikidata_entity_url_to_entity_id(row['person']['value'])
-    # names.append(wikidata_client.get_entity_name(id))
+    print(name, id, wikipedia_page)
 
-for name in sorted(names):
-    print(name)
+for name, id, wikipedia_page in sorted(persons):
+    print('%s\t%s' % (id, name))
     sys.stdout.flush()
-# print(len(names))

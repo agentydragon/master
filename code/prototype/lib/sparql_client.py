@@ -51,3 +51,17 @@ class SPARQLClient(object):
         print(error, "Retrying in %d seconds (retries left:" % time_to_sleep, retry, ")")
         time.sleep(time_to_sleep)
         return self.get_results(query, retry=retry-1)
+
+    def get_result_values(self, query):
+        """More friendly API around get_results."""
+        results = self.get_results(query)
+        results = results['results']['bindings']
+        values = []
+
+        for row in results:
+            row_values = {}
+            for key in row:
+                row_values[key] = row[key]['value']
+            values.append(row_values)
+
+        return values
