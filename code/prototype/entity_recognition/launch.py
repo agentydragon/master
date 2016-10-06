@@ -1,7 +1,6 @@
 from prototype.lib import flags
 from prototype.lib import article_set
 from prototype.lib import mapper
-from prototype.entity_recognition import spotlight
 
 def main():
     flags.add_argument('--force_redo')
@@ -11,12 +10,10 @@ def main():
 
     art_set = article_set.ArticleSet()
 
-    spotlight_endpoint = spotlight.get_default_spotlight_endpoint()
-
     def make_commandline(articles_slice):
         job_command = [
             'prototype/entity_recognition/entity_recognition',
-            '--spotlight_endpoint', spotlight_endpoint,
+            #'--spotlight_endpoint', spotlight_endpoint,
         ]
 
         if args.force_redo:
@@ -32,9 +29,12 @@ def main():
         art_set.article_names,
         args.articles_per_job,
         make_commandline,
-        slice_to_walltime=(lambda s: "01:00:00"),
-        cores=1,
-        ram='1gb'
+        slice_to_walltime=(lambda s: "02:00:00"),
+        # cores=1,
+        cores=4,
+        # ram='1gb'
+        ram='16gb'
+        # TODO: scratch
     )
 
 if __name__ == '__main__':

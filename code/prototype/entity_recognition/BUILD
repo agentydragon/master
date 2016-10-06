@@ -8,6 +8,9 @@ py_binary(
         "//:paths_lib",
         "//prototype/lib:article_repo_lib",
     ],
+    data = [
+        ":spotlight",
+    ],
 )
 
 py_binary(
@@ -62,16 +65,16 @@ py_binary(
     ],
     data = [
         "@cpulimit//:cpulimit_bin",
-        ":spotlight",
+        ":spotlight_server",
     ]
 )
 
 java_binary(
-    name = "spotlight",
+    name = "spotlight_server",
     srcs = [
-        "Spotlight.java",
+        "SpotlightServer.java",
     ],
-    main_class = "Spotlight",
+    main_class = "SpotlightServer",
     deps = [
         "@dbpedia_spotlight//jar",
     ],
