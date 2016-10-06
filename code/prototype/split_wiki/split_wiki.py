@@ -95,7 +95,10 @@ def split_corpus(wiki_plaintext_path, target_articles=None):
                             title = articletitle,
                             corenlp_xml = None,
                             spotlight_json = None,
-                            proto = None
+
+                            sentences = None,
+                            coreferences = None,
+                            spotlight_mentions = None,
                         )
                         article_repository.write_article(articletitle, article)
                     if (datetime.datetime.now() - last_report).seconds >= 5:
