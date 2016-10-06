@@ -59,6 +59,7 @@ def launch_job_for_slice(slice_index, job_name, log_base_dir,
         job_name=('%s_%d' % (job_name, slice_index)),
         job_command=job_command,
         output_path=(log_base_dir + ("/%04d.o" % slice_index)),
-        error_path=(log_base_dir + ("/%04d.e" % slice_index))
+        error_path=(log_base_dir + ("/%04d.e" % slice_index)),
+        save_jobscript_path=(log_base_dir + ("/%04d.sh" % slice_index)),
     )
     print("Launched %s:" % job_name, job.job_id)

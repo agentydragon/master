@@ -60,7 +60,10 @@ class Job(object):
         print("Killing", self.job_id)
         subprocess.check_output(['qdel', self.job_id])
 
-def launch(walltime, node_spec, job_name, script, error_path=None, output_path=None):
+def launch(walltime, node_spec, job_name, script,
+           error_path=None,
+           output_path=None,
+           save_jobscript_path=True):
     """
     Returns:
         PBS job ID (str)
@@ -73,24 +76,30 @@ def launch(walltime, node_spec, job_name, script, error_path=None, output_path=N
                     ]
     now = datetime.datetime.now()
     basedir = paths.LOG_PATH + "/" + job_name + "/" + now.strftime("%Y%m%d-%H%M%S")
-    file_util.ensure_dir(basedir)
 
     if error_path is None:
         error_path = basedir + "/stderr"
+        file_util.ensure_dir(basedir)
     if output_path is None:
         output_path = basedir + "/stderr"
+        file_util.ensure_dir(basedir)
 
     qsub_command.extend(['-e', error_path])
     qsub_command.extend(['-o', output_path])
     # print(qsub_command)
     job_script = (JOBSCRIPT_HEADER + script)
 
-    js_path = basedir + "/" + job_name + '.sh'
-    with open(js_path, 'w') as jobscript_file:
+    if save_jobscript_path is True:
+        save_jobscript_path = basedir + "/" + job_name + '.sh'
+        file_util.ensure_dir(basedir)
+    elif save_jobscript_path is None:
+        save_jobscript_path = job_name + '.sh'
+
+    with open(save_jobscript_path, 'w') as jobscript_file:
         jobscript_file.write(job_script)
     #print(job_script)
 
-    qsub_command.append(js_path)
+    qsub_command.append(save_jobscript_path)
     popen = subprocess.Popen(
         qsub_command,
         stdout=subprocess.PIPE,
