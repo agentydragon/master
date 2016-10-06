@@ -1,17 +1,4 @@
 py_binary(
-    name = "run_fuseki",
-    srcs = [
-        "run_fuseki.py",
-    ],
-    deps = [
-        "//thirdparty/fuseki:fuseki_lib",
-        "//:fuseki_config_lib",
-        "//:paths_lib",
-        "//prototype/lib:zk_lib",
-    ],
-)
-
-py_binary(
     name = "get_pra_data",
     srcs = [
         "get_pra_data.py",
@@ -23,14 +10,6 @@ py_binary(
         "//prototype/lib:flags_lib",
         "//prototype/lib:file_util_lib",
     ],
-)
-
-py_library(
-    name = "fuseki_config_lib",
-    srcs = [
-        "fuseki_config.py",
-    ],
-    visibility = ["//visibility:public"],
 )
 
 py_library(

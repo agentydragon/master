@@ -22,12 +22,7 @@ def main():
     args = flags.parse_args()
 
     def make_commandline(articles_slice):
-        job_command = [
-            '../cpulimit/cpulimit',
-            '--limit=' + str(CORES * 100),
-            '--include-children',
-            'local_fuseki/local_fuseki',
-        ]
+        job_command = ['local_fuseki/local_fuseki']
         for article in articles_slice:
             job_command.extend(['--articles', article])
         print(job_command)

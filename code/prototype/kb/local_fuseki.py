@@ -1,7 +1,7 @@
-import fuseki_config
-import paths
-from thirdparty.fuseki import fuseki
+from prototype.kb import fuseki_config
+from prototype.kb import fuseki
 from prototype.lib import flags
+import paths
 import subprocess
 import datetime
 import os

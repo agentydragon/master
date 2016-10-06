@@ -1,7 +1,7 @@
 import paths
 import datetime
-from thirdparty.fuseki import fuseki
-import fuseki_config
+from prototype.kb import fuseki
+from prototype.kb import fuseki_config
 from prototype.lib import zk
 
 # NOTE: must be absolute path
