@@ -13,7 +13,7 @@ storage_home = storage_root + "/home/prvak"
 
 work_dir = storage_home + "/data"
 wikipedia_plaintext = work_dir + "/wiki-plain.txt"
-wiki_articles_plaintexts_dir = work_dir + "/wiki-articles-plaintexts"
+documents_dir = work_dir + "/documents"
 log_path = storage_home + "/logs"
 charts_path = storage_home + "/charts"
 models_path = storage_home + "/models"
@@ -35,7 +35,7 @@ wikipedia_dump_file = wikipedia_dump_dir + '/' + wikipedia_dump_filename
 
 python.write(
     'WIKIPEDIA_PLAINTEXT = "' + wikipedia_plaintext + '"\n'
-    'WIKI_ARTICLES_PLAINTEXTS_DIR = "' + wiki_articles_plaintexts_dir+ '"\n'
+    'DOCUMENTS_DIR = "' + documents_dir + '"\n'
     'RELATION_SAMPLES_DIR = "' + relation_samples_dir + '"\n'
     'WORK_DIR = "' + work_dir + '"\n'
     'LOG_PATH = "' + log_path + '"\n'
@@ -61,7 +61,7 @@ shell.write(
 java.write("""
     public class Paths {
         public static String RelationSamplesDir = \"""" + relation_samples_dir + """\";
-        public static String WikiArticlesPlaintextsDir = \"""" + wiki_articles_plaintexts_dir + """\";
+        public static String DocumentsDir = \"""" + documents_dir + """\";
     }
 """)
 

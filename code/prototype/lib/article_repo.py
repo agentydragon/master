@@ -7,7 +7,7 @@ import io
 import os.path
 
 flags.add_argument('--article_plaintexts_dir',
-                   default=paths.WIKI_ARTICLES_PLAINTEXTS_DIR,
+                   default=paths.DOCUMENTS_DIR,
                    help='TODO')
 
 def get_article_plaintexts_dir():
