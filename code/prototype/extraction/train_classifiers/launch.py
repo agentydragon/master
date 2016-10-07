@@ -2,6 +2,7 @@ from prototype.lib import sample_repo
 from prototype.lib import relations
 from prototype.lib import mapper
 from prototype.lib import flags
+from prototype.lib import wikidata
 
 def main():
     flags.add_argument('--relations_per_job', type=int)
@@ -9,7 +10,10 @@ def main():
     args = flags.parse_args()
 
     def make_commandline(relations_slice):
-        job_command = ['prototype/train_classifiers/train_classifiers']
+        job_command = [
+            'prototype/extraction/train_classifiers/train_classifiers',
+            '--wikidata_endpoint', wikidata.get_default_endpoint_url(),
+        ]
         for relation in relations_slice:
             job_command.extend(['--relation', relation])
         return job_command

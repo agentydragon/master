@@ -24,6 +24,7 @@ py_binary(
         "//prototype/lib:sample_repo_lib",
         "//prototype/lib:mapper_lib",
         "//prototype/lib:relations_lib",
+        "//prototype/lib:wikidata_lib",
     ],
     data = [
         ":train_classifiers",
