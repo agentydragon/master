@@ -22,7 +22,8 @@ def main():
     job_id = pbs_util.launch_job(
         walltime="48:00:00",
         # (2016-10-06 prvak) 4 GB RAM not enough
-        node_spec="nodes=1:brno:ppn=2,mem=8gb",
+        # (2016-10-07 prvak) 8 GB RAM not enough
+        node_spec="nodes=1:brno:ppn=2,mem=16gb",
         job_name="wiki-split",
         job_command=job_command
     )
