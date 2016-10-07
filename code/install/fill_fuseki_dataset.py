@@ -6,6 +6,7 @@ import paths
 import sys
 import subprocess
 import os.path
+import datetime
 
 import os
 assert 'SCRATCHDIR' in os.environ
@@ -17,7 +18,10 @@ assert 'SCRATCHDIR' in os.environ
 #     out = WIKIDATA_JSON_DUMP_FILE,
 # )
 
-dataset_path = paths.WORK_DIR + '/fuseki-datasets/merged'
+# dataset_path = paths.WORK_DIR + '/fuseki-datasets/merged'
+
+scratch_dir = os.environ['SCRATCHDIR']
+dataset_path = scratch_dir + '/merged-fuseki-dataset'
 
 wikidata_dump_date = '20160801'
 wikidata_dump_dir = (paths.DUMP_DIR + '/wikidata')
@@ -98,6 +102,7 @@ def download_wikidata_dump():
         bunzip(WIKIPEDIA_LINKS_FILE + ".bz2")
 
 def main():
+    start = datetime.datetime.now()
     download_wikidata_dump()
 
     print("cleaning output")
@@ -109,16 +114,49 @@ def main():
 
     file_util.ensure_dir(dataset_path)
 
+    print("copying wikidata to scratch...")
+    subprocess.call([
+        "cp",
+        WIKIDATA_TTL_DUMP_UNPACKED_FILE,
+        (scratch_dir + "/wikidata.ttl")
+    ])
+    print("copying interlanguage to scratch...")
+    subprocess.call([
+        "cp",
+        INTERLANGUAGE_LINKS_FILE,
+        (scratch_dir + "/interlanguage.ttl")
+    ])
+    print("copying wikipedia links to scratch...")
+    subprocess.call([
+        "cp",
+        WIKIPEDIA_LINKS_FILE,
+        (scratch_dir + "/wikipedia_links.ttl")
+    ])
+
     # TODO: Needs lots of RAM and scratch space
     print("loading...")
     jena.load_ttl_file(
         dataset_path,
         ttl_file_paths=[
-            WIKIDATA_TTL_DUMP_UNPACKED_FILE,
-            INTERLANGUAGE_LINKS_FILE, # links DBpedia to Wikidata
-            WIKIPEDIA_LINKS_FILE, # links DBpedia to Wikipedia
+            (scratch_dir + "/wikidata.ttl"),
+            (scratch_dir + "/interlanguage.ttl"),
+            (scratch_dir + "/wikipedia_links.ttl"),
+    #        WIKIDATA_TTL_DUMP_UNPACKED_FILE,
+    #        INTERLANGUAGE_LINKS_FILE, # links DBpedia to Wikidata
+    #        WIKIPEDIA_LINKS_FILE, # links DBpedia to Wikipedia
         ],
     )
+
+    print("copying resulting dataset...")
+    rv = subprocess.call([
+        "cp",
+        "--recursive",
+        dataset_path,
+        ("/storage/brno7-cerit/home/prvak/fuseki-datasets/merged-" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+    ])
+    assert rv == 0
+
+    print("done in", datetime.datetime.now() - start)
 
 if __name__ == '__main__':
     main()
