@@ -57,7 +57,7 @@ class Job(object):
         return state
 
     def kill(self):
-        print("Killing", self.job_id)
+        print("Killing", self.job_id, "...")
         subprocess.check_output(['qdel', self.job_id])
 
 def launch(walltime, node_spec, job_name, script,
@@ -132,3 +132,46 @@ def launch_job(walltime, node_spec, job_name, job_command,
         output_path=output_path,
         save_jobscript_path=save_jobscript_path,
     )
+
+def get_all_jobs():
+    output = subprocess.check_output(["qstat", "-n", "-u", "prvak"]).decode('utf-8')
+    lines = output.split("\n")
+
+    jobs = []
+
+    for unstripped_line in lines:
+        line = unstripped_line.strip()
+        if not line:
+            continue
+        if line.startswith('arien.ics.muni.cz'):
+            continue
+        if line.startswith('Job ID'):
+            continue
+        if line.startswith('-------'):
+            continue
+        if line.startswith("Req'd"):
+            continue
+
+        if unstripped_line.startswith(' '):
+            job_machine = line.split('+')[0]
+            # TODO: check that it's running on just 1 machine
+
+            jobs.append({
+                'jobid': jobid,
+                'jobname': jobname,
+                'target_walltime': target_walltime,
+                'status': status,
+                'runtime': runtime,
+                'job_machine': job_machine
+            })
+            continue
+
+        short_jobid, user, queue, jobname, jobpid, nodes, cpus, ram, target_walltime, status, runtime = line.split()
+        jobid = short_jobid.split('.')[0] + '.arien.ics.muni.cz'
+
+        # print(short_jobid, user, queue, jobname, jobpid, nodes, cpus, ram,
+        #       target_walltime, status, runtime)
+
+    return jobs
+    # for job in jobs:
+    #     print(job)
