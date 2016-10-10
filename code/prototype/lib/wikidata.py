@@ -58,7 +58,6 @@ class WikidataClient(object):
         if wikidata_id in self.forward_cache:
             return self.forward_cache[wikidata_id]
 
-        # print('forward for', wikidata_id)
         results = self.wikidata_client.get_result_values("""
             SELECT ?rel ?other
             WHERE { wd:%s ?rel ?other . }
@@ -66,11 +65,10 @@ class WikidataClient(object):
         """ % (wikidata_id, LIMIT))
 
         properties=[]
-        for x in results:
-            # print(x)
+        for row in results:
             subject = wikidata_util.wikidata_entity_prefix + wikidata_id
-            rel = x['rel']
-            other = x['other']
+            rel = row['rel']
+            other = row['other']
 
             triple = wikidata_util.transform_relation(subject, rel, other)
             if triple:
@@ -94,9 +92,9 @@ class WikidataClient(object):
         """ % (wikidata_id, LIMIT))
 
         properties=[]
-        for x in results:
-            rel = x['rel']
-            other = x['other']
+        for row in results:
+            rel = row['rel']
+            other = row['other']
             subject = wikidata_util.wikidata_entity_prefix + wikidata_id
 
             triple = wikidata_util.transform_relation(other, rel, subject)
@@ -118,16 +116,14 @@ class WikidataClient(object):
         # TODO: cache?
 
         rels = []
-        for x in results:
-            rel = x['rel']
+        for row in results:
+            rel = row['rel']
             rel = wikidata_util.normalize_relation(rel)
             if rel is not None:
                 rels.append(rel)
         return rels
 
     def get_all_triples_of_entity(self, wikidata_id):
-#        self.load_cache()
-
         if wikidata_id in self.wikidata_relations_cache:
             return self.wikidata_relations_cache[wikidata_id]
 
@@ -136,9 +132,6 @@ class WikidataClient(object):
         properties.extend(self.collect_backward_properties(wikidata_id))
 
         self.wikidata_relations_cache[wikidata_id] = properties
-#
-#        # TODO HAX
-#        self.save_cache()
         return properties
 
     def find_relation_subjects(self, entities, relation):
@@ -166,18 +159,10 @@ class WikidataClient(object):
         """ % (join_entities(entities), relation)
         results = self.wikidata_client.get_result_values(query)
         objects = set()
-        for x in results:
-            obj = x['object']
+        for row in results:
+            obj = row['object']
             objects.add(wikidata_util.wikidata_entity_url_to_entity_id(obj))
         return objects
-
-    # subject_wikidata_ids = set()
-    # object_wikidata_ids = set()
-    # for wikidata_id in all_wikidata_ids:
-    #     if wikidata_client.entity_is_relation_subject(wikidata_id, relation):
-    #         subject_wikidata_ids.add(wikidata_id)
-    #     if wikidata_client.entity_is_relation_object(wikidata_id, relation):
-    #         object_wikidata_ids.add(wikidata_id)
 
     def entity_is_relation_subject(self, entity, relation):
         query = """
@@ -344,12 +329,10 @@ class WikidataClient(object):
             return results[0]['label']
 
     def get_entity_name(self, entity_id):
-#        self.load_cache()
         if entity_id in self.name_cache:
             return self.name_cache[entity_id]
         name = self.fetch_label(entity_id)
         self.name_cache[entity_id] = name
-#        self.save_cache()
         return name
 
     def get_true_subset(self, triples):
@@ -409,12 +392,10 @@ class WikidataClient(object):
         return labels
 
     def get_name(self, property_id):
-#        self.load_cache()
         if property_id in self.name_cache:
             return self.name_cache[property_id]
         name = self.fetch_label(property_id)
         self.name_cache[property_id] = name
-#        self.save_cache()
         return name
 
     def relation_exists(self, s, p, o):
