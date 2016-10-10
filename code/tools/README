@@ -1,0 +1,1 @@
+ln -s `pwd`/run_nolock.py ~/bin/run_nolock
