@@ -63,3 +63,39 @@ py_binary(
         "//prototype/make_training_samples:make_training_samples",
     ],
 )
+
+py_library(
+    name = "jena_lib",
+    srcs = [
+        "jena.py",
+    ],
+    data = [
+        "@jena//:everything",
+    ],
+)
+
+py_binary(
+    name = "fill_fuseki_dataset",
+    srcs = [
+        "fill_fuseki_dataset.py",
+    ],
+    deps = [
+        ":jena_lib",
+        "//prototype/lib:file_util_lib",
+        "//:paths_lib",
+    ],
+)
+
+py_binary(
+    name = "launch_fill_fuseki_dataset",
+    srcs = [
+        "launch_fill_fuseki_dataset.py",
+    ],
+    deps = [
+        "//prototype/lib:pbs_util_lib",
+        "//:paths_lib",
+    ],
+    data = [
+        ":fill_fuseki_dataset",
+    ],
+)

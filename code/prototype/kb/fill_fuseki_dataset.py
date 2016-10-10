@@ -1,4 +1,4 @@
-from thirdparty.jena import jena
+from prototype.kb import jena
 from prototype.lib import file_util
 import paths
 # import wget
