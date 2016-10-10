@@ -4,7 +4,7 @@ Requirements
 All Python code uses Python 3.
 
 ```
-pip install --user requests SPARQLWrapper protobuf nltk gflags scikit-learn kazoo etaprogress matplotlib
+pip install --user requests SPARQLWrapper protobuf nltk gflags scikit-learn kazoo etaprogress matplotlib terminaltables
 ```
 
 

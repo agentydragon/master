@@ -26,3 +26,13 @@ py_binary(
         "//prototype/lib:pbs_util_lib",
     ],
 )
+
+py_binary(
+    name = "show_all_jobs",
+    srcs = [
+        "show_all_jobs.py",
+    ],
+    deps = [
+        "//prototype/lib:pbs_util_lib",
+    ],
+)
