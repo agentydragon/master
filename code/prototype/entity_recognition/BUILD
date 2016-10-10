@@ -9,7 +9,7 @@ py_binary(
         "//prototype/lib:article_repo_lib",
     ],
     data = [
-        ":spotlight",
+        ":spotlight_server",
     ],
 )
 

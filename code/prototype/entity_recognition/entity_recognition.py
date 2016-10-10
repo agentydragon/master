@@ -22,15 +22,26 @@ def launch_spotlight():
     print("Starting Spotlight server")
 
     spotlight_port = 2222 + random.randint(0, 100)
+
+    # Tell Java launcher script which Java path to use explicitly.
+    # Otherwise, it would default to the Java of the Bazel installation,
+    # which is probably a broken symlink anywhere but on the machine
+    # Bazel is running on.
+    env = dict(os.environ)
+    env['JAVABIN'] = '/packages/run/jdk-8/current/bin/java'
     spotlight_process = subprocess.Popen([
-        'prototype/entity_recognition/spotlight',
+        'prototype/entity_recognition/spotlight_server',
         str(spotlight_port),
-    ])
+    ], env=env)
     spotlight_address = "http://localhost:%d/rest/annotate" % spotlight_port
+
+    # TODO: Timeout after some time.
 
     wait_seconds = 60
 
     while True:
+        assert spotlight_process.returncode is None, "Spotlight server died"
+
         try:
             client = spotlight.SpotlightClient(spotlight_address)
             client.annotate_text("Barack Obama is the president of the United States.")
@@ -54,6 +65,7 @@ def main():
     args = flags.parse_args()
 
     launch_spotlight()
+    print("Spotlight launched in", (datetime.datetime.now() - start))
 
     # TODO: skip if finished
 
