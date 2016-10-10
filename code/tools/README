@@ -1,1 +1,3 @@
 ln -s `pwd`/run_nolock.py ~/bin/run_nolock
+
+bazel run --script_path ~/bin/get_job_machine :get_job_machine
