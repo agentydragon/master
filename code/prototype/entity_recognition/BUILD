@@ -9,7 +9,7 @@ py_binary(
         "//prototype/lib:article_repo_lib",
     ],
     data = [
-        ":spotlight_server_launcher",
+        ":spotlight_server",
     ],
 )
 
@@ -68,17 +68,6 @@ py_binary(
         ":spotlight_server",
     ]
 )
-
-sh_binary(
-    name = "spotlight_server_launcher",
-    srcs = [
-        "spotlight_server_launcher.sh",
-    ],
-    data = [
-        ":spotlight_server",
-    ],
-)
-
 
 java_binary(
     name = "spotlight_server",

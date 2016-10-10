@@ -10,8 +10,6 @@ import datetime
 
 import random
 
-# TODO: Do we actually need to hop through _launcher.sh?
-
 class SpotlightServer(object):
     def __init__(self):
         self.spotlight_port = None
@@ -25,23 +23,17 @@ class SpotlightServer(object):
         print("Starting Spotlight server")
 
         self.spotlight_port = 2222 + random.randint(0, 100)
-
-        # Tell Java launcher script which Java path to use explicitly.
-        # Otherwise, it would default to the Java of the Bazel installation,
-        # which is probably a broken symlink anywhere but on the machine
-        # Bazel is running on.
-        env = dict(os.environ)
         self.spotlight_process = subprocess.Popen([
-            'prototype/entity_recognition/spotlight_server_launcher',
+            'prototype/entity_recognition/spotlight_server',
             str(self.spotlight_port),
-        ], env=env)
+        ])
 
         # TODO: Timeout after some time.
 
         wait_seconds = 60
 
         while True:
-            assert self.spotlight_process.returncode is None, "Spotlight server died"
+            assert self.spotlight_process.poll() is None, "Spotlight server died"
 
             try:
                 client = self.make_client()
