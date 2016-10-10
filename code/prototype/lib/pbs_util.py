@@ -117,7 +117,9 @@ def launch(walltime, node_spec, job_name, script,
 
 # TODO: select error_path and output_path by default
 def launch_job(walltime, node_spec, job_name, job_command,
-               error_path=None, output_path=None):
+               error_path=None,
+               output_path=None,
+               save_jobscript_path=True):
     assert isinstance(job_command, list)
 
     command = ' '.join(map(shlex.quote, job_command))
@@ -127,5 +129,6 @@ def launch_job(walltime, node_spec, job_name, job_command,
         job_name,
         command,
         error_path=error_path,
-        output_path=output_path
+        output_path=output_path,
+        save_jobscript_path=save_jobscript_path,
     )
