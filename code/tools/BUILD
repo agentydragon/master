@@ -36,3 +36,13 @@ py_binary(
         "//prototype/lib:pbs_util_lib",
     ],
 )
+
+py_binary(
+    name = "follow_log",
+    srcs = [
+        "follow_log.py",
+    ],
+    deps = [
+        "//prototype/lib:pbs_util_lib",
+    ],
+)
