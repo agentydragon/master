@@ -23,6 +23,7 @@ def main():
         walltime="48:00:00",
         # (2016-10-06 prvak) 4 GB RAM not enough
         # (2016-10-07 prvak) 8 GB RAM not enough
+        # (2016-10-10 prvak) took 13:44:00 hours
         node_spec="nodes=1:brno:ppn=2,mem=16gb",
         job_name="wiki-split",
         job_command=job_command
