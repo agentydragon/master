@@ -17,7 +17,7 @@ class ArticleSet(object):
             article_names = []
             for line in f:
                 line = line.strip()
-                name, id, wikipedia_page = line.split("\t")
+                id, name, wikipedia_page = line.split("\t")
                 # TODO: Use wikipedia_page instead.
                 article_names.append(name)
 
