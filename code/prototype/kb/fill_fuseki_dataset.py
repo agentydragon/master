@@ -114,24 +114,30 @@ def main():
 
     file_util.ensure_dir(dataset_path)
 
+    # TODO: skip if done
     print("copying wikidata to scratch...")
-    subprocess.call([
+    rv = subprocess.call([
         "cp",
         WIKIDATA_TTL_DUMP_UNPACKED_FILE,
         (scratch_dir + "/wikidata.ttl")
     ])
+    assert rv == 0
+    # TODO: skip if done
     print("copying interlanguage to scratch...")
-    subprocess.call([
+    rv = subprocess.call([
         "cp",
         INTERLANGUAGE_LINKS_FILE,
         (scratch_dir + "/interlanguage.ttl")
     ])
+    assert rv == 0
+    # TODO: skip if done
     print("copying wikipedia links to scratch...")
-    subprocess.call([
+    rv = subprocess.call([
         "cp",
         WIKIPEDIA_LINKS_FILE,
         (scratch_dir + "/wikipedia_links.ttl")
     ])
+    assert rv == 0
 
     # TODO: Needs lots of RAM and scratch space
     print("loading...")
@@ -152,7 +158,7 @@ def main():
         "cp",
         "--recursive",
         dataset_path,
-        ("/storage/brno7-cerit/home/prvak/fuseki-datasets/merged-" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+        ("/storage/brno7-cerit/home/prvak/data/fuseki-datasets/merged-" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     ])
     assert rv == 0
 
