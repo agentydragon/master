@@ -18,6 +18,9 @@ rv = subprocess.call([
     sys.argv[1],
     '--',
 ] + sys.argv[2:])
-assert rv == 0
+if rv != 0:
+    sys.exit(rv)
 
-subprocess.call([f.name])
+rv = subprocess.call([f.name])
+if rv != 0:
+    sys.exit(rv)
