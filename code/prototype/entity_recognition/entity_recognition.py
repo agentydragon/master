@@ -10,51 +10,62 @@ import datetime
 
 import random
 
-spotlight_port = None
-spotlight_process = None
-spotlight_address = None
+# TODO: Do we actually need to hop through _launcher.sh?
 
-def launch_spotlight():
-    global spotlight_port
-    global spotlight_process
-    global spotlight_address
+class SpotlightServer(object):
+    def __init__(self):
+        self.spotlight_port = None
+        self.spotlight_process = None
 
-    print("Starting Spotlight server")
+    def make_client(self):
+        address = "http://localhost:%d/rest/annotate" % self.spotlight_port
+        return spotlight.SpotlightClient(address)
 
-    spotlight_port = 2222 + random.randint(0, 100)
+    def launch(self):
+        print("Starting Spotlight server")
 
-    # Tell Java launcher script which Java path to use explicitly.
-    # Otherwise, it would default to the Java of the Bazel installation,
-    # which is probably a broken symlink anywhere but on the machine
-    # Bazel is running on.
-    env = dict(os.environ)
-    env['JAVABIN'] = '/packages/run/jdk-8/current/bin/java'
-    spotlight_process = subprocess.Popen([
-        'prototype/entity_recognition/spotlight_server',
-        str(spotlight_port),
-    ], env=env)
-    spotlight_address = "http://localhost:%d/rest/annotate" % spotlight_port
+        self.spotlight_port = 2222 + random.randint(0, 100)
 
-    # TODO: Timeout after some time.
+        # Tell Java launcher script which Java path to use explicitly.
+        # Otherwise, it would default to the Java of the Bazel installation,
+        # which is probably a broken symlink anywhere but on the machine
+        # Bazel is running on.
+        env = dict(os.environ)
+        self.spotlight_process = subprocess.Popen([
+            'prototype/entity_recognition/spotlight_server_launcher',
+            str(self.spotlight_port),
+        ], env=env)
 
-    wait_seconds = 60
+        # TODO: Timeout after some time.
 
-    while True:
-        assert spotlight_process.returncode is None, "Spotlight server died"
+        wait_seconds = 60
 
-        try:
-            client = spotlight.SpotlightClient(spotlight_address)
-            client.annotate_text("Barack Obama is the president of the United States.")
-            break
-        except:
-            waiting = True
-            print('not yet OK:', sys.exc_info()[0], 'waiting %d seconds' % wait_seconds)
-            print(sys.exc_info()[1])
-            sys.stdout.flush()
-            time.sleep(wait_seconds)
-            continue
+        while True:
+            assert self.spotlight_process.returncode is None, "Spotlight server died"
 
-    print("Spotlight seems to be running OK.")
+            try:
+                client = self.make_client()
+                client.annotate_text("Barack Obama is the president of the United States.")
+                break
+            except:
+                waiting = True
+                print('not yet OK:', sys.exc_info()[0], 'waiting %d seconds' % wait_seconds)
+                print(sys.exc_info()[1])
+                sys.stdout.flush()
+                time.sleep(wait_seconds)
+                continue
+
+        print("Spotlight seems to be running OK.")
+
+    def stop(self):
+        print("Terminating Spotlight...")
+        self.spotlight_process.terminate()
+        time.sleep(5)
+        print("Killing Spotlight...")
+        self.spotlight_process.kill()
+        self.spotlight_process.wait()
+        print("Joined. Done.")
+
 
 def main():
     start = datetime.datetime.now()
@@ -64,12 +75,13 @@ def main():
     flags.make_parser(description='Look up articles in Spotlight')
     args = flags.parse_args()
 
-    launch_spotlight()
+    spotlight_server = SpotlightServer()
+    spotlight_server.launch()
     print("Spotlight launched in", (datetime.datetime.now() - start))
 
     # TODO: skip if finished
 
-    spotlight_client = spotlight.SpotlightClient(spotlight_address)
+    spotlight_client = spotlight_server.make_client()
     repo = article_repo.ArticleRepo()
 
     not_exist = 0
@@ -102,13 +114,7 @@ def main():
         repo.write_article(title, article_data)
         print("Done")
 
-    print("Terminating Spotlight...")
-    spotlight_process.terminate()
-    time.sleep(5)
-    print("Killing Spotlight...")
-    spotlight_process.kill()
-    spotlight_process.wait()
-    print("Joined. Done.")
+    spotlight_server.stop()
 
     print("Finished %d articles in" % len(args.articles), (datetime.datetime.now() - start))
     print('not_exist:', not_exist)

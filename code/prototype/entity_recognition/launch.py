@@ -13,7 +13,6 @@ def main():
     def make_commandline(articles_slice):
         job_command = [
             'prototype/entity_recognition/entity_recognition',
-            #'--spotlight_endpoint', spotlight_endpoint,
         ]
 
         if args.force_redo:
@@ -24,6 +23,7 @@ def main():
 
         return job_command
 
+    # (2016-10-10 prvak) 4 cores crash on startup sometimes (not sure how, cpulimit should prevent that)
     mapper.launch_in_slices(
         'add-spotlight',
         art_set.article_names,
@@ -31,7 +31,7 @@ def main():
         make_commandline,
         slice_to_walltime=(lambda s: "02:00:00"),
         # cores=1,
-        cores=4,
+        cores=8,
         # ram='1gb'
         ram='16gb'
         # TODO: scratch
