@@ -33,9 +33,9 @@ for title in bar(art_set.article_names):
         with_spotlight += 1
     if art.corenlp_xml:
         with_corenlp += 1
-    if art.proto:
+    if art.sentences:
         with_proto += 1
-    if art.spotlight_json and art.corenlp_xml and art.proto:
+    if art.spotlight_json and art.corenlp_xml and art.sentences:
         fully_processed.append(title)
 
 print("Nonexistant", nonexistant,
