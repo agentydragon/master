@@ -159,3 +159,20 @@ http://benjaminbolte.com/blog/2016/keras-language-modeling.html
 TODO: shard by md5?
 
 eClub Slack: https://eclubcvut.slack.com/messages
+
+YodaQA data: https://github.com/brmson/yodaqa/tree/master/data
+qsub -l nodes=1:gpu=4:mem=16gb:walltime=01:00:00 -q gpu -I
+
+sbt
+	run /storage/brno7-cerit/home/prvak/data/pra/prvak
+	[1]
+
+build: took 25 006 seconds
+
+qsub -l nodes=1:ppn=2,mem=4gb -l walltime=01:00:00 -l gpu=1 -q gpu ~/SME/run.sh
+
+TODO: Finish loading union dataset into Fuseki
+
+fill-fuseki-data: 04h 08m (failed when starting sort phrase)
+
+wiki2text: version GLIBC_2.14 not found
