@@ -29,6 +29,10 @@ export LC_ALL=
 module add jdk-8
 module add python34-modules-gcc
 
+# Prevent Java launchers from using Bazel's symlinks, which won't work
+# anywhere but on dev machine.
+export JAVABIN=/packages/run/jdk-8/current/bin/java
+
 cd $PBS_O_WORKDIR
 """
 
