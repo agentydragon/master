@@ -1,20 +1,12 @@
-import java.io.IOException;
-import java.util.StringTokenizer;
-
 import java.lang.System;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobContext;
-import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.InputFormat;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
@@ -32,35 +24,6 @@ import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 // Arguments: (input) (output) -Dprefix_length=200
 
 public class CoreNLP extends Configured implements Tool {
-	public static class CoreNLPAnnotateMapper extends Mapper<Text, Text, Text, Text>{
-		private int prefixLength;
-		private CoreNLPInterface corenlpInterface = new CoreNLPInterface();
-
-		@Override
-		public void setup(Context context) {
-			Configuration conf = context.getConfiguration();
-			prefixLength = conf.getInt("prefix_length", 10);
-			corenlpInterface.setup();
-		}
-
-		@Override
-		public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
-			String articleTitle = key.toString();
-			String articleText = value.toString();
-
-			// Reduce the length of the text.
-			// XXX: HAX
-			int length = articleText.length();
-			if (length > prefixLength) {
-				length = prefixLength;
-			}
-			articleText = articleText.substring(0, length);
-			// articleText = "Jackdaws love my big sphinx on quartz.";
-
-			context.write(key, new Text(corenlpInterface.getXML(articleText)));
-		}
-	}
-
 	public int run(String[] args) throws Exception {
 		// Configuration processed by ToolRunner
 		Configuration conf = getConf();

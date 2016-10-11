@@ -144,6 +144,7 @@ java_binary(
     name = "CoreNLP",
     srcs = [
         "CoreNLP.java",
+        "CoreNLPAnnotateMapper.java",
     ],
     main_class = "CoreNLP",
     deps = [
