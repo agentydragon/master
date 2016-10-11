@@ -4,6 +4,7 @@ java_binary(
     name = "WikiSplit",
     srcs = [
         "WikiSplit.java",
+        "ArticleSplitterMapper.java",
     ],
     main_class = "WikiSplit",
     deps = [

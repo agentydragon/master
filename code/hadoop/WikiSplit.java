@@ -1,46 +1,36 @@
-// export HADOOP_CLASSPATH=`hbase mapredcp`:/storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/WikiSplit_deploy.jar
-// hadoop jar (...)
-
-import java.io.IOException;
-import java.util.StringTokenizer;
-
 import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.conf.Configuration;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import java.lang.System;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Writable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobContext;
-import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.InputFormat;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.hbase.mapreduce.TableOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 
 /*
-# Needed for MyFIF
-export HADOOP_CLASSPATH=`hbase classpath`:`pwd`/WikiSplit_deploy.jar
-# mapredcp -> taky nefunguje :(
+   bazel build :WikiSplit_deploy.jar
+   export HADOOP_CLASSPATH=$(hbase classpath):$(pwd)/WikiSplit_deploy.jar
+   hadoop jar WikiSplit_deploy.jar -Djava.security.auth.login.config=/storage/brno2/home/prvak/master/code/hadoop/jaas.conf /user/prvak/wiki-plain-small/wiki-plain-small.txt
+     => Map runs to 100%, then Reduce hangs. Why?
 
-hadoop jar WikiSplit_deploy.jar /user/prvak/wiki-plain-small/wiki-split-small.txt
+   bazel build :WikiSplit_deploy.jar
+   export HADOOP_CLASSPATH=$(hbase classpath):$(hbase mapredcp):$(pwd)/WikiSplit_deploy.jar
+   hadoop jar WikiSplit_deploy.jar -Djava.security.auth.login.config=/storage/brno2/home/prvak/master/code/hadoop/jaas.conf /user/prvak/wiki-plain-small/wiki-plain-small.txt
+     => Same result, Reduce hangs.
+
+   I just needed to call a call to grab HBase auth tokens :)
 */
 
 public class WikiSplit extends Configured implements Tool {
-	// implement custom InputFormat that processes entire file in blocks
+	// Custom InputFormat that processes entire file in blocks.
 	public static class MyFIF extends TextInputFormat {
 		@Override
 		protected boolean isSplitable(JobContext ctx, Path file) {
@@ -49,64 +39,9 @@ public class WikiSplit extends Configured implements Tool {
 		}
 	}
 
-	public enum Counters { PROCESSED_ARTICLES };
-
-	//public static class ArticleSplitterMapper extends Mapper<LongWritable, Text, Text, Text>{
-	public static class ArticleSplitterMapper<K> extends Mapper<LongWritable, Text, K, /*Writable*/Put>{
-		private String articleName = null;
-		private String articleText = "";
-
-		private void writeArticle(Context context) throws IOException, InterruptedException {
-			/*
-			context.write(new Text(articleName),
-					new Text(articleText));
-			*/
-			byte[] rowkey = articleName.getBytes();
-			Put put = new Put(rowkey);
-			put.add("wiki".getBytes(), "plaintext".getBytes(), articleText.getBytes());
-			// (key ignored)
-			context.write(null, put);
-			//context.getCounter(Counters.PROCESSED_ARTICLES).increment(1);
-		}
-
-		private void flushArticle(Context context) throws IOException, InterruptedException {
-			// flush article
-			if (articleName != null) {
-				writeArticle(context);
-			}
-			articleText = "";
-		}
-
-		private String titleFromLine(String line) {
-			if (line.length() > 4 && line.charAt(0) == '=' && line.charAt(1) == ' ' &&
-					line.charAt(line.length() - 1) == '=' && line.charAt(line.length() - 2) == ' ') {
-					/*line.substring(0, 2) == "= "*//* &&
-					line.substring(line.length() - 2, line.length()) == " ="*///) {
-				return line.substring(2, line.length() - 2);
-			} else {
-				return null;
-			}
-		}
-
-		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-			String line = value.toString();
-			String title = titleFromLine(line);
-			if (title != null) {
-				flushArticle(context);
-				articleName = title;
-			} else {
-				articleText += line + "\n";
-			}
-	       }
-
-	       public void cleanup(Context context) throws IOException, InterruptedException {
-		       flushArticle(context);
-	       }
-	}
-
 	public int run(String[] args) throws Exception {
 		Configuration conf = getConf();
-		Job job = Job.getInstance(conf, "wiki split");
+		Job job = Job.getInstance(conf, WikiSplit.class.getName());
 		job.setJarByClass(WikiSplit.class);
 
 		// Set input.
@@ -115,13 +50,11 @@ public class WikiSplit extends Configured implements Tool {
 
 		// Set mapper and input/output classes.
 		job.setMapperClass(ArticleSplitterMapper.class);
-		//job.setMapOutputKeyClass(ImmutableBytesWritable.class);
 		//job.setMapOutputValueClass(Put.class);
 		job.setNumReduceTasks(0);
 
 		//job.setOutputKeyClass(Text.class);
 		//job.setOutputValueClass(Text.class);
-		//job.setOutputKeyClass(ImmutableBytesWritable.class);
 		//job.setOutputValueClass(Put.class);
 
 		//job.setNumReduceTasks(0);
@@ -132,11 +65,21 @@ public class WikiSplit extends Configured implements Tool {
 		job.getConfiguration().set(TableOutputFormat.OUTPUT_TABLE, "prvak:wiki_articles");
 		job.setOutputFormatClass(TableOutputFormat.class);
 
+		TableMapReduceUtil.initCredentials(job);
+
 		return job.waitForCompletion(true) ? 0 : 1;
 	}
 
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(HBaseConfiguration.create(), new WikiSplit(), args);
+		BasicConfigurator.configure();
+
+		Configuration conf = HBaseConfiguration.create();
+		conf.set("hbase.zookeeper.quorum", "hador-c1.ics.muni.cz:2181,hador-c2.ics.muni.cz:2181,hador.ics.muni.cz:2181");
+		conf.setBoolean("hbase.security.auth.enable", true);
+		conf.set("hbase.security.authentication", "kerberos");
+		conf.set("hbase.kerberos.regionserver.principal", "hbase/_HOST@ICS.MUNI.CZ");
+		conf.set("hbase.sasl.clientconfig", "Client");
+		int res = ToolRunner.run(conf, new WikiSplit(), args);
 		System.exit(res);
 	}
 }

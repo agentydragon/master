@@ -4,27 +4,20 @@ import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.*;
 
-// working:
+// working as of 2016-10-11:
 // export HADOOP_CLASSPATH=`hbase classpath`
-// hadoop jar (...)
-
-//// export HADOOP_CLASSPATH=`hbase classpath`
-//// -Djava.security.auth.login.config=$(shell pwd)/jaas.conf
-////
-//// java -cp $(hbase classpath) -jar TestHBase_deploy.jar -Djava.security.auth.login.config=$(pwd)/jaas.conf
+// hadoop jar (...)/TestHBase_deploy.jar -Djava.security.auth.login.config=(...)/jaas.conf
 
 public class TestHBase {
 	public static void main(String[] args) throws Exception {
 		BasicConfigurator.configure();
 
 		Configuration conf = HBaseConfiguration.create();
-		/*
 		conf.set("hbase.zookeeper.quorum", "hador-c1.ics.muni.cz:2181,hador-c2.ics.muni.cz:2181,hador.ics.muni.cz:2181");
 		conf.setBoolean("hbase.security.auth.enable", true);
 		conf.set("hbase.security.authentication", "kerberos");
 		conf.set("hbase.kerberos.regionserver.principal", "hbase/_HOST@ICS.MUNI.CZ");
 		conf.set("hbase.sasl.clientconfig", "Client");
-		*/
 
 		HBaseAdmin admin = new HBaseAdmin(conf);
 		try {
