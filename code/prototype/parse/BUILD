@@ -38,3 +38,17 @@ java_library(
     ],
     visibility = ["//visibility:public"],
 )
+
+java_binary(
+    name = "CoreNLP",
+    srcs = [
+        "CoreNLP.java",
+        "CoreNLPAnnotateMapper.java",
+    ],
+    main_class = "CoreNLP",
+    deps = [
+        ":CoreNLPInterface",
+        "//:org_apache_hadoop_hadoop_common",
+        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
+    ],
+)

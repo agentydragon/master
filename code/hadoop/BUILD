@@ -139,17 +139,3 @@ java_library(
         "SpotlightPooledConnection.java",
     ],
 )
-
-java_binary(
-    name = "CoreNLP",
-    srcs = [
-        "CoreNLP.java",
-        "CoreNLPAnnotateMapper.java",
-    ],
-    main_class = "CoreNLP",
-    deps = [
-        "//:org_apache_hadoop_hadoop_common",
-        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
-        "//prototype/parse:CoreNLPInterface",
-    ],
-)
