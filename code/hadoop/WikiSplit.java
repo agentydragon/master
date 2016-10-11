@@ -15,20 +15,6 @@ import org.apache.hadoop.hbase.mapreduce.TableOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 
-/*
-   bazel build :WikiSplit_deploy.jar
-   export HADOOP_CLASSPATH=$(hbase classpath):$(pwd)/WikiSplit_deploy.jar
-   hadoop jar WikiSplit_deploy.jar -Djava.security.auth.login.config=/storage/brno2/home/prvak/master/code/hadoop/jaas.conf /user/prvak/wiki-plain-small/wiki-plain-small.txt
-     => Map runs to 100%, then Reduce hangs. Why?
-
-   bazel build :WikiSplit_deploy.jar
-   export HADOOP_CLASSPATH=$(hbase classpath):$(hbase mapredcp):$(pwd)/WikiSplit_deploy.jar
-   hadoop jar WikiSplit_deploy.jar -Djava.security.auth.login.config=/storage/brno2/home/prvak/master/code/hadoop/jaas.conf /user/prvak/wiki-plain-small/wiki-plain-small.txt
-     => Same result, Reduce hangs.
-
-   I just needed to call a call to grab HBase auth tokens :)
-*/
-
 public class WikiSplit extends Configured implements Tool {
 	// Custom InputFormat that processes entire file in blocks.
 	public static class MyFIF extends TextInputFormat {

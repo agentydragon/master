@@ -1,4 +1,13 @@
-hadoop jar /storage/brno7-cerit/home/prvak/bin/WikiSplit_deploy.jar /user/prvak/wiki-plain /user/prvak/wiki-splits
+hdfs dfs -copyFromLocal data/wiki-plain-backup.txt /user/prvak/wiki-plain/wiki-plain.txt
+
+Working:
+
+// 2016-10-11
+bazel build :WikiSplit_deploy.jar
+export HADOOP_CLASSPATH=$(hbase classpath):$(pwd)/WikiSplit_deploy.jar
+hadoop jar WikiSplit_deploy.jar -Djava.security.auth.login.config=/storage/brno2/home/prvak/master/code/hadoop/jaas.conf /user/prvak/wiki-plain/wiki-plain.txt
+
+---------
 
 hadoop jar /storage/brno7-cerit/home/prvak/bin/CoreNLP_deploy.jar /user/prvak/wiki-splits /user/prvak/article-parse-xmls
 	-> "disk quota exceeded" :(
