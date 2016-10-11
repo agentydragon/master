@@ -92,13 +92,6 @@ java_test(
 )
 
 java_library(
-    name = "Relations",
-    srcs = [
-        "Relations.java",
-    ],
-)
-
-java_library(
     name = "WikidataClient",
     srcs = [
         "WikidataClient.java",
