@@ -7,6 +7,27 @@ All Python code uses Python 3.
 pip install --user requests SPARQLWrapper protobuf nltk gflags scikit-learn kazoo etaprogress matplotlib terminaltables
 ```
 
+Building articles HBase table
+==
+
+1. Copy Wikipedia plaintext to HDFS: `hdfs dfs -copyFromLocal data/wiki-plain-backup.txt /user/prvak/wiki-plain/wiki-plain.txt`
+2. Create HBase table:
+   ```
+   $ hbase shell
+   # 'wiki' is created column family
+   create 'prvak:wiki_articles', 'wiki', SPLITS => ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
+   # hbase.hregion.max.filesize is 10 GB by efault. want smaller.
+   alter 'prvak:wiki_articles', 'hbase.region.max.filesize' => (256 * 1024 * 1024)
+   # => ok, creates regions
+   ```
+
+To destroy HBase table
+==
+```
+$ hbase shell
+disable 'prvak:wiki_articles'
+drop 'prvak:wiki_articles'
+```
 
 PRA
 ==

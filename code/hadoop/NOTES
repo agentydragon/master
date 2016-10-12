@@ -9,20 +9,9 @@ hadoop jar WikiSplit_deploy.jar -Djava.security.auth.login.config=/storage/brno2
 
 ---------
 
-hadoop jar /storage/brno7-cerit/home/prvak/bin/CoreNLP_deploy.jar /user/prvak/wiki-splits /user/prvak/article-parse-xmls
-	-> "disk quota exceeded" :(
-
-to run so that it actually works:
-	export HADOOP_CLASSPATH=(CoreNLP_deploy.jar)
-	hadoop jar (CoreNLP.jar) CoreNLP /user/prvak/wiki-splits /user/prvak/article-parse-xmls
-
-/storage/brno7-cerit/home/prvak/bin/bazel build hadoop:CoreNLP_deploy.jar
-=> same thing
-
 export HADOOP_CLASSPATH=/storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP_deploy.jar
 export HADOOP_DATANODE_OPTS="-Xmx10g"
 hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.jar CoreNLP /user/prvak/wiki-splits /user/prvak/article-parse-xmls
-
 
 -Dmapred.job.map.memory.mb=5300
 -Dmapred.child.java.opts="-Xmx5g"
@@ -35,10 +24,6 @@ with shift-reduce model:
 
 bazel run :DocumentProcessor -- --jvm_flags=-Xmx6000m -D 'text=Barack Obama is the president of the United States. Barack married Michelle Obama and he was born in Hawaii. His father was named Lolo Soetoro.' -D spotlight_server=http://spotlight.sztaki.hu:2222/rest/annotate --stdin
 
-hbase shell
-
-'cf': column family
-create 'prvak:wiki_articles', 'wiki'
 	row key: article name
 
 # Parse
