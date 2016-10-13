@@ -31,8 +31,6 @@ public class CoreNLP extends Configured implements Tool {
 		job.setJarByClass(CoreNLP.class);
 
 		Scan scanner = new Scan();
-		scanner.setStartRow("Andrew Wiles".getBytes());
-		scanner.setStopRow("Autism".getBytes());
 		scanner.addColumn("wiki".getBytes(), "plaintext".getBytes());
 		// TODO: get only latest version; or overwrite.
 
