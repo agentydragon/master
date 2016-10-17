@@ -54,7 +54,7 @@ public class HBaseToJSON extends Configured implements Tool {
 		json.put("title", title);
 		json.put("plaintext", plaintext);
 		json.put("corenlp_xml", corenlpXml);
-		json.put("spotlight_json", spotlightJson);
+		json.put("spotlight_json", new JSONObject(spotlightJson));
 
 		ArticleRepository.writeArticle(title, json);
 		System.out.println("written " + title);
