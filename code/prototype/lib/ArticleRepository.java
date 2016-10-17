@@ -20,8 +20,10 @@ public class ArticleRepository {
 		if (title.codePointCount(0, title.length()) > 100) {
 			title = prefix(title, 100);
 		}
-		String sub = prefix(title, 1) + "/" + prefix(title, 2) + "/" + prefix(title, 3) + "/" + title + ".json";
-		return basePath + "/" + sub;
+		String sub = prefix(title, 1) + "/" + prefix(title, 2) + "/" + prefix(title, 3);
+		String filename = title + ".json";
+		new File(basePath + "/" + sub).mkdirs();
+		return basePath + "/" + sub + "/" + filename;
 	}
 
 	public static JSONObject readArticle(String title) throws IOException {

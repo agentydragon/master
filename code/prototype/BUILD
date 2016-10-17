@@ -52,3 +52,19 @@ py_binary(
     default_python_version = "PY3",
     srcs_version = "PY3",
 )
+
+java_binary(
+    name = "HBaseToJSON",
+    srcs = [
+        "HBaseToJSON.java",
+    ],
+    main_class = "HBaseToJSON",
+    deps = [
+        "//prototype/lib:ArticleRepository",
+        "//:org_json_json",
+        "//:org_apache_hadoop_hadoop_common",
+        "//:org_apache_hbase_hbase_common",
+        "//:org_apache_hbase_hbase_client",
+        "//:org_apache_hbase_hbase_server",
+    ],
+)
