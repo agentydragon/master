@@ -15,8 +15,10 @@ Building articles HBase table
    ```
    $ hbase shell
    # 'wiki' is created column family
-   create 'prvak:wiki_articles', 'wiki', SPLITS => ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
-   # hbase.hregion.max.filesize is 10 GB by efault. want smaller.
+   splits = ('A'..'Z').map { |x| ('a'..'z').map { |y| (x + y) } }.inject(&:+)
+   splits += ('0'..'9').to_a
+   create 'prvak:wiki_articles', 'wiki', SPLITS => splits
+   # hbase.hregion.max.filesize is 10 GB by default. want smaller.
    alter 'prvak:wiki_articles', 'hbase.region.max.filesize' => (256 * 1024 * 1024)
    # => ok, creates regions
    ```

@@ -1,6 +1,10 @@
 import java.io.IOException;
 import java.lang.IllegalArgumentException;
 
+import org.apache.hadoop.fs.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
@@ -17,9 +21,26 @@ import org.apache.hadoop.hbase.mapreduce.TableMapper;
 public class CoreNLPAnnotateMapper/*<K>*/ extends TableMapper</*K*/ImmutableBytesWritable, Put>{
 	private int prefixLength;
 	private CoreNLPInterface corenlpInterface = new CoreNLPInterface();
+	private Set<String> whitelist = new HashSet<>();
 
 	@Override
 	public void setup(Context context) {
+		try {
+			FileSystem fs = FileSystem.get(context.getConfiguration());
+			FSDataInputStream inputStream = fs.open(new Path("/user/prvak/articles.tsv"));
+			try (BufferedReader r = new BufferedReader(new InputStreamReader(inputStream))) {
+				String line;
+				while  ((line = r.readLine()) != null) {
+					whitelist.add(line.split("\t")[1]);
+				}
+			}
+
+			inputStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			whitelist = null;
+		}
+
 		Configuration conf = context.getConfiguration();
 		prefixLength = conf.getInt("prefix_length", 10);
 		corenlpInterface.setup();
@@ -28,7 +49,13 @@ public class CoreNLPAnnotateMapper/*<K>*/ extends TableMapper</*K*/ImmutableByte
 	@Override
 	public void map(ImmutableBytesWritable rowkey, Result result, Context context) throws IOException, InterruptedException {
 		//String articleText = value.toString();
+		String articleTitle = new String(rowkey.get());
 		String articleText = new String(result.getValue("wiki".getBytes(), "plaintext".getBytes()));
+
+
+		if (!whitelist.contains(articleTitle)) {
+			return;
+		}
 
 		// Reduce the length of the text.
 		// XXX: HAX

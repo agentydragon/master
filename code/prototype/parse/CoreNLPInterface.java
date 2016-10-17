@@ -15,8 +15,11 @@ public class CoreNLPInterface {
 		props.put("annotators",
 				"tokenize,ssplit,pos,parse," +
 				"lemma,ner,dcoref");
-		props.put("parser.maxlen", "100");
-		props.put("pos.maxlen", "100");
+		props.put("threads", "10");
+		// props.put("pos.maxlen", "100");
+		// props.put("parse.maxlen", "100");
+		props.put("pos.maxlen", "50");
+		props.put("parse.maxlen", "50");
 
 		// Use shift-reduce model to parse faster.
 		props.put("parse.model", "edu/stanford/nlp/models/srparser/englishSR.ser.gz");
