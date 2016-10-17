@@ -24,7 +24,8 @@ public class HBaseToJSON extends Configured implements Tool {
 			return;
 		}
 		SavedDocument document = new SavedDocument(result);
-		if (document.plaintext == null || document.corenlpXml == null || document.spotlightJson == null) {
+		if (document.plaintext == null || document.corenlpXml == null || document.spotlightJson == null ||
+				document.sentences == null || document.coreferences == null || document.spotlightMentions == null) {
 			return;
 		}
 		System.out.println(document.title);

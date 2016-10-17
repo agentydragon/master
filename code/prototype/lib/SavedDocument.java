@@ -5,6 +5,15 @@ import org.apache.hadoop.hbase.client.Result;
 import java.util.*;
 import java.util.stream.*;
 import java.util.function.*;
+import java.io.*;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.w3c.dom.*;
+import javax.xml.xpath.*;
 
 public class SavedDocument {
 	public static class JSONUtils {
@@ -152,7 +161,8 @@ public class SavedDocument {
 			JSONArray resources = (JSONArray) spotlightJSON.get("Resources");
 			Set<String> dbpediaUris = new HashSet<>();
 			for (int i = 0; i < resources.length(); i++) {
-				dbpediaUris.add((String) ((JSONObject) resources.get(i)).get("@URI"));
+				JSONObject mention_json = (JSONObject) resources.get(i);
+				dbpediaUris.add((String) mention_json.get("@URI"));
 			}
 			Map<String, String> dbpediaUriToWikidataId = dbpediaClient.dbpediaUrisToWikidataIds(new ArrayList<>(dbpediaUris));
 
@@ -227,7 +237,9 @@ public class SavedDocument {
 		get.addColumn(ArticlesTable.WIKI, ArticlesTable.PLAINTEXT);
 		get.addColumn(ArticlesTable.WIKI, ArticlesTable.CORENLP_XML);
 		get.addColumn(ArticlesTable.WIKI, ArticlesTable.SPOTLIGHT_JSON);
-		// TODO: sentences, coreferences, spotlight mentions
+		get.addColumn(ArticlesTable.WIKI, ArticlesTable.SENTENCES);
+		get.addColumn(ArticlesTable.WIKI, ArticlesTable.COREFERENCES);
+		get.addColumn(ArticlesTable.WIKI, ArticlesTable.SPOTLIGHT_MENTIONS);
 		return get;
 	}
 
@@ -293,11 +305,110 @@ public class SavedDocument {
 		return json;
 	}
 
-	/*
-	public void addProtoToDocument(DBpediaClient dbpediaClient) {
-		TODO
+	private static XPathFactory xPathFactory = XPathFactory.newInstance();
+	private static XPath xPath = xPathFactory.newXPath();
+
+	private static org.w3c.dom.Document parseXmlFromString(String str) throws SAXException, ParserConfigurationException, IOException {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		return db.parse(new InputSource(new StringReader(str)));
 	}
-	*/
+
+	private static Map<String, XPathExpression> tagContentXpaths = new HashMap<>();
+
+	private static int getAttributeAsInt(Node tag, String attribute) {
+		return Integer.parseInt(tag.getAttributes().getNamedItem(attribute).getNodeValue());
+	}
+
+	private static NodeList queryXPathNodes(String xPathstr, Object tag) throws XPathExpressionException {
+		if (!tagContentXpaths.containsKey(xPathstr)) {
+			tagContentXpaths.put(xPathstr, xPath.compile(xPathstr));
+		}
+		XPathExpression e2 = tagContentXpaths.get(xPathstr);
+		return (NodeList) e2.evaluate(tag, XPathConstants.NODESET);
+	}
+
+	// TODO: handle those as literals!
+
+	private static Map<String, String> getTagTexts(Node node) {
+		Map<String, String> result = new HashMap<>();
+		NodeList children = node.getChildNodes();
+		for (int k = 0; k < children.getLength(); k++) {
+			Node child = children.item(k);
+			result.put(child.getNodeName(), child.getTextContent());
+		}
+		return result;
+	}
+
+	public void addProtoToDocument(DBpediaClient dbpediaClient) throws XPathExpressionException, SAXException, ParserConfigurationException, IOException {
+		spotlightMentions = SpotlightMention.mentionsFromSpotlightJSON(spotlightJson, dbpediaClient);
+
+		org.w3c.dom.Document root = parseXmlFromString(corenlpXml);
+
+		sentences = new ArrayList<>();
+		NodeList nodes = queryXPathNodes("/root/document/sentences/sentence", root);
+		for (int i = 0; i < nodes.getLength(); i++) {
+			Node sentenceTag = nodes.item(i);
+
+			DocumentSentence sentence = new DocumentSentence();
+			sentence.id = getAttributeAsInt(sentenceTag, "id");
+			sentence.tokens = new ArrayList<>();
+
+			int sentenceBegin = -1;
+			int sentenceEnd = -1;
+
+			NodeList tokens = queryXPathNodes("tokens/token", sentenceTag);
+			for (int j = 0; j < tokens.getLength(); j++) {
+				Node tokenTag = tokens.item(j);
+
+				Map<String, String> texts = getTagTexts(tokenTag);
+
+				int tokenStart = Integer.parseInt(texts.get("CharacterOffsetBegin"));
+				int tokenEnd = Integer.parseInt(texts.get("CharacterOffsetEnd"));
+
+				sentenceEnd = tokenEnd;
+				if (sentenceBegin == -1) {
+					sentenceBegin = tokenStart;
+				}
+
+				SentenceToken token = new SentenceToken();
+				token.id = getAttributeAsInt(tokenTag, "id");
+				token.startOffset = tokenStart;
+				token.endOffset = tokenEnd;
+				token.lemma = texts.get("lemma");
+				token.word = texts.get("word");
+				token.pos = texts.get("POS");
+				token.ner = texts.get("NER");
+				sentence.tokens.add(token);
+			}
+
+			sentence.text = plaintext.substring(sentenceBegin, sentenceEnd);
+			sentences.add(sentence);
+		}
+
+		coreferences = new ArrayList<>();
+		nodes = queryXPathNodes("/root/document/coreference/coreference", root);
+		for (int i = 0; i < nodes.getLength(); i++) {
+			Node corefNode = nodes.item(i);
+			Coreference coreference = new Coreference();
+			coreference.mentions = new ArrayList<>();
+
+			NodeList mentionTags = queryXPathNodes("mention", corefNode);
+			for (int j = 0; j < mentionTags.getLength(); j++) {
+				Node mentionNode = mentionTags.item(j);
+
+				Map<String, String> texts = getTagTexts(mentionNode);
+
+				Mention mention = new Mention();
+				mention.startWordId = Integer.parseInt(texts.get("start"));
+				mention.endWordId = Integer.parseInt(texts.get("end"));
+				mention.sentenceId = Integer.parseInt(texts.get("sentence"));
+				mention.text = texts.get("text");
+				coreference.mentions.add(mention);
+			}
+			coreferences.add(coreference);
+		}
+	}
 
 	public byte[] getSentencesSerialization() {
 		return Bytes.toBytes(JSONUtils.toArray(sentences, DocumentSentence::toJSON).toString());

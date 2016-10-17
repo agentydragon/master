@@ -15,6 +15,7 @@ public class DBpediaClient {
 //	private static Map<String, String> dbpediaUriToWikidataIdCache = TODO;
 
 	private final static String wikidataPrefix = "http://www.wikidata.org/entity/";
+	private final static String wikidataPrefix2 = "http://wikidata.org/entity/";
 	private final static String STANDARD_PREFIXES = "PREFIX wd: <http://www.wikidata.org/entity/>\n" +
 			"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
 			"PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
@@ -28,6 +29,11 @@ public class DBpediaClient {
 
 	public DBpediaClient(Configuration configuration) {
 		this.endpoint = configuration.get("dbpedia_endpoint");
+
+		if (this.endpoint == null || this.endpoint == "") {
+			System.out.println("No dbpedia_endpoint given!");
+			System.exit(1);
+		}
 	}
 
 	public String dbpediaUriToWikidataId(String uri) {
@@ -38,12 +44,17 @@ public class DBpediaClient {
 		try (QueryExecution execution = QueryExecutionFactory.sparqlService(endpoint, query)) {
 			ResultSet results = execution.execSelect();
 			while (results.hasNext()) {
+				System.out.println("Solution:");
 				QuerySolution soln = results.nextSolution();
 				Resource r = soln.getResource("same");
-				if ( ! r.isAnon() ) {
+				if (!r.isAnon()) {
+					System.out.println("...");
 					String sameUri = r.getURI();
 					if (sameUri.startsWith(wikidataPrefix)) {
 						return sameUri.substring(wikidataPrefix.length());
+					}
+					if (sameUri.startsWith(wikidataPrefix2)) {
+						return sameUri.substring(wikidataPrefix2.length());
 					}
 				}
 			}
@@ -92,6 +103,11 @@ public class DBpediaClient {
 						String sameUri = same.getURI();
 						if (sameUri.startsWith(wikidataPrefix)) {
 							String wikidataId = sameUri.substring(wikidataPrefix.length());
+							result.put(entityUri, wikidataId);
+							// TODO: and cache
+						}
+						if (sameUri.startsWith(wikidataPrefix2)) {
+							String wikidataId = sameUri.substring(wikidataPrefix2.length());
 							result.put(entityUri, wikidataId);
 							// TODO: and cache
 						}
