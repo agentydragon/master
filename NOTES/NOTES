@@ -176,3 +176,31 @@ TODO: Finish loading union dataset into Fuseki
 fill-fuseki-data: 04h 08m (failed when starting sort phrase)
 
 wiki2text: version GLIBC_2.14 not found
+
+kinit -r 7d (renewable time extra)
+kinit -l 24h (lifetime)
+
+brown bag: "bag of N-grams" vs. "bag of words"
+
+qstat -n -u prvak (show node allocation)
+
+Data Load Phase:
+INFO  Total: 1,712,534,452 tuples : 13,803.78 seconds : 124,062.67 tuples/sec [2016/10/10 21:55:06 CEST]
+
+Pavel Taufer, schuzka 11.10.
+	live.dbpedia.org/dumps
+	IPython umi pousten enginy v PBS
+	notebook: --script => uklada se pri kazdem ulozeni jako Python script
+	SGcko je to same jako PBS -- taky jenom dostane skript
+
+	PySpark
+
+	Hoffart AIDA -- dataset (oanotovane clanky a vety)
+
+Flume: pro prubezne produkovani dat, YARN: workflow z MapReduce uloh (Hadoop 2.0)
+
+truncate 'prvak:wiki_articles'
+
+https://hador-c1.ics.muni.cz:60010/table.jsp?name=prvak:wiki_articles
+
+props.setProperty("tokenize.options", "untokenizable=noneDelete");
