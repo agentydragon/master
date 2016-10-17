@@ -22,10 +22,6 @@ hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.
 with shift-reduce model:
 	hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.jar CoreNLP -D prefix_length=1000 -D mapreduce.map.memory.mb=9000 -D mapreduce.map.java.opts=-Xmx8000m -D mapreduce.task.timeout=6000000 -D mapreduce.input.fileinputformat.split.maxsize=1000000 /user/prvak/wiki-splits /user/prvak/article-parse-xmls-1000
 
-bazel run :DocumentProcessor -- --jvm_flags=-Xmx6000m -D 'text=Barack Obama is the president of the United States. Barack married Michelle Obama and he was born in Hawaii. His father was named Lolo Soetoro.' -D spotlight_server=http://spotlight.sztaki.hu:2222/rest/annotate --stdin
-
-	row key: article name
-
 # Parse
 hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.jar CoreNLP -D prefix_length=1000 -D mapreduce.map.memory.mb=9000 -D mapreduce.map.java.opts=-Xmx8000m -D mapreduce.task.timeout=6000000 -D mapreduce.input.fileinputformat.split.maxsize=1000000 /user/prvak/wiki-splits /user/prvak/article-parse-xmls-1000
 	=>
@@ -34,11 +30,6 @@ hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/CoreNLP.
 hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/SpotlightAnnotator_deploy.jar -D prefix_length=1000 -D spotlight_server=http://hador:2222/rest/annotate -D mapreduce.input.fileinputformat.split.maxsize=1000000 /user/prvak/wiki-splits /user/prvak/article-spotlights-separate-1000
 
 hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/RandomSelector_deploy.jar -D selection_probability=0.001 /user/prvak/wiki-splits /user/prvak/wiki-splits-sub-0.001
-
-# launch on hador
-export HADOOP_CLASSPATH=/storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/DocumentProcessor_deploy.jar
-hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/DocumentProcessor.jar DocumentProcessor -D spotlight_server=http://hador:2222/rest/annotate -D mapreduce.input.fileinputformat.split.maxsize=1000000 -D mapreduce.map.java.opts=-Xmx8000m -D mapreduce.map.memory.mb=9000 -D mapreduce.task.timeout=6000000 /user/prvak/wiki-splits-sub-0.001 /user/prvak/wiki-processed-sub-0.001
-# has very long bootup
 
 14..19 minut na 1/1000 Wikipedie
 
@@ -56,9 +47,6 @@ hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -input /user/prvak/wik
 
 chmod +x hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -input /user/prvak/wiki-processed-sub-0.001 -output /user/prvak/wiki-samples-sub-0.001 -mapper mr_generate_training_samples.py -file annotate_coreferences.py -file dbpedia.py -file file_util.py -file get_training_samples.py -file json_cache.py -file parse_xmls_to_protos.py -file paths.py -file relations.py -file bazel-genfiles/sentence_pb2.py -file sparql_client.py -file bazel-genfiles/training_samples_pb2.py -file wikidata_util.py -file mr_generate_training_samples.py
 
-
-export HADOOP_CLASSPATH=/storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/DocumentProcessor_deploy.jar
-hadoop jar /storage/brno7-cerit/home/prvak/master/code/bazel-bin/hadoop/DocumentProcessor.jar DocumentProcessor -D spotlight_server=http://hador:2222/rest/annotate -D mapreduce.input.fileinputformat.split.maxsize=1000000 -D mapreduce.map.java.opts=-Xmx8000m -D mapreduce.map.memory.mb=9000 -D mapreduce.task.timeout=6000000 /user/prvak/wiki-splits-sub-0.001 /user/prvak/wiki-processed-sub-0.001
 
 hador.ics.muni.cz: Hadoop frontend
 

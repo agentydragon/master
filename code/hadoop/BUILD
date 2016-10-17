@@ -89,31 +89,3 @@ java_library(
         "//:org_apache_httpcomponents_httpclient",
     ],
 )
-
-java_binary(
-    name = "DocumentProcessor",
-    srcs = [
-        "DocumentProcessor.java",
-    ],
-    main_class = "DocumentProcessor",
-    deps = [
-        ":DocumentProcessorMapper",
-        "//:org_apache_hadoop_hadoop_common",
-        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
-        "//:commons_io_commons_io",
-    ],
-)
-
-java_library(
-    name = "DocumentProcessorMapper",
-    srcs = [
-        "DocumentProcessorMapper.java",
-    ],
-    deps = [
-        ":SpotlightConnection",
-        "//prototype/parse:CoreNLPInterface",
-        "//:org_apache_hadoop_hadoop_common",
-        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
-        "//:org_json_json",
-    ],
-)
