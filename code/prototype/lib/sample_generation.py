@@ -22,11 +22,11 @@ def try_load_document(article_title):
         print('unspotlighted article', article_title)
         return
 
-    if not article.proto:
+    if not article.sentences:
         print('unjoined article', article_title)
         return
 
-    return article.proto
+    return article
 
 def get_document_subgraph(document, wikidata_client, relations):
     all_wikidata_ids = set()
