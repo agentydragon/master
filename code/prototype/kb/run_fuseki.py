@@ -9,15 +9,14 @@ config_file_path = '/tmp/fuseki-config.ttl'
 fuseki_config.write_config(
     config_file_path,
     datasets = {
-        'wikidata': '/scratch/prvak/wikidata',
-        'dbpedia-sameas': paths.WORK_DIR + '/fuseki-datasets/dbpedia-sameas',
+        'merged': paths.WORK_DIR + '/fuseki-datasets/merged',
         # TODO: 'merged' when we merge it
     },
 )
 
 # TODO: not really Hador...
-zk.set_wikidata_endpoint('http://hador:3030/wikidata/query')
-zk.set_dbpedia_endpoint('http://hador:3030/dbpedia-sameas/query')
+zk.set_wikidata_endpoint('http://hador:3030/merged/query')
+zk.set_dbpedia_endpoint('http://hador:3030/merged/query')
 
 print("Starting Fuseki...", datetime.datetime.now())
 fuseki.serve_forever(
