@@ -7,61 +7,176 @@ k = recordclass.recordclass
 class SentenceToken(k("SentenceToken",
                       ["id", "start_offset", "end_offset", "lemma", "pos",
                        "word", "ner"])):
+    ID = 'id'
+    START_OFFSET = 'start_offset'
+    END_OFFSET = 'end_offset'
+    LEMMA = 'lemma'
+    POS = 'pos'
+    WORD = 'word'
+    NER = 'ner'
+
     def to_json(self):
         return {
-            'id': self.id,
-            'start_offset': self.start_offset,
-            'end_offset': self.end_offset,
-            'lemma': self.lemma,
-            'pos': self.pos,
-            'word': self.word,
-            'ner': self.ner,
+            ID: self.id,
+            START_OFFSET: self.start_offset,
+            END_OFFSET: self.end_offset,
+            LEMMA: self.lemma,
+            POS: self.pos,
+            WORD: self.word,
+            NER: self.ner,
         }
 
     @classmethod
     def from_json(klass, json):
         return klass(
-            id = json['id'],
-            start_offset = json['start_offset'],
-            end_offset = json['end_offset'],
-            lemma = json['lemma'],
-            pos = json['pos'],
-            word = json['word'],
-            ner = json['ner'],
+            id = json[ID],
+            start_offset = json[START_OFFSET],
+            end_offset = json[END_OFFSET],
+            lemma = json[LEMMA],
+            pos = json[POS],
+            word = json[WORD],
+            ner = json[NER],
         )
-
 
 class Mention(k("Mention",
                 ["sentence_id", "start_word_id", "end_word_id", "text"])):
+    SENTENCE_ID = "sentence_id"
+    START_WORD_ID = "start_word_id"
+    END_WORD_ID = "end_word_id"
+    TEXT = "text"
+
     def to_json(self):
         return {
-            'sentence_id': self.sentence_id,
-            'start_word_id': self.start_word_id,
-            'end_word_id': self.end_word_id,
-            'text': self.text,
+            SENTENCE_ID: self.sentence_id,
+            START_WORD_ID: self.start_word_id,
+            END_WORD_ID: self.end_word_id,
+            TEXT: self.text,
         }
 
     @classmethod
     def from_json(klass, json):
         return klass(
-            sentence_id = json['sentence_id'],
-            start_word_id = json['start_word_id'],
-            end_word_id = json['end_word_id'],
-            text = json['text']
+            sentence_id = json[SENTENCE_ID],
+            start_word_id = json[START_WORD_ID],
+            end_word_id = json[END_WORD_ID],
+            text = json[TEXT]
         )
 
 class Coreference(k("Coreference",
                     ["mentions"])):
+    MENTIONS = "mentions"
+
     def to_json(self):
         return {
-            'mentions': list(map(Mention.to_json, self.mentions)),
+            MENTIONS: list(map(Mention.to_json, self.mentions)),
         }
 
     @classmethod
     def from_json(klass, json):
         return klass(
-            mentions = list(map(Mention.from_json, json['mentions'])),
+            mentions = list(map(Mention.from_json, json[MENTIONS])),
         )
+
+class SpotlightMention(k("SpotlightMention",
+                         ["start_offset", "end_offset", "surface_form",
+                          "uri",
+                          "wikidata_id"])):
+    START_OFFSET = "start_offset"
+    END_OFFSET = "end_offset"
+    SURFACE_FORM = "surface_form"
+    URI = "uri"
+    WIKIDATA_ID = "wikidata_id"
+
+    def to_json(self):
+        return {
+            START_OFFSET: self.start_offset,
+            END_OFFSET: self.end_offset,
+            SURFACE_FORM: self.surface_form,
+            URI: self.uri,
+            WIKIDATA_ID: self.wikidata_id
+        }
+
+    @classmethod
+    def from_json(klass, json):
+        return klass(
+            start_offset = json[START_OFFSET],
+            end_offset = json[END_OFFSET],
+            surface_form = json[SURFACE_FORM],
+            uri = json[URI],
+            wikidata_id = json[WIKIDATA_ID],
+        )
+
+    @classmethod
+    def mentions_from_spotlight_json(klass, spotlight_json, dbpedia_client):
+        mentions = []
+
+        # TODO: fix?
+        if 'Resources' not in spotlight_json:
+            print("WARN: no resources returned by Spotlight")
+            return []
+
+        dbpedia_uris = set(mention_json['@URI']
+                           for mention_json
+                           in spotlight_json['Resources'])
+        dbpedia_uri_to_wikidata_id = dbpedia_client.dbpedia_uris_to_wikidata_ids(dbpedia_uris)
+
+        for mention_json in spotlight_json['Resources']:
+            if not mention_json['@surfaceForm']:
+                # TODO HACK?
+                continue
+
+            uri = mention_json['@URI']
+            if uri in dbpedia_uri_to_wikidata_id:
+                wikidata_id = dbpedia_uri_to_wikidata_id[uri]
+            else:
+                print('WARN: No translation:', uri)
+                wikidata_id = None
+
+            mention = klass(
+                start_offset = int(mention_json['@offset']),
+                uri = uri,
+                end_offset = None,
+                surface_form = None,
+                wikidata_id = wikidata_id,
+            )
+
+            surface_form = mention_json['@surfaceForm']
+            mention.end_offset = mention.start_offset + len(surface_form)
+            mention.surface_form = surface_form
+            mentions.append(mention)
+        return mentions
+
+
+class DocumentSentence(k("DocumentSentence", ["id", "text", "tokens"])):
+    ID = 'id'
+    TEXT = 'text'
+    TOKENS = 'tokens'
+
+    def to_json(self):
+        return {
+            ID: self.id,
+            TEXT: self.text,
+            TOKENS: list(map(SentenceToken.to_json, self.tokens)),
+        }
+
+    @classmethod
+    def from_json(klass, json):
+        return klass(
+            id = json[ID],
+            text = json[TEXT],
+            tokens = list(map(SentenceToken.from_json, json[TOKENS])),
+        )
+
+    def start_offset(self):
+        return self.tokens[0].start_offset
+
+    def end_offset(self):
+        return self.tokens[-1].end_offset
+
+    def find_token_by_id(self, token_id):
+        for token in self.tokens:
+            if token.id == token_id:
+                return token
 
 class SavedDocument(k("SavedDocument", [
         "title",
@@ -211,93 +326,3 @@ class SavedDocument(k("SavedDocument", [
         # add_single_referenced_entities_to_coreferences(proto)
         # annotate_coreferences(proto)
 
-class SpotlightMention(k("SpotlightMention",
-                         ["start_offset", "end_offset", "surface_form",
-                          "uri",
-                          "wikidata_id"])):
-    def to_json(self):
-        return {
-            'start_offset': self.start_offset,
-            'end_offset': self.end_offset,
-            'surface_form': self.surface_form,
-            'uri': self.uri,
-            'wikidata_id': self.wikidata_id
-        }
-
-    @classmethod
-    def from_json(klass, json):
-        return klass(
-            start_offset = json['start_offset'],
-            end_offset = json['end_offset'],
-            surface_form = json['surface_form'],
-            uri = json['uri'],
-            wikidata_id = json['wikidata_id'],
-        )
-
-    @classmethod
-    def mentions_from_spotlight_json(klass, spotlight_json, dbpedia_client):
-        mentions = []
-
-        # TODO: fix?
-        if 'Resources' not in spotlight_json:
-            print("WARN: no resources returned by Spotlight")
-            return []
-
-        dbpedia_uris = set(mention_json['@URI']
-                           for mention_json
-                           in spotlight_json['Resources'])
-        dbpedia_uri_to_wikidata_id = dbpedia_client.dbpedia_uris_to_wikidata_ids(dbpedia_uris)
-
-        for mention_json in spotlight_json['Resources']:
-            if not mention_json['@surfaceForm']:
-                # TODO HACK?
-                continue
-
-            uri = mention_json['@URI']
-            if uri in dbpedia_uri_to_wikidata_id:
-                wikidata_id = dbpedia_uri_to_wikidata_id[uri]
-            else:
-                print('WARN: No translation:', uri)
-                wikidata_id = None
-
-            mention = klass(
-                start_offset = int(mention_json['@offset']),
-                uri = uri,
-                end_offset = None,
-                surface_form = None,
-                wikidata_id = wikidata_id,
-            )
-
-            surface_form = mention_json['@surfaceForm']
-            mention.end_offset = mention.start_offset + len(surface_form)
-            mention.surface_form = surface_form
-            mentions.append(mention)
-        return mentions
-
-
-class DocumentSentence(k("DocumentSentence", ["id", "text", "tokens"])):
-    def to_json(self):
-        return {
-            'id': self.id,
-            'text': self.text,
-            'tokens': list(map(SentenceToken.to_json, self.tokens)),
-        }
-
-    @classmethod
-    def from_json(klass, json):
-        return klass(
-            id = json['id'],
-            text = json['text'],
-            tokens = list(map(SentenceToken.from_json, json['tokens'])),
-        )
-
-    def start_offset(self):
-        return self.tokens[0].start_offset
-
-    def end_offset(self):
-        return self.tokens[-1].end_offset
-
-    def find_token_by_id(self, token_id):
-        for token in self.tokens:
-            if token.id == token_id:
-                return token

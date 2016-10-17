@@ -96,6 +96,7 @@ java_library(
     ],
     deps = [
         ":ArticlesTable",
+        ":DBpediaClient",
         "//:org_json_json",
         "//:org_apache_hbase_hbase_common",
         "//:org_apache_hbase_hbase_client",

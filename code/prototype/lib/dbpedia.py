@@ -44,7 +44,6 @@ class DBpediaClient(object):
             else:
                 to_fetch.append(uri)
 
-        # TODO: Batching?
         batch_size = 100
         for i in range(0, len(to_fetch), batch_size):
             uri_batch = to_fetch[i:i+batch_size]
