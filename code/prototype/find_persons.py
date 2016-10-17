@@ -25,22 +25,22 @@ def main():
             # instance-of human
             ?person wdp:P31 wd:Q5 .
 
-            ?person rdfs:label ?label .
+            ?person rdfs:label ?label
             FILTER (lang(?label) = "en")
+
+            BIND(URI(REPLACE(STR(?person), STR(wd:), "http://wikidata.org/entity/")) AS ?person2)
+            ?dbpedia_person owl:sameAs ?person2 .
+            ?dbpedia_person foaf:isPrimaryTopicOf ?wikipedia_page
         }
         LIMIT %d
     """ % args.num_persons)
-
-    #         ?person owl:sameAs ?dbpedia_person .
-    #         ?dbpedia_person foaf:isPrimaryTopicOf ?wikipedia_page .
 
     bar = progressbar.ProgressBar()
     persons = set()
     for row in bar(results):
         id = wikidata_util.wikidata_entity_url_to_entity_id(row['person'])
         name = row['label']
-    #    wikipedia_page = row['wikipedia_page']
-        wikipedia_page = '???'
+        wikipedia_page = row['wikipedia_page']
         persons.add((name, id, wikipedia_page)) # add: because of multiplicities
 
         print(name, id, wikipedia_page)
