@@ -117,25 +117,3 @@ java_library(
         "//:org_json_json",
     ],
 )
-
-java_binary(
-    name = "SpotlightAnnotator",
-    srcs = [
-        "SpotlightAnnotator.java",
-    ],
-    main_class = "SpotlightAnnotator",
-    deps = [
-        ":SpotlightConnection",
-        "//:org_apache_hadoop_hadoop_common",
-        "//:org_apache_hadoop_hadoop_mapreduce_client_core",
-    ],
-)
-
-java_library(
-    name = "SpotlightConnection",
-    srcs = [
-        "SpotlightConnection.java",
-        "SpotlightSingleConnection.java",
-        "SpotlightPooledConnection.java",
-    ],
-)

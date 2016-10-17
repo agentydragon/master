@@ -24,14 +24,18 @@ class Job(object):
 
         port = self.i + 2222
         SCRIPT = (
-            "../cpulimit/cpulimit -l %d prototype/entity_recognition/spotlight %d" %
-            (CORES * 100, port)
+            "../cpulimit/cpulimit -l %(cpulimit)d prototype/entity_recognition/spotlight_server --jvm_flags=-Xmx%(mem)s %(port)d" % {
+                'cpulimit': CORES * 100,
+                'mem': '%dm' % (30 * 1024),
+                'port': port,
+            }
         )
         # 4: not enough
         # 10: not enough
+        # 16 gb not enough (2016-10-17)
         self.job = pbs_util.launch(
             walltime="24:00:00",
-            node_spec="nodes=1:brno:ppn=%d,mem=16gb,scratch=100mb" % CORES,
+            node_spec="nodes=1:brno:ppn=%d,mem=32gb,scratch=100mb" % CORES,
             job_name="spotlight_%d" % (self.i + 1),
             script=SCRIPT
         )
