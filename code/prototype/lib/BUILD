@@ -79,6 +79,18 @@ py_library(
     ],
 )
 
+java_library(
+    name = "SavedDocument",
+    srcs = [
+        "SavedDocument.java",
+    ],
+    deps = [
+        "//:org_json_json",
+        "//:org_apache_hbase_hbase_common",
+        "//:org_apache_hbase_hbase_client",
+    ],
+)
+
 py_library(
     name = "training_sample_lib",
     srcs = [

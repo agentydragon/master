@@ -61,6 +61,7 @@ java_binary(
     main_class = "HBaseToJSON",
     deps = [
         "//prototype/lib:ArticleRepository",
+        "//prototype/lib:SavedDocument",
         "//:org_json_json",
         "//:org_apache_hadoop_hadoop_common",
         "//:org_apache_hbase_hbase_common",

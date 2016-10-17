@@ -1,4 +1,3 @@
-import org.json.*;
 import java.io.*;
 import java.lang.*;
 import org.apache.hadoop.fs.*;
@@ -24,40 +23,14 @@ public class HBaseToJSON extends Configured implements Tool {
 			System.out.println("null rowkey");
 			return;
 		}
-		String title = new String(rowkey);
-		byte[] plaintextBytes = result.getValue(Bytes.toBytes("wiki"), Bytes.toBytes("plaintext"));
-		String plaintext = null;
-		if (plaintextBytes != null) {
-			plaintext = new String(plaintextBytes);
-		}
-		byte[] corenlpXmlBytes = result.getValue(Bytes.toBytes("wiki"), Bytes.toBytes("corenlp_xml"));
-		String corenlpXml = null;
-		if (corenlpXmlBytes != null) {
-			corenlpXml = new String(corenlpXmlBytes);
-		}
-		String spotlightJson = null;
-		byte[] spotlightJsonBytes = result.getValue(Bytes.toBytes("wiki"),
-				Bytes.toBytes("spotlight_json"));
-		if (spotlightJsonBytes != null) {
-		       spotlightJson = new String(spotlightJsonBytes);
-		}
-
-		if (plaintext == null || corenlpXml == null || spotlightJson == null) {
+		SavedDocument document = new SavedDocument(result);
+		if (document.plaintext == null || document.corenlpXml == null || document.spotlightJson == null) {
 			return;
 		}
-		System.out.println(title);
-		// System.out.println(plaintext);
-		// System.out.println(corenlpXml);
-		// System.out.println(spotlightJson);
+		System.out.println(document.title);
 
-		JSONObject json = new JSONObject(); //ArticleRepository.readArticle(title);
-		json.put("title", title);
-		json.put("plaintext", plaintext);
-		json.put("corenlp_xml", corenlpXml);
-		json.put("spotlight_json", new JSONObject(spotlightJson));
-
-		ArticleRepository.writeArticle(title, json);
-		System.out.println("written " + title);
+		ArticleRepository.writeArticle(document.title, document.toJSON());
+		System.out.println("written " + document.title);
 	}
 
 	public int run(String[] args) throws Exception {
@@ -75,14 +48,7 @@ public class HBaseToJSON extends Configured implements Tool {
 				List<Get> batch = new ArrayList<>();
 				for (int j = i; j < (i + batchSize) && (j < whitelist.size()); j++) {
 					String title = whitelist.get(j);
-					Get get = new Get(Bytes.toBytes(title)); //"George Washington"));
-					get.addColumn(Bytes.toBytes("wiki"),
-							Bytes.toBytes("plaintext"));
-					get.addColumn(Bytes.toBytes("wiki"),
-							Bytes.toBytes("corenlp_xml"));
-					get.addColumn(Bytes.toBytes("wiki"),
-							Bytes.toBytes("spotlight_json"));
-					batch.add(get);
+					batch.add(SavedDocument.getGet(title));
 				}
 
 				Result[] results = table.get(batch);
@@ -90,10 +56,6 @@ public class HBaseToJSON extends Configured implements Tool {
 					processResult(result);
 				}
 			}
-
-		//	Put put = new Put(Bytes.toBytes("Hello"));
-		//	put.add(Bytes.toBytes("wiki"), Bytes.toBytes("plaintext"), Bytes.toBytes("Hello hello ..."));
-		//	table.put(put);
 		} finally {
 			admin.close();
 		}
@@ -120,34 +82,6 @@ public class HBaseToJSON extends Configured implements Tool {
 			whitelist = null;
 		}
 	}
-
-	/*
-	private void processArticle(String title) {
-		try {
-			System.out.println(title);
-
-			if (!ArticleRepository.articleExists(title)) {
-				System.out.println("Article doesn't exist");
-				return;
-			}
-
-			JSONObject json = ArticleRepository.readArticle(title);
-
-			// Skip if already processed.
-			if (json.has("corenlp_xml") && json.get("corenlp_xml") != JSONObject.NULL) {
-				System.out.println("Article already annotated");
-				return;
-			}
-
-			String articleText = (String) json.get("plaintext");
-			json.put("corenlp_xml", corenlpInterface.getXML(articleText));
-			ArticleRepository.writeArticle(title, json);
-		} catch (IOException e) {
-			System.out.println("Failed: " + title);
-			System.out.println(e);
-		}
-	}
-	*/
 
 	public static void main(String[] args) throws Exception {
 		BasicConfigurator.configure();
