@@ -253,3 +253,55 @@ py_test(
     srcs_version = "PY3",
     default_python_version = "PY3",
 )
+
+java_library(
+    name = "DBpediaClient",
+    srcs = [
+        "DBpediaClient.java",
+    ],
+    deps = [
+        "//:org_apache_jena_jena_core",
+        "//:org_apache_jena_jena_base",
+        "//:org_apache_jena_jena_arq",
+        # NOTE: undeclared deps >[
+        "//:org_apache_httpcomponents_httpcore",
+        "//:org_apache_httpcomponents_httpclient",
+    ],
+)
+
+java_test(
+    name = "DBpediaClientTest",
+    srcs = [
+        "DBpediaClientTest.java",
+    ],
+    deps = [
+        ":DBpediaClient",
+    ],
+    test_class = "DBpediaClientTest",
+)
+
+java_test(
+    name = "WikidataClientTest",
+    srcs = [
+        "WikidataClientTest.java",
+    ],
+    deps = [
+        ":WikidataClient",
+    ],
+    test_class = "WikidataClientTest",
+)
+
+java_library(
+    name = "WikidataClient",
+    srcs = [
+        "WikidataClient.java",
+    ],
+    deps = [
+        "//:org_apache_jena_jena_core",
+        "//:org_apache_jena_jena_base",
+        "//:org_apache_jena_jena_arq",
+        # NOTE: undeclared deps >[
+        "//:org_apache_httpcomponents_httpcore",
+        "//:org_apache_httpcomponents_httpclient",
+    ],
+)
