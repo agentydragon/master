@@ -50,7 +50,7 @@ public class CoreNLP extends Configured implements Tool {
 				Put.class,
 				job);
 
-		Configuration.dumpConfiguration(job.getConfiguration(), new OutputStreamWriter(System.out));
+		// Configuration.dumpConfiguration(job.getConfiguration(), new OutputStreamWriter(System.out));
 
 		return job.waitForCompletion(true) ? 0 : 1;
 	}

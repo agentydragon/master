@@ -21,12 +21,11 @@ import org.apache.hadoop.hbase.mapreduce.TableMapper;
 public class CoreNLPAnnotateMapper/*<K>*/ extends TableMapper</*K*/ImmutableBytesWritable, Put>{
 	private int prefixLength;
 	private CoreNLPInterface corenlpInterface = new CoreNLPInterface();
-	private Set<String> whitelist = new HashSet<>();
 
-	@Override
-	public void setup(Context context) {
+	private Set<String> whitelist = new HashSet<>();
+	private void loadWhitelist(Configuration conf) {
 		try {
-			FileSystem fs = FileSystem.get(context.getConfiguration());
+			FileSystem fs = FileSystem.get(conf);
 			FSDataInputStream inputStream = fs.open(new Path("/user/prvak/articles.tsv"));
 			try (BufferedReader r = new BufferedReader(new InputStreamReader(inputStream))) {
 				String line;
@@ -40,10 +39,15 @@ public class CoreNLPAnnotateMapper/*<K>*/ extends TableMapper</*K*/ImmutableByte
 			e.printStackTrace();
 			whitelist = null;
 		}
+	}
 
+	@Override
+	public void setup(Context context) {
 		Configuration conf = context.getConfiguration();
 		prefixLength = conf.getInt("prefix_length", 10);
 		corenlpInterface.setup();
+
+		loadWhitelist(conf);
 	}
 
 	@Override
