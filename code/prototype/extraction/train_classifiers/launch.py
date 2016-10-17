@@ -30,7 +30,9 @@ def main():
         make_commandline,
         slice_to_walltime,
         cores=16,
-        ram='8gb'
+        # (2016-10-17) 8 gb not enough
+        # (2016-10-17) 16 gb not enough
+        ram='32gb'
     )
 
 if __name__ == '__main__':
