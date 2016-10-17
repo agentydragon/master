@@ -1,4 +1,5 @@
 import java.lang.System;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.QueryFactory;
@@ -19,12 +20,22 @@ public class DBpediaClient {
 			"PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
 			"\n";
 
-	public static String dbpediaUriToWikidataId(String uri) {
+	private String endpoint; // = "http://dbpedia.org/sparql"
+
+	public DBpediaClient(String endpoint) {
+		this.endpoint = endpoint;
+	}
+
+	public DBpediaClient(Configuration configuration) {
+		this.endpoint = configuration.get("dbpedia_endpoint");
+	}
+
+	public String dbpediaUriToWikidataId(String uri) {
 		// TODO: load cache
 		String queryString = STANDARD_PREFIXES +
 			"SELECT ?same WHERE { <" + uri + "> owl:sameAs ?same . }";
 		Query query = QueryFactory.create(queryString);
-		try (QueryExecution execution = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query)) {
+		try (QueryExecution execution = QueryExecutionFactory.sparqlService(endpoint, query)) {
 			ResultSet results = execution.execSelect();
 			while (results.hasNext()) {
 				QuerySolution soln = results.nextSolution();
@@ -40,7 +51,7 @@ public class DBpediaClient {
 		return null;
 	}
 
-	public static Map<String, String> dbpediaUrisToWikidataIds(List<String> uris) {
+	public Map<String, String> dbpediaUrisToWikidataIds(List<String> uris) {
 		uris = new ArrayList<>(new HashSet<>(uris));
 		// TODO: sort?
 
@@ -70,7 +81,7 @@ public class DBpediaClient {
 					"?entity owl:sameAs ?same . " +
 				"}";
 			Query query = QueryFactory.create(queryString);
-			try (QueryExecution execution = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query)) {
+			try (QueryExecution execution = QueryExecutionFactory.sparqlService(endpoint, query)) {
 				ResultSet results = execution.execSelect();
 				while (results.hasNext()) {
 					QuerySolution soln = results.nextSolution();
