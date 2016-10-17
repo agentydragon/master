@@ -9,19 +9,14 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 
-//public static class ArticleSplitterMapper extends Mapper<LongWritable, Text, Text, Text>{
 public class ArticleSplitterMapper<K> extends Mapper<LongWritable, Text, K, /*Writable*/Put>{
 	private String articleName = null;
 	private String articleText = "";
 
 	private void writeArticle(Context context) throws IOException, InterruptedException {
-		/*
-		context.write(new Text(articleName),
-				new Text(articleText));
-		*/
 		byte[] rowkey = articleName.getBytes();
 		Put put = new Put(rowkey);
-		put.add("wiki".getBytes(), "plaintext".getBytes(), articleText.getBytes());
+		put.add(ArticlesTable.WIKI, ArticlesTable.PLAINTEXT, articleText.getBytes());
 		// (key ignored)
 		context.write(null, put);
 		//context.getCounter(Counters.PROCESSED_ARTICLES).increment(1);

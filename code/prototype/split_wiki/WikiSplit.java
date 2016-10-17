@@ -36,7 +36,7 @@ public class WikiSplit extends Configured implements Tool {
 		job.setNumReduceTasks(0);
 
 		// Set output.
-		job.getConfiguration().set(TableOutputFormat.OUTPUT_TABLE, "prvak:wiki_articles");
+		job.getConfiguration().set(TableOutputFormat.OUTPUT_TABLE, ArticlesTable.FULL_TABLE_NAME_STRING);
 		job.setOutputFormatClass(TableOutputFormat.class);
 
 		TableMapReduceUtil.initCredentials(job);

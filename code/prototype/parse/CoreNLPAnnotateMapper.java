@@ -14,11 +14,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.hbase.mapreduce.TableMapper;
 
-//public class CoreNLPAnnotateMapper extends Mapper<Text, Text, Text, Text>{
-
-// output key: K
-// output value: Put
-public class CoreNLPAnnotateMapper/*<K>*/ extends TableMapper</*K*/ImmutableBytesWritable, Put>{
+public class CoreNLPAnnotateMapper extends TableMapper<ImmutableBytesWritable, Put>{
 	private int prefixLength;
 	private CoreNLPInterface corenlpInterface = new CoreNLPInterface();
 
@@ -52,10 +48,8 @@ public class CoreNLPAnnotateMapper/*<K>*/ extends TableMapper</*K*/ImmutableByte
 
 	@Override
 	public void map(ImmutableBytesWritable rowkey, Result result, Context context) throws IOException, InterruptedException {
-		//String articleText = value.toString();
 		String articleTitle = new String(rowkey.get());
-		String articleText = new String(result.getValue("wiki".getBytes(), "plaintext".getBytes()));
-
+		String articleText = new String(result.getValue(ArticlesTable.WIKI, ArticlesTable.PLAINTEXT));
 
 		if (!whitelist.contains(articleTitle)) {
 			return;
@@ -68,12 +62,11 @@ public class CoreNLPAnnotateMapper/*<K>*/ extends TableMapper</*K*/ImmutableByte
 			length = prefixLength;
 		}
 		articleText = articleText.substring(0, length);
-		// articleText = "Jackdaws love my big sphinx on quartz.";
 
 		try {
 			Put put = new Put(rowkey.get());
 			String xml = corenlpInterface.getXML(articleText);
-			put.add("wiki".getBytes(), "corenlp_xml".getBytes(), xml.getBytes());
+			put.add(ArticlesTable.WIKI, ArticlesTable.CORENLP_XML, xml.getBytes());
 			context.write(null, put);
 		} catch (IllegalArgumentException e) {
 			/**
@@ -118,7 +111,5 @@ public class CoreNLPAnnotateMapper/*<K>*/ extends TableMapper</*K*/ImmutableByte
 			// TODO: log it and which article is it
 			// TODO: count it
 		}
-		// put.add("wiki".getBytes(), "corenlp_xml".getBytes(), articleText.getBytes());
-		// context.write(key, new Text(xml));
 	}
 }

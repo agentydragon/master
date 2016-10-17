@@ -14,16 +14,11 @@ public class SavedDocument {
 	// private TODO coreferences;
 	// private TODO spotlight_mentions;
 
-	private static byte[] WIKI = Bytes.toBytes("wiki");
-	private static byte[] PLAINTEXT = Bytes.toBytes("plaintext");
-	private static byte[] CORENLP_XML = Bytes.toBytes("corenlp_xml");
-	private static byte[] SPOTLIGHT_JSON = Bytes.toBytes("spotlight_json");
-
 	public static Get getGet(String title) {
 		Get get = new Get(Bytes.toBytes(title));
-		get.addColumn(WIKI, PLAINTEXT);
-		get.addColumn(WIKI, CORENLP_XML);
-		get.addColumn(WIKI, SPOTLIGHT_JSON);
+		get.addColumn(ArticlesTable.WIKI, ArticlesTable.PLAINTEXT);
+		get.addColumn(ArticlesTable.WIKI, ArticlesTable.CORENLP_XML);
+		get.addColumn(ArticlesTable.WIKI, ArticlesTable.SPOTLIGHT_JSON);
 		return get;
 	}
 
@@ -34,20 +29,20 @@ public class SavedDocument {
 
 		title = new String(result.getRow());
 
-		byte[] plaintextBytes = result.getValue(WIKI, PLAINTEXT);
+		byte[] plaintextBytes = result.getValue(ArticlesTable.WIKI, ArticlesTable.PLAINTEXT);
 		if (plaintextBytes != null) {
 			plaintext = new String(plaintextBytes);
 		} else {
 			plaintext = null;
 		}
 
-		byte[] corenlpXmlBytes = result.getValue(WIKI, CORENLP_XML);
+		byte[] corenlpXmlBytes = result.getValue(ArticlesTable.WIKI, ArticlesTable.CORENLP_XML);
 		if (corenlpXmlBytes != null) {
 			corenlpXml = new String(corenlpXmlBytes);
 		} else {
 			corenlpXml = null;
 		}
-		byte[] spotlightJsonBytes = result.getValue(WIKI, SPOTLIGHT_JSON);
+		byte[] spotlightJsonBytes = result.getValue(ArticlesTable.WIKI, ArticlesTable.SPOTLIGHT_JSON);
 		if (spotlightJsonBytes != null) {
 			spotlightJson = new JSONObject(new String(spotlightJsonBytes));
 		} else {

@@ -80,11 +80,22 @@ py_library(
 )
 
 java_library(
+    name = "ArticlesTable",
+    srcs = [
+        "ArticlesTable.java",
+    ],
+    deps = [
+        "//:org_apache_hbase_hbase_common",
+    ],
+)
+
+java_library(
     name = "SavedDocument",
     srcs = [
         "SavedDocument.java",
     ],
     deps = [
+        ":ArticlesTable",
         "//:org_json_json",
         "//:org_apache_hbase_hbase_common",
         "//:org_apache_hbase_hbase_client",

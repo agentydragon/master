@@ -39,7 +39,7 @@ public class HBaseToJSON extends Configured implements Tool {
 		Configuration conf = getConf();
 		HBaseAdmin admin = new HBaseAdmin(conf);
 		try {
-			HTable table = new HTable(conf, "prvak:wiki_articles");
+			HTable table = new HTable(conf, ArticlesTable.FULL_TABLE_NAME);
 
 			int batchSize = 100;
 

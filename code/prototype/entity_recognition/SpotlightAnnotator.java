@@ -51,7 +51,7 @@ public class SpotlightAnnotator extends Configured implements Tool {
 		job.setJarByClass(SpotlightAnnotator.class);
 
 		Scan scanner = new Scan();
-		scanner.addColumn("wiki".getBytes(), "plaintext".getBytes());
+		scanner.addColumn(ArticlesTable.WIKI, ArticlesTable.PLAINTEXT);
 		// TODO: get only latest version; or overwrite.
 
 		job.setNumReduceTasks(0);
@@ -59,11 +59,11 @@ public class SpotlightAnnotator extends Configured implements Tool {
 		TableMapReduceUtil.initCredentials(job);
 
 		// Set output.
-		job.getConfiguration().set(TableOutputFormat.OUTPUT_TABLE, "prvak:wiki_articles");
+		job.getConfiguration().set(TableOutputFormat.OUTPUT_TABLE, ArticlesTable.FULL_TABLE_NAME_STRING);
 		job.setOutputFormatClass(TableOutputFormat.class);
 
 		TableMapReduceUtil.initTableMapperJob(
-				"prvak:wiki_articles".getBytes(),
+				ArticlesTable.FULL_TABLE_NAME,
 				scanner,
 				SpotlightAnnotatorMapper.class,
 				ImmutableBytesWritable.class,

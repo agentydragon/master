@@ -98,14 +98,14 @@ public class SpotlightAnnotatorMapper extends TableMapper<ImmutableBytesWritable
 			return;
 		}
 
-		String articleText = new String(result.getValue("wiki".getBytes(), "plaintext".getBytes()));
+		String articleText = new String(result.getValue(ArticlesTable.WIKI, ArticlesTable.PLAINTEXT));
 
 		try {
 			//String jsonOut = connection.getAnnotationJSON(articleText);
 			//context.write(key, new Text(jsonOut.toString()));
 			Put put = new Put(rowkey.get());
 			String jsonOut = connection.getAnnotationJSON(articleText);
-			put.add("wiki".getBytes(), "spotlight_json".getBytes(), jsonOut.getBytes());
+			put.add(ArticlesTable.WIKI, ArticlesTable.SPOTLIGHT_JSON, jsonOut.getBytes());
 			context.write(null, put);
 		} catch (IOException e) {
 			// nothing -- TODO (response code 400 sometimes)

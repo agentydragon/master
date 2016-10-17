@@ -44,6 +44,7 @@ java_binary(
     ],
     main_class = "WikiSplit",
     deps = [
+        "//prototype/lib:ArticlesTable",
         "//:org_apache_hadoop_hadoop_common",
         "//:org_apache_hadoop_hadoop_mapreduce_client_core",
         "//:org_apache_hbase_hbase_common",
