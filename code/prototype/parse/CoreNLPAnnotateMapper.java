@@ -119,7 +119,7 @@ public class CoreNLPAnnotateMapper extends TableMapper<ImmutableBytesWritable, P
 					at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
 			*/
 			// TODO: log which article is it
-			e.writeStackTrace();
+			e.printStackTrace();
 			context.getCounter(Counters.ARTICLES_FAILED_ILLEGAL_ARGUMENT_EXCEPTION).increment(1);
 		}
 	}

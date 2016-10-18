@@ -119,7 +119,7 @@ public class SpotlightAnnotatorMapper extends TableMapper<ImmutableBytesWritable
 			context.getCounter(Counters.ARTICLES_ANNOTATED_SUCCESSFULLY).increment(1);
 		} catch (IOException e) {
 			// nothing -- TODO (response code 400 sometimes)
-			e.writeStackTrace();
+			e.printStackTrace();
 			context.getCounter(Counters.ARTICLES_FAILED_WITH_EXCEPTION).increment(1);
 		}
 	}
