@@ -31,6 +31,13 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.hbase.mapreduce.TableMapper;
 
 public class SpotlightAnnotatorMapper extends TableMapper<ImmutableBytesWritable, Put>{
+	public static enum Counters {
+		ARTICLES_SKIPPED_NOT_IN_WHITELIST,
+		ARTICLES_IN_WHITELIST,
+		ARTICLES_FAILED_WITH_EXCEPTION,
+		ARTICLES_ANNOTATED_SUCCESSFULLY,
+	};
+
 	private Logger logger = Logger.getLogger(SpotlightAnnotatorMapper.class);
 	private SpotlightConnection connection;
 
@@ -95,8 +102,10 @@ public class SpotlightAnnotatorMapper extends TableMapper<ImmutableBytesWritable
 		String articleTitle = new String(rowkey.get());
 
 		if (!whitelist.contains(articleTitle)) {
+			context.getCounter(Counters.ARTICLES_SKIPPED_NOT_IN_WHITELIST).increment(1);
 			return;
 		}
+		context.getCounter(Counters.ARTICLES_IN_WHITELIST).increment(1);
 
 		String articleText = new String(result.getValue(ArticlesTable.WIKI, ArticlesTable.PLAINTEXT));
 
@@ -107,8 +116,11 @@ public class SpotlightAnnotatorMapper extends TableMapper<ImmutableBytesWritable
 			String jsonOut = connection.getAnnotationJSON(articleText);
 			put.add(ArticlesTable.WIKI, ArticlesTable.SPOTLIGHT_JSON, jsonOut.getBytes());
 			context.write(null, put);
+			context.getCounter(Counters.ARTICLES_ANNOTATED_SUCCESSFULLY).increment(1);
 		} catch (IOException e) {
 			// nothing -- TODO (response code 400 sometimes)
+			e.writeStackTrace();
+			context.getCounter(Counters.ARTICLES_FAILED_WITH_EXCEPTION).increment(1);
 		}
 	}
 }

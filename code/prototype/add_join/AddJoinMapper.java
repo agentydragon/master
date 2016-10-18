@@ -16,6 +16,14 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.hbase.mapreduce.TableMapper;
 
 public class AddJoinMapper extends TableMapper<ImmutableBytesWritable, Put>{
+	public static enum Counters {
+		ARTICLES_SKIPPED_NO_PLAINTEXT,
+		ARTICLES_SKIPPED_NO_PARSE,
+		ARTICLES_SKIPPED_NO_SPOTLIGHT,
+		ARTICLES_JOINED_SUCCESSFULLY,
+		ARTICLES_FAILED_WITH_EXCEPTION,
+	};
+
 	private Logger logger = Logger.getLogger(AddJoinMapper.class);
 	private DBpediaClient dbpediaClient;
 
@@ -30,8 +38,16 @@ public class AddJoinMapper extends TableMapper<ImmutableBytesWritable, Put>{
 		String articleTitle = new String(rowkey.get());
 
 		SavedDocument document = new SavedDocument(result);
-		if (document.plaintext == null || document.corenlpXml == null || document.spotlightJson == null) {
-			// TODO: Increase counters?
+		if (document.plaintext == null) {
+			context.getCounter(Counters.ARTICLES_SKIPPED_NO_PLAINTEXT).increment(1);
+			return;
+		}
+		if (document.corenlpXml == null) {
+			context.getCounter(Counters.ARTICLES_SKIPPED_NO_PARSE).increment(1);
+			return;
+		}
+		if (document.spotlightJson == null) {
+			context.getCounter(Counters.ARTICLES_SKIPPED_NO_SPOTLIGHT).increment(1);
 			return;
 		}
 
@@ -43,9 +59,10 @@ public class AddJoinMapper extends TableMapper<ImmutableBytesWritable, Put>{
 			put.add(ArticlesTable.WIKI, ArticlesTable.COREFERENCES, document.getCoreferencesSerialization());
 			put.add(ArticlesTable.WIKI, ArticlesTable.SPOTLIGHT_MENTIONS, document.getSpotlightMentionsSerialization());
 			context.write(null, put);
+			context.getCounter(Counters.ARTICLES_JOINED_SUCCESSFULLY).increment(1);
 		} catch (Exception e) {
 			e.printStackTrace();
-			// TODO
+			context.getCounter(Counters.ARTICLES_FAILED_WITH_EXCEPTION).increment(1);
 		}
 	}
 }

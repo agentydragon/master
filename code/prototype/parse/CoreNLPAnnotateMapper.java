@@ -15,6 +15,13 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.hbase.mapreduce.TableMapper;
 
 public class CoreNLPAnnotateMapper extends TableMapper<ImmutableBytesWritable, Put>{
+	public static enum Counters {
+		ARTICLES_SKIPPED_NOT_IN_WHITELIST,
+		ARTICLES_IN_WHITELIST,
+		ARTICLES_PARSED_SUCCESSFULLY,
+		ARTICLES_FAILED_ILLEGAL_ARGUMENT_EXCEPTION,
+	};
+
 	private int prefixLength;
 	private CoreNLPInterface corenlpInterface = new CoreNLPInterface();
 
@@ -52,8 +59,10 @@ public class CoreNLPAnnotateMapper extends TableMapper<ImmutableBytesWritable, P
 		String articleText = new String(result.getValue(ArticlesTable.WIKI, ArticlesTable.PLAINTEXT));
 
 		if (!whitelist.contains(articleTitle)) {
+			context.getCounter(Counters.ARTICLES_SKIPPED_NOT_IN_WHITELIST).increment(1);
 			return;
 		}
+		context.getCounter(Counters.ARTICLES_IN_WHITELIST).increment(1);
 
 		// Reduce the length of the text.
 		// XXX: HAX
@@ -68,6 +77,7 @@ public class CoreNLPAnnotateMapper extends TableMapper<ImmutableBytesWritable, P
 			String xml = corenlpInterface.getXML(articleText);
 			put.add(ArticlesTable.WIKI, ArticlesTable.CORENLP_XML, xml.getBytes());
 			context.write(null, put);
+			context.getCounter(Counters.ARTICLES_PARSED_SUCCESSFULLY).increment(1);
 		} catch (IllegalArgumentException e) {
 			/**
 				2016-10-13 13:42:12,160 INFO [AsyncDispatcher event handler] org.apache.hadoop.mapreduce.v2.app.job.impl.TaskAttemptImpl: Diagnostics report from attempt_1469474050624_0453_m_000015_1: Error: java.lang.IllegalArgumentException
@@ -108,8 +118,9 @@ public class CoreNLPAnnotateMapper extends TableMapper<ImmutableBytesWritable, P
 					at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1693)
 					at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
 			*/
-			// TODO: log it and which article is it
-			// TODO: count it
+			// TODO: log which article is it
+			e.writeStackTrace();
+			context.getCounter(Counters.ARTICLES_FAILED_ILLEGAL_ARGUMENT_EXCEPTION).increment(1);
 		}
 	}
 }

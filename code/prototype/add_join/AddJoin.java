@@ -48,8 +48,14 @@ public class AddJoin extends Configured implements Tool {
 				Put.class,
 				job);
 
-		// Submit the job, then poll for progress until the job is complete
-		return job.waitForCompletion(true) ? 0 : 1;
+		int result = job.waitForCompletion(true) ? 0 : 1;
+		System.out.println("Articles skipped (no plaintext): " + job.getCounters().findCounter(AddJoinMapper.Counters.ARTICLES_SKIPPED_NO_PLAINTEXT).getValue());
+		System.out.println("Articles skipped (plaintext, no parse): " + job.getCounters().findCounter(AddJoinMapper.Counters.ARTICLES_SKIPPED_NO_PARSE).getValue());
+		System.out.println("Articles skipped (plaintext, parse, no spotlight): " + job.getCounters().findCounter(AddJoinMapper.Counters.ARTICLES_SKIPPED_NO_SPOTLIGHT).getValue());
+		System.out.println("Articles joined successfully: " + job.getCounters().findCounter(AddJoinMapper.Counters.ARTICLES_JOINED_SUCCESSFULLY).getValue());
+		System.out.println("Articles failed with exception: " + job.getCounters().findCounter(AddJoinMapper.Counters.ARTICLES_FAILED_WITH_EXCEPTION).getValue());
+
+		return result;
 	}
 
 	public static void main(String[] args) throws Exception {

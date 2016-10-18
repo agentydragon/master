@@ -41,7 +41,11 @@ public class WikiSplit extends Configured implements Tool {
 
 		TableMapReduceUtil.initCredentials(job);
 
-		return job.waitForCompletion(true) ? 0 : 1;
+		int result = job.waitForCompletion(true) ? 0 : 1;
+
+		System.out.println("Articles processed: " + job.getCounters().findCounter(ArticleSplitterMapper.Counters.PROCESSED_ARTICLES).getValue());
+
+		return result;
 	}
 
 	public static void main(String[] args) throws Exception {

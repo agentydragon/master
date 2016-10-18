@@ -51,7 +51,13 @@ public class CoreNLP extends Configured implements Tool {
 
 		// Configuration.dumpConfiguration(job.getConfiguration(), new OutputStreamWriter(System.out));
 
-		return job.waitForCompletion(true) ? 0 : 1;
+		int result = job.waitForCompletion(true) ? 0 : 1;
+		System.out.println("Articles skipped (not in whitelist):" + job.getCounters().findCounter(CoreNLPAnnotateMapper.Counters.ARTICLES_SKIPPED_NOT_IN_WHITELIST).getValue());
+		System.out.println("Articles in whitelist: " + job.getCounters().findCounter(CoreNLPAnnotateMapper.Counters.ARTICLES_IN_WHITELIST).getValue());
+		System.out.println("Articles parsed successfully: " + job.getCounters().findCounter(CoreNLPAnnotateMapper.Counters.ARTICLES_PARSED_SUCCESSFULLY).getValue());
+		System.out.println("Articles failed (IllegalArgumentException): " + job.getCounters().findCounter(CoreNLPAnnotateMapper.Counters.ARTICLES_FAILED_ILLEGAL_ARGUMENT_EXCEPTION).getValue());
+
+		return result;
 	}
 
 	public static void main(String[] args) throws Exception {

@@ -10,6 +10,10 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 
 public class ArticleSplitterMapper<K> extends Mapper<LongWritable, Text, K, /*Writable*/Put>{
+	public static enum Counters {
+		PROCESSED_ARTICLES
+	};
+
 	private String articleName = null;
 	private String articleText = "";
 
@@ -19,7 +23,7 @@ public class ArticleSplitterMapper<K> extends Mapper<LongWritable, Text, K, /*Wr
 		put.add(ArticlesTable.WIKI, ArticlesTable.PLAINTEXT, articleText.getBytes());
 		// (key ignored)
 		context.write(null, put);
-		//context.getCounter(Counters.PROCESSED_ARTICLES).increment(1);
+		context.getCounter(Counters.PROCESSED_ARTICLES).increment(1);
 	}
 
 	private void flushArticle(Context context) throws IOException, InterruptedException {

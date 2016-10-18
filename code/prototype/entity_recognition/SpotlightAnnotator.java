@@ -71,8 +71,13 @@ public class SpotlightAnnotator extends Configured implements Tool {
 				Put.class,
 				job);
 
-		// Submit the job, then poll for progress until the job is complete
-		return job.waitForCompletion(true) ? 0 : 1;
+		int result = job.waitForCompletion(true) ? 0 : 1;
+		System.out.println("Articles skipped (not in whitelist): " + job.getCounters().findCounter(SpotlightAnnotatorMapper.Counters.ARTICLES_SKIPPED_NOT_IN_WHITELIST).getValue());
+		System.out.println("Articles in whitelist: " + job.getCounters().findCounter(SpotlightAnnotatorMapper.Counters.ARTICLES_IN_WHITELIST).getValue());
+		System.out.println("Articles failed with exception: " + job.getCounters().findCounter(SpotlightAnnotatorMapper.Counters.ARTICLES_FAILED_WITH_EXCEPTION).getValue());
+		System.out.println("Articles annotated successfully: " + job.getCounters().findCounter(SpotlightAnnotatorMapper.Counters.ARTICLES_ANNOTATED_SUCCESSFULLY).getValue());
+
+		return result;
 	}
 
 	public static void main(String[] args) throws Exception {
