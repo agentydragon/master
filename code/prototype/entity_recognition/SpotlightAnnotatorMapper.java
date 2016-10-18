@@ -41,6 +41,7 @@ public class SpotlightAnnotatorMapper extends TableMapper<ImmutableBytesWritable
 	private Logger logger = Logger.getLogger(SpotlightAnnotatorMapper.class);
 	private SpotlightConnection connection;
 
+	private boolean useWhitelist = true;
 	private Set<String> whitelist = new HashSet<>();
 	private void loadWhitelist(Configuration conf) {
 		try {
@@ -67,7 +68,11 @@ public class SpotlightAnnotatorMapper extends TableMapper<ImmutableBytesWritable
 		logger.info("mapper setup");
 		Configuration conf = context.getConfiguration();
 
-		loadWhitelist(conf);
+		if (conf.get("whitelist").equals("false")) {
+			useWhitelist = false;
+		} else {
+			loadWhitelist(conf);
+		}
 		/*
 		if (startOwnSpotlight) {
 			try {
@@ -101,11 +106,13 @@ public class SpotlightAnnotatorMapper extends TableMapper<ImmutableBytesWritable
 
 		String articleTitle = new String(rowkey.get());
 
-		if (!whitelist.contains(articleTitle)) {
-			context.getCounter(Counters.ARTICLES_SKIPPED_NOT_IN_WHITELIST).increment(1);
-			return;
+		if (useWhitelist) {
+			if (!whitelist.contains(articleTitle)) {
+				context.getCounter(Counters.ARTICLES_SKIPPED_NOT_IN_WHITELIST).increment(1);
+				return;
+			}
+			context.getCounter(Counters.ARTICLES_IN_WHITELIST).increment(1);
 		}
-		context.getCounter(Counters.ARTICLES_IN_WHITELIST).increment(1);
 
 		String articleText = new String(result.getValue(ArticlesTable.WIKI, ArticlesTable.PLAINTEXT));
 
