@@ -7,6 +7,7 @@ from prototype.lib import file_util
 from prototype.fusion import fuser
 from sklearn import linear_model
 from sklearn import metrics
+from sklearn import calibration
 from sklearn import cross_validation
 import math
 import numpy
@@ -66,9 +67,16 @@ def train_relation_fuser(relation, samples, chart_dir):
         features, labels, test_size=0.33, random_state=42)
 
     # TODO: Decision trees instead?
-    clf = linear_model.LogisticRegression(verbose=True)
+
+    clf = calibration.CalibratedClassifierCV(
+        base_estimator=linear_model.LogisticRegression(verbose=True),
+        method='isotonic',
+        cv=2
+    )
     clf.fit(X_train, y_train)
-    score = clf.decision_function(X_test)
+
+    score = clf.predict_proba(X_test)
+    score = [s[1] for s in score]
 
     fpr, tpr, _ = metrics.roc_curve(y_test, score)
     auc = metrics.auc(fpr, tpr)
