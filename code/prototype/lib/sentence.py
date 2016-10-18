@@ -29,13 +29,13 @@ class SentenceToken(k("SentenceToken",
     @classmethod
     def from_json(klass, json):
         return klass(
-            id = json[ID],
-            start_offset = json[START_OFFSET],
-            end_offset = json[END_OFFSET],
-            lemma = json[LEMMA],
-            pos = json[POS],
-            word = json[WORD],
-            ner = json[NER],
+            id = json[klass.ID],
+            start_offset = json[klass.START_OFFSET],
+            end_offset = json[klass.END_OFFSET],
+            lemma = json[klass.LEMMA],
+            pos = json[klass.POS],
+            word = json[klass.WORD],
+            ner = json[klass.NER],
         )
 
 class Mention(k("Mention",
@@ -56,10 +56,10 @@ class Mention(k("Mention",
     @classmethod
     def from_json(klass, json):
         return klass(
-            sentence_id = json[SENTENCE_ID],
-            start_word_id = json[START_WORD_ID],
-            end_word_id = json[END_WORD_ID],
-            text = json[TEXT]
+            sentence_id = json[klass.SENTENCE_ID],
+            start_word_id = json[klass.START_WORD_ID],
+            end_word_id = json[klass.END_WORD_ID],
+            text = json[klass.TEXT]
         )
 
 class Coreference(k("Coreference",
@@ -74,7 +74,7 @@ class Coreference(k("Coreference",
     @classmethod
     def from_json(klass, json):
         return klass(
-            mentions = list(map(Mention.from_json, json[MENTIONS])),
+            mentions = list(map(Mention.from_json, json[klass.MENTIONS])),
         )
 
 class SpotlightMention(k("SpotlightMention",
@@ -99,11 +99,11 @@ class SpotlightMention(k("SpotlightMention",
     @classmethod
     def from_json(klass, json):
         return klass(
-            start_offset = json[START_OFFSET],
-            end_offset = json[END_OFFSET],
-            surface_form = json[SURFACE_FORM],
-            uri = json[URI],
-            wikidata_id = json[WIKIDATA_ID],
+            start_offset = json[klass.START_OFFSET],
+            end_offset = json[klass.END_OFFSET],
+            surface_form = json[klass.SURFACE_FORM],
+            uri = json[klass.URI],
+            wikidata_id = (json[klass.WIKIDATA_ID] if klass.WIKIDATA_ID in json else None),
         )
 
     @classmethod
@@ -162,9 +162,9 @@ class DocumentSentence(k("DocumentSentence", ["id", "text", "tokens"])):
     @classmethod
     def from_json(klass, json):
         return klass(
-            id = json[ID],
-            text = json[TEXT],
-            tokens = list(map(SentenceToken.from_json, json[TOKENS])),
+            id = json[klass.ID],
+            text = json[klass.TEXT],
+            tokens = list(map(SentenceToken.from_json, json[klass.TOKENS])),
         )
 
     def start_offset(self):
