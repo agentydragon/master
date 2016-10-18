@@ -22,6 +22,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
 import org.apache.hadoop.hbase.mapreduce.TableOutputFormat;
+import org.apache.log4j.BasicConfigurator;
 
 // Input:
 //   Key:   article name (Text)
@@ -75,7 +76,12 @@ public class SpotlightAnnotator extends Configured implements Tool {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(null, new SpotlightAnnotator(), args);
+		BasicConfigurator.configure();
+
+		Configuration conf = HBaseConfiguration.create();
+		conf.addResource(new Path("/storage/brno2/home/prvak/master/code/hadoop/overrides.xml"));
+
+		int res = ToolRunner.run(conf, new SpotlightAnnotator(), args);
 		System.exit(res);
 	}
 }

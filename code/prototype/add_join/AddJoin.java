@@ -2,6 +2,8 @@ import java.io.IOException;
 
 import java.lang.System;
 import org.apache.log4j.Logger;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.util.Tool;
@@ -51,7 +53,12 @@ public class AddJoin extends Configured implements Tool {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(null, new AddJoin(), args);
+		BasicConfigurator.configure();
+
+		Configuration conf = HBaseConfiguration.create();
+		conf.addResource(new Path("/storage/brno2/home/prvak/master/code/hadoop/overrides.xml"));
+
+		int res = ToolRunner.run(conf, new AddJoin(), args);
 		System.exit(res);
 	}
 }

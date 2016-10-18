@@ -11,7 +11,6 @@ export HADOOP_CLASSPATH=$(hbase classpath):$BAZEL_BIN/prototype/parse/CoreNLP_de
 # Reduce memory?
 hadoop jar $BAZEL_BIN/prototype/parse/CoreNLP.jar \
 	CoreNLP \
-	-D java.security.auth.login.config=/storage/brno2/home/prvak/master/code/hadoop/jaas.conf \
 	-D mapreduce.map.memory.mb=9000 \
 	-D mapred.job.map.memory.mb=9000 \
 	-D mapred.child.java.opts=-Xmx8000m \

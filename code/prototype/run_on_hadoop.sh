@@ -10,5 +10,4 @@ export HADOOP_CLASSPATH=$(hbase classpath):$BAZEL_BIN/prototype/HBaseToJSON_depl
 
 # Reduce memory?
 hadoop jar $BAZEL_BIN/prototype/HBaseToJSON.jar \
-	HBaseToJSON \
-	-D java.security.auth.login.config=/storage/brno2/home/prvak/master/code/hadoop/jaas.conf
+	HBaseToJSON

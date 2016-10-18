@@ -12,5 +12,4 @@ hadoop jar $BAZEL_BIN/prototype/add_join/AddJoin.jar \
 	-D dbpedia_endpoint=http://hador:3030/merged/query \
 	-D mapreduce.task.timeout=60000000 \
 	-D hbase.client.retries.number=10 \
-	-D hbase.client.scanner.timeout.period=600000000 \
-	-D java.security.auth.login.config=/storage/brno2/home/prvak/master/code/hadoop/jaas.conf
+	-D hbase.client.scanner.timeout.period=600000000

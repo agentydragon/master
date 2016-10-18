@@ -88,11 +88,7 @@ public class HBaseToJSON extends Configured implements Tool {
 		BasicConfigurator.configure();
 
 		Configuration conf = HBaseConfiguration.create();
-		conf.set("hbase.zookeeper.quorum", "hador-c1.ics.muni.cz:2181,hador-c2.ics.muni.cz:2181,hador.ics.muni.cz:2181");
-		conf.setBoolean("hbase.security.auth.enable", true);
-		conf.set("hbase.security.authentication", "kerberos");
-		conf.set("hbase.kerberos.regionserver.principal", "hbase/_HOST@ICS.MUNI.CZ");
-		conf.set("hbase.sasl.clientconfig", "Client");
+		conf.addResource(new Path("/storage/brno2/home/prvak/master/code/hadoop/overrides.xml"));
 
 		int res = ToolRunner.run(conf, new HBaseToJSON(), args);
 		System.exit(res);
