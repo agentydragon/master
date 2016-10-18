@@ -1,0 +1,47 @@
+hdfs dfs -copyFromLocal data/wiki-plain-backup.txt /user/prvak/wiki-plain/wiki-plain.txt
+
+Working:
+
+// 2016-10-11
+bazel build :WikiSplit_deploy.jar
+export HADOOP_CLASSPATH=$(hbase classpath):$(pwd)/WikiSplit_deploy.jar
+hadoop jar WikiSplit_deploy.jar -Djava.security.auth.login.config=`pwd`/jaas.conf /user/prvak/wiki-plain/wiki-plain.txt
+
+---------
+
+export HADOOP_CLASSPATH=$BAZEL_BIN/hadoop/CoreNLP_deploy.jar
+export HADOOP_DATANODE_OPTS="-Xmx10g"
+hadoop jar $BAZEL_BIN/hadoop/CoreNLP.jar CoreNLP /user/prvak/wiki-splits /user/prvak/article-parse-xmls
+
+-Dmapred.job.map.memory.mb=5300
+-Dmapred.child.java.opts="-Xmx5g"
+
+
+hadoop jar $BAZEL_BIN/hadoop/CoreNLP.jar CoreNLP /user/prvak/wiki-splits /user/prvak/article-parse-xmls -Dmapred.job.map.memory.mb=5300 -Dmapred.child.java.opts="-Xmx5g"
+
+with shift-reduce model:
+	hadoop jar $BAZEL_BIN/hadoop/CoreNLP.jar CoreNLP -D prefix_length=1000 -D mapreduce.map.memory.mb=9000 -D mapreduce.map.java.opts=-Xmx8000m -D mapreduce.task.timeout=6000000 -D mapreduce.input.fileinputformat.split.maxsize=1000000 /user/prvak/wiki-splits /user/prvak/article-parse-xmls-1000
+
+hadoop jar $BAZEL_BIN/hadoop/RandomSelector_deploy.jar -D selection_probability=0.001 /user/prvak/wiki-splits /user/prvak/wiki-splits-sub-0.001
+
+14..19 minut na 1/1000 Wikipedie
+
+hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -input /user/prvak/wiki-processed-sub-0.001 -output /user/prvak/wiki-samples-sub-0.001 -mapper $BAZEL_BIN/mr_generate_training_samples
+
+hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -input /user/prvak/wi-processed-sub-0.001 -output /user/prvak/wiki-samples-sub-0.001 -mapper mr_generate_training_samples.py -files annotate_coreferences.py,dbpedia.py,file_util.py,get_training_samples.py,json_cache.py,parse_xmls_to_protos.py,paths.py,relations.py,sentence_pb2.py,sparql_client.py,training_samples_pb2.py,wikidata_util.py,mr_generate_training_samples.py
+
+hadoop jar -files annotate_coreferences.py,dbpedia.py,file_util.py,get_training_samples.py,json_cache.py,parse_xmls_to_protos.py,paths.py,relations.py,sentence_pb2.py,sparql_client.py,training_samples_pb2.py,wikidata_util.py,mr_generate_training_samples.py /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -input /user/prvak/wi-processed-sub-0.001 -output /user/prvak/wiki-samples-sub-0.001 -mapper mr_generate_training_samples.py
+
+hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -files annotate_coreferences.py,dbpedia.py,file_util.py,get_training_samples.py,json_cache.py,parse_xmls_to_protos.py,paths.py,relations.py,sentence_pb2.py,sparql_client.py,training_samples_pb2.py,wikidata_util.py,mr_generate_training_samples.py -input /user/prvak/wiki-processed-sub-0.001 -output /user/prvak/wiki-samples-sub-0.001 -mapper mr_generate_training_samples.py
+
+hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -files annotate_coreferences.py,dbpedia.py,file_util.py,get_training_samples.py,json_cache.py,parse_xmls_to_protos.py,paths.py,relations.py,bazel-bin/mr_generate_training_samples.runfiles/__main__/sentence_pb2.py,sparql_client.py,bazel-bin/mr_generate_training_samples.runfiles/__main__/training_samples_pb2.py,wikidata_util.py,mr_generate_training_samples.py -input /user/prvak/wiki-processed-sub-0.001 -output /user/prvak/wiki-samples-sub-0.001 -mapper mr_generate_training_samples.py
+
+hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -input /user/prvak/wiki-processed-sub-0.001 -output /user/prvak/wiki-samples-sub-0.001 -mapper mr_generate_training_samples.py -file annotate_coreferences.py -file dbpedia.py -file file_util.py -file get_training_samples.py -file json_cache.py -file parse_xmls_to_protos.py -file paths.py -file relations.py -file sentence_pb2.py -file sparql_client.py -file training_samples_pb2.py -file wikidata_util.py -file mr_generate_training_samples.py
+
+chmod +x hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar -input /user/prvak/wiki-processed-sub-0.001 -output /user/prvak/wiki-samples-sub-0.001 -mapper mr_generate_training_samples.py -file annotate_coreferences.py -file dbpedia.py -file file_util.py -file get_training_samples.py -file json_cache.py -file parse_xmls_to_protos.py -file paths.py -file relations.py -file bazel-genfiles/sentence_pb2.py -file sparql_client.py -file bazel-genfiles/training_samples_pb2.py -file wikidata_util.py -file mr_generate_training_samples.py
+
+
+hador.ics.muni.cz: Hadoop frontend
+
+export HADOOP_CLASSPATH=/storage/brno7-cerit/home/prvak/bin/stanford-english-corenlp-2016-01-10-models.jar
+hadoop jar /storage/brno7-cerit/home/prvak/bin/CoreNLP_deploy.jar /user/prvak/wiki-splits /user/prvak/article-parse-xmls-200 200

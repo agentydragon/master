@@ -1,0 +1,48 @@
+py_binary(
+    name = "run_nolock",
+    srcs = [
+        "run_nolock.py",
+    ],
+    deps = [
+    ],
+)
+
+py_binary(
+    name = "get_job_machine",
+    srcs = [
+        "get_job_machine.py",
+    ],
+    deps = [
+        "//src/prototype/lib:pbs_util_lib",
+    ],
+)
+
+py_binary(
+    name = "kill_all_jobs",
+    srcs = [
+        "kill_all_jobs.py",
+    ],
+    deps = [
+        "//src/prototype/lib:pbs_util_lib",
+    ],
+)
+
+py_binary(
+    name = "show_all_jobs",
+    srcs = [
+        "show_all_jobs.py",
+    ],
+    deps = [
+        "//src/prototype/lib:pbs_util_lib",
+    ],
+)
+
+py_binary(
+    name = "follow_log",
+    srcs = [
+        "follow_log.py",
+    ],
+    deps = [
+        "//src/prototype/lib:pbs_util_lib",
+    ],
+)
