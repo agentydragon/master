@@ -45,6 +45,15 @@ def sample_to_features(sample):
     # bag-of-words features
     features = features.union(sentence_bag_of_words_features(sample))
 
+    # POS & NER tags for subject, object
+    for i in sample.subject_token_indices:
+        features.add('subject_pos_' + sample.sentence.tokens[i].pos)
+        features.add('subject_ner_' + sample.sentence.tokens[i].ner)
+
+    for i in sample.object_token_indices:
+        features.add('object_pos_' + sample.sentence.tokens[i].pos)
+        features.add('object_ner_' + sample.sentence.tokens[i].ner)
+
     # subject window
     subject_window = window_features('subject', sample.subject_token_indices, sample)
     features = features.union(subject_window)
