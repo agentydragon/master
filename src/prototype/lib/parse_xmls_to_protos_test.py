@@ -4,11 +4,11 @@ from prototype.lib import sentence
 
 dbpedia_client = dbpedia.DBpediaClient(dbpedia.PUBLIC_DBPEDIA_ENDPOINT)
 
-with open('testdata/Obama.txt.out') as f:
+with open('src/testdata/Obama.txt.out') as f:
     corenlp_xml = f.read()
-with open('testdata/Obama.txt') as f:
+with open('src/testdata/Obama.txt') as f:
     plaintext = f.read()
-with open('testdata/Obama.spotlight.json') as f:
+with open('src/testdata/Obama.spotlight.json') as f:
     spotlight_json = json.load(f)
 
 document = sentence.SavedDocument(

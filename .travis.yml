@@ -17,8 +17,7 @@ before_install:
   - sudo dpkg -i bazel_0.3.1-linux-x86_64.deb
 
 script:
-  - cp ci/bazelrc code/.bazelrc
-  - cd code
-  - bazel build //prototype/...
+  - cp ci/bazelrc .bazelrc
+  - bazel build //src/...
 #  - bazel test --test_output=streamed //prototype/lib:all
 #  - bazel test //...

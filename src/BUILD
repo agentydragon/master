@@ -47,5 +47,5 @@ genrule(
         "paths.sh",
         "Paths.java",
     ],
-    cmd = "python3 ./paths_gen.py --python_out=$(GENDIR)/paths.py --sh_out $(GENDIR)/paths.sh --java_out $(GENDIR)/Paths.java",
+    cmd = "python3 src/paths_gen.py --python_out=$(GENDIR)/src/paths.py --sh_out $(GENDIR)/src/paths.sh --java_out $(GENDIR)/src/Paths.java",
 )

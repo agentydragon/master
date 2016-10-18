@@ -89,7 +89,7 @@ genrule(
         "@dbpedia_spotlight_model_en//file",
     ],
     cmd = ("tar xpf $(location @dbpedia_spotlight_model_en//file) " +
-           "-C $(GENDIR)/prototype/entity_recognition"),
+           "-C $(GENDIR)/src/prototype/entity_recognition"),
     outs = [
         "en/model.properties",
         "en/spotter_thresholds.txt",

@@ -68,7 +68,7 @@ java_library(
     deps = [
         "//:commons_io_commons_io",
         "//:org_json_json",
-        "//:paths_java_lib",
+        "//src:paths_java_lib",
     ],
 )
 
@@ -144,9 +144,9 @@ py_test(
         ":sentence_lib",
     ],
     data = [
-        "//testdata:Obama.txt",
-        "//testdata:Obama.txt.out",
-        "//testdata:Obama.spotlight.json",
+        "//src/testdata:Obama.txt",
+        "//src/testdata:Obama.txt.out",
+        "//src/testdata:Obama.spotlight.json",
     ],
     srcs_version = "PY3",
     default_python_version = "PY3",

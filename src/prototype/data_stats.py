@@ -38,11 +38,13 @@ for title in bar(art_set.article_names):
     if art.spotlight_json and art.corenlp_xml and art.sentences:
         fully_processed.append(title)
 
-print("Nonexistant", nonexistant,
-      "plaintext", got_plaintext,
-      "spotlight", with_spotlight,
-      "corenlp", with_corenlp,
-      "proto", with_proto,
-      "fully processed", len(fully_processed))
+print(
+    "Nonexistant", nonexistant,
+    "plaintext", got_plaintext,
+    "spotlight", with_spotlight,
+    "corenlp", with_corenlp,
+    "proto", with_proto,
+    "fully processed", len(fully_processed),
+)
 # for name in fully_processed:
 #     print(name)
