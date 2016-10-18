@@ -1,11 +1,11 @@
 package(default_visibility = ["//visibility:public"])
 
 java_binary(
-    name = "TestHBase",
+    name = "GetKeys",
     srcs = [
-        "TestHBase.java",
+        "GetKeys.java",
     ],
-    main_class = "TestHBase",
+    main_class = "GetKeys",
     deps = [
         "//:org_apache_hadoop_hadoop_common",
         "//:org_apache_hbase_hbase_common",
