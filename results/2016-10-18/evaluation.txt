@@ -1,0 +1,555 @@
+Predictions above 0.5000:
+Carol Moseley Braun	member of political party	Republican Party	0.6995	False
+Mohamed Nasheed	member of political party	Maldivian Democratic Party	0.6474	True
+Hartford	member of political party	BBC	0.5520	?
+Winfield Scott	member of political party	Whig Party	0.5740	?
+Peter Fitzgerald	member of political party	Republican Party	0.7286	True
+Samuel J. Tilden	member of political party	history of the england Republican Party	0.6944	False
+Richard Nixon	member of political party	Republican Party	0.6119	True
+Herbert Wehner	member of political party	Social Democratic Party of Germany	0.5544	True
+Franz Josef Strauß	member of political party	Bavaria	0.6408	False
+John Redmond	member of political party	Ireland	0.5139	False
+William Gemmell Cochran	member of political party	Democratic Party	0.5474	?
+Mohammed Waheed Hassan	member of political party	Dhivehi Rayyithunge Party	0.7278	False
+Walter Mondale	member of political party	Democratic Party	0.7056	True
+Nicolas Sarkozy	member of political party	Democratic Party	0.7289	False
+John Van Buren	member of political party	history of the england Republican Party	0.6570	False
+David Steel	member of political party	Liberal Party	0.5796	True
+William Laud	member of political party	English Dissenters	0.5291	?
+Tony Blair	member of political party	Democratic Party	0.7367	False
+Barry Goldwater	member of political party	Republican Party	0.7363	True
+Zachary Taylor	member of political party	Whig Party	0.6707	True
+Kim Beazley	member of political party	Australian Labor Party	0.6942	True
+Gaumee Itthihaad	member of political party	Dhivehi Rayyithunge Party	0.7310	?
+Aaron Burr	member of political party	Democratic-Republican Party	0.6014	True
+Howard Dean	member of political party	1988 Democratic National Convention	0.5162	False
+Zhou Enlai	member of political party	Communist Party of China	0.7074	True
+Hassan Saeed	member of political party	Social Democratic Party	0.5462	?
+Robert Emmet	member of political party	Society of United Irishmen	0.5546	?
+Bharatiya Jana Sangh	member of political party	Bharatiya Janata Party	0.6439	?
+Strom Thurmond	member of political party	Dixiecrat	0.6995	False
+Mohammed Waheed Hassan	member of political party	Social Democratic Party	0.5131	False
+William Henry Harrison	member of political party	Whig Party	0.5825	True
+Hartford	member of political party	The Avengers	0.6072	?
+Chen Liangyu	member of political party	17th National Congress of the Communist Party of China	0.6899	False
+Mohamed Nasheed	member of political party	Dhivehi Rayyithunge Party	0.7240	False
+Bruce King	member of political party	Republican Party	0.5160	False
+John Dendahl	member of political party	Republican Party	0.6274	True
+Warren Truss	member of political party	National Party of Australia	0.6274	True
+Gareth Evans	member of political party	Australian Labor Party	0.5009	True
+Sutan Sjahrir	member of political party	Indonesia	0.5250	False
+Malcolm Turnbull	member of political party	Liberal Party of Australia	0.6236	True
+Mikhail Gorbachev	member of political party	National Science Foundation	0.7200	False
+Vladimir Bukovsky	member of political party	National Science Foundation	0.6798	False
+Wang Qishan	member of political party	Communist Party of China	0.7047	True
+Jon Huntsman, Jr.	member of political party	Republican Party	0.7036	True
+Yeung Sum	member of political party	Democratic Party	0.5710	True
+Bill Clinton	member of political party	Democratic Party	0.7148	True
+Willy Brandt	member of political party	Social Democratic Party of Germany	0.5953	True
+John Peter Van Ness	member of political party	Democratic-Republican Party	0.7240	?
+John F. Kennedy	member of political party	Democratic Party	0.6931	True
+Gaumee Itthihaad	member of political party	Maldivian Democratic Party	0.7021	?
+Maumoon Abdul Gayoom	member of political party	Dhivehi Rayyithunge Party	0.5069	True
+Mikhail Gorbachev	member of political party	KGB	0.6714	False
+Eric Schmidt	member of political party	Novell	0.5881	?
+Italy	member of political party	Democratic Party	0.6253	?
+Kevin Rudd	member of political party	Australian Labor Party	0.7248	True
+Georgy Malenkov	member of political party	Communist Party of the Soviet Union	0.6152	True
+Gerrit Zalm	member of political party	People's Party for Freedom and Democracy	0.6806	True
+Nelson Rockefeller	member of political party	Republican Party	0.7359	True
+Richard Nixon	member of political party	Democratic Party	0.5360	False
+Davy Medal	member of political party	Royal Society	0.6307	?
+Joe Biden	member of political party	Democratic Party	0.5919	True
+Brendan Nelson	member of political party	Liberal Party of Australia	0.7225	True
+John Tyler	member of political party	Democratic Party	0.5055	?
+Walter Veltroni	member of political party	Democratic Party	0.7361	False
+California	member of political party	Republican Party	0.5288	?
+Hugh Gaitskell	member of political party	Labour Party	0.5270	True
+Mohammed Waheed Hassan	member of political party	Maldivian Democratic Party	0.6485	False
+Vladimir Bukovsky	member of political party	KGB	0.5924	False
+Erwin Huber	member of political party	Bavaria	0.6165	False
+Joseph Klausner	member of political party	Revisionist Zionism	0.5142	?
+Sabu	country of citizenship	Shanghai	0.5627	False
+Ann Brashares	country of citizenship	United States	0.8442	True
+Comrade X	country of citizenship	Brooklyn	0.7029	?
+Eric III of Denmark	country of citizenship	Denmark	0.7850	True
+Alexander McKenzie	country of citizenship	United States	0.5922	True
+Vlad Munteanu	country of citizenship	Romania	0.6967	True
+Comrade X	country of citizenship	Earth	0.8695	?
+Mr. Sardonicus	country of citizenship	Arizona	0.7905	?
+Max Aitken, 1st Baron Beaverbrook	country of citizenship	Commonwealth of Nations	0.5854	False
+Michael Bartels	country of citizenship	Germany	0.8943	True
+Tung Chee-hwa	country of citizenship	Mainland China	0.5704	False
+Mr. Sardonicus	country of citizenship	Earth	0.8510	?
+Ben F. Wilson	country of citizenship	Australia	0.8612	False
+Joel Murray	country of citizenship	United States	0.7540	True
+Comrade X	country of citizenship	Shanghai	0.8802	?
+Geldern	country of citizenship	Shanghai	0.6158	?
+Angela Merkel	country of citizenship	Germany	0.5625	True
+Terra Mariana	country of citizenship	Tirana	0.5005	?
+Philip IV of Spain	country of citizenship	Spain	0.6360	True
+Sir Robert Williams, 1st Baronet, of Park	country of citizenship	United States	0.8921	False
+Paula Seling	country of citizenship	Romania	0.5251	True
+Catherine Zeta-Jones	country of citizenship	Wales	0.7247	False
+J. Lee Thompson	country of citizenship	Cinema of the United Kingdom	0.6609	False
+Morgan Grimes	country of citizenship	United States	0.5687	True
+Ziaur Rahman	country of citizenship	Bangladesh	0.8043	True
+Arbaaz Ali Khan	country of citizenship	Pakistan	0.8379	False
+Michael Chapman	country of citizenship	United Kingdom	0.8257	True
+Fabian	country of citizenship	Germany	0.6172	?
+Arabella Field	country of citizenship	United States	0.8078	True
+honorary degree	country of citizenship	Berlin	0.5949	?
+David Marshall	country of citizenship	United Kingdom	0.8914	False
+Jared Burton	country of citizenship	American League	0.7935	False
+Aksana Drahun	country of citizenship	Lithuania	0.9158	False
+Edith Head	country of citizenship	cinema of the United States	0.5466	False
+Greystoke	country of citizenship	United States	0.7709	?
+Kondraty Ryleyev	country of citizenship	Russia	0.8172	False
+Hikaru Utada	country of citizenship	Asia	0.8892	False
+Mr. Lucky	country of citizenship	Russia	0.9019	?
+Napoleon III	country of citizenship	France	0.6986	True
+Bimal Roy	country of citizenship	Parineeta	0.8882	False
+Christina McHale	country of citizenship	United States	0.8705	True
+Mr. Lucky	country of citizenship	Brooklyn	0.6997	?
+Casper	country of citizenship	Denmark	0.8498	?
+Gustaf V of Sweden	country of citizenship	Order of the Dannebrog	0.7972	False
+Don Quixote	country of citizenship	Shanghai	0.6605	?
+Order of the Dannebrog	country of citizenship	Danish Royal Family	0.7359	?
+Arbaaz Khan	country of citizenship	India	0.6544	True
+Rod Taylor	country of citizenship	Hollywood Hills	0.5026	False
+Kerstin Szymkowiak	country of citizenship	Germany	0.8252	True
+Kevin Sullivan	country of citizenship	United States	0.8511	True
+Kendrick Lamar	country of citizenship	United States	0.9101	True
+Carl Albert	country of citizenship	United States	0.8450	True
+Mike Chapman	country of citizenship	Australia	0.8176	True
+Aksana	country of citizenship	Lithuania	0.8280	True
+Alexander von Humboldt	country of citizenship	Russian Empire	0.6354	False
+Nikita Khrushchev	country of citizenship	Washington, D.C.	0.5448	False
+Derek Jarman	country of citizenship	Britons	0.8555	False
+Fritz Bauer	country of citizenship	West Germany	0.7524	False
+Roberto Aguirre-Sacasa	country of citizenship	Nicaragua	0.8582	False
+Hugh Davies	country of citizenship	England	0.5211	False
+Ludwig van Beethoven	country of citizenship	Hungary	0.5349	False
+Marilyn Quayle	country of citizenship	United States	0.7042	True
+David de Keyser	country of citizenship	United Kingdom	0.8253	True
+Kim Jong-il	country of citizenship	North Korea	0.7984	True
+John Cassavetes	country of citizenship	Woodstock	0.6711	False
+Bimal Roy	country of citizenship	Debdas	0.5820	False
+Mr. Lucky	country of citizenship	Scarlet Street	0.6194	?
+Macoumba Kandji	country of citizenship	French colonial empire	0.8627	False
+The Magnificent Seven	country of citizenship	Russia	0.8048	?
+Anaxagoras	country of citizenship	Ancient Greece	0.6752	?
+Boutros Boutros-Ghali	country of citizenship	Federal government of the United States	0.7141	False
+Don Quixote	country of citizenship	Earth	0.6341	?
+Jan Romein	country of citizenship	Netherlands	0.6107	True
+Arbaaz Khan	country of citizenship	Pakistan	0.8965	False
+Christos Dantis	country of citizenship	Greek alphabet	0.6634	False
+Keshubhai Patel	country of citizenship	India	0.8353	True
+John Bardeen	country of citizenship	United Kingdom	0.8892	False
+Phil Mahre	country of citizenship	United States	0.8718	True
+Daniel O'Connell	country of citizenship	Peerage of Ireland	0.5524	False
+E. F. Schumacher	country of citizenship	Humboldt University of Berlin	0.7088	False
+Giorgio Rocca	country of citizenship	Chur	0.7385	False
+Papa Bouba Diop	country of citizenship	French colonial empire	0.6463	False
+Robert Wolders	country of citizenship	Dutch East Indies	0.8196	False
+Mahmud II	country of citizenship	Ottoman Empire	0.6853	True
+Greystoke	country of citizenship	Australia	0.6231	?
+Thomas Lionel Hodgkin	country of citizenship	Merlin	0.5992	?
+Province of Varese	country of citizenship	Italy	0.5394	?
+Andrei Krauchanka	country of citizenship	Belgium	0.6863	False
+Kyiv Post	country of citizenship	Crimea	0.8874	?
+Jacques Delors	country of citizenship	French	0.9132	False
+James Madison	country of citizenship	United States	0.9084	True
+Larry B. Scott	country of citizenship	United States	0.6725	True
+Andrea Dotti	country of citizenship	Italy	0.5410	?
+Ray Coleman	country of citizenship	Germany	0.7562	?
+Georgy Malenkov	country of citizenship	Soviet Union	0.8116	True
+doctoral degree	country of citizenship	Dresden	0.7624	?
+Antoine Lavoisier	country of citizenship	France	0.6959	True
+George Lucas	country of citizenship	United States	0.7310	True
+Elvis Presley	country of citizenship	United States	0.8414	True
+Sangeet Natak Akademi	country of citizenship	India	0.6898	?
+David Eisenbud	country of citizenship	United States	0.6212	True
+Heinrich Himmler	country of citizenship	Germany	0.5131	?
+Gustaf VI Adolf of Sweden	country of citizenship	Order of the Dannebrog	0.8629	False
+Henryk Rzewuski	country of citizenship	Poland	0.5633	False
+Makarand Anaspure	country of citizenship	Marathi cinema	0.8298	False
+Mamadou N'Diaye	country of citizenship	Rwanda	0.7077	?
+Alexander von Humboldt	country of citizenship	Prussia	0.8838	True
+John F. Kennedy	country of citizenship	Soviet Union	0.8658	False
+Nikita Khrushchev	country of citizenship	East Germany	0.5975	False
+Salvador Allende	country of citizenship	Chile	0.8674	True
+Armand Augustin Louis de Caulaincourt	country of citizenship	French	0.6768	False
+Saint-Preux	country of citizenship	Florence	0.6328	False
+Isabel Preysler	country of citizenship	Spain	0.8301	True
+Nana Patekar	country of citizenship	India	0.7725	True
+Jonathan Coulton	country of citizenship	United States	0.6687	True
+Margaret Fuller	country of citizenship	American Revolutionary War	0.7012	False
+Joel David Moore	country of citizenship	United States	0.7325	True
+Benon Sevan	country of citizenship	Cyprus	0.5143	?
+Mr. Lucky	country of citizenship	Earth	0.8688	?
+Mickey Mouse	country of citizenship	United States	0.5729	?
+Merle Oberon	country of citizenship	Dutch East Indies	0.5454	False
+Diego Maradona	country of citizenship	Serbs	0.8307	False
+proletariat	country of citizenship	Armenian Soviet Socialist Republic	0.7819	?
+Hugh Sykes Davies	country of citizenship	Australia	0.8551	False
+Mr. Sardonicus	country of citizenship	Scarlet Street	0.5718	?
+Jorge Alessandri	country of citizenship	Chile	0.7286	True
+Talat Mahmood	country of citizenship	Parineeta	0.8737	False
+Ludwig Berger	country of citizenship	Germany	0.7648	True
+Bernard Herrmann	country of citizenship	cinema of the United States	0.8588	False
+Lucy DeVito	country of citizenship	United States	0.8150	True
+Theodore Roosevelt	country of citizenship	United States	0.5541	True
+John Major	country of citizenship	United Kingdom	0.9198	True
+David Kilgour	country of citizenship	Canada	0.5229	True
+Gustaf VI Adolf of Sweden	country of citizenship	Sweden	0.9062	True
+Margaret Leijonhufvud	country of citizenship	Sweden	0.7758	True
+doctoral degree	country of citizenship	Berlin	0.7615	?
+Nicolas Sarkozy	country of citizenship	Italy	0.5528	False
+Andrey Lugovoy	country of citizenship	Russia	0.7385	True
+Massachusetts Institute of Technology	country of citizenship	France	0.8219	?
+Dev Patel	country of citizenship	United States	0.8287	False
+Saint Sebastian	country of citizenship	Britons	0.8786	False
+Bill Clinton	country of citizenship	United States	0.6192	True
+Macoumba Kandji	country of citizenship	Rwanda	0.6859	False
+Sabu	country of citizenship	Russia	0.7902	False
+Carl XVI Gustaf of Sweden	country of citizenship	Order of the Dannebrog	0.7171	False
+The Magnificent Seven	country of citizenship	Earth	0.5194	?
+Walter Mondale	country of citizenship	United States	0.9129	True
+Philip I of Castile	country of citizenship	Landgraviate of Hesse	0.6174	?
+Jack Brabham	country of citizenship	Oldsmobile	0.6964	False
+Comrade X	country of citizenship	Russia	0.9022	?
+Giorgio Rocca	country of citizenship	Italy	0.8999	True
+Malcolm David Kelley	country of citizenship	United States	0.7933	True
+Mr. Lucky	country of citizenship	Shanghai	0.8796	?
+Geldern	country of citizenship	Earth	0.5863	?
+Fernando Sanford	country of citizenship	Humboldt University of Berlin	0.5350	?
+Cezary Pazura	country of citizenship	Poland	0.6699	True
+Bjarne Riis	country of citizenship	Denmark	0.6602	True
+Johan Kriek	country of citizenship	African American	0.8865	False
+Ruhollah Khomeini	country of citizenship	Islamic Iran Participation Front	0.6400	False
+Yuna	country of citizenship	United States	0.6215	False
+Easter	country of citizenship	Romania	0.6298	?
+Mr. Sardonicus	country of citizenship	Bataan	0.6882	?
+J. Edgar Hoover	country of citizenship	United States	0.8147	True
+Mr. Sardonicus	country of citizenship	Russia	0.8991	?
+Mamadou N'Diaye	country of citizenship	French colonial empire	0.8679	?
+Lorraine Toussaint	country of citizenship	United States	0.7539	True
+Stefan Edberg	country of citizenship	United States	0.9030	False
+Kari Lizer	country of citizenship	United States	0.7954	True
+Fana IL	country of citizenship	Florence	0.8218	?
+Ebba Eriksdotter Vasa	country of citizenship	Sweden	0.8023	True
+Graham Norton	country of citizenship	UK Singles chart	0.8268	False
+Devin Griffin	country of citizenship	United States	0.6497	False
+Thomas Lionel Hodgkin	country of citizenship	Vietnam	0.8825	?
+John Tyler	country of citizenship	United States	0.8525	True
+Charles de Gaulle	country of citizenship	France	0.8793	True
+Geoffrey Howe	country of citizenship	Thatcherism	0.7875	False
+Nicola Mancino	country of citizenship	Italy	0.8637	True
+John Clayton	country of citizenship	Australia	0.8570	False
+FourFourTwo	country of citizenship	United Kingdom	0.7307	?
+David Costabile	country of citizenship	United States	0.8552	True
+Maureen Connolly	country of citizenship	United States	0.8538	True
+Thurgood Marshall	country of citizenship	United States	0.5173	True
+Damon Hill	country of citizenship	United Kingdom	0.6650	True
+Forbes	country of citizenship	France	0.7142	?
+Angus McKinnon	country of citizenship	Australia	0.5656	False
+Andrea Riccardi	country of citizenship	Italy	0.8545	True
+Spain	country of citizenship	Chile	0.5655	?
+Popular Science	country of citizenship	France	0.7884	?
+Kerry Packer	country of citizenship	Australia	0.8270	True
+Diego Maradona	country of citizenship	Santiago	0.8526	False
+Ernst Hanfstaengl	country of citizenship	Nazi Germany	0.7618	False
+Arbaaz Khan	country of citizenship	Pakistan	0.8919	True
+Joan Mondale	country of citizenship	United States	0.9127	True
+Terra Mariana	country of citizenship	Albania	0.7717	?
+George Soros	country of citizenship	Hungary	0.5145	True
+John O'Connor Power	country of citizenship	Canada	0.7477	?
+Sterling Hayden	country of citizenship	United Kingdom	0.6836	False
+Marie Aubry	country of citizenship	French	0.7804	False
+Frida Kahlo	country of citizenship	Mexicans	0.8929	False
+Anders Fogh Rasmussen	country of citizenship	Denmark	0.6991	True
+Piers Morgan	country of citizenship	UK Singles chart	0.6505	False
+Nadine Beiler	country of citizenship	Austria	0.6235	True
+Minnesota Vikings	country of citizenship	United States	0.6414	?
+Colette Rolland	country of citizenship	France	0.8924	True
+Carl Linnaeus	country of citizenship	Sweden	0.7455	True
+The Real Glory	country of citizenship	Earth	0.5708	?
+Carl XVI Gustaf of Sweden	country of citizenship	Gustaf VI Adolf of Sweden	0.6898	False
+Benjamin Raich	country of citizenship	Austria	0.5830	True
+Marina Berlusconi	country of citizenship	Italy	0.8796	True
+Betty Friedan	country of citizenship	Sigmund Freud	0.7908	False
+Henry Augustus Rowland	country of citizenship	Humboldt University of Berlin	0.7640	False
+Elias Koteas	country of citizenship	Canada	0.7953	True
+Aksana Miankova	country of citizenship	Belarus	0.7285	True
+Mikhail Khodorkovsky	country of citizenship	Russia	0.7065	True
+Mike Chapman	country of citizenship	United States	0.8730	False
+Tomasz Majewski	country of citizenship	Poland	0.7320	True
+Nelson Mandela	country of citizenship	South Africa	0.7727	True
+Audrey Fleurot	country of citizenship	France	0.7748	True
+Sharon Van Etten	country of citizenship	United States	0.8822	True
+Samuel Morse	country of citizenship	French people	0.8071	False
+Dan Quayle	country of citizenship	United States	0.6901	True
+Jean Harlow	country of citizenship	Armenian Soviet Socialist Republic	0.9134	False
+Nicky Hopkins	country of citizenship	Germany	0.8915	False
+Arthur Miller	country of citizenship	Jews	0.6876	False
+Tarn-et-Garonne	country of citizenship	France	0.5940	?
+Hafez al-Assad	country of citizenship	Syria	0.5854	True
+Junichi Okada	country of citizenship	Japan	0.7066	True
+James Ford	country of citizenship	United States	0.5959	False
+Joe DiMaggio	country of citizenship	Jews	0.7690	False
+Kristine Thatcher	country of citizenship	Barbara Jordan	0.7703	False
+Aksana Drahun	country of citizenship	Belarus	0.6973	True
+Robert Hotung	country of citizenship	Eurasian (mixed ancestry)	0.7762	?
+Karin Fossum	country of citizenship	Norway	0.5070	True
+Marek Kondrat	country of citizenship	Poland	0.7543	True
+Grainger Hines	country of citizenship	United States	0.8081	True
+The Dawn Patrol	country of citizenship	United States	0.6522	?
+Bo Johansson	country of citizenship	Denmark	0.7941	False
+Samuel Goudsmit	country of citizenship	United States	0.5209	True
+Linda Lee Cadwell	country of citizenship	United States	0.8001	True
+TR35	country of citizenship	France	0.8640	?
+John Clayton	country of citizenship	United States	0.8823	True
+doctoral degree	country of citizenship	Bratislava	0.5399	?
+Gustaf VI Adolf of Sweden	country of citizenship	Danish Royal Family	0.9199	False
+Seton Hall University	country of citizenship	Berlin	0.6846	?
+Emir Kusturica	country of citizenship	Serbs	0.6697	False
+John Dahl	country of citizenship	United States	0.5846	True
+John F. Kennedy	country of citizenship	Cuba	0.5912	False
+Wilhelm Wien	country of citizenship	Humboldt University of Berlin	0.8269	False
+Redman	country of citizenship	Soviet Union	0.5227	False
+Robert Mugabe	country of citizenship	United States	0.6901	False
+Frank Frost	country of citizenship	United States	0.5676	True
+Alex James	country of citizenship	United States	0.5814	False
+Charles XII of Sweden	country of citizenship	Swedish Empire	0.9041	False
+Grover Cleveland	country of citizenship	United States	0.8078	True
+George Melly	country of citizenship	Cinema of the United Kingdom	0.7206	False
+Max von Sydow	country of citizenship	Sweden	0.6613	True
+Johann Sebastian Bach	country of citizenship	Germany	0.7742	False
+Gustaf V of Sweden	country of citizenship	Gustaf VI Adolf of Sweden	0.5742	False
+Don Quixote	country of citizenship	Russia	0.8280	?
+Louis XVI of France	country of citizenship	France	0.5912	True
+Frank Sinatra	country of citizenship	Hollywood Hills	0.5782	False
+Yan'an	country of citizenship	Xi'an	0.6656	?
+Diahnne Abbott	country of citizenship	United States	0.8967	True
+Mika Kojonkoski	country of citizenship	Finland	0.8152	True
+Kirk Douglas	country of citizenship	cinema of the United States	0.7454	False
+Francis Dana	country of citizenship	United States	0.5165	True
+Arbaaz Khan	country of citizenship	India	0.6001	False
+Sutton Hoo	country of citizenship	Ancient Egypt	0.6017	?
+Mike Chapman	country of citizenship	England	0.5962	False
+Comrade X	country of citizenship	Bataan	0.7254	?
+Alain Cuny	country of citizenship	France	0.5730	True
+Frank McRae	country of citizenship	United States	0.7949	True
+Ron Weasley	country of citizenship	Peru	0.5240	?
+Nathan Clifford	country of citizenship	United States	0.8791	True
+Robert Servatius	country of citizenship	Nazi Germany	0.7547	False
+Mohammad Hatta	country of citizenship	United States	0.6203	False
+Charles Bronson	country of citizenship	England	0.5911	False
+Charles X of France	country of citizenship	France	0.7377	True
+Comrade X	country of citizenship	Paris	0.5479	?
+Harry S. Truman	country of citizenship	Israel	0.6484	False
+Anthony Daniels	country of citizenship	English	0.6676	False
+Grace Gummer	country of citizenship	United States	0.7070	True
+Colin Egglesfield	country of citizenship	United States	0.8083	True
+Tom Waits	country of citizenship	California	0.5483	False
+Roberto Aguirre-Sacasa	country of citizenship	United States	0.7430	True
+Chad	country of citizenship	Canada	0.6898	?
+Shahin Najafi	country of citizenship	Iran	0.8951	True
+Sajeeb Wazed	country of citizenship	Bangladesh	0.5471	True
+Martin Scorsese	country of citizenship	French New Wave	0.5021	False
+Augusto Pinochet	country of citizenship	Spain	0.8034	False
+Elena Kagan	country of citizenship	United States	0.7213	True
+Ajinkya Deo	country of citizenship	United States	0.5760	False
+Manna Dey	country of citizenship	Parineeta	0.8798	False
+Anthony Merry	country of citizenship	East India Company	0.7556	False
+Augusto Pinochet	country of citizenship	Chile	0.8983	True
+Ingrid of Sweden	country of citizenship	Danish Royal Family	0.9182	False
+David Bergman	country of citizenship	United States	0.8321	?
+Rick Perry	country of citizenship	United States	0.6579	True
+Comrade X	country of citizenship	Arizona	0.8114	?
+Saint Sebastian	country of citizenship	United States	0.5163	False
+Shirley MacLaine	country of citizenship	Maya people	0.7272	False
+Ingmar Bergman	country of citizenship	Uppsala	0.6021	False
+Ron Weasley	country of citizenship	United States	0.6753	?
+Mbaye Diagne	country of citizenship	French colonial empire	0.8263	False
+Lata Mangeshkar	country of citizenship	Parineeta	0.8798	False
+Thomas Pynchon	country of citizenship	California	0.7417	False
+Betty Ford	country of citizenship	United States	0.9046	True
+Gary Herbert	country of citizenship	United States	0.8944	True
+Michael Chapman	country of citizenship	United States	0.5321	False
+Indian Institute of Technology Bombay	country of citizenship	France	0.7096	?
+Geoffrey Howe	country of citizenship	United Kingdom	0.9199	True
+Vladimir Putin	country of citizenship	France	0.8859	False
+Vester Pegg	country of citizenship	United States	0.8160	True
+Wen Yunsong	country of citizenship	China	0.7155	True
+Jean Hersholt Humanitarian Award	country of citizenship	United States	0.6837	?
+Simonetta Stefanelli	country of citizenship	cinema of Italy	0.8414	False
+Watkins Glen International	country of citizenship	United States Grand Prix	0.8614	?
+Estella-Lizarra	country of citizenship	Philippines	0.5104	?
+Olga Govortsova	country of citizenship	Tennessee	0.7788	False
+Hermann Maier	country of citizenship	Italy	0.6246	False
+President of the European Commission	country of citizenship	French	0.5821	?
+Lewis Tappan	country of citizenship	United States	0.8176	True
+The Magnificent Seven	country of citizenship	Shanghai	0.5989	?
+Alexander Lukashenko	country of citizenship	Belarusian	0.8990	False
+Robbie Williams	country of citizenship	England	0.6442	False
+King Harald V of Norway	country of citizenship	Kalmar Union	0.6917	False
+Dan O'Brien	country of citizenship	United States	0.5897	True
+Carl W. Hergenrother	country of citizenship	United States	0.8128	True
+Marina von Neumann Whitman	country of citizenship	United States	0.8374	True
+Pras	country of citizenship	Sinik	0.7424	False
+Salil Chowdhury	country of citizenship	Parineeta	0.8806	False
+Anatoliy Serdyukov	country of citizenship	Mediterranean Sea	0.6977	False
+Gustav IV Adolf of Sweden	country of citizenship	Sweden	0.9031	True
+The Conspirators	country of citizenship	Russia	0.5571	?
+Seton Hall University	country of citizenship	Dresden	0.7185	?
+Rosalie van Breemen	country of citizenship	Netherlands	0.6695	True
+Carla Gugino	country of citizenship	United States	0.5683	True
+Charles X of France	country of citizenship	Poland	0.5222	False
+Ingmar Bergman	country of citizenship	Cinema of Sweden	0.8541	False
+Empedocles	country of citizenship	Ancient Greece	0.6752	False
+John Howard	country of citizenship	Government of Australia	0.8419	False
+Pernilla Karlsson	country of citizenship	Finland	0.6669	True
+Joel Edgerton	country of citizenship	Australia	0.6532	True
+Hugh Davies	country of citizenship	Australia	0.8402	False
+Tata Young	country of citizenship	Asia	0.8777	False
+George Sand	country of citizenship	French	0.7838	False
+Aksana Miankova	country of citizenship	Lithuania	0.9158	False
+Austria	country of citizenship	Weimar Republic	0.7065	?
+Mr. Sardonicus	country of citizenship	Morocco	0.7296	?
+Mr. Lucky	country of citizenship	Arizona	0.8098	?
+Joe Swash	country of citizenship	United Kingdom	0.7430	True
+John E. Walker	country of citizenship	England	0.8928	False
+Mr. Sardonicus	country of citizenship	Brooklyn	0.6620	?
+Kenyon Hopkins	country of citizenship	United States	0.7472	True
+Michael Brandon	country of citizenship	United States	0.6062	True
+Isabel Bishop	country of citizenship	Australia	0.9042	False
+Coco Lee	country of citizenship	Asia	0.8842	False
+Mara Carfagna	country of citizenship	Italy	0.8224	True
+Makoto Kano	country of citizenship	Japan	0.8721	True
+William Howard Taft	country of citizenship	United States	0.7971	True
+Ronald Reagan	country of citizenship	Mexico City Policy	0.6675	False
+Hafez al-Assad	country of citizenship	Iran	0.5190	False
+Bill Johnson	country of citizenship	United States	0.9087	True
+Makarand Anaspure	country of citizenship	India	0.8076	True
+Thomas Robsahm	country of citizenship	Norway	0.6944	True
+Hermann Maier	country of citizenship	English	0.5337	False
+Nubkheperre Intef	country of citizenship	Ancient Egypt	0.5715	True
+Peter Cook	country of citizenship	United Kingdom	0.7239	True
+Mike Chapman	country of citizenship	United Kingdom	0.9055	False
+Jack Angel	country of citizenship	United States	0.6023	True
+Alexander Mronz	country of citizenship	Germany	0.8803	True
+Martin Landau	country of citizenship	cinema of the United States	0.7819	False
+Mr. Sardonicus	country of citizenship	Shanghai	0.8658	?
+George Lucas	country of citizenship	United Kingdom	0.8171	False
+Comrade X	country of citizenship	Morocco	0.7605	?
+Diego Maradona	country of citizenship	Iran	0.9072	False
+Count Karl-Wilhelm Finck von Finckenstein	country of citizenship	Prussia	0.8657	False
+33rd United States Congress	country of citizenship	Israel	0.6920	?
+Hugo Grotius	country of citizenship	Netherlands	0.5941	True
+Riemann hypothesis	country of citizenship	United Kingdom	0.7632	?
+Friedrich Dollmann	country of citizenship	Wehrmacht	0.7857	False
+Odd Reitan	country of citizenship	Norway	0.8191	True
+Michael Frontzeck	country of citizenship	Germany national football team	0.8413	False
+Geldern	country of citizenship	Russia	0.8114	?
+honorary degree	country of citizenship	Dresden	0.6392	?
+Carl XVI Gustaf of Sweden	country of citizenship	Danish Royal Family	0.9197	False
+Devin Sarno	country of citizenship	California	0.6843	False
+Maja Keuc	country of citizenship	Slovenia	0.8049	True
+Fabian	country of citizenship	United States	0.6486	?
+Hermann Maier	country of citizenship	Austria	0.8243	True
+Santosh Mohan Dev	country of citizenship	Bollywood	0.6697	False
+Meek Mill	country of citizenship	United States	0.8982	True
+Gianni Rivera	country of citizenship	Italy national football team	0.6283	False
+Princess Margaret, Countess of Snowdon	country of citizenship	Sweden	0.5391	False
+Gustaf V of Sweden	country of citizenship	Sweden	0.5267	True
+Carl XVI Gustaf of Sweden	country of citizenship	Sweden	0.8080	True
+Pontormo	country of citizenship	Egypt	0.5355	?
+Emilie de Ravin	country of citizenship	Australia	0.7531	True
+Mr. Lucky	country of citizenship	Paris	0.5431	?
+Ron Weasley	country of citizenship	Germany	0.6837	?
+The Real Glory	country of citizenship	Russia	0.8057	?
+Dominique Gisin	country of citizenship	Switzerland	0.5644	True
+Harry S. Truman	country of citizenship	United States	0.8920	True
+David H. Leroy	country of citizenship	Republican Party	0.5628	False
+Wilhelm II, German Emperor	country of citizenship	German Empire	0.7198	False
+Ivi Adamou	country of citizenship	Cyprus	0.6655	True
+Richard J. Evans	country of citizenship	Nazi Party	0.8112	False
+currency union	country of citizenship	United Kingdom	0.7742	?
+Anne Perry	country of citizenship	Society of Jesus	0.6535	False
+Charles de Gaulle	country of citizenship	cinema of France	0.7827	False
+Alexander Lukashenko	country of citizenship	Russia	0.8210	False
+Frank Oz	country of citizenship	United States	0.6226	True
+Percival Farquhar	country of citizenship	United States	0.8530	True
+Wim Wenders	country of citizenship	Germany	0.5837	True
+Brigitte Oertli	country of citizenship	Switzerland	0.7155	True
+Yuna	country of citizenship	Malaysia	0.8320	True
+Richard Burton	country of citizenship	Welsh	0.5268	False
+Eugen Goldstein	country of citizenship	Humboldt University of Berlin	0.7341	False
+Edward Greenfield	country of citizenship	Armenian Soviet Socialist Republic	0.5221	False
+Max Planck	country of citizenship	Humboldt University of Berlin	0.5993	False
+Celina Szymanowska	country of citizenship	Poland	0.5573	?
+Jacques Chirac	country of citizenship	France	0.8264	True
+Johann Ambrosius Bach	country of citizenship	Germany	0.8495	?
+Ott Lepland	country of citizenship	Estonia	0.9031	True
+Georg von Cancrin	country of citizenship	Prussia	0.6213	False
+Andrey Malakhov	country of citizenship	Russia	0.7602	True
+Angelo Savoldi	country of citizenship	United States	0.9019	True
+Teodoro Obiang Nguema Mbasogo	country of citizenship	Equatorial Guinea	0.9020	True
+Heinrich Kayser	country of citizenship	Humboldt University of Berlin	0.8517	False
+Fritz Bauer	country of citizenship	Nazi Party	0.5596	False
+William Short	country of citizenship	United States	0.9195	?
+Jill Biden	country of citizenship	United States	0.5323	True
+Abdulla Mohamed	country of citizenship	Maldives	0.5863	?
+Ludwig van Beethoven	country of citizenship	Electorate of Cologne	0.8141	False
+Frank Klepacki	country of citizenship	cinema of the United States	0.8956	False
+Santosh Mohan Dev	country of citizenship	Bangladesh	0.7159	False
+Christin Kristoffersen	country of citizenship	Norway	0.8605	True
+Florian Heller	country of citizenship	Germany	0.8594	True
+??	country of citizenship	Florence	0.7502	?
+Nigel Lawson	country of citizenship	United Kingdom	0.9189	True
+Andrei Zhdanov	country of citizenship	Armenian Soviet Socialist Republic	0.8814	False
+Henry James	country of citizenship	English	0.5807	False
+Anita Bose Pfaff	country of citizenship	India	0.6592	False
+Charles de Gaulle	country of citizenship	French	0.9160	False
+Love Crazy	country of citizenship	Russia	0.7224	?
+Mukesh	country of citizenship	Parineeta	0.6352	False
+Jack Clayton	country of citizenship	United States	0.6363	True
+Comrade X	country of citizenship	Scarlet Street	0.6236	?
+The Real Glory	country of citizenship	Shanghai	0.6435	?
+Fondaco dei Tedeschi	country of citizenship	German	0.6312	?
+
+1644 positives, 135696 negatives, 1373092 unknowns
+0.00 positive 1.00 negative: average score 0.0175
+0.10 positive 0.90 negative: average score 0.0175
+0.20 positive 0.80 negative: average score 0.0451
+0.30 positive 0.70 negative: average score 0.0499
+0.40 positive 0.60 negative: average score 0.0518
+0.50 positive 0.50 negative: average score 0.0670
+0.60 positive 0.40 negative: average score 0.0797
+0.70 positive 0.30 negative: average score 0.0904
+0.80 positive 0.20 negative: average score 0.1359
+0.90 positive 0.10 negative: average score 0.1405
+1.00 positive 0.00 negative: average score 0.1462
+
+[0.00;0.10]: 0.89% true (1217 true 135125 false)
+[0.10;0.20]: 35.86% true (104 true 186 false)
+[0.20;0.30]: 37.24% true (54 true 91 false)
+[0.30;0.40]: 45.78% true (38 true 45 false)
+[0.40;0.50]: 39.02% true (32 true 50 false)
+[0.50;0.60]: 43.75% true (35 true 45 false)
+[0.60;0.70]: 45.98% true (40 true 47 false)
+[0.70;0.80]: 53.49% true (46 true 40 false)
+[0.80;0.90]: 54.24% true (64 true 54 false)
+[0.90;1.00]: 51.85% true (14 true 13 false)
+[0.00;0.20]: 0.97% true (1321 true 135311 false)
+[0.20;0.40]: 40.35% true (92 true 136 false)
+[0.40;0.60]: 41.36% true (67 true 95 false)
+[0.60;0.80]: 49.71% true (86 true 87 false)
+[0.80;1.00]: 53.79% true (78 true 67 false)
+Number of predictions above 0.1 : 1435
+Number of predictions above 0.5 : 520
+Number of predictions above 0.9 : 30
+Number of predictions above 0.95 : 0
+Number of predictions above 0.99 : 0
