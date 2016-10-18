@@ -88,11 +88,16 @@ def main():
             continue
 
         all_samples = []
+        no_samples = 0
         bar = progressbar.ProgressBar(redirect_stdout=True)
         for article in bar(articles):
             samples = find_samples_in_document(relation, article)
             if samples:
                 all_samples.extend(samples)
+            else:
+                no_samples += 1
+        print("number of samples:", len(all_samples))
+        print("articles with no samples:", no_samples)
 
         scored_samples = []
         scores = model.predict_proba(all_samples)
