@@ -12,6 +12,7 @@ PREFIXES = {
     'wd': 'http://www.wikidata.org/entity/',
     'wdp': 'http://www.wikidata.org/prop/direct/',
     'dbr': 'http://dbpedia.org/resource/',
+    'foaf': 'http://xmlns.com/foaf/0.1/',
 }
 
 STANDARD_PREFIXES = ""
