@@ -13,8 +13,4 @@ text/thesis.pdf
 
 *.swp
 
-bazel-bin
-bazel-code
-bazel-genfiles
-bazel-out
-bazel-testlogs
+bazel-*
