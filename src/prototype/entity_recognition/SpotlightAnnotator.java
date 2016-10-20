@@ -3,6 +3,9 @@
 
 import java.io.IOException;
 
+import java.net.URI;
+//import org.apache.hadoop.filecache.DistributedCache;
+import org.apache.hadoop.fs.*;
 import java.lang.System;
 import org.apache.log4j.Logger;
 import org.apache.hadoop.conf.Configuration;
@@ -47,9 +50,23 @@ public class SpotlightAnnotator extends Configured implements Tool {
 		}
 		*/
 
+		FileSystem fs = FileSystem.get(conf);
+		System.out.println("Copying...");
+		//fs.copyFromLocalFile(false, new Path("src/prototype/entity_recognition/run_on_hadoop"),
+		//		new Path("/user/prvak/run_on_hadoop"));
+		fs.copyFromLocalFile(false, new Path("src/prototype/entity_recognition/spotlight_server_deploy.jar"),
+				new Path("/user/prvak/spotlight_server_deploy.jar"));
+		System.out.println("Copied.");
+
+		// TODO: hdfs:// ?
+		//DistributedCache.addCacheFile(new URI("/user/prvak/run_on_hadoop#run_on_hadoop"), conf);
+		//DistributedCache.createSymlink(conf);
+		//DistributedCache.addCacheFile(new URI("/user/prvak/spotlight_server_deploy.jar#spotlight_server_deploy.jar"), conf);
+
 		// Create a JobConf using the processed conf
 		Job job = Job.getInstance(conf, SpotlightAnnotator.class.getName());
 		job.setJarByClass(SpotlightAnnotator.class);
+		job.addCacheFile(new Path("/user/prvak/spotlight_server_deploy.jar").toUri());
 
 		Scan scanner = new Scan();
 		scanner.addColumn(ArticlesTable.WIKI, ArticlesTable.PLAINTEXT);

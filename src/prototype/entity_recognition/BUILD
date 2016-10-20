@@ -123,6 +123,9 @@ java_binary(
         "//:org_apache_hbase_hbase_client",
         "//:org_apache_hbase_hbase_server",
     ],
+    data = [
+        ":spotlight_server_deploy.jar",
+    ],
 )
 
 java_library(
@@ -142,5 +145,6 @@ sh_binary(
     data = [
         ":SpotlightAnnotator_deploy.jar",
         ":SpotlightAnnotator.jar",
+        ":spotlight_server_deploy.jar",
     ],
 )

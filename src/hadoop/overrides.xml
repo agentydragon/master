@@ -28,4 +28,9 @@
   <value>Client</value>
 </property>
 
+<property>
+  <name>mapreduce.tasktracker.cache.local.size</name>
+  <value>10737418240</value> <!-- 10 GB -->
+</property>
+
 </configuration>

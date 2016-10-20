@@ -61,13 +61,35 @@ public class SpotlightAnnotatorMapper extends TableMapper<ImmutableBytesWritable
 	}
 
 	// public static boolean startOwnSpotlight = true;
+	//
+	private Process process;
 
 	@Override
 	public void setup(Context context) {
-		logger.info("mapper setup");
-		Configuration conf = context.getConfiguration();
+		try {
+			logger.info("mapper setup");
+			/*
 
-		loadWhitelist(conf);
+			int port = 2222 + new java.util.Random().nextInt(1000);
+			ProcessBuilder bldr = new ProcessBuilder(
+					"java", "-jar", "spotlight_server_deploy.jar",
+					Integer.toString(port));
+			process = bldr.start();
+			*/
+
+			Configuration conf = context.getConfiguration();
+
+			loadWhitelist(conf);
+			//connection = new SpotlightPooledConnection(SpotlightPooledConnection.splitEndpointList("http://localhost:" + Integer.toString(port) + "/rest/annotate"));
+		//} catch (IOException e) {
+		//	e.printStackTrace();
+		//	System.exit(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		System.exit(2);
+
 		/*
 		if (startOwnSpotlight) {
 			try {
@@ -80,8 +102,8 @@ public class SpotlightAnnotatorMapper extends TableMapper<ImmutableBytesWritable
 		} else {
 		*/
 
-		String[] connectionUrls = SpotlightPooledConnection.splitEndpointList(conf.get("spotlight_server"));
-		connection = new SpotlightPooledConnection(connectionUrls);
+		//String[] connectionUrls = SpotlightPooledConnection.splitEndpointList(conf.get("spotlight_server"));
+		//connection = new SpotlightPooledConnection(connectionUrls);
 		//}
 	}
 
@@ -92,6 +114,8 @@ public class SpotlightAnnotatorMapper extends TableMapper<ImmutableBytesWritable
 			server.stop();
 		}
 		*/
+
+		process.destroy();
 	}
 
 	@Override
