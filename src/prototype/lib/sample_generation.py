@@ -1,9 +1,7 @@
-from src import paths
 from src.prototype.lib import article_repo
 from src.prototype.lib import training_sample
 from src.prototype.lib import relations
 
-from xml.etree import ElementTree
 import random
 
 def try_load_document(article_title):

@@ -158,7 +158,6 @@ py_library(
         "sample_generation.py",
     ],
     deps = [
-        "//src:paths_lib",
         ":dbpedia_lib",
         ":training_sample_lib",
         ":relations_lib",
