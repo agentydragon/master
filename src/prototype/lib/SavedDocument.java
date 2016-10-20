@@ -16,20 +16,6 @@ import org.w3c.dom.*;
 import javax.xml.xpath.*;
 
 public class SavedDocument {
-	public static class JSONUtils {
-		public static <T> List<T> arrayMap(JSONArray array, Function<JSONObject, T> convert) {
-			List<T> r = new ArrayList<>();
-			for (int i = 0; i < array.length(); i++) {
-				r.add(convert.apply((JSONObject) array.get(i)));
-			}
-			return r;
-		}
-
-		public static <T> JSONArray toArray(List<T> array, Function<T, JSONObject> convert) {
-			return new JSONArray(array.stream().map(convert).collect(Collectors.toList()));
-		}
-	}
-
 	public static class SentenceToken {
 		public int id;
 		public int startOffset;

@@ -90,6 +90,27 @@ java_library(
 )
 
 java_library(
+    name = "JSONUtils",
+    srcs = [
+        "JSONUtils.java",
+    ],
+    deps = [
+        "//:org_json_json",
+    ],
+)
+
+java_library(
+    name = "TrainingSample",
+    srcs = [
+        "TrainingSample.java",
+    ],
+    deps = [
+        ":JSONUtils",
+        "//:org_json_json",
+    ],
+)
+
+java_library(
     name = "SavedDocument",
     srcs = [
         "SavedDocument.java",
@@ -97,6 +118,7 @@ java_library(
     deps = [
         ":ArticlesTable",
         ":DBpediaClient",
+        ":JSONUtils",
         "//:org_json_json",
         "//:org_apache_hbase_hbase_common",
         "//:org_apache_hbase_hbase_client",
