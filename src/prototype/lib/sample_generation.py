@@ -82,7 +82,7 @@ def get_all_document_samples(document):
     # print('Document produced', len(samples), 'unlabeled samples.')
     return samples
 
-def get_document_samples(document, wikidata_client):
+def get_labeled_samples_from_document(document, wikidata_client):
     samples = []
 
     all_triples = get_document_subgraph(
@@ -172,58 +172,7 @@ def get_samples_from_document(article_title, wikidata_client):
     if not document:
         print('cannot load document')
         return
-    return get_document_samples(document, wikidata_client)
-
-def sample_random_entity_pair(documents):
-    while True:
-        document = random.choice(documents)
-
-        for i in range(5):
-            # select random sentence that has at least 2 mentions in it
-            sentence = random.choice(document.sentences)
-            sentence_wrapper = SentenceWrapper(document, sentence)
-
-            wikidata_ids = sentence_wrapper.get_sentence_wikidata_ids()
-            if len(wikidata_ids) < 2:
-                continue
-
-            for j in range(5):
-                # select two random wikidata ids
-                s, o = random.sample(wikidata_ids, 2)
-
-                # Against reflexive references ("Country is in country").
-                if sentence_wrapper.mentions_in_sentence_overlap(s, o):
-                    continue
-
-                return sentence_wrapper.make_training_sample(s, None, o,
-                                                             positive=None)
-            # select sentence again
-            continue
-        # pick next article
-        continue
-
-def sample_complete_negative(documents, wikidata_client):
-    while True:
-        sample = sample_random_entity_pair(documents)
-        if len(wikidata_client.get_holding_relations_between(sample.subject,
-                                                             sample.object)) > 0:
-            # skip if we happen to hit it
-            continue
-        else:
-            sample.relation = None
-            sample.positive = False
-            return sample
-
-def sample_negative(documents, relation, wikidata_client):
-    while True:
-        sample = sample_random_entity_pair(documents)
-        if wikidata_client.relation_exists(sample.subject, relation, sample.object):
-            # skip if we happen to hit it
-            continue
-        else:
-            sample.relation = relation
-            sample.positive = False
-            return sample
+    return get_labeled_samples_from_document(document, wikidata_client)
 
 class SentenceWrapper(object):
     def __init__(self, document, sentence):
