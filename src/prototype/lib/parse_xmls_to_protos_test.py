@@ -1,6 +1,6 @@
 import json
-from prototype.lib import dbpedia
-from prototype.lib import sentence
+from src.prototype.lib import dbpedia
+from src.prototype.lib import sentence
 
 dbpedia_client = dbpedia.DBpediaClient(dbpedia.PUBLIC_DBPEDIA_ENDPOINT)
 

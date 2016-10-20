@@ -1,10 +1,10 @@
 # TODO: declare as dependency!
 
 #import atexit
-from prototype.entity_recognition import spotlight
-from prototype.lib import pbs_util
-from prototype.lib import zk
-import paths
+from src.prototype.entity_recognition import spotlight
+from src.prototype.lib import pbs_util
+from src.prototype.lib import zk
+from src import paths
 import sys
 import time
 

@@ -1,6 +1,6 @@
-from prototype.lib import sample_repo
-from prototype.lib import flags
-from prototype.lib import wikidata
+from src.prototype.lib import sample_repo
+from src.prototype.lib import flags
+from src.prototype.lib import wikidata
 import json
 
 #def show_all_relations(client):

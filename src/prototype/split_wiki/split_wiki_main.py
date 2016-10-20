@@ -1,13 +1,11 @@
-#!/usr/bin/python3
-
 """
 Splits Wiki plaintext into articles.
 
 Usage: TODO
 """
 
-from prototype.split_wiki import split_wiki
-from prototype.lib import flags
+from src.prototype.split_wiki import split_wiki
+from src.prototype.lib import flags
 
 def main():
     flags.add_argument('--max_articles', type=int)

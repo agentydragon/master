@@ -1,6 +1,6 @@
-from prototype.lib import article_repo
-from prototype.lib import flags
-import paths
+from src.prototype.lib import article_repo
+from src.prototype.lib import flags
+from src import paths
 
 def document_to_html(document):
     html = ""

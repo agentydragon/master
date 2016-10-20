@@ -1,9 +1,8 @@
-from prototype.lib import flags
-from prototype.eval import prediction
-from prototype.lib import wikidata
+from src.prototype.lib import flags
+from src.prototype.eval import prediction
+from src.prototype.lib import wikidata
 
 import itertools
-import random
 import progressbar
 
 def add_labels_to_predictions(predictions, wikidata_client):

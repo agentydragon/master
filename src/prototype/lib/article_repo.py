@@ -1,8 +1,8 @@
-import paths
+from src.prototype.lib import file_util
+from src.prototype.lib import sentence
+from src.prototype.lib import flags
+from src import paths
 import json
-from prototype.lib import file_util
-from prototype.lib import sentence
-from prototype.lib import flags
 import io
 import os.path
 

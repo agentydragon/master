@@ -1,10 +1,11 @@
-import paths
+from src.prototype.lib import file_util
+from src.prototype.lib import article_repo
+from src.prototype.lib import training_sample
+from src import paths
+
 import json
-from prototype.lib import file_util
 import io
 import os.path
-from prototype.lib import article_repo
-from prototype.lib import training_sample
 
 import progressbar
 

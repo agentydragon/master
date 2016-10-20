@@ -1,9 +1,10 @@
+from src.prototype.lib import flags
+
 import SPARQLWrapper
 import re
 import time
 import urllib
 import urllib.error
-from prototype.lib import flags
 import http.client
 
 PREFIXES = {

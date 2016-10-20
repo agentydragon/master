@@ -1,10 +1,10 @@
-from prototype.extraction import feature_extraction
-from prototype.extraction import model as model_lib
-from prototype.lib import article_set
-from prototype.lib import flags
-from prototype.lib import plot
-from prototype.lib import sample_repo
-from prototype.lib import wikidata
+from src.prototype.extraction import feature_extraction
+from src.prototype.extraction import model as model_lib
+from src.prototype.lib import article_set
+from src.prototype.lib import flags
+from src.prototype.lib import plot
+from src.prototype.lib import sample_repo
+from src.prototype.lib import wikidata
 from sklearn import calibration
 from sklearn import linear_model
 from sklearn import metrics

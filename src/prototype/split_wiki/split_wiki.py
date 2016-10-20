@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 """
 Splits Wiki plaintext into articles.
 
@@ -13,8 +11,8 @@ import datetime
 locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
 import re
-from prototype.lib import article_repo
-from prototype.lib import sentence
+from src.prototype.lib import article_repo
+from src.prototype.lib import sentence
 
 #from etaprogress.progress import ProgressBarBytes
 import progressbar

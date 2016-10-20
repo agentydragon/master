@@ -1,9 +1,10 @@
+from src.prototype.lib import file_util
+from src import paths
+
 import matplotlib
 matplotlib.use('Agg')
 
 from matplotlib import pyplot
-from prototype.lib import file_util
-import paths
 
 def plot_roc_general(fpr, tpr, label, output_file):
     pyplot.figure()

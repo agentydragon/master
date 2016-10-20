@@ -1,7 +1,7 @@
-from prototype.lib import sparql_client
-from prototype.lib import wikidata_util
-from prototype.lib import zk
-from prototype.lib import flags
+from src.prototype.lib import sparql_client
+from src.prototype.lib import wikidata_util
+from src.prototype.lib import zk
+from src.prototype.lib import flags
 
 flags.add_argument('--dbpedia_endpoint',
                    help=('DBpedia SPARQL endpoint. '

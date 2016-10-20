@@ -1,8 +1,8 @@
 import json
 import os.path
-from prototype.entity_recognition import spotlight
-from prototype.lib import article_repo
-from prototype.lib import flags
+from src.prototype.entity_recognition import spotlight
+from src.prototype.lib import article_repo
+from src.prototype.lib import flags
 import sys
 import time
 import subprocess

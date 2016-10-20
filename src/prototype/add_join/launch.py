@@ -1,7 +1,7 @@
-from prototype.lib import flags
-from prototype.lib import article_set
-from prototype.lib import mapper
-from prototype.lib import dbpedia
+from src.prototype.lib import flags
+from src.prototype.lib import article_set
+from src.prototype.lib import mapper
+from src.prototype.lib import dbpedia
 
 def main():
     # TODO: add max_jobs

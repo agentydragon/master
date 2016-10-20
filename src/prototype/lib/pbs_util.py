@@ -1,8 +1,9 @@
+from src.prototype.lib import file_util
+from src import paths
+
 import subprocess
 import shlex
 import sys
-from prototype.lib import file_util
-import paths
 import datetime
 
 JOBSCRIPT_HEADER = """

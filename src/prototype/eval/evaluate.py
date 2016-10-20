@@ -1,8 +1,7 @@
-from prototype.lib import flags
-from prototype.eval import prediction
+from src.prototype.lib import flags
+from src.prototype.eval import prediction
 
 import random
-import progressbar
 
 def select_predictions(predictions, min_score=None, max_score=None):
     return [p for p in predictions

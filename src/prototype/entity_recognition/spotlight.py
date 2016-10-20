@@ -3,8 +3,8 @@ import time
 import json
 import requests
 
-from prototype.lib import flags
-from prototype.lib import zk
+from src.prototype.lib import flags
+from src.prototype.lib import zk
 
 DEFAULT_PUBLIC_SPOTLIGHT_ENDPOINT = 'http://spotlight.sztaki.hu:2222/rest/annotate'
 

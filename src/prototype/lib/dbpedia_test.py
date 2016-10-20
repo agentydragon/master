@@ -1,6 +1,6 @@
 import sys
 
-from prototype.lib import dbpedia
+from src.prototype.lib import dbpedia
 
 client = dbpedia.DBpediaClient(endpoint=dbpedia.PUBLIC_DBPEDIA_ENDPOINT)
 

@@ -1,7 +1,7 @@
-from prototype.lib import mapper
-from prototype.lib import article_set
-from prototype.lib import wikidata
-from prototype.lib import flags
+from src.prototype.lib import mapper
+from src.prototype.lib import article_set
+from src.prototype.lib import wikidata
+from src.prototype.lib import flags
 
 def main():
     flags.add_argument('--articles_per_job', type=int)

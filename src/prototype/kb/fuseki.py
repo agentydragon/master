@@ -1,6 +1,6 @@
+from src.prototype.lib import pbs_util
 import os
 import subprocess
-from prototype.lib import pbs_util
 
 def serve_forever(#dataset_path,
                   #namespace,

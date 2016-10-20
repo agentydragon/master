@@ -1,8 +1,8 @@
-import paths
+from src.prototype.kb import fuseki
+from src.prototype.kb import fuseki_config
+from src.prototype.lib import zk
+from src import paths
 import datetime
-from prototype.kb import fuseki
-from prototype.kb import fuseki_config
-from prototype.lib import zk
 
 # NOTE: must be absolute path
 config_file_path = '/tmp/fuseki-config.ttl'

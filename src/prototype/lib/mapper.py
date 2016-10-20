@@ -1,6 +1,6 @@
-import paths
-from prototype.lib import pbs_util
-from prototype.lib import file_util
+from src import paths
+from src.prototype.lib import pbs_util
+from src.prototype.lib import file_util
 import datetime
 
 def launch_in_slices(job_name, items, slice_size,

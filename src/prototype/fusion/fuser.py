@@ -1,6 +1,6 @@
-import paths
+from src.prototype.lib import file_util
+from src import paths
 import numpy
-from prototype.lib import file_util
 import pickle
 
 FUSER_MODELS_PATH = paths.MODELS_PATH + "/fusion"

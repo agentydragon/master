@@ -1,10 +1,10 @@
-from prototype.lib import article_repo
-from prototype.lib import article_set
-from prototype.lib import flags
+from src.prototype.lib import article_repo
+from src.prototype.lib import article_set
+from src.prototype.lib import flags
+from src import paths
 
 import sys
 import progressbar
-import paths
 
 flags.make_parser(description='TODO')
 args = flags.parse_args()

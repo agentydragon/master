@@ -1,8 +1,8 @@
-from prototype.lib import sample_repo
-from prototype.lib import relations
-from prototype.lib import mapper
-from prototype.lib import flags
-from prototype.lib import wikidata
+from src.prototype.lib import sample_repo
+from src.prototype.lib import relations
+from src.prototype.lib import mapper
+from src.prototype.lib import flags
+from src.prototype.lib import wikidata
 
 def main():
     flags.add_argument('--relations_per_job', type=int)

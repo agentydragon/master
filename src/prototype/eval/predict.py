@@ -1,17 +1,12 @@
 import progressbar
-import itertools
-from prototype.extraction import model as model_lib
-from prototype.extraction import feature_extraction
-from prototype.fusion import fuser as fuser_lib
-# from prototype.lib import file_util
-from prototype.lib import flags
-from prototype.lib import article_set
-from prototype.lib import sample_repo
-from prototype.lib import sample_generation
-from prototype.lib import relations
-# import paths
+from src.prototype.extraction import model as model_lib
+from src.prototype.fusion import fuser as fuser_lib
+from src.prototype.lib import flags
+from src.prototype.lib import article_set
+from src.prototype.lib import sample_generation
+from src.prototype.lib import relations
 
-from prototype.eval import prediction
+from src.prototype.eval import prediction
 
 def load_samples(articles):
     all_samples = []

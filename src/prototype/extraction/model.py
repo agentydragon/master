@@ -1,7 +1,7 @@
-import paths
+from src import paths
+from src.prototype.extraction import feature_extraction
+from src.prototype.lib import file_util
 import pickle
-from prototype.extraction import feature_extraction
-from prototype.lib import file_util
 
 class Model(object):
     def __init__(self, classifier, head_features_dict, relation):

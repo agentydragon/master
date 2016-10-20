@@ -6,7 +6,7 @@ To test with Zookeeper:
     bazel test :wikidata_test --test_arg=--zk
 """
 
-from prototype.lib import wikidata
+from src.prototype.lib import wikidata
 
 import sys
 

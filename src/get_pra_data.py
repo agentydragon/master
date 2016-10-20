@@ -1,8 +1,8 @@
-from prototype.lib import wikidata
-from prototype.lib import wikidata_util
-from prototype.lib import file_util
-from prototype.lib import flags
-import paths
+from src.prototype.lib import wikidata
+from src.prototype.lib import wikidata_util
+from src.prototype.lib import file_util
+from src.prototype.lib import flags
+from src import paths
 import random
 
 INFORMATIVE_RELATIONS = [

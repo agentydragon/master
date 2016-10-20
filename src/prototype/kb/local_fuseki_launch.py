@@ -1,7 +1,7 @@
-from prototype.lib import mapper
-from prototype.lib import flags
-from prototype.lib import article_set
-from prototype.lib import pbs_util
+from src.prototype.lib import mapper
+from src.prototype.lib import flags
+from src.prototype.lib import article_set
+from src.prototype.lib import pbs_util
 
 # job = pbs_util.launch(
 #     walltime = "02:00:00",

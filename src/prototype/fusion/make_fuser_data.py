@@ -1,13 +1,13 @@
 import json
 import progressbar
-from prototype.extraction import model as model_lib
-from prototype.fusion import fuser as fuser_lib
-from prototype.lib import file_util
-from prototype.lib import flags
-from prototype.lib import article_set
-from prototype.lib import sample_repo
-from prototype.lib import sample_generation
-from prototype.lib import relations
+from src.prototype.extraction import model as model_lib
+from src.prototype.fusion import fuser as fuser_lib
+from src.prototype.lib import file_util
+from src.prototype.lib import flags
+from src.prototype.lib import article_set
+from src.prototype.lib import sample_repo
+from src.prototype.lib import sample_generation
+from src.prototype.lib import relations
 
 def find_samples_in_document(relation, title):
     scored_samples = []

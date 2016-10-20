@@ -1,8 +1,8 @@
+from src.prototype.lib import file_util
+from src import paths
 import numpy
 from scipy import sparse
 import progressbar
-from prototype.lib import file_util
-import paths
 
 def sentence_bag_of_words_features(sample):
     features = set()

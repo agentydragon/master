@@ -1,13 +1,13 @@
 import json
 import os.path
-from prototype.lib import article_repo
-from prototype.lib import dbpedia
+from src.prototype.lib import article_repo
+from src.prototype.lib import dbpedia
 import sys
 import time
 import locale
 locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
-from prototype.lib import flags
+from src.prototype.lib import flags
 flags.add_argument('--articles', action='append')
 flags.make_parser()
 args = flags.parse_args()

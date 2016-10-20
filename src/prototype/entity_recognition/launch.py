@@ -1,6 +1,6 @@
-from prototype.lib import flags
-from prototype.lib import article_set
-from prototype.lib import mapper
+from src.prototype.lib import flags
+from src.prototype.lib import article_set
+from src.prototype.lib import mapper
 
 def main():
     flags.add_argument('--force_redo')

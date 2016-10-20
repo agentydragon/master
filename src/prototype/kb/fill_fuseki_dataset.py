@@ -1,6 +1,6 @@
-from prototype.kb import jena
-from prototype.lib import file_util
-import paths
+from src.prototype.kb import jena
+from src.prototype.lib import file_util
+from src import paths
 # import wget
 
 import sys

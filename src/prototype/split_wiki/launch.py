@@ -1,9 +1,7 @@
-#!/usr/bin/python3
-
-from prototype.lib import pbs_util
-from prototype.lib import flags
-from prototype.lib import article_repo
-import paths
+from src.prototype.lib import pbs_util
+from src.prototype.lib import flags
+from src.prototype.lib import article_repo
+from src import paths
 
 def main():
     flags.add_argument('--max_articles', type=int)

@@ -1,5 +1,5 @@
-import paths
-from prototype.lib import flags
+from src import paths
+from src.prototype.lib import flags
 
 flags.add_argument('--article_list_file',
                    default=paths.ARTICLE_LIST_PATH)

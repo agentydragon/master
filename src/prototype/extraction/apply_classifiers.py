@@ -1,11 +1,11 @@
-from prototype import feature_extraction
-from prototype.lib import flags
-from prototype.lib import sample_generation
-from prototype.lib import wikidata
-from prototype.lib import relations
+from src.prototype import feature_extraction
+from src.prototype.lib import flags
+from src.prototype.lib import sample_generation
+from src.prototype.lib import wikidata
+from src.prototype.lib import relations
+from src import paths
 from scipy import sparse
 import numpy
-import paths
 import pickle
 
 # load classifiers

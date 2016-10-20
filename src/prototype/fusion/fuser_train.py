@@ -1,17 +1,18 @@
+from src.prototype.lib import flags
+from src.prototype.lib import relations
+from src.prototype.lib import plot
+from src.prototype.lib import file_util
+from src.prototype.fusion import fuser
+from src import paths
+
 import json
 import datetime
-from prototype.lib import flags
-from prototype.lib import relations
-from prototype.lib import plot
-from prototype.lib import file_util
-from prototype.fusion import fuser
 from sklearn import linear_model
 from sklearn import metrics
 from sklearn import calibration
 from sklearn import cross_validation
 import math
 import numpy
-import paths
 
 def show_certainty_histogram(samples):
     certainties = []
