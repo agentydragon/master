@@ -112,20 +112,13 @@ def get_labeled_samples_from_document(document, wikidata_client):
                                            for object, relation in document_object_relation_pairs
                                            if object in wikidata_ids]
 
-#        sentence_relations = wikidata_client.get_all_relations_of_entities(wikidata_ids)
-#
-        # subject_relation_pairs = wikidata_client.get_subject_relation_pairs(wikidata_ids)
-        # object_relation_pairs = wikidata_client.get_object_relation_pairs(wikidata_ids)
-        sentence_relations = []
-        sentence_relations += list(set(relation for subject, relation in
-                                       sentence_subject_relation_pairs))
-        sentence_relations += list(set(relation for object, relation in
-                                       sentence_object_relation_pairs))
-        sentence_relations = set(sentence_relations)
+        sentence_relations = set()
+        sentence_relations += set(relation for subject, relation in
+                                  sentence_subject_relation_pairs)
+        sentence_relations += set(relation for object, relation in
+                                  sentence_object_relation_pairs)
 
         for relation in sentence_relations:
-            # subject_wikidata_ids = wikidata_client.find_relation_subjects(wikidata_ids, relation)
-            # object_wikidata_ids = wikidata_client.find_relation_objects(wikidata_ids, relation)
             subject_wikidata_ids = list(set(subject for subject, r in sentence_subject_relation_pairs if r == relation))
             object_wikidata_ids = list(set(object for object, r in sentence_object_relation_pairs if r == relation))
 
@@ -161,7 +154,7 @@ def get_labeled_samples_from_document(document, wikidata_client):
                         samples.append(sample)
                         continue
 
-                    # Sentence may be either true or false.
+                    # Triple may be either true or false.
                     continue
 
     print('Document produced', len(samples), 'true+false samples.')

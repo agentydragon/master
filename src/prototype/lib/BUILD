@@ -111,6 +111,19 @@ java_library(
 )
 
 java_library(
+    name = "SampleGeneration",
+    srcs = [
+        "SampleGeneration.java",
+        "Relations.java",
+    ],
+    deps = [
+        ":SavedDocument",
+        ":WikidataClient",
+        ":TrainingSample",
+    ],
+)
+
+java_library(
     name = "SavedDocument",
     srcs = [
         "SavedDocument.java",

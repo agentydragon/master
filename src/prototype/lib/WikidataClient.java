@@ -1,4 +1,6 @@
 import java.util.List;
+import java.util.*;
+import java.util.stream.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,20 +18,66 @@ import org.apache.jena.query.QueryExecutionFactory;
 // TODO test
 
 public class WikidataClient {
+	public static String joinEntities(Collection<String> entities) {
+		return entities.stream().sorted().map(entity -> "wd:" + entity).collect(Collectors.joining(" "));
+	}
+
+	public static String joinRelations(Collection<String> relations) {
+		return relations.stream().sorted().map(relation -> "wdp:" + relation).collect(Collectors.joining(" "));
+	}
+
+	public static class EntityRelationPair {
+		public String entity;
+		public String relation;
+
+		public EntityRelationPair(String entity, String relation) {
+			this.entity = entity;
+			this.relation = relation;
+		}
+
+		@Override
+		public boolean equals(Object other) {
+			if (!(other instanceof EntityRelationPair)) {
+				return false;
+			}
+			EntityRelationPair o = (EntityRelationPair) other;
+			return o.entity.equals(entity) && o.relation.equals(relation);
+		}
+
+		@Override
+		public int hashCode() {
+			return entity.hashCode() * 7 ^ relation.hashCode() * 13;
+		}
+	}
+
 	public static class Triple {
 		public String subject;
-		public String predicate;
+		public String relation;
 		public String object;
 
-		public Triple(String subject, String predicate, String object) {
+		public Triple(String subject, String relation, String object) {
 			this.subject = subject;
-			this.predicate = predicate;
+			this.relation = relation;
 			this.object = object;
 		}
 
 		@Override
 		public String toString() {
-			return "Triple{" + subject + " " + predicate + " " + object + "}";
+			return "Triple{" + subject + " " + relation + " " + object + "}";
+		}
+
+		@Override
+		public boolean equals(Object other) {
+			if (!(other instanceof Triple)) {
+				return false;
+			}
+			Triple o = (Triple) other;
+			return o.subject.equals(subject) && o.relation.equals(relation) && o.object.equals(object);
+		}
+
+		@Override
+		public int hashCode() {
+			return subject.hashCode() * 7 ^ relation.hashCode() * 13 + object.hashCode() * 29;
 		}
 	}
 
@@ -69,6 +117,9 @@ public class WikidataClient {
 	private static final String extendedPropertyPrefix = "http://www.wikidata.org/wiki/Property:P";
 
 	private static String normalizeRelation(String relation) {
+		if (!relationInteresting(relation)) {
+			return null;
+		}
 		if (relation.startsWith(propertyPrefix) && (relation.endsWith("s") || relation.endsWith("c"))) {
 			relation = relation.replace(propertyPrefix, extendedPropertyPrefix);
 			relation = relation.substring(0, relation.length() - 1);
@@ -95,18 +146,18 @@ public class WikidataClient {
 		return uri.substring(pp.length());
 	}
 
-	private static Triple transformRelation(String subject, String predicate, String object) {
-		if (!relationInteresting(predicate)) {
+	private static Triple transformRelation(String subject, String relation, String object) {
+		if (!relationInteresting(relation)) {
 			return null;
 		}
-		predicate = normalizeRelation(predicate);
+		relation = normalizeRelation(relation);
 		if (isStatement(subject) || isStatement(object)) {
 			return null;
 		}
 		if (!subject.contains("/Q") || !object.contains("/Q")) {
 			return null;
 		}
-		if (!predicate.contains("/P")) {
+		if (!relation.contains("/P")) {
 			return null;
 		}
 		if (!isWikidataEntityUrl(subject) || !isWikidataEntityUrl(object)) {
@@ -114,8 +165,8 @@ public class WikidataClient {
 		}
 		subject = wikidataEntityUrlToEntityId(subject);
 		object = wikidataEntityUrlToEntityId(object);
-		predicate = wikidataPropertyUrlToPropertyId(predicate);
-		return new Triple(subject, predicate, object);
+		relation = wikidataPropertyUrlToPropertyId(relation);
+		return new Triple(subject, relation, object);
 	}
 
 	public List<Triple> collectForwardProperties(String wikidataId) {
@@ -191,5 +242,144 @@ public class WikidataClient {
 		triples.addAll(collectBackwardProperties(wikidataId));
 		cache.put(wikidataId, triples);
 		return triples;
+	}
+
+	public List<Triple> getTriplesBetweenEntities(Collection<String> wikidataIds, Collection<String> relations) {
+		if (wikidataIds.isEmpty()) {
+			return Collections.emptyList();
+		}
+		String x = joinEntities(wikidataIds);
+		String queryString =
+				"SELECT ?s ?p ?o\n" +
+				"WHERE {\n" +
+				"    VALUES ?s { %s }\n" +
+				"    VALUES ?o { %s }\n" +
+				"    VALUES ?p { %s }\n" +
+				"    ?s ?p ?o\n" +
+				"}".format(x, x, joinRelations(relations));
+
+		Query query = QueryFactory.create(queryString);
+		List<Triple> resultsx = new ArrayList<>();
+		try (QueryExecution execution = QueryExecutionFactory.sparqlService(sparqlUrl, query)) {
+			ResultSet results = execution.execSelect();
+			while (results.hasNext()) {
+				QuerySolution soln = results.nextSolution();
+				RDFNode s = soln.get("s");
+				RDFNode p = soln.get("p");
+				RDFNode o = soln.get("o");
+				if (!s.isResource() || !p.isResource() || !o.isResource()) {
+					// (literals)
+					continue;
+				}
+				Resource sr = soln.getResource("s");
+				Resource pr = soln.getResource("p");
+				Resource or = soln.getResource("o");
+				if (sr.isAnon() || pr.isAnon() || or.isAnon()) {
+					// (anonymous)
+					continue;
+				}
+				Triple triple = transformRelation(sr.getURI(), pr.getURI(), or.getURI());
+				if (triple != null) {
+					resultsx.add(triple);
+				}
+			}
+		}
+		return resultsx;
+	}
+
+	public Set<EntityRelationPair> getSubjectRelationPairs(Collection<String> wikidataIds, Collection<String> relations) {
+		if (wikidataIds.isEmpty()) {
+			return Collections.emptySet();
+		}
+
+		Set<String> rels = new HashSet<>();
+		String queryString =
+				"SELECT ?s ?p\n" +
+				"WHERE {\n" +
+				"    VALUES ?s { %s }\n" +
+				"    VALUES ?p { %s }\n" +
+				"    ?s ?p ?o\n" +
+				"}".format(joinEntities(wikidataIds), joinRelations(relations));
+
+		Query query = QueryFactory.create(queryString);
+		Set<EntityRelationPair> resultsx = new HashSet<>();
+		try (QueryExecution execution = QueryExecutionFactory.sparqlService(sparqlUrl, query)) {
+			ResultSet results = execution.execSelect();
+			while (results.hasNext()) {
+				QuerySolution soln = results.nextSolution();
+				RDFNode s = soln.get("s");
+				RDFNode p = soln.get("p");
+				if (!s.isResource() || !p.isResource()) {
+					// (literals)
+					continue;
+				}
+				Resource sr = soln.getResource("s");
+				Resource pr = soln.getResource("p");
+				if (sr.isAnon() || pr.isAnon()) {
+					// (anonymous)
+					continue;
+				}
+
+				String rr = normalizeRelation(pr.getURI());
+				if (rr == null) {
+					continue;
+				}
+				String ss = sr.getURI();
+				if (!isWikidataEntityUrl(ss)) {
+					continue;
+				}
+				ss = wikidataEntityUrlToEntityId(ss);
+				resultsx.add(new EntityRelationPair(ss, rr));
+			}
+		}
+		return resultsx;
+	}
+
+	public Set<EntityRelationPair> getObjectRelationPairs(Collection<String> wikidataIds, Collection<String> relations) {
+		if (wikidataIds.isEmpty()) {
+			return Collections.emptySet();
+		}
+
+		Set<String> rels = new HashSet<>();
+		String queryString =
+				"SELECT ?o ?p\n" +
+				"WHERE {\n" +
+				"    VALUES ?p { %s }\n" +
+				"    VALUES ?o { %s }\n" +
+				"    ?s ?p ?o\n" +
+				"}".format(joinEntities(wikidataIds), joinRelations(relations));
+
+		Query query = QueryFactory.create(queryString);
+		Set<EntityRelationPair> resultsx = new HashSet<>();
+		try (QueryExecution execution = QueryExecutionFactory.sparqlService(sparqlUrl, query)) {
+			ResultSet results = execution.execSelect();
+			while (results.hasNext()) {
+				QuerySolution soln = results.nextSolution();
+				RDFNode o = soln.get("o");
+				RDFNode p = soln.get("p");
+				if (!o.isResource() || !p.isResource()) {
+					// (literals)
+					continue;
+				}
+				Resource or = soln.getResource("o");
+				Resource pr = soln.getResource("p");
+				if (or.isAnon() || pr.isAnon()) {
+					// (anonymous)
+					continue;
+				}
+
+				String rr = normalizeRelation(pr.getURI());
+				if (rr == null) {
+					continue;
+				}
+				String oo = or.getURI();
+				if (!isWikidataEntityUrl(oo)) {
+					continue;
+				}
+				oo = wikidataEntityUrlToEntityId(oo);
+				resultsx.add(new EntityRelationPair(oo, rr));
+			}
+		}
+		return resultsx;
 	}
 }

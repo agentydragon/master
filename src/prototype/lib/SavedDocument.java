@@ -208,6 +208,14 @@ public class SavedDocument {
 			s.tokens = JSONUtils.arrayMap((JSONArray) o.get(TOKENS), SentenceToken::fromJSON);
 			return s;
 		}
+
+		public int startOffset() {
+			return tokens.get(0).startOffset;
+		}
+
+		public int endOffset() {
+			return tokens.get(tokens.size() - 1).endOffset;
+		}
 	}
 
 	public String title = null;
@@ -408,5 +416,23 @@ public class SavedDocument {
 
 	public byte[] getSpotlightMentionsSerialization() {
 		return Bytes.toBytes(JSONUtils.toArray(spotlightMentions, SpotlightMention::toJSON).toString());
+	}
+
+	// Works when document is processed.
+	public List<SpotlightMention> findSpotlightMentionsBetween(int start, int end) {
+		return spotlightMentions.stream().filter(mention -> mention.startOffset >= start && mention.endOffset <= end).collect(Collectors.toList());
+	}
+
+	public DocumentSentence findSentenceById(int sentenceId) {
+		for (DocumentSentence sentence : sentences) {
+			if (sentence.id == sentenceId) {
+				return sentence;
+			}
+		}
+		return null;
+	}
+
+	public List<SpotlightMention> getSpotlightMentionsInSentence(DocumentSentence sentence) {
+		return findSpotlightMentionsBetween(sentence.startOffset(), sentence.endOffset());
 	}
 }
