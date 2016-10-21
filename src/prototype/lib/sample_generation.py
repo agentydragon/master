@@ -28,23 +28,23 @@ def try_load_document(article_title):
     return article
 
 def get_document_subgraph(document, wikidata_client, relations):
-    all_wikidata_ids = set()
+    batch_wikidata_ids = set()
     all_triples = set()
     WIKIDATA_IDS_PER_BATCH = 20
 
     for sentence in document.sentences:
         sentence_wrapper = SentenceWrapper(document, sentence)
-        all_wikidata_ids = all_wikidata_ids.union(sentence_wrapper.get_sentence_wikidata_ids())
+        batch_wikidata_ids = batch_wikidata_ids.union(sentence_wrapper.get_sentence_wikidata_ids())
 
-        if len(all_wikidata_ids) >= WIKIDATA_IDS_PER_BATCH:
+        if len(batch_wikidata_ids) >= WIKIDATA_IDS_PER_BATCH:
             all_triples = all_triples.union(wikidata_client.get_triples_between_entities(
-                all_wikidata_ids,
+                batch_wikidata_ids,
                 relations = relations
             ))
-            all_wikidata_ids = set()
+            batch_wikidata_ids = set()
 
     all_triples = all_triples.union(wikidata_client.get_triples_between_entities(
-        all_wikidata_ids,
+        batch_wikidata_ids,
         relations = relations
     ))
     return all_triples
