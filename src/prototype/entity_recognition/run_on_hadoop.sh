@@ -3,6 +3,7 @@
 set -e
 
 echo "SERVERS: [$1]"
+# e.g.: http://hador:2222/rest/annotate
 
 if [ -z $1 ]; then
 	echo "No servers given!"
