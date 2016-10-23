@@ -17,13 +17,13 @@ class TrainingSample(recordclass("TrainingSample",
         assert len(self.object_token_indices) > 0
 
         return {
-            RELATION: self.relation,
-            POSITIVE: self.positive,
-            SENTENCE: self.sentence.to_json(),
-            SUBJECT: self.subject,
-            OBJECT: self.object,
-            SUBJECT_TOKEN_INDICES: self.subject_token_indices,
-            OBJECT_TOKEN_INDICES: self.object_token_indices,
+            self.RELATION: self.relation,
+            self.POSITIVE: self.positive,
+            self.SENTENCE: self.sentence.to_json(),
+            self.SUBJECT: self.subject,
+            self.OBJECT: self.object,
+            self.SUBJECT_TOKEN_INDICES: self.subject_token_indices,
+            self.OBJECT_TOKEN_INDICES: self.object_token_indices,
         }
 
     @classmethod
@@ -64,10 +64,10 @@ class TrainingSampleParsedSentence(recordclass("TrainingSampleParsedSentence",
         assert self.origin_article is not None
 
         return {
-            TEXT: self.text,
-            TOKENS: [token.to_json() for token in self.tokens],
-            ORIGIN_ARTICLE: self.origin_article,
-            ORIGIN_SENTENCE_ID: self.origin_sentence_id
+            self.TEXT: self.text,
+            self.TOKENS: [token.to_json() for token in self.tokens],
+            self.ORIGIN_ARTICLE: self.origin_article,
+            self.ORIGIN_SENTENCE_ID: self.origin_sentence_id
         }
 
     @classmethod
@@ -91,11 +91,11 @@ class TrainingSampleSentenceToken(recordclass("TrainingSampleSentenceToken",
 
     def to_json(self):
         return {
-            START_OFFSET: self.start_offset,
-            END_OFFSET: self.end_offset,
-            LEMMA: self.lemma,
-            POS: self.pos,
-            NER: self.ner,
+            self.START_OFFSET: self.start_offset,
+            self.END_OFFSET: self.end_offset,
+            self.LEMMA: self.lemma,
+            self.POS: self.pos,
+            self.NER: self.ner,
         }
 
     @classmethod
