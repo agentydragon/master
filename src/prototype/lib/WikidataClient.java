@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.*;
+import org.apache.hadoop.conf.Configuration;
 import java.util.stream.*;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -88,6 +89,15 @@ public class WikidataClient {
 		this.sparqlUrl = sparqlUrl;
 	}
 
+	public WikidataClient(Configuration configuration) {
+		this.sparqlUrl = configuration.get("wikidata_endpoint");
+
+		if (this.sparqlUrl == null || this.sparqlUrl == "") {
+			System.out.println("No dbpedia_endpoint given!");
+			System.exit(1);
+		}
+	}
+
 	public static WikidataClient newPublicEndpointClient() {
 		return new WikidataClient(WIKIDATA_PUBLIC_ENDPOINT);
 	}
@@ -97,7 +107,10 @@ public class WikidataClient {
 
 	private static final String PREFIXES = "PREFIX wd: <http://www.wikidata.org/entity/>\n" +
 			"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-			"PREFIX owl: <http://www.w3.org/2002/07/owl#>\n";
+			"PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+			"PREFIX wd: <http://www.wikidata.org/entity/>\n" +
+			"PREFIX wdp: <http://www.wikidata.org/prop/direct/>\n" +
+			"";
 
 	private static final String wikidataEntityPrefix = "http://www.wikidata.org/entity/";
 
@@ -249,14 +262,14 @@ public class WikidataClient {
 			return Collections.emptyList();
 		}
 		String x = joinEntities(wikidataIds);
-		String queryString =
+		String queryString = PREFIXES + String.format(
 				"SELECT ?s ?p ?o\n" +
 				"WHERE {\n" +
-				"    VALUES ?s { %s }\n" +
-				"    VALUES ?o { %s }\n" +
-				"    VALUES ?p { %s }\n" +
+				"    VALUES ?s { %1$s }\n" +
+				"    VALUES ?o { %1$s }\n" +
+				"    VALUES ?p { %2$s }\n" +
 				"    ?s ?p ?o\n" +
-				"}".format(x, x, joinRelations(relations));
+				"}", x, joinRelations(relations));
 
 		Query query = QueryFactory.create(queryString);
 		List<Triple> resultsx = new ArrayList<>();
@@ -293,13 +306,13 @@ public class WikidataClient {
 		}
 
 		Set<String> rels = new HashSet<>();
-		String queryString =
+		String queryString = PREFIXES + String.format(
 				"SELECT ?s ?p\n" +
 				"WHERE {\n" +
-				"    VALUES ?s { %s }\n" +
-				"    VALUES ?p { %s }\n" +
+				"    VALUES ?s { %1$s }\n" +
+				"    VALUES ?p { %2$s }\n" +
 				"    ?s ?p ?o\n" +
-				"}".format(joinEntities(wikidataIds), joinRelations(relations));
+				"}", joinEntities(wikidataIds), joinRelations(relations));
 
 		Query query = QueryFactory.create(queryString);
 		Set<EntityRelationPair> resultsx = new HashSet<>();
@@ -324,6 +337,7 @@ public class WikidataClient {
 				if (rr == null) {
 					continue;
 				}
+				rr = wikidataPropertyUrlToPropertyId(rr);
 				String ss = sr.getURI();
 				if (!isWikidataEntityUrl(ss)) {
 					continue;
@@ -341,13 +355,13 @@ public class WikidataClient {
 		}
 
 		Set<String> rels = new HashSet<>();
-		String queryString =
+		String queryString = PREFIXES + String.format(
 				"SELECT ?o ?p\n" +
 				"WHERE {\n" +
-				"    VALUES ?p { %s }\n" +
-				"    VALUES ?o { %s }\n" +
+				"    VALUES ?p { %1$s }\n" +
+				"    VALUES ?o { %2$s }\n" +
 				"    ?s ?p ?o\n" +
-				"}".format(joinEntities(wikidataIds), joinRelations(relations));
+				"}", joinEntities(wikidataIds), joinRelations(relations));
 
 		Query query = QueryFactory.create(queryString);
 		Set<EntityRelationPair> resultsx = new HashSet<>();
@@ -372,6 +386,7 @@ public class WikidataClient {
 				if (rr == null) {
 					continue;
 				}
+				rr = wikidataPropertyUrlToPropertyId(rr);
 				String oo = or.getURI();
 				if (!isWikidataEntityUrl(oo)) {
 					continue;

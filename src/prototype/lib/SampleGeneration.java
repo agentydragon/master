@@ -2,7 +2,7 @@ import java.util.*;
 import java.util.stream.*;
 
 public class SampleGeneration {
-	private Set<WikidataClient.Triple> getDocumentSubgraph(SavedDocument document, WikidataClient wikidataClient, List<String> relations) {
+	private static Set<WikidataClient.Triple> getDocumentSubgraph(SavedDocument document, WikidataClient wikidataClient, List<String> relations) {
 		Set<String> batchWikidataIds = new HashSet<>();
 		Set<WikidataClient.Triple> allTriples = new HashSet<>();
 		int batchSize = 20;
@@ -26,7 +26,7 @@ public class SampleGeneration {
 		return allTriples;
 	}
 
-	private Set<String> getAllDocumentEntities(SavedDocument document) {
+	private static Set<String> getAllDocumentEntities(SavedDocument document) {
 		Set<String> allWikidataIds = new HashSet<>();
 		for (SavedDocument.DocumentSentence sentence : document.sentences) {
 			SentenceWrapper sentenceWrapper = new SentenceWrapper(document, sentence);
@@ -35,7 +35,7 @@ public class SampleGeneration {
 		return allWikidataIds;
 	}
 
-	public List<TrainingSample> getLabeledSamplesFromDocument(SavedDocument document, WikidataClient wikidataClient) {
+	public static List<TrainingSample> getLabeledSamplesFromDocument(SavedDocument document, WikidataClient wikidataClient) {
 		List<TrainingSample> samples = new ArrayList<>();
 
 		Set<WikidataClient.Triple> allTriples = getDocumentSubgraph(document, wikidataClient, Relations.RELATIONS);
@@ -179,7 +179,7 @@ public class SampleGeneration {
 			for (SavedDocument.SentenceToken token : sentence.tokens) {
 				TrainingSample.TrainingSampleSentenceToken t = new TrainingSample.TrainingSampleSentenceToken();
 				t.startOffset = token.startOffset - sentence.startOffset();
-				t.endOffset = token.endOffset - sentence.endOffset();
+				t.endOffset = token.endOffset - sentence.startOffset();
 				t.lemma = token.lemma;
 				t.pos = token.pos;
 				t.ner = token.ner;

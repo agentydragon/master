@@ -346,6 +346,8 @@ java_library(
         "WikidataClient.java",
     ],
     deps = [
+        "//:org_apache_hadoop_hadoop_common",
+
         "//:org_apache_jena_jena_core",
         "//:org_apache_jena_jena_base",
         "//:org_apache_jena_jena_arq",
