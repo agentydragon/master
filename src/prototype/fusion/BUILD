@@ -22,7 +22,6 @@ py_binary(
         "//src/prototype/lib:article_set_lib",
         "//src/prototype/lib:flags_lib",
         "//src/prototype/lib:relations_lib",
-        "//src/prototype/lib:sample_generation_lib",
         "//src/prototype/lib:sample_repo_lib",
     ],
     default_python_version = "PY3",
