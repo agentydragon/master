@@ -50,7 +50,8 @@ def train_classifier_for_relation(relation, relation_name):
     def try_classifier(name, classifier, prefix):
         print('Training %s...' % name)
         clf = classifier.fit(X_train, y_train)
-        score = clf.decision_function(X_test)
+        score = clf.predict_proba(X_test)
+        score = [row[1] for row in score]
 
         fpr, tpr, _ = metrics.roc_curve(y_test, score)
         auc = metrics.auc(fpr, tpr)
