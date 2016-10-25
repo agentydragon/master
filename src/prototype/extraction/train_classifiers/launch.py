@@ -9,10 +9,12 @@ def main():
     flags.make_parser(description='TODO')
     args = flags.parse_args()
 
+    wikidata_endpoint = wikidata.get_default_endpoint_url()
+
     def make_commandline(relations_slice):
         job_command = [
             'prototype/extraction/train_classifiers/train_classifiers',
-            '--wikidata_endpoint', wikidata.get_default_endpoint_url(),
+            '--wikidata_endpoint', wikidata_endpoint,
         ]
         for relation in relations_slice:
             job_command.extend(['--relation', relation])
