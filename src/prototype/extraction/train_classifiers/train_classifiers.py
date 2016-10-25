@@ -1,4 +1,5 @@
 from src.prototype.extraction import feature_extraction
+from src import paths
 from src.prototype.extraction import model as model_lib
 from src.prototype.lib import flags
 from src.prototype.lib import plot
@@ -53,9 +54,14 @@ def train_classifier_for_relation(relation, relation_name):
         auc = metrics.auc(fpr, tpr)
         print("%s AUC:" % name, auc)
 
-        plot.plot_roc(fpr, tpr, auc, prefix,
-                      relation=relation,
-                      relation_name=relation_name)
+        d = paths.CHARTS_PATH + "/extraction/"
+        file_util.ensure_dir(d)
+        label = '%s %s (area = %0.4f)' % (relation, relation_name, auc)
+        plot.plot_roc_general(
+            fpr, tpr,
+            label = label,
+            output_file = d + "/" + relation + "-roc.png" % prefix
+        )
 
         predicted = clf.predict(X_test)
         print("%s accuracy:" % name, numpy.mean(predicted == y_test))

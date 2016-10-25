@@ -4,6 +4,7 @@ py_binary(
         "train_classifiers.py",
     ],
     deps = [
+        "//src:paths_lib",
         "//src/prototype/extraction:feature_extraction_lib",
         "//src/prototype/extraction:model_lib",
         "//src/prototype/lib:plot_lib",

@@ -89,7 +89,7 @@ def train_relation_fuser(relation, samples, chart_dir):
         fpr,
         tpr,
         '%s (area = %.02f)' % (relation, auc),
-        chart_dir + '/' + relation + '.png'
+        chart_dir + '/' + relation + '-roc.png'
     )
 
     f = fuser.Fuser(
