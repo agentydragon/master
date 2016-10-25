@@ -4,20 +4,9 @@ from src.prototype.extraction import model as model_lib
 from src.prototype.fusion import fuser as fuser_lib
 from src.prototype.lib import file_util
 from src.prototype.lib import flags
-from src.prototype.lib import article_set
 from src.prototype.lib import sample_repo
 from src.prototype.lib import relations
 
-def find_samples_in_document(relation, title):
-    scored_samples = []
-    document_samples = sample_repo.load_document_samples(
-        relations = [relation],
-        title = title
-    )
-    if len(document_samples) == 0:
-        # print("No samples in document.")
-        return
-    return document_samples
 
 def show_assertion_support(relation, scored_samples):
     by_relation = {'true': [], 'false': []}
@@ -50,7 +39,6 @@ def show_assertion_support(relation, scored_samples):
 def main():
     flags.add_argument('--article', action='append')
     flags.add_argument('--relation', action='append')
-    # flags.add_argument('--json_out', required=True)
     flags.make_parser(description='TODO')
     args = flags.parse_args()
 
@@ -58,15 +46,6 @@ def main():
         run_on_relations = args.relation
     else:
         run_on_relations = relations.RELATIONS
-
-    if args.article:
-        articles = args.article
-    else:
-        # TODO: calibration set should be separate
-        art_set = article_set.ArticleSet()
-        train, test, calibrate = art_set.split_train_test_calibrate()
-        # articles = calibrate[:100]
-        articles = calibrate
 
     for relation in run_on_relations:
         print('Making fuser training data for', relation)
@@ -80,17 +59,11 @@ def main():
             print('Skipping relation, cannot load model')
             continue
 
-        all_samples = []
         no_samples = 0
         bar = progressbar.ProgressBar(redirect_stdout=True)
-        for article in bar(articles):
-            samples = find_samples_in_document(relation, article)
-            if samples:
-                all_samples.extend(samples)
-            else:
-                no_samples += 1
+        all_samples = sample_repo.load_samples(relation, 'calibrate')
         print("number of samples:", len(all_samples))
-        print("articles with no samples:", no_samples)
+        assert len(all_samples) > 1, "no samples!"
 
         scored_samples = []
         scores = model.predict_proba(all_samples)

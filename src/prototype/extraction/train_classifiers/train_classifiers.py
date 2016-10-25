@@ -1,6 +1,5 @@
 from src.prototype.extraction import feature_extraction
 from src.prototype.extraction import model as model_lib
-from src.prototype.lib import article_set
 from src.prototype.lib import flags
 from src.prototype.lib import plot
 from src.prototype.lib import sample_repo
@@ -13,17 +12,14 @@ import numpy
 def train_classifier_for_relation(relation, relation_name):
     print('Training extractor for', relation, relation_name)
 
-    art_set = article_set.ArticleSet()
-    train_articles, test_articles, calibrate_articles = art_set.split_train_test_calibrate()
-
     print('Loading samples...')
-    train_samples = sample_repo.load_documents_samples(relation, train_articles)
+    train_samples = sample_repo.load_samples(relation, 'train')
     positive_count = len([s for s in train_samples if s.positive])
     negative_count = len([s for s in train_samples if not s.positive])
     print('Positive in train:', positive_count)
     print('Negative in train:', negative_count)
 
-    test_samples = sample_repo.load_documents_samples(relation, test_articles)
+    test_samples = sample_repo.load_samples(relation, 'test')
 
     if positive_count < 10 or negative_count < 10:
         print('Too few samples to train for', relation, '.')

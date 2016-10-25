@@ -1,24 +1,21 @@
 import java.io.IOException;
 
 import java.lang.System;
-import org.apache.log4j.Logger;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.util.ToolRunner;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.JobContext;
-import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
-import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
-import org.apache.hadoop.hbase.mapreduce.TableOutputFormat;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.JobContext;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.MultipleOutputs;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
+import org.apache.log4j.BasicConfigurator;
 
 public class MakeTrainingSamples extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
@@ -44,25 +41,26 @@ public class MakeTrainingSamples extends Configured implements Tool {
 
 		// Set output.
 
-		//job.getConfiguration().set(TableOutputFormat.OUTPUT_TABLE, ArticlesTable.FULL_TABLE_NAME_STRING);
-		//job.setOutputFormatClass(TableOutputFormat.class);
-		//job.getConfiguration().set(SequenceFileOutputFormat.OUTDIR, "/user/prvak/ts");
-		//job.setOutputFormatClass(SequenceFileOutputFormat.class);
-		//job.getConfiguration().set(TextOutputFormat.OUTDIR, "/user/prvak/ts");
-		job.setOutputFormatClass(TextOutputFormat.class);
-		//job.getConfiguration().set(TextOutputFormat.OUTDIR, "/user/prvak/ts");
-		TextOutputFormat.setOutputPath(job, new Path("/user/prvak/ts.txt"));
+		FileOutputFormat.setOutputPath(job, new Path("/user/prvak/ts"));
+
+		job.setReducerClass(MakeTrainingSamplesReducer.class);
+		for (String relation : Relations.RELATIONS) {
+			String[] sets = new String[] { "train", "test", "calibrate" };
+			for (String s : sets) {
+				MultipleOutputs.addNamedOutput(job,
+						relation + "S" + s,
+						TextOutputFormat.class,
+						Text.class,
+						Text.class);
+			}
+		}
 
 		TableMapReduceUtil.initTableMapperJob(
 				ArticlesTable.FULL_TABLE_NAME,
 				scanner,
 				MakeTrainingSamplesMapper.class,
-		//		ImmutableBytesWritable.class,
-		//		Put.class,
-				Text.class,  // relation
-				Text.class,  // training sample JSON
-		//		ImmutableBytesWritable.class,
-		//		Put.class,
+				Text.class,
+				Text.class,
 				job);
 
 		int result = job.waitForCompletion(true) ? 0 : 1;
@@ -74,6 +72,8 @@ public class MakeTrainingSamples extends Configured implements Tool {
 		System.out.println("Articles processed successfully: " + job.getCounters().findCounter(MakeTrainingSamplesMapper.Counters.ARTICLES_PROCESSED_SUCCESSFULLY).getValue());
 		System.out.println("Articles failed with exception: " + job.getCounters().findCounter(MakeTrainingSamplesMapper.Counters.ARTICLES_FAILED_WITH_EXCEPTION).getValue());
 		System.out.println("Samples produced: " + job.getCounters().findCounter(MakeTrainingSamplesMapper.Counters.SAMPLES_PRODUCED).getValue());
+		System.out.println("Articles in no set: " + job.getCounters().findCounter(MakeTrainingSamplesReducer.Counters.ARTICLES_IN_NO_SET).getValue());
+		System.out.println("Articles written ok: " + job.getCounters().findCounter(MakeTrainingSamplesReducer.Counters.ARTICLES_WRITTEN_OK).getValue());
 
 		return result;
 	}
