@@ -65,11 +65,12 @@ public class HBaseToJSON extends Configured implements Tool {
 
 			int batchSize = 100;
 
-			for (int i = 0; i < whitelist.size(); i += batchSize) {
-				System.out.println("Batch " + i + " / " + whitelist.size());
+			List<String> articles = articleSet.getArticleList();
+			for (int i = 0; i < articles.size(); i += batchSize) {
+				System.out.println("Batch " + i + " / " + articles.size());
 				List<Get> batch = new ArrayList<>();
-				for (int j = i; j < (i + batchSize) && (j < whitelist.size()); j++) {
-					String title = whitelist.get(j);
+				for (int j = i; j < (i + batchSize) && (j < articles.size()); j++) {
+					String title = articles.get(j);
 					batch.add(SavedDocument.getGet(title));
 				}
 
@@ -92,23 +93,15 @@ public class HBaseToJSON extends Configured implements Tool {
 		return 0;
 	}
 
-	private List<String> whitelist = new ArrayList<>();
+	private ArticleSet articleSet;
 	private void loadWhitelist() {
 		Configuration conf = getConf();
 		try {
-			FileSystem fs = FileSystem.get(conf);
-			FSDataInputStream inputStream = fs.open(new Path("/user/prvak/articles.tsv"));
-			try (BufferedReader r = new BufferedReader(new InputStreamReader(inputStream))) {
-				String line;
-				while  ((line = r.readLine()) != null) {
-					whitelist.add(line.split("\t")[1]);
-				}
-			}
-
-			inputStream.close();
+			articleSet = new ArticleSet();
+			articleSet.load(conf);
 		} catch (IOException e) {
 			e.printStackTrace();
-			whitelist = null;
+			articleSet = null;
 		}
 	}
 

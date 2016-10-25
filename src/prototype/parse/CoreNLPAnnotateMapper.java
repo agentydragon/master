@@ -25,22 +25,14 @@ public class CoreNLPAnnotateMapper extends TableMapper<ImmutableBytesWritable, P
 	private int prefixLength;
 	private CoreNLPInterface corenlpInterface = new CoreNLPInterface();
 
-	private Set<String> whitelist = new HashSet<>();
+	private ArticleSet articleSet;
 	private void loadWhitelist(Configuration conf) {
 		try {
-			FileSystem fs = FileSystem.get(conf);
-			FSDataInputStream inputStream = fs.open(new Path("/user/prvak/articles.tsv"));
-			try (BufferedReader r = new BufferedReader(new InputStreamReader(inputStream))) {
-				String line;
-				while  ((line = r.readLine()) != null) {
-					whitelist.add(line.split("\t")[1]);
-				}
-			}
-
-			inputStream.close();
+			articleSet = new ArticleSet();
+			articleSet.load(conf);
 		} catch (IOException e) {
 			e.printStackTrace();
-			whitelist = null;
+			articleSet = null;
 		}
 	}
 
@@ -58,7 +50,7 @@ public class CoreNLPAnnotateMapper extends TableMapper<ImmutableBytesWritable, P
 		String articleTitle = new String(rowkey.get());
 		String articleText = new String(result.getValue(ArticlesTable.WIKI, ArticlesTable.PLAINTEXT));
 
-		if (!whitelist.contains(articleTitle)) {
+		if (!articleSet.contains(articleTitle)) {
 			context.getCounter(Counters.ARTICLES_SKIPPED_NOT_IN_WHITELIST).increment(1);
 			return;
 		}

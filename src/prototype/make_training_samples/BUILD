@@ -47,6 +47,7 @@ java_binary(
         "//src/prototype/lib:SavedDocument",
         "//src/prototype/lib:ArticlesTable",
         "//src/prototype/lib:WikidataClient",
+        "//src/prototype/lib:ArticleSet",
         "//:org_apache_hadoop_hadoop_common",
         "//:org_apache_hadoop_hadoop_mapreduce_client_core",
         "//:org_apache_hbase_hbase_common",

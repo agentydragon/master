@@ -34,6 +34,16 @@ py_library(
     ],
 )
 
+java_library(
+    name = "ArticleSet",
+    srcs = [
+        "ArticleSet.java",
+    ],
+    deps = [
+        "//:org_apache_hadoop_hadoop_common",
+    ],
+)
+
 py_library(
     name = "article_repo_lib",
     srcs = [
