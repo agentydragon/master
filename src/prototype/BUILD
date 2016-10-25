@@ -73,6 +73,7 @@ java_binary(
     deps = [
         "//src/prototype/lib:ArticleRepository",
         "//src/prototype/lib:ArticlesTable",
+        "//src/prototype/lib:ArticleSet",
         "//src/prototype/lib:SavedDocument",
         "//:org_json_json",
         "//:org_apache_hadoop_hadoop_common",

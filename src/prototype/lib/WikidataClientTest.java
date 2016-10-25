@@ -10,7 +10,7 @@ public class WikidataClientTest {
 		WikidataClient client = new WikidataClient(WikidataClient.WIKIDATA_PUBLIC_ENDPOINT);
 		List<WikidataClient.Triple> triples = client.getAllTriplesOfEntity(id);
 		for (WikidataClient.Triple triple : triples) {
-			System.out.println(triple.subject + "\t" + triple.predicate + "\t" + triple.object);
+			System.out.println(triple.subject + "\t" + triple.relation + "\t" + triple.object);
 		}
 	}
 }
