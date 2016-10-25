@@ -19,10 +19,8 @@ import org.apache.log4j.BasicConfigurator;
 
 public class MakeTrainingSamples extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
-		// Configuration processed by ToolRunner
 		Configuration conf = getConf();
 
-		// Create a JobConf using the processed conf
 		Job job = Job.getInstance(conf, MakeTrainingSamples.class.getName());
 		job.setJarByClass(MakeTrainingSamples.class);
 
@@ -44,16 +42,6 @@ public class MakeTrainingSamples extends Configured implements Tool {
 		FileOutputFormat.setOutputPath(job, new Path("/user/prvak/ts"));
 
 		job.setReducerClass(MakeTrainingSamplesReducer.class);
-		for (String relation : Relations.RELATIONS) {
-			String[] sets = new String[] { "train", "test", "calibrate" };
-			for (String s : sets) {
-				MultipleOutputs.addNamedOutput(job,
-						relation + "S" + s,
-						TextOutputFormat.class,
-						Text.class,
-						Text.class);
-			}
-		}
 
 		TableMapReduceUtil.initTableMapperJob(
 				ArticlesTable.FULL_TABLE_NAME,

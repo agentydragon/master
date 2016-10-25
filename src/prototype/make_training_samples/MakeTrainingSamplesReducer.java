@@ -33,13 +33,15 @@ public class MakeTrainingSamplesReducer extends Reducer<Text, Text, Text, Text> 
 		if (set == null) {
 			context.getCounter(Counters.ARTICLES_IN_NO_SET).increment(1);
 		} else {
-			String outkey = relation + "S" + set;
-
 			for (Text value : values) {
-				mos.write(outkey, key, value);
+				mos.write(key, value, generateFileName(relation, set));
 			}
 			context.getCounter(Counters.ARTICLES_WRITTEN_OK).increment(1);
 		}
+	}
+
+	private static String generateFileName(String relation, String set) {
+		return relation + "/" + set;
 	}
 
 	@Override
