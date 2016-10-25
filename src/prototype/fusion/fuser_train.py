@@ -108,7 +108,7 @@ def main():
     else:
         run_on = relations.RELATIONS
 
-    chart_dir = paths.CHARTS_PATH + '/fusion/' + datetime.datetime.now().strftime('%Y%m%d-%H%M')
+    chart_dir = paths.CHARTS_PATH + '/fusion/'
     file_util.ensure_dir(chart_dir)
 
     for relation in run_on:
