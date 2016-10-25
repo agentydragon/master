@@ -3,6 +3,7 @@ from src import paths
 from src.prototype.extraction import model as model_lib
 from src.prototype.lib import flags
 from src.prototype.lib import plot
+from src.prototype.lib import file_util
 from src.prototype.lib import sample_repo
 from src.prototype.lib import wikidata
 from sklearn import calibration
@@ -44,7 +45,7 @@ def train_classifier_for_relation(relation, relation_name):
         head_features_dict
     )
 
-    def try_classifier(name, classifier, prefix):
+    def try_classifier(name, classifier):
         print('Training %s...' % name)
         clf = classifier.fit(X_train, y_train)
         score = clf.predict_proba(X_test)
@@ -60,7 +61,7 @@ def train_classifier_for_relation(relation, relation_name):
         plot.plot_roc_general(
             fpr, tpr,
             label = label,
-            output_file = d + "/" + relation + "-roc.png" % prefix
+            output_file = d + "/" + relation + "-roc.png"
         )
 
         predicted = clf.predict(X_test)
@@ -72,7 +73,7 @@ def train_classifier_for_relation(relation, relation_name):
         base_estimator=linear_model.LogisticRegression(verbose=True),
         method='isotonic',
     )
-    clf = try_classifier('Logistic regression', c, 'logreg')
+    clf = try_classifier('Logistic regression', c)
     model = model_lib.Model(clf, head_features_dict, relation)
     model.save()
 
