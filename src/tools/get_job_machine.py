@@ -1,6 +1,6 @@
 # TODO: launch
 
-from prototype.lib import pbs_util
+from src.prototype.lib import pbs_util
 import sys
 
 job = pbs_util.Job(sys.argv[1])

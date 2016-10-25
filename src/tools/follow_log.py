@@ -1,4 +1,4 @@
-from prototype.lib import pbs_util
+from src.prototype.lib import pbs_util
 import sys
 import subprocess
 
