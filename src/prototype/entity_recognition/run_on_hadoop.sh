@@ -18,7 +18,6 @@ export HADOOP_CLASSPATH=$(hbase classpath):`pwd`/src/prototype/entity_recognitio
 hadoop jar `pwd`/src/prototype/entity_recognition/SpotlightAnnotator.jar \
 	SpotlightAnnotator \
 	-D mapreduce.map.memory.mb=1000 \
-	-D mapred.job.map.memory.mb=1000 \
 	-D mapred.child.java.opts=-Xmx800m \
 	-D mapreduce.map.java.opts='-Xmx800m -XX:+UseParallelOldGC -XX:ParallelGCThreads=4' \
 	-D mapreduce.task.timeout=600000 \
