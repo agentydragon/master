@@ -29,16 +29,17 @@ def add_ground_truth_to_predictions(predictions, wikidata_client):
     subjects = {p.subject for p in predictions}
     relations = {p.relation for p in predictions}
     print('Looking for counterexamples...')
-    subject_relation_pairs = wikidata_client.get_subject_relation_pairs(
+    subject_relation_pairs = set(wikidata_client.get_subject_relation_pairs(
         subjects,
         relations
-    )
+    ))
 
     triples = [(p.subject, p.relation, p.object) for p in predictions]
     print('Validating predictions...')
     true_triples = wikidata_client.get_true_subset(triples)
 
-    for p in predictions:
+    bar = progressbar.ProgressBar(redirect_stdout=True)
+    for p in bar(predictions):
         if ((p.subject, p.relation, p.object) in true_triples):
             # truth
             truth = True
@@ -59,6 +60,7 @@ def main():
     predictions = prediction.load_predictions(args.prediction_tsv)
     add_labels_to_predictions(predictions, wikidata_client)
     add_ground_truth_to_predictions(predictions, wikidata_client)
+    print('Writing predictions')
     prediction.write_predictions(predictions, args.prediction_tsv)
 
 if __name__ == '__main__':
