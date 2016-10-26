@@ -368,9 +368,9 @@ class WikidataClient(object):
         #         labels[x] = label
         # return label
 
-        ids = list(sorted(ids))
+        ids = list(sorted(ids, key=lambda entity: int(entity[1:])))
 
-        batch_size = 50
+        batch_size = 100
 
         for i in bar(range(0, len(ids), batch_size)):
             ids_batch = ids[i:i+batch_size]
