@@ -15,7 +15,7 @@ public class CoreNLPInterface {
 		props.put("annotators",
 				"tokenize,ssplit,pos,parse," +
 				"lemma,ner,dcoref");
-		props.put("threads", "10");
+		props.put("threads", "16");
 		// props.put("pos.maxlen", "100");
 		// props.put("parse.maxlen", "100");
 		props.put("pos.maxlen", "100");

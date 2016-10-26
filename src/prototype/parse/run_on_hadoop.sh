@@ -4,15 +4,13 @@ export HADOOP_CLASSPATH=$(hbase classpath):`pwd`/src/prototype/parse/CoreNLP_dep
 # TODO: hbase.client.max.perregion.tasks => is now 1. should set higher?
 hadoop jar `pwd`/src/prototype/parse/CoreNLP.jar \
 	CoreNLP \
-	-D mapreduce.map.memory.mb=9000 \
-	-D mapred.job.map.memory.mb=9000 \
 	-D mapred.child.java.opts=-Xmx8000m \
-	-D mapreduce.map.java.opts='-Xmx8000m -XX:+UseParallelOldGC -XX:ParallelGCThreads=4' \
-	-D mapreduce.task.timeout=60000000 \
+	-D mapreduce.tasktracker.map.tasks.maximum=8 \
+	-D mapreduce.map.cpu.vcores=4 \
 	-D hbase.client.retries.number=10 \
 	-D hbase.client.scanner.timeout.period=600000000 \
-	-D mapreduce.map.maxattempts=1 \
 	-D prefix_length=-1
+	# (2016-10-26): 6 GB is not enough
 	#-D prefix_length=100
 	# timeout of scanner: 100 minutes (should be enough to parse anything)
 
