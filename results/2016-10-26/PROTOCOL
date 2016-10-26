@@ -1,0 +1,25 @@
+Generated 2016-10-26 from commit 9daa78f.
+
+Uses local closed-world assumption.
+
+Extractors:
+    Logistic regression over features:
+        * bag of words in sentence (word, lemmatized word),
+        * window of 2 words to left and right of subject and object
+          (subject_window_+2_lemma_go, object_window_-2_word_went, ...)
+        * subject_first / object_first
+	* POS & NER from subject and object
+
+    Selected features: only those occurring in at least 1 in 10 000 samples
+
+    Trained on 75000 train articles.
+    ROC charts generated on 20000 test articles.
+
+Fuser:
+    Logistic regression trained over avg(extracted score).
+
+    Trained on 5000 calibration articles.
+    ROC charts generated on 20000 test articles.
+
+All predictions (including p < 0.5) and models stored in my Dropbox in
+/masters-data/2016-10-26.
