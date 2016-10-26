@@ -15,10 +15,12 @@ flags.add_argument('--wikidata_endpoint',
                          'Specify "PUBLIC" to use public endpoint.'))
 
 def join_entities(entities):
-    return ' '.join([('wd:%s' % wikidata_id) for wikidata_id in sorted(entities)])
+    return ' '.join([('wd:%s' % wikidata_id)
+                     for wikidata_id in sorted(entities, key=lambda x: int(x[1:]))])
 
 def join_relations(relations):
-    return ' '.join([('wdp:%s' % relation_id) for relation_id in sorted(relations)])
+    return ' '.join([('wdp:%s' % relation_id)
+                     for relation_id in sorted(relations, key=lambda x: int(x[1:]))])
 
 PUBLIC_WIKIDATA_ENDPOINT = 'https://query.wikidata.org/sparql'
 
@@ -185,8 +187,6 @@ class WikidataClient(object):
         if len(wikidata_ids) == 0:
             return []
 
-        rels = set()
-
         query = """
             SELECT ?o ?p
             WHERE {
@@ -217,8 +217,6 @@ class WikidataClient(object):
         """
         if len(wikidata_ids) == 0:
             return []
-
-        rels = set()
 
         query = """
             SELECT ?s ?p
