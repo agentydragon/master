@@ -36,7 +36,7 @@ def add_ground_truth_to_predictions(predictions, wikidata_client):
 
     triples = [(p.subject, p.relation, p.object) for p in predictions]
     print('Validating predictions...')
-    true_triples = wikidata_client.get_true_subset(triples)
+    true_triples = set(wikidata_client.get_true_subset(triples))
 
     bar = progressbar.ProgressBar(redirect_stdout=True)
     for p in bar(predictions):
