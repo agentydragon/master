@@ -32,38 +32,6 @@ py_library(
     ],
 )
 
-py_binary(
-    name = "local_fuseki_launch",
-    srcs = [
-        "local_fuseki_launch.py",
-    ],
-    deps = [
-        "//src/prototype/lib:pbs_util_lib",
-        "//src/prototype/lib:mapper_lib",
-        "//src/prototype/lib:article_set_lib",
-        "//src/prototype/lib:flags_lib",
-    ],
-    data = [
-        ":local_fuseki",
-    ],
-)
-
-py_binary(
-    name = "local_fuseki",
-    srcs = [
-        "local_fuseki.py",
-    ],
-    deps = [
-        ":fuseki_lib",
-        ":fuseki_config_lib",
-        "//src:paths_lib",
-        "//src/prototype/lib:flags_lib",
-    ],
-    data = [
-        "//src/prototype/make_training_samples:make_training_samples",
-    ],
-)
-
 py_library(
     name = "jena_lib",
     srcs = [
