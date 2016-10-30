@@ -71,10 +71,12 @@ public class MakeTrainingSamples extends Configured implements Tool {
 
 		Configuration conf = HBaseConfiguration.create();
 		conf.addResource(new Path("/storage/brno2/home/prvak/master/src/hadoop/overrides.xml"));
-		conf.set(JobContext.MAP_MEMORY_MB, 9000);
-		conf.set(JobConf.MAPRED_TASK_JAVA_OPTS, "-Xmx8000m");
-		conf.set(JobContext.MAP_JAVA_OPTS, "-Xmx8000m -XX:+UseParallelOldGC -XX:ParallelGCThreads=4");
-		conf.set(JobContext.TASK_TIMEOUT, 60000000);
+		conf.setLong(JobContext.MAP_MEMORY_MB, 9000);
+		conf.setLong(JobContext.REDUCE_MEMORY_MB, 9000);
+		// conf.set(JobConf.MAPRED_TASK_JAVA_OPTS, "-Xmx8000m");
+		conf.set(JobContext.MAP_JAVA_OPTS, "-Xmx8000m");
+		conf.set(JobContext.REDUCE_JAVA_OPTS, "-Xmx8000m");
+		conf.setLong(JobContext.TASK_TIMEOUT, 60000000);
 
 		int res = ToolRunner.run(conf, new MakeTrainingSamples(), args);
 		System.exit(res);
