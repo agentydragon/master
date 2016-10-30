@@ -276,20 +276,21 @@ class WikidataClient(object):
 
         return rels
 
-    def get_triples_between_entities(self, wikidata_ids, relations):
-        if len(wikidata_ids) == 0:
+    def get_triples_between_entities(self, subject_ids, relations, object_ids):
+        if len(subject_ids) == 0 or len(relations) == 0 or len(object_ids) == 0:
             return []
 
-        x = join_entities(wikidata_ids)
         query = """
             SELECT ?s ?p ?o
             WHERE {
                 VALUES ?s { %s }
-                VALUES ?o { %s }
                 VALUES ?p { %s }
+                VALUES ?o { %s }
                 ?s ?p ?o
             }
-        """ % (x, x, join_relations(relations))
+        """ % (join_entities(subject_ids),
+               join_relations(relations),
+               join_entities(object_ids))
         results = self.wikidata_client.get_result_values(query)
         triples = []
         for x in results:
@@ -342,16 +343,17 @@ class WikidataClient(object):
         bar = progressbar.ProgressBar()
         for i in bar(r):
             batch_triples = triples[i:i+BATCH_SIZE]
-            batch_entities = set()
+            batch_subjects = set()
             batch_relations = set()
+            batch_objects = set()
 
             for subject, relation, object in batch_triples:
-                batch_entities.add(subject)
+                batch_subjects.add(subject)
                 batch_relations.add(relation)
-                batch_entities.add(object)
+                batch_objects.add(object)
 
             # TODO: split left and right side (might be important)
-            true_batch_triples = self.get_triples_between_entities(batch_entities, batch_relations)
+            true_batch_triples = self.get_triples_between_entities(batch_subjects, batch_relations, batch_objects)
             true_triples = true_triples.union(true_batch_triples)
 
         return list(sorted(true_triples))
@@ -368,7 +370,7 @@ class WikidataClient(object):
 
         ids = list(sorted(ids, key=lambda entity: int(entity[1:])))
 
-        batch_size = 100
+        batch_size = 1000
 
         for i in bar(range(0, len(ids), batch_size)):
             ids_batch = ids[i:i+batch_size]
