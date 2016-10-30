@@ -1,0 +1,39 @@
+On 100k articles, we had 19376 new predictions with predicted likelihood >= 0.5.
+On 10k articles, we had 520 new predictions with predicted likelihood >= 0.5.
+
+Adding 10x more data let us add 40x more prediction.
+However, on the earlier 10k experiment, the calibration appeared to be off,
+which may make the 40x figure misleading.
+
+Per-relation analysis of predictions:
+
+	In the 'occupation' relation, predicted relations with unknown previous value
+	are very frequently wrong -- the object is an entirely wrong type:
+	Relation 'occupation', random sample of 10:
+		bootstrapping	occupation	statistics	0.6766	?
+		television producer	occupation	theatre director	0.6767	?
+		The Walt Disney Company	occupation	film producer	0.6837	?
+		German Academy of Sciences at Berlin	occupation	oncology	0.5839	?
+		Santa Fe	occupation	pornographic actor	0.5822	?
+		Illinois	occupation	television producer	0.6791	?
+		West Germany	occupation	Film director	0.8238	?
+		New York	occupation	Film director	0.9117	?
+		Screenwriter	occupation	Film director	0.6766	?
+		The New York Times	occupation	Screenwriter	0.7546	?
+
+	Relation 'employer', random sample of 10:
+		Christian Identity	employer	Aryan Nations	0.5663	?
+		organic chemistry	employer	Kyoto University	0.5992	?
+		New Brunswick general election, 1982	employer	United Nations	0.5291	?
+		Amsterdam	employer	Veldhoven	0.8590	?
+		University of Bonn	employer	Stanford University	0.7756	?
+		Alan W. Livingston	employer	Capitol Records	0.8420	?
+		Companies law	employer	New York University	0.5992	?
+		Lamar Hunt	employer	Kansas City Chiefs	0.5992	?
+		seminary	employer	University of Chicago	0.7118	?
+		psychology	employer	Michigan	0.5267	?
+
+	This might be due to LCWA's too simple selection of negative samples.
+	Let's try:
+		- limiting the extractors to where relations' natural types match,
+		- progressivelly building a gold standard.
