@@ -45,3 +45,14 @@ py_binary(
         "//src/prototype/lib:wikidata_lib",
     ],
 )
+
+py_binary(
+    name = "build_gold",
+    srcs = [
+        "build_gold.py",
+    ],
+    deps = [
+        ":prediction_lib",
+        "//src/prototype/lib:flags_lib",
+    ],
+)
