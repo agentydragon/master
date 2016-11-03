@@ -67,34 +67,30 @@ public class SampleGeneration {
 						}
 
 						WikidataClient.Triple triple = new WikidataClient.Triple(subject, relation, object);
+						TrainingSample.Positiveness positiveness;
 						if (allTriples.contains(triple)) {
 							// True relation. Not a negative.
-							TrainingSample sample = sentenceWrapper.makeTrainingSample(
-									subject,
-									relation,
-									object,
-									true);
-							samples.add(sample);
-							continue;
+							positiveness = TrainingSample.Positiveness.TRUE;
+						} else {
+							boolean subjectHasCounterexample = subjectWikidataIds.contains(subject);
+							boolean objectHasCounterexample = objectWikidataIds.contains(object);
+							boolean hasCounterexample = (subjectHasCounterexample || objectHasCounterexample);
+
+							if (hasCounterexample) {
+								// This sentence is false (LCWA)
+								positiveness = TrainingSample.Positiveness.FALSE;
+							} else {
+								// Sentence may be either true or false.
+								// positiveness = TrainingSample.Positiveness.UNKNOWN;
+								continue;
+							}
 						}
-
-						boolean subjectHasCounterexample = subjectWikidataIds.contains(subject);
-						boolean objectHasCounterexample = objectWikidataIds.contains(object);
-						boolean hasCounterexample = (subjectHasCounterexample || objectHasCounterexample);
-
-						if (hasCounterexample) {
-							// This sentence is false (LCWA)
-							TrainingSample sample = sentenceWrapper.makeTrainingSample(
-									subject,
-									relation,
-									object,
-									false);
-							samples.add(sample);
-							continue;
-						}
-
-						// Sentence may be either true or false.
-						continue;
+						TrainingSample sample = sentenceWrapper.makeTrainingSample(
+								subject,
+								relation,
+								object,
+								positiveness);
+						samples.add(sample);
 					}
 				}
 			}
@@ -159,7 +155,7 @@ public class SampleGeneration {
 			return !si.isEmpty();
 		}
 
-		public TrainingSample makeTrainingSample(String s, String relation, String o, boolean positive) {
+		public TrainingSample makeTrainingSample(String s, String relation, String o, TrainingSample.Positiveness positive) {
 			TrainingSample sample = new TrainingSample();
 			sample.relation = relation;
 			sample.positive = positive;

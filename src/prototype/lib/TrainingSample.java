@@ -5,8 +5,14 @@ import java.util.function.*;
 import java.io.*;
 
 public class TrainingSample {
+	public enum Positiveness {
+		TRUE,
+		FALSE,
+		UNKNOWN,
+	};
+
 	public String relation;
-	public boolean positive;
+	public Positiveness positive;
 	public TrainingSampleParsedSentence sentence;
 	public String subject;
 	public String object;
@@ -24,7 +30,7 @@ public class TrainingSample {
 	public JSONObject toJSON() {
 		return new JSONObject()
 			.put(RELATION, relation)
-			.put(POSITIVE, positive)
+			.put(POSITIVE, positive.name())
 			.put(SENTENCE, sentence.toJSON())
 			.put(SUBJECT, subject)
 			.put(OBJECT, object)
@@ -35,7 +41,7 @@ public class TrainingSample {
 	public static TrainingSample fromJSON(JSONObject o) {
 		TrainingSample sample = new TrainingSample();
 		sample.relation = (String) o.get(RELATION);
-		sample.positive = o.getBoolean(POSITIVE);
+		sample.positive = Positiveness.valueOf((String) o.get(POSITIVE));
 		sample.sentence = TrainingSampleParsedSentence.fromJSON((JSONObject) o.get(SENTENCE));
 		sample.subject = (String) o.get(SUBJECT);
 		sample.object = (String) o.get(OBJECT);
