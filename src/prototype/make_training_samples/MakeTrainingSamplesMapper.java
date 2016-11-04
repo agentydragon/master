@@ -27,8 +27,7 @@ public class MakeTrainingSamplesMapper extends TableMapper<Text, Text>{
 		ARTICLES_PROCESSED_SUCCESSFULLY, // TODO
 		ARTICLES_FAILED_WITH_EXCEPTION,
 		SAMPLES_PRODUCED,
-
-		// TODO: samples produced
+		SAMPLES_FAILED_WITH_SERIALIZATION_EXCEPTION
 	};
 
 	private Logger logger = Logger.getLogger(MakeTrainingSamplesMapper.class);
@@ -64,7 +63,12 @@ public class MakeTrainingSamplesMapper extends TableMapper<Text, Text>{
 
 		List<TrainingSample> samples = SampleGeneration.getLabeledSamplesFromDocument(document, wikidataClient);
 		for (TrainingSample sample : samples) {
-			context.write(new Text(sample.relation + ":" + articleTitle), new Text(sample.toJSON().toString()));
+			try {
+				context.write(new Text(sample.subject + ":" + sample.relation + ":" + sample.object), new Text(sample.toJSON().toString()));
+			} catch (Exception e) {
+				e.printStackTrace();
+				context.getCounter(Counters.SAMPLES_FAILED_WITH_SERIALIZATION_EXCEPTION).increment(1);
+			}
 		}
 		/*
 		for (String relation : Relations.RELATIONS) {

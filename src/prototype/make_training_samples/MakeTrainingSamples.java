@@ -33,7 +33,7 @@ public class MakeTrainingSamples extends Configured implements Tool {
 		scanner.addColumn(ArticlesTable.WIKI, ArticlesTable.SPOTLIGHT_MENTIONS);
 		// TODO: get only latest version; or overwrite.
 
-		//job.setNumReduceTasks(0);
+		job.setNumReduceTasks(32);
 
 		TableMapReduceUtil.initCredentials(job);
 
