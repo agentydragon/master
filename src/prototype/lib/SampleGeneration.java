@@ -81,8 +81,8 @@ public class SampleGeneration {
 								positiveness = TrainingSample.Positiveness.FALSE;
 							} else {
 								// Sentence may be either true or false.
-								// positiveness = TrainingSample.Positiveness.UNKNOWN;
-								continue;
+								positiveness = TrainingSample.Positiveness.UNKNOWN;
+								// continue;
 							}
 						}
 						TrainingSample sample = sentenceWrapper.makeTrainingSample(

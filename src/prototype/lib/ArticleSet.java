@@ -19,10 +19,6 @@ public class ArticleSet {
 	private List<String> articles = new ArrayList<>();
 	private Set<String> whitelist = new HashSet<>();
 
-	private List<String> train = new ArrayList<>();
-	private List<String> test = new ArrayList<>();
-	private List<String> calibrate = new ArrayList<>();
-
 	public void load(Configuration conf) throws IOException {
 		FileSystem fs = FileSystem.get(conf);
 		FSDataInputStream inputStream = fs.open(new Path("/user/prvak/articles.tsv"));
@@ -35,14 +31,6 @@ public class ArticleSet {
 				String article = line.split("\t")[1];
 				articles.add(article);
 				whitelist.add(article);
-
-				if ((i % 100) < 75) {
-					train.add(article);
-				} else if ((i % 100) < 95) {
-					test.add(article);
-				} else {
-					calibrate.add(article);
-				}
 				i++;
 			}
 		}
@@ -55,18 +43,5 @@ public class ArticleSet {
 
 	public boolean contains(String title) {
 		return whitelist.contains(title);
-	}
-
-	public String getArticleSet(String title) {
-		if (train.contains(title)) {
-			return "train";
-		}
-		if (test.contains(title)) {
-			return "test";
-		}
-		if (calibrate.contains(title)) {
-			return "calibrate";
-		}
-		return null;
 	}
 }

@@ -64,7 +64,6 @@ def show_counts(predictions):
         print('Number of predictions above', threshold, ':', predicted)
 
 def main():
-    flags.add_argument('--article', action='append')
     flags.add_argument('--prediction_tsv', required=True)
     flags.add_argument('--show_above_threshold', type=float)
     flags.add_argument('--show_calibration', type=bool)

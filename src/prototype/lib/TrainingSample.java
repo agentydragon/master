@@ -27,7 +27,10 @@ public class TrainingSample {
 	private static String SUBJECT_TOKEN_INDICES = "subject_token_indices";
 	private static String OBJECT_TOKEN_INDICES = "object_token_indices";
 
-	public JSONObject toJSON() {
+	public JSONObject toJSON() throws Exception {
+		if (relation == null || relation.equals("")) {
+			throw new Exception("No relation when serializing training sample");
+		}
 		return new JSONObject()
 			.put(RELATION, relation)
 			.put(POSITIVE, positive.name())

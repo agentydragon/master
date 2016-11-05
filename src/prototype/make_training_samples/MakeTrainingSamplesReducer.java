@@ -53,8 +53,8 @@ public class MakeTrainingSamplesReducer extends Reducer<Text, Text, Text, Text> 
 				try {
 					TrainingSample ts = TrainingSample.fromJSON(new JSONObject(value.toString()));
 					if (ts.positive == TrainingSample.Positiveness.UNKNOWN) {
-						// fileName = generateFileName(relation, "test-unknown");
-						continue;
+						fileName = generateFileName(relation, "test-unknown");
+						// continue;
 					} else {
 						fileName = generateFileName(relation, set);
 					}

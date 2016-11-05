@@ -10,6 +10,7 @@ import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobContext;
+// import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.MultipleOutputs;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
@@ -71,11 +72,11 @@ public class MakeTrainingSamples extends Configured implements Tool {
 
 		Configuration conf = HBaseConfiguration.create();
 		conf.addResource(new Path("/storage/brno2/home/prvak/master/src/hadoop/overrides.xml"));
-		conf.setLong(JobContext.MAP_MEMORY_MB, 9000);
-		conf.setLong(JobContext.REDUCE_MEMORY_MB, 9000);
-		// conf.set(JobConf.MAPRED_TASK_JAVA_OPTS, "-Xmx8000m");
-		conf.set(JobContext.MAP_JAVA_OPTS, "-Xmx8000m");
-		conf.set(JobContext.REDUCE_JAVA_OPTS, "-Xmx8000m");
+		conf.setLong(JobContext.MAP_MEMORY_MB, 64000);
+		conf.setLong(JobContext.REDUCE_MEMORY_MB, 13000);
+		// conf.set(JobConf.MAPRED_TASK_JAVA_OPTS, "-Xmx12000m");
+		conf.set(JobContext.MAP_JAVA_OPTS, "-Xmx60000m");
+		conf.set(JobContext.REDUCE_JAVA_OPTS, "-Xmx12000m");
 		conf.setLong(JobContext.TASK_TIMEOUT, 60000000);
 
 		int res = ToolRunner.run(conf, new MakeTrainingSamples(), args);

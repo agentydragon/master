@@ -2,51 +2,25 @@ import progressbar
 from src.prototype.extraction import model as model_lib
 from src.prototype.fusion import fuser as fuser_lib
 from src.prototype.lib import flags
-from src.prototype.lib import article_set
-from src.prototype.lib import sample_generation
+from src.prototype.lib import sample_repo
 from src.prototype.lib import relations
 
 from src.prototype.eval import prediction
 
-def load_samples(articles):
-    all_samples = []
-    bar = progressbar.ProgressBar(redirect_stdout=True)
-    # articles = articles[:10]
-    for title in bar(articles):
-        document = sample_generation.try_load_document(title)
-        if not document:
-            # print('Cannot load document', title, ':(')
-            continue
-        document_samples = sample_generation.get_all_document_samples(
-            document = document
-        )
-        all_samples.extend(document_samples)
-    return all_samples
-
 def main():
-    flags.add_argument('--article', action='append')
     flags.add_argument('--output_tsv', required=True)
     flags.add_argument('--score_cutoff')
-    flags.add_argument('--n_articles', type=int)
     flags.make_parser(description='TODO')
     args = flags.parse_args()
 
-    if args.article:
-        articles = args.article
-    else:
-        # TODO: make some sense of the sets
-        art_set = article_set.ArticleSet()
-        train, test, calibrate = art_set.split_train_test_calibrate()
-        articles = test
-        # articles = calibrate
-
-    if args.n_articles:
-        articles = articles[:args.n_articles]
-
-    all_samples = load_samples(articles)
     predictions = []
 
     for i, relation in enumerate(relations.RELATIONS):
+        print('Relation', relation)
+
+        print('Loading samples for relation', relation)
+        all_samples = load_samples(relation, 'test-known') # + load_samples(relation, 'test-unknown')
+
         print("Loading model for %s (%d of %d)." % (
             relation, (i + 1), len(relations.RELATIONS)
         ))
@@ -58,8 +32,10 @@ def main():
             print('Skipping relation, cannot load model')
             continue
 
+        print("Predicting...")
         scores = model.predict_proba(all_samples)
 
+        print("Fusing...")
         by_entities = {}
         for i, sample in enumerate(all_samples):
             key = (sample.subject, sample.object)

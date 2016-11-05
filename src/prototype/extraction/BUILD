@@ -18,6 +18,7 @@ py_library(
     deps = [
         "//src/prototype/lib:file_util_lib",
         "//src/prototype/lib:article_set_lib",
+        "//src/prototype/lib:training_sample_lib",
         "//src:paths_lib",
     ],
     visibility = ["//visibility:public"],

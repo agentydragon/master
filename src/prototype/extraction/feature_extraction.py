@@ -1,4 +1,5 @@
 from src.prototype.lib import file_util
+from src.prototype.lib import training_sample
 from src import paths
 import numpy
 from scipy import sparse
@@ -130,7 +131,14 @@ def samples_to_matrix(samples, head_feature_dict):
 
 def samples_to_matrix_target(samples, head_feature_dict):
     matrix = samples_to_matrix(samples, head_feature_dict)
-    target = [sample.positive for sample in samples]
+    def sample_to_tgt(sample):
+        if sample.positive == training_sample.TRUE:
+            return 1
+        elif sample.positive == training_sample.FALSE:
+            return 0
+        else:
+            raise
+    target = [sample_to_tgt(sample) for sample in samples]
     return matrix, target
 
 # Split normally:

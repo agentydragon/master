@@ -1,5 +1,9 @@
 from recordclass import recordclass
 
+TRUE = 'TRUE'
+FALSE = 'FALSE'
+UNKNOWN = 'UNKNOWN'
+
 class TrainingSample(recordclass("TrainingSample",
                                  ["relation", "positive", "subject", "object",
                                   "sentence", "subject_token_indices",

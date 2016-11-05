@@ -198,18 +198,6 @@ py_test(
 )
 
 py_library(
-    name = "sample_generation_lib",
-    srcs = [
-        "sample_generation.py",
-    ],
-    deps = [
-        ":dbpedia_lib",
-        ":training_sample_lib",
-        ":relations_lib",
-    ],
-)
-
-py_library(
     name = "mapper_lib",
     srcs = [
         "mapper.py",

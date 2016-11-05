@@ -5,10 +5,8 @@ py_binary(
     ],
     deps = [
         ":prediction_lib",
-        "//src/prototype/lib:article_set_lib",
         "//src/prototype/lib:sample_repo_lib",
         "//src/prototype/lib:flags_lib",
-        "//src/prototype/lib:sample_generation_lib",
         "//src/prototype/lib:relations_lib",
         "//src/prototype/fusion:fuser_lib",
         "//src/prototype/extraction:feature_extraction_lib",

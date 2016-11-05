@@ -5,6 +5,7 @@ from src.prototype.lib import flags
 from src.prototype.lib import plot
 from src.prototype.lib import file_util
 from src.prototype.lib import sample_repo
+from src.prototype.lib import training_sample
 from src.prototype.lib import wikidata
 from sklearn import calibration
 from sklearn import linear_model
@@ -14,14 +15,15 @@ import numpy
 def train_classifier_for_relation(relation, relation_name):
     print('Training extractor for', relation, relation_name)
 
-    print('Loading samples...')
+    print('Loading train samples...')
     train_samples = sample_repo.load_samples(relation, 'train')
-    positive_count = len([s for s in train_samples if s.positive])
-    negative_count = len([s for s in train_samples if not s.positive])
+    positive_count = len([s for s in train_samples if s.positive == training_sample.TRUE])
+    negative_count = len([s for s in train_samples if s.positive == training_sample.FALSE])
     print('Positive in train:', positive_count)
     print('Negative in train:', negative_count)
 
-    test_samples = sample_repo.load_samples(relation, 'test')
+    print('Loading test-known samples...')
+    test_samples = sample_repo.load_samples(relation, 'test-known')
 
     if positive_count < 10 or negative_count < 10:
         print('Too few samples to train for', relation, '.')
@@ -84,19 +86,13 @@ def train_classifier_for_relation(relation, relation_name):
     #               'linear-svm')
 
 def main():
-    flags.add_argument('--relation', action='append')
+    flags.add_argument('--relation', action='append', required=True)
     flags.make_parser(description='TODO')
     args = flags.parse_args()
 
-    if args.relation:
-        relations = args.relation
-    else:
-        assert False
-        # relations = sample_repo.all_relations()
-
     wikidata_client = wikidata.WikidataClient()
 
-    for relation in relations:
+    for relation in args.relation:
         relation_name = wikidata_client.get_name(relation)
         train_classifier_for_relation(relation, relation_name)
 

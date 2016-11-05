@@ -8,6 +8,7 @@ py_binary(
         "//src/prototype/extraction:feature_extraction_lib",
         "//src/prototype/extraction:model_lib",
         "//src/prototype/lib:plot_lib",
+        "//src/prototype/lib:training_sample_lib",
         "//src/prototype/lib:file_util_lib",
         "//src/prototype/lib:sample_repo_lib",
         "//src/prototype/lib:wikidata_lib",
