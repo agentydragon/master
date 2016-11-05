@@ -10,16 +10,22 @@ from src.prototype.eval import prediction
 def main():
     flags.add_argument('--output_tsv', required=True)
     flags.add_argument('--score_cutoff')
+    flags.add_argument('--relation', action='append')
     flags.make_parser(description='TODO')
     args = flags.parse_args()
 
     predictions = []
 
-    for i, relation in enumerate(relations.RELATIONS):
+    if args.relation:
+        rs = args.relation
+    else:
+        rs = relations.RELATIONS
+
+    for i, relation in enumerate(rs):
         print('Relation', relation)
 
         print('Loading samples for relation', relation)
-        all_samples = load_samples(relation, 'test-known') # + load_samples(relation, 'test-unknown')
+        all_samples = sample_repo.load_samples(relation, 'test-known') # + sample_repo.load_samples(relation, 'test-unknown')
 
         print("Loading model for %s (%d of %d)." % (
             relation, (i + 1), len(relations.RELATIONS)
