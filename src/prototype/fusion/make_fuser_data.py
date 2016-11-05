@@ -4,6 +4,7 @@ from src.prototype.extraction import model as model_lib
 from src.prototype.fusion import fuser as fuser_lib
 from src.prototype.lib import file_util
 from src.prototype.lib import flags
+from src.prototype.lib import training_sample
 from src.prototype.lib import sample_repo
 from src.prototype.lib import relations
 
@@ -32,12 +33,12 @@ def show_assertion_support(relation, scored_samples):
         key = (subject, relation, object)
         supports = support[key]
         truth = truths[key]
-        truth_label = ('true' if truth else 'false')
+        # TODO
+        truth_label = ('true' if truth == training_sample.TRUE else 'false')
         by_relation[truth_label].append(supports)
     return by_relation
 
 def main():
-    flags.add_argument('--article', action='append')
     flags.add_argument('--relation', action='append')
     flags.make_parser(description='TODO')
     args = flags.parse_args()
@@ -61,7 +62,8 @@ def main():
 
         no_samples = 0
         bar = progressbar.ProgressBar(redirect_stdout=True)
-        all_samples = sample_repo.load_samples(relation, 'calibrate')
+        # TODO: RENAME to 'calibrate'
+        all_samples = sample_repo.load_samples(relation, 'validate')
         print("number of samples:", len(all_samples))
         assert len(all_samples) > 1, "no samples!"
 
