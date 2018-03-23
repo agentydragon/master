@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: upload-to-storage
+  labels:
+    app: upload-to-storage
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: upload-to-storage
+        tier: worker
+    spec:
+      containers:
+      - name: upload-to-storage
+        image: gcr.io/extended-atrium-198523/upload_to_storage
+        imagePullPolicy: Always
