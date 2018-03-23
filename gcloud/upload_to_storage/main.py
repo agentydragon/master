@@ -26,11 +26,13 @@ def _get_storage_client():
 
 client = _get_storage_client()
 bucket = client.bucket("agentydragon-gspython")  # current_app.config['CLOUD_STORAGE_BUCKET'])
-import datetime
-filename = datetime.datetime.now().strftime("test-file-%Y%m%d%H%M%S.html")
-blob = bucket.blob(filename)
+#import datetime
+#filename = datetime.datetime.now().strftime("test-file-%Y%m%d%H%M%S.html")
+#blob = bucket.blob(filename)
+blob = bucket.blob('wiki-dumps/enwiki/20180301/enwiki-20180301-pages-articles.xml.bz2')
 
-http = urllib2.urlopen('http://agentydragon.github.io')
+http = urllib2.urlopen(#'http://agentydragon.github.io')
+    'https://dumps.wikimedia.org/enwiki/20180301/enwiki-20180301-pages-articles.xml.bz2')
 blob.upload_from_file(
     http,#"hello world",#file_stream,
     content_type="text/html")#content_type)
