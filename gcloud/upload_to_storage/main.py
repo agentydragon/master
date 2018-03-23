@@ -25,7 +25,9 @@ def _get_storage_client():
 
 client = _get_storage_client()
 bucket = client.bucket("agentydragon-gspython")  # current_app.config['CLOUD_STORAGE_BUCKET'])
-blob = bucket.blob("test-file")
+import datetime
+filename = datetime.datetime.now().strftime("test-file-%Y%m%d%H%M%S")
+blob = bucket.blob(filename)
 
 blob.upload_from_string(
     "hello world",#file_stream,
