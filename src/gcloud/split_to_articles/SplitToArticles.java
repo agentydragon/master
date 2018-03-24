@@ -75,12 +75,20 @@ public class SplitToArticles {
 
     private Put createArticlePut(WikiArticle page) {
       // Write the article into the Bigtable. Its rowkey is its title.
-      Put put = new Put(Bytes.toBytes(page.getTitle()));
-      put.addColumn(COLUMN_FAMILY_NAME, WIKITEXT_COLUMN,
-                    Bytes.toBytes(page.getText()));
-      put.addColumn(COLUMN_FAMILY_NAME, TITLE_COLUMN,
-                    Bytes.toBytes(page.getTitle()));
-      return put;
+      String title = page.getTitle();
+      String text = page.getText();
+      if (title == null) {
+        System.out.println("Article with null title detected, and will be skipped. Body:");
+	System.out.println(text == null ? "NULL" : text);
+	return null;
+      }
+      if (text == null) {
+        System.out.println("Article with null text detected, and will be skipped. Title: " + text);
+	return null;
+      }
+      return new Put(Bytes.toBytes(title))
+        .addColumn(COLUMN_FAMILY_NAME, WIKITEXT_COLUMN, Bytes.toBytes(text))
+        .addColumn(COLUMN_FAMILY_NAME, TITLE_COLUMN, Bytes.toBytes(title));
     }
 
     private boolean isTimeUpToLogStats() {
@@ -96,6 +104,10 @@ public class SplitToArticles {
         System.out.printf("Writing article #%d: %s\n", articlesProcessed, page.getTitle());
       }
       Put put = createArticlePut(page);
+      if (put == null) {
+        System.out.println("null put created, skipping");
+	return;
+      }
       try {
 	if (batchMode) {
           mutator.mutate(put);
