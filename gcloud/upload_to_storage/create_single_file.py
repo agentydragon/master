@@ -1,15 +1,14 @@
 from __future__ import absolute_import
+from __future__ import print_function
+
+import pprint
+import sys
+pprint.pprint(sys.path)
 
 # Running help("modules") makes the google.cloud module available. SOMEHOW.
-
-#help("modules")
-import google
-print dir(google)
-print dir(google.cloud)
+help("modules")
 
 from google.cloud import storage
-import six
-import urllib2
 import datetime
 
 filename = datetime.datetime.now().strftime('single-file-%Y%m%d-%H%M%S.txt')
@@ -23,4 +22,4 @@ bucket = client.bucket("agentydragon-gspython")  # current_app.config['CLOUD_STO
 blob = bucket.blob(filename)
 blob.upload_from_string("Hello, World!", content_type="text/html")
 
-print "Success! File written:", blob.public_url
+print("Success! File written:", blob.public_url)
