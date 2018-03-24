@@ -2,7 +2,7 @@ load("@io_bazel_rules_docker//python:image.bzl", "py_image")
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 load("@io_bazel_rules_docker//container:push.bzl", "container_push")
 
-load("@my_deps//:requirements.bzl", "requirement")
+load("@pip_dependencies//:requirements.bzl", "requirement")
 
 py_image(
     name = "upload_to_storage_py",
