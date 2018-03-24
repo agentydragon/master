@@ -36,37 +36,6 @@ import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 
 public class SplitToArticles {
-  //    // [START getting_a_row]
-  //    // Get the first greeting by row key
-  //    String rowKey = "greeting0";
-  //    Result getResult = table.get(new Get(Bytes.toBytes(rowKey)));
-  //    String greeting = Bytes.toString(getResult.getValue(COLUMN_FAMILY_NAME, COLUMN_NAME));
-  //    System.out.println("Get a single greeting by row key");
-  //    System.out.printf("\t%s = %s\n", rowKey, greeting);
-  //    // [END getting_a_row]
-  //    // [START scanning_all_rows]
-  //    // Now scan across all rows.
-  //    Scan scan = new Scan();
-  //    print("Scan for all greetings:");
-  //    ResultScanner scanner = table.getScanner(scan);
-  //    for (Result row : scanner) {
-  //      byte[] valueBytes = row.getValue(COLUMN_FAMILY_NAME, COLUMN_NAME);
-  //      System.out.println('\t' + Bytes.toString(valueBytes));
-  //    }
-  //    // [END scanning_all_rows]
-  //    // [START deleting_a_table]
-  //    // Clean up by disabling and then deleting the table
-  //    print("Delete the table");
-  //    admin.disableTable(table.getName());
-  //    admin.deleteTable(table.getName());
-  //    // [END deleting_a_table]
-  //  } catch (IOException e) {
-  //    System.err.println("Exception while running HelloWorld: " + e.getMessage());
-  //    e.printStackTrace();
-  //    System.exit(1);
-  //  }
-  //  System.exit(0);
-
   private static void print(String msg) {
     System.out.println("HelloWorld: " + msg);
   }
