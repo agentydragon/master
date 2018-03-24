@@ -19,16 +19,16 @@ java_image(
     ],
     main_class = "SplitToArticles",
     deps = [
+        "//3rdparty/jvm/com/google/cloud:google_cloud_storage",
         "//3rdparty/jvm/com/google/cloud/bigtable:bigtable_hbase_2_x",
-	"//3rdparty/jvm/com/google/cloud:google_cloud_storage",
-	"//3rdparty/jvm/info/bliki/wiki:bliki_core",
+        "//3rdparty/jvm/info/bliki/wiki:bliki_core",
     ],
 )
 
 container_push(
     name = "push_split_to_articles",
-    image = ":split_to_articles",
     format = "Docker",
+    image = ":split_to_articles",
     registry = "gcr.io",
     repository = "extended-atrium-198523/split_to_articles",
 )

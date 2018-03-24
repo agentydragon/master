@@ -9,7 +9,7 @@ git_repository(
 
 load(
     "@io_bazel_rules_docker//python:image.bzl",
-     _py_image_repos = "repositories",
+    _py_image_repos = "repositories",
 )
 
 _py_image_repos()
@@ -26,15 +26,15 @@ _java_image_repos()
 
 git_repository(
     name = "io_bazel_rules_python",
-    remote = "https://github.com/bazelbuild/rules_python.git",
     commit = "115e3a0dab4291184fdcb0d4e564a0328364571a",
+    remote = "https://github.com/bazelbuild/rules_python.git",
 )
 
 load("@io_bazel_rules_python//python:pip.bzl", "pip_import")
 
 pip_import(
     name = "pip_dependencies",
-    requirements = "//src:requirements.txt"
+    requirements = "//src:requirements.txt",
 )
 
 load("@pip_dependencies//:requirements.bzl", "pip_install")
@@ -49,7 +49,7 @@ pip_install()
 #     url = "http://nlp.stanford.edu/software/stanford-english-corenlp-2016-01-10-models.jar",
 #     sha256 = "8ad16bb419044a8c3efc2d14b9072c56b300e6f462183c62ff1f6470c11389c0"
 # )
-# 
+#
 # http_jar(
 #     name = "corenlp_srparser_model",
 #     url = "http://nlp.stanford.edu/software/stanford-srparser-2014-10-23-models.jar",
@@ -62,7 +62,7 @@ pip_install()
 #     url = "http://spotlight.sztaki.hu/downloads/archive/version-0.1/dbpedia-spotlight.jar",
 #     sha256 = "760ce9440be6858f956ad98bcbb4754636c31cdf77d23c6f98019cb02412d32b"
 # )
-# 
+#
 # http_file(
 #     name = "dbpedia_spotlight_model_en",
 #     url = "http://spotlight.sztaki.hu/downloads/archive/version-0.1/en.tar.gz",
@@ -84,7 +84,7 @@ pip_install()
 # )
 # """,
 # )
-# 
+#
 # new_http_archive(
 #     name = "jena_fuseki",
 #     url = "http://mirror.dkm.cz/apache/jena/binaries/apache-jena-fuseki-2.4.0.tar.gz",
@@ -106,9 +106,9 @@ pip_install()
 #     type = "zip",
 #     strip_prefix = "migration-tooling-master",
 # )
-# 
+#
 # load("@migration_tooling//transitive_maven_jar:transitive_maven_jar.bzl", "transitive_maven_jar")
-# 
+#
 # transitive_maven_jar(
 #   name = "dependencies",
 #   artifacts = [
@@ -132,6 +132,7 @@ pip_install()
 # TODO: bazelbuild/migration-tooling also has transitive_maven_jars rule which
 # might alleviate the need for generating WORKSPACE.
 load("//3rdparty:workspace.bzl", "maven_dependencies")
+
 maven_dependencies()
 
 # TODO: Leftover artifacts from earlier version:
