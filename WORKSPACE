@@ -74,18 +74,18 @@ pip_install()
 #     sha256 = "0335b1a443a41952d18a472ac65e49b4482424ffec12ddf41703c696e72c793d"
 # )
 
-# DBpedia Spotlight
-http_jar(
-    name = "dbpedia_spotlight",
-    url = "http://spotlight.sztaki.hu/downloads/archive/version-0.1/dbpedia-spotlight.jar",
-    sha256 = "760ce9440be6858f956ad98bcbb4754636c31cdf77d23c6f98019cb02412d32b"
-)
-
-http_file(
-    name = "dbpedia_spotlight_model_en",
-    url = "http://spotlight.sztaki.hu/downloads/archive/version-0.1/en.tar.gz",
-    sha256 = "773beb985b3a28d8618e620ac7ac699a59228e81f0afa56618f13e3984a40e2f",
-)
+# # DBpedia Spotlight
+# http_jar(
+#     name = "dbpedia_spotlight",
+#     url = "http://spotlight.sztaki.hu/downloads/archive/version-0.1/dbpedia-spotlight.jar",
+#     sha256 = "760ce9440be6858f956ad98bcbb4754636c31cdf77d23c6f98019cb02412d32b"
+# )
+# 
+# http_file(
+#     name = "dbpedia_spotlight_model_en",
+#     url = "http://spotlight.sztaki.hu/downloads/archive/version-0.1/en.tar.gz",
+#     sha256 = "773beb985b3a28d8618e620ac7ac699a59228e81f0afa56618f13e3984a40e2f",
+# )
 
 # # Apache Jena Fuseki
 # new_http_archive(
@@ -116,32 +116,6 @@ http_file(
 #     visibility = ["//visibility:public"],
 # )
 # """,
-# )
-
-new_git_repository(
-    name = "cpulimit",
-    commit = "bf0506b593a3b0392804c007bab98faf579bc681",
-    remote = "https://github.com/MichalPokorny/cpulimit",
-    build_file_content = """
-package(default_visibility = ["//visibility:public"])
-
-genrule(
-    name = "cpulimit_bin",
-    srcs = glob(["src/*.c", "src/*.h", "src/Makefile"]),
-    cmd = ("cd external/cpulimit/src; " +
-           'CFLAGS="-Wall -g -D_GNU_SOURCE -B/usr/lib/x86_64-linux-gnu" make; ' +
-           "mkdir -p -v $(@D); " +
-           "cd ../../..; " +
-           "cp -v external/cpulimit/src/cpulimit $(@)"),
-    outs = ["cpulimit"],
-)
-""",
-)
-
-# git_repository(
-#     name = "wiki2text",
-#     commit = "ae50e5c7f69be643099d90ed6ca7c0fd9501ebf4",
-#     remote = "https://github.com/rspeer/wiki2text"
 # )
 
 # http_archive(
