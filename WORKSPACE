@@ -40,7 +40,7 @@ pip_import(
     requirements = "//src:requirements.txt"
 )
 
-load("@my_deps//src:requirements.bzl", "pip_install")
+load("@my_deps//:requirements.bzl", "pip_install")
 pip_install()
 
 # container_pull(
@@ -54,18 +54,18 @@ pip_install()
 
 # TODO: want commons_cli_commons_cli
 
-# Stanford CoreNLP
-http_jar(
-    name = "corenlp_models",
-    url = "http://nlp.stanford.edu/software/stanford-english-corenlp-2016-01-10-models.jar",
-    sha256 = "8ad16bb419044a8c3efc2d14b9072c56b300e6f462183c62ff1f6470c11389c0"
-)
-
-http_jar(
-    name = "corenlp_srparser_model",
-    url = "http://nlp.stanford.edu/software/stanford-srparser-2014-10-23-models.jar",
-    sha256 = "0335b1a443a41952d18a472ac65e49b4482424ffec12ddf41703c696e72c793d"
-)
+# # Stanford CoreNLP
+# http_jar(
+#     name = "corenlp_models",
+#     url = "http://nlp.stanford.edu/software/stanford-english-corenlp-2016-01-10-models.jar",
+#     sha256 = "8ad16bb419044a8c3efc2d14b9072c56b300e6f462183c62ff1f6470c11389c0"
+# )
+# 
+# http_jar(
+#     name = "corenlp_srparser_model",
+#     url = "http://nlp.stanford.edu/software/stanford-srparser-2014-10-23-models.jar",
+#     sha256 = "0335b1a443a41952d18a472ac65e49b4482424ffec12ddf41703c696e72c793d"
+# )
 
 # DBpedia Spotlight
 http_jar(
@@ -80,36 +80,36 @@ http_file(
     sha256 = "773beb985b3a28d8618e620ac7ac699a59228e81f0afa56618f13e3984a40e2f",
 )
 
-# Apache Jena Fuseki
-new_http_archive(
-    name = "jena",
-    url = "http://mirror.dkm.cz/apache/jena/binaries/apache-jena-3.1.0.tar.gz",
-    sha256 = "532ad87eab7792ff1ffae34375d4c27956aada7c659743c39027e8b48f29cbd9",
-    build_file_content = """
-filegroup(
-    name = "everything",
-    srcs = glob(
-	include = ["**/*"]
-    ),
-    visibility = ["//visibility:public"],
-)
-""",
-)
-
-new_http_archive(
-    name = "jena_fuseki",
-    url = "http://mirror.dkm.cz/apache/jena/binaries/apache-jena-fuseki-2.4.0.tar.gz",
-    sha256 = "8b4299c35374bba47c6f9644166c069c243b08eb600a71f66c3c9cc2ec7e594a",
-    build_file_content = """
-filegroup(
-    name = "everything",
-    srcs = glob(
-	include = ["**/*"]
-    ),
-    visibility = ["//visibility:public"],
-)
-""",
-)
+# # Apache Jena Fuseki
+# new_http_archive(
+#     name = "jena",
+#     url = "http://mirror.dkm.cz/apache/jena/binaries/apache-jena-3.1.0.tar.gz",
+#     sha256 = "532ad87eab7792ff1ffae34375d4c27956aada7c659743c39027e8b48f29cbd9",
+#     build_file_content = """
+# filegroup(
+#     name = "everything",
+#     srcs = glob(
+# 	include = ["**/*"]
+#     ),
+#     visibility = ["//visibility:public"],
+# )
+# """,
+# )
+# 
+# new_http_archive(
+#     name = "jena_fuseki",
+#     url = "http://mirror.dkm.cz/apache/jena/binaries/apache-jena-fuseki-2.4.0.tar.gz",
+#     sha256 = "8b4299c35374bba47c6f9644166c069c243b08eb600a71f66c3c9cc2ec7e594a",
+#     build_file_content = """
+# filegroup(
+#     name = "everything",
+#     srcs = glob(
+# 	include = ["**/*"]
+#     ),
+#     visibility = ["//visibility:public"],
+# )
+# """,
+# )
 
 new_git_repository(
     name = "cpulimit",
