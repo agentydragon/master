@@ -18,3 +18,6 @@ To run:
 ```
 kubectl create -f split_to_articles.yaml
 ```
+
+TODO: Could I speed this up by maybe using sharded XML dumps? Or maybe by
+bundling the mutations?

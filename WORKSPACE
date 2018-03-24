@@ -144,6 +144,33 @@ genrule(
 #     remote = "https://github.com/rspeer/wiki2text"
 # )
 
+# http_archive(
+#     name = "migration_tooling",
+#     url = "https://github.com/bazelbuild/migration-tooling/archive/master.zip",
+#     type = "zip",
+#     strip_prefix = "migration-tooling-master",
+# )
+# 
+# load("@migration_tooling//transitive_maven_jar:transitive_maven_jar.bzl", "transitive_maven_jar")
+# 
+# transitive_maven_jar(
+#   name = "dependencies",
+#   artifacts = [
+#     "org.apache.beam:beam-runners-google-cloud-dataflow-java:2.1.0",
+#     "org.apache.hbase:hbase-client:1.4.2",
+#     "com.google.cloud:google-cloud-storage:1.14.0",
+#     # "com.google.api-client:google-api-client:1.22.0",
+#     "com.google.cloud.bigtable:bigtable-hbase-2.x:1.3.0",
+#     "com.google.cloud.bigtable:bigtable-hbase-beam:1.1.2",
+#     "info.bliki.wiki:bliki-core:3.1.0",
+#   ],
+#   repositories = [
+#     # "https://repo.maven.apache.org/maven2/"
+#     #"https://repo1.maven.org/maven2/",
+#     "http://uk.maven.org/maven2/",
+#   ]
+# )
+
 # 3rdparty/workspace.bzl generated using https://github.com/johnynek/bazel-deps:
 # bazel run //:parse -- generate -r ~/repos/master -s 3rdparty/workspace.bzl -d dependencies.yaml
 # TODO: bazelbuild/migration-tooling also has transitive_maven_jars rule which
