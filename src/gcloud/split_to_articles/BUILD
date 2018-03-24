@@ -18,5 +18,6 @@ java_binary(
     deps = [
         "//3rdparty/jvm/com/google/cloud/bigtable:bigtable_hbase_2_x",
 	"//3rdparty/jvm/com/google/cloud:google_cloud_storage",
+	"//3rdparty/jvm/info/bliki/wiki:bliki_core",
     ],
 )

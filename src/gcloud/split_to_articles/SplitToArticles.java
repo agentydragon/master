@@ -5,6 +5,11 @@
 
 import com.google.cloud.bigtable.hbase.BigtableConfiguration;
 
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import info.bliki.wiki.dump.WikiXMLParser;
+import info.bliki.wiki.dump.WikiArticle;
+import info.bliki.wiki.dump.Siteinfo;
+import info.bliki.wiki.dump.IArticleFilter;
 import com.google.cloud.storage.Bucket;
 import com.google.cloud.ReadChannel;
 import com.google.cloud.storage.BucketInfo;
@@ -25,6 +30,8 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 import java.nio.ByteBuffer;
+import java.io.BufferedReader;
+import java.io.Reader;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.io.InputStream;
@@ -137,6 +144,17 @@ public class SplitToArticles {
     System.out.println("HelloWorld: " + msg);
   }
 
+  static class DemoArticleFilter implements IArticleFilter {
+	  public void process(WikiArticle page, Siteinfo info) {
+		  System.out.println("----------------------------------------");
+		  System.out.println(page.getTitle());
+		  System.out.println("----------------------------------------");
+		  System.out.println(page.getText());
+		  // return true;
+		  // return false;
+	  }
+  }
+
   public static void main(String[] args) {
     Storage store = StorageOptions.getDefaultInstance().getService();
     String bucketName = "agentydragon-gspython";
@@ -150,16 +168,25 @@ public class SplitToArticles {
     }
     PrintStream writeTo = System.out;
     try (ReadChannel reader = blob.reader()) {
-      WritableByteChannel channel = Channels.newChannel(writeTo);
-      ByteBuffer bytes = ByteBuffer.allocate(1024);
-      while (reader.read(bytes) > 0) {
-        bytes.flip();
-	channel.write(bytes);
-        bytes.clear();
-	break;  // print just first 1024 bytes to show we can do that.
-      }
+      IArticleFilter handler = new DemoArticleFilter();
+      WikiXMLParser parser = new WikiXMLParser(
+		      new BZip2CompressorInputStream(
+			      Channels.newInputStream(reader), true), handler);
+      parser.parse();
+
+      //WritableByteChannel channel = Channels.newChannel(writeTo);
+      //ByteBuffer bytes = ByteBuffer.allocate(1024);
+      //while (reader.read(bytes) > 0) {
+      //  bytes.flip();
+      //  channel.write(bytes);
+      //  bytes.clear();
+      //  break;  // print just first 1024 bytes to show we can do that.
+      //}
     } catch (IOException e) {
       print("io exception");
+      return;
+    } catch (Exception e) {
+      print("exception");
       return;
     }
 
