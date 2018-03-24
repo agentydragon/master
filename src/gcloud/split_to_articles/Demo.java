@@ -1,7 +1,7 @@
 // package com.example.cloud.bigtable.helloworld;
 
 import com.google.cloud.bigtable.hbase.BigtableConfiguration;
-
+import java.io.IOException;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
@@ -15,11 +15,9 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 
-import java.io.IOException;
-
 /**
- * A minimal application that connects to Cloud Bigtable using the native HBase API
- * and performs some basic operations.
+ * A minimal application that connects to Cloud Bigtable using the native HBase API and performs
+ * some basic operations.
  */
 public class Demo {
 
@@ -29,12 +27,11 @@ public class Demo {
   private static final byte[] COLUMN_NAME = Bytes.toBytes("greeting");
 
   // Write some friendly greetings to Cloud Bigtable
-  private static final String[] GREETINGS =
-      { "Hello World!", "Hello Cloud Bigtable!", "Hello HBase!" };
+  private static final String[] GREETINGS = {
+    "Hello World!", "Hello Cloud Bigtable!", "Hello HBase!"
+  };
 
-  /**
-   * Connects to Cloud Bigtable, runs some basic operations and prints the results.
-   */
+  /** Connects to Cloud Bigtable, runs some basic operations and prints the results. */
   private static void doHelloWorld(String projectId, String instanceId) {
 
     // [START connecting_to_bigtable]
@@ -137,5 +134,4 @@ public class Demo {
     }
     return value;
   }
-
 }
