@@ -1,12 +1,22 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-import pprint
 import sys
-pprint.pprint(sys.path)
 
-# Running help("modules") makes the google.cloud module available. SOMEHOW.
-help("modules")
+# Workaround for issue #5.
+# TODO(#5): Come up with a better work-around, or remove this hack once Bazel
+# fixes their thing.
+def hoist_package_to_top_of_path(package):
+    hoisted_paths = []
+    for path in sys.path:
+        if package in path:
+            hoisted_paths.append(path)
+    if len(hoisted_paths) != 1:
+        raise RuntimeError('Not exactly 1 path to be hoisted: ' +
+                           str(hoisted_paths))
+    sys.path.insert(0, hoisted_paths[0])
+
+hoist_package_to_top_of_path('pypi__google_cloud_storage_1_7_0')
 
 from google.cloud import storage
 import datetime
