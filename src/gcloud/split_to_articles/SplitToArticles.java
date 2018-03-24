@@ -1,11 +1,9 @@
 // package com.example.cloud.bigtable.helloworld;
 
-import com.google.cloud.bigtable.hbase.BigtableConfiguration;
-
 import com.google.cloud.ReadChannel;
+import com.google.cloud.bigtable.hbase.BigtableConfiguration;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
-import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import info.bliki.wiki.dump.IArticleFilter;
@@ -48,8 +46,7 @@ public class SplitToArticles {
     private static final byte[] WIKITEXT_COLUMN = Bytes.toBytes("wikitext");
     private static final byte[] TITLE_COLUMN = Bytes.toBytes("title");
 
-    public WriteToBigtableArticleFilter(BufferedMutator mutator,
-		                        Table table, boolean batchMode) {
+    public WriteToBigtableArticleFilter(BufferedMutator mutator, Table table, boolean batchMode) {
       this.mutator = mutator;
       this.table = table;
       this.batchMode = batchMode;
@@ -69,26 +66,29 @@ public class SplitToArticles {
     private void logStats() {
       lastLog = Instant.now();
       double articlesPerSec = getSpeedInArticlesPerSec();
-      System.out.printf("Speed: %.2f articles/s (%s mode)\n", articlesPerSec,
-		        batchMode ? "batch" : "serial");
+      System.out.printf(
+          "Speed: %.2f articles/s (%s mode)\n", articlesPerSec, batchMode ? "batch" : "serial");
     }
 
     private Put createArticlePut(WikiArticle page) {
       // Write the article into the Bigtable. Its rowkey is its title.
       String title = page.getTitle();
       String text = page.getText();
+      // Some articles in the dataset have null titles or texts, for some
+      // reason. Make sure we don't crash on those (by calling
+      // Bytes.toBytes on null).
       if (title == null) {
         System.out.println("Article with null title detected, and will be skipped. Body:");
-	System.out.println(text == null ? "NULL" : text);
-	return null;
+        System.out.println(text == null ? "NULL" : text);
+        return null;
       }
       if (text == null) {
         System.out.println("Article with null text detected, and will be skipped. Title: " + text);
-	return null;
+        return null;
       }
       return new Put(Bytes.toBytes(title))
-        .addColumn(COLUMN_FAMILY_NAME, WIKITEXT_COLUMN, Bytes.toBytes(text))
-        .addColumn(COLUMN_FAMILY_NAME, TITLE_COLUMN, Bytes.toBytes(title));
+          .addColumn(COLUMN_FAMILY_NAME, WIKITEXT_COLUMN, Bytes.toBytes(text))
+          .addColumn(COLUMN_FAMILY_NAME, TITLE_COLUMN, Bytes.toBytes(title));
     }
 
     private boolean isTimeUpToLogStats() {
@@ -106,14 +106,14 @@ public class SplitToArticles {
       Put put = createArticlePut(page);
       if (put == null) {
         System.out.println("null put created, skipping");
-	return;
+        return;
       }
       try {
-	if (batchMode) {
+        if (batchMode) {
           mutator.mutate(put);
-	} else {
-	  table.put(put);
-	}
+        } else {
+          table.put(put);
+        }
       } catch (IOException e) {
         e.printStackTrace();
         print("io exception while writing " + page.getTitle());
@@ -126,8 +126,7 @@ public class SplitToArticles {
 
   private static void createTable(Connection connection) throws IOException {
     Admin admin = connection.getAdmin();
-    HTableDescriptor descriptor = new HTableDescriptor(
-      TableName.valueOf(TABLE_NAME));
+    HTableDescriptor descriptor = new HTableDescriptor(TableName.valueOf(TABLE_NAME));
     descriptor.addFamily(new HColumnDescriptor(COLUMN_FAMILY_NAME));
     print("Create table " + descriptor.getNameAsString());
     admin.createTable(descriptor);
@@ -136,9 +135,8 @@ public class SplitToArticles {
   private static void addArticles(Connection connection) throws IOException {
     Storage store = StorageOptions.getDefaultInstance().getService();
     String bucketName = "agentydragon-gspython";
-    BlobId blobId = BlobId.of(
-          bucketName,
-          "wiki-dumps/enwiki/20180301/enwiki-20180301-pages-articles.xml.bz2");
+    BlobId blobId =
+        BlobId.of(bucketName, "wiki-dumps/enwiki/20180301/enwiki-20180301-pages-articles.xml.bz2");
     Blob blob = store.get(blobId);
     if (blob == null) {
       print("Did not find blob.");
@@ -149,11 +147,12 @@ public class SplitToArticles {
     try (ReadChannel reader = blob.reader()) {
       BufferedMutator mutator = connection.getBufferedMutator(TableName.valueOf(TABLE_NAME));
       print("BufferedMutator write buffer size: " + mutator.getWriteBufferSize() + " B");
-      // print("BufferedMutator periodic flush timeout: " + mutator.getWriteBufferPeriodicFlushTimeoutMs() + " ms");
+      // print("BufferedMutator periodic flush timeout: " +
+      // mutator.getWriteBufferPeriodicFlushTimeoutMs() + " ms");
       IArticleFilter handler = new WriteToBigtableArticleFilter(mutator, table, true);
-      WikiXMLParser parser = new WikiXMLParser(
-        new BZip2CompressorInputStream(
-          Channels.newInputStream(reader), true), handler);
+      WikiXMLParser parser =
+          new WikiXMLParser(
+              new BZip2CompressorInputStream(Channels.newInputStream(reader), true), handler);
       parser.parse();
       mutator.flush();
     } catch (IOException e) {
