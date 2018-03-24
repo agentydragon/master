@@ -10,3 +10,27 @@ java_library(
 )
 
 
+
+java_library(
+    name = "google_api_client_jackson2",
+    exports = [
+        "//external:jar/com/google/api_client/google_api_client_jackson2"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
+    name = "google_api_client_java6",
+    exports = [
+        "//external:jar/com/google/api_client/google_api_client_java6"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+

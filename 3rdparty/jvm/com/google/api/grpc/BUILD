@@ -23,10 +23,71 @@ java_library(
 
 
 java_library(
+    name = "grpc_google_cloud_pubsub_v1",
+    exports = [
+        "//external:jar/com/google/api/grpc/grpc_google_cloud_pubsub_v1"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
+    name = "grpc_google_cloud_spanner_admin_database_v1",
+    exports = [
+        "//external:jar/com/google/api/grpc/grpc_google_cloud_spanner_admin_database_v1"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
+    name = "grpc_google_cloud_spanner_admin_instance_v1",
+    exports = [
+        "//external:jar/com/google/api/grpc/grpc_google_cloud_spanner_admin_instance_v1"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
+    name = "grpc_google_cloud_spanner_v1",
+    exports = [
+        "//external:jar/com/google/api/grpc/grpc_google_cloud_spanner_v1"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
     name = "grpc_google_common_protos",
     exports = [
         "//external:jar/com/google/api/grpc/grpc_google_common_protos",
         ":proto_google_common_protos"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
+    name = "grpc_google_longrunning_v1",
+    exports = [
+        "//external:jar/com/google/api/grpc/grpc_google_longrunning_v1",
+        ":proto_google_longrunning_v1"
     ],
     visibility = [
         "//visibility:public"
@@ -62,6 +123,55 @@ java_library(
 
 
 java_library(
+    name = "proto_google_cloud_pubsub_v1",
+    exports = [
+        "//external:jar/com/google/api/grpc/proto_google_cloud_pubsub_v1",
+        ":proto_google_iam_v1"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
+    name = "proto_google_cloud_spanner_admin_database_v1",
+    exports = [
+        "//external:jar/com/google/api/grpc/proto_google_cloud_spanner_admin_database_v1"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
+    name = "proto_google_cloud_spanner_admin_instance_v1",
+    exports = [
+        "//external:jar/com/google/api/grpc/proto_google_cloud_spanner_admin_instance_v1"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
+    name = "proto_google_cloud_spanner_v1",
+    exports = [
+        "//external:jar/com/google/api/grpc/proto_google_cloud_spanner_v1"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
     name = "proto_google_common_protos",
     exports = [
         "//external:jar/com/google/api/grpc/proto_google_common_protos"
@@ -77,6 +187,18 @@ java_library(
     name = "proto_google_iam_v1",
     exports = [
         "//external:jar/com/google/api/grpc/proto_google_iam_v1"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
+    name = "proto_google_longrunning_v1",
+    exports = [
+        "//external:jar/com/google/api/grpc/proto_google_longrunning_v1"
     ],
     visibility = [
         "//visibility:public"

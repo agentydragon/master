@@ -15,6 +15,7 @@ java_library(
 java_library(
     name = "datastore_v1_protos",
     exports = [
+        "//3rdparty/jvm/com/google/api/grpc:grpc_google_common_protos",
         "//external:jar/com/google/cloud/datastore/datastore_v1_protos"
     ],
     visibility = [

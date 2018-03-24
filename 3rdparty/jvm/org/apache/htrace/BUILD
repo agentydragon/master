@@ -1,7 +1,7 @@
 java_library(
-    name = "htrace_core4",
+    name = "htrace_core",
     exports = [
-        "//external:jar/org/apache/htrace/htrace_core4"
+        "//external:jar/org/apache/htrace/htrace_core"
     ],
     visibility = [
         "//visibility:public"

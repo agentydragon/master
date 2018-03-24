@@ -9,3 +9,15 @@ java_library(
 )
 
 
+
+java_library(
+    name = "google_oauth_client_java6",
+    exports = [
+        "//external:jar/com/google/oauth_client/google_oauth_client_java6"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+

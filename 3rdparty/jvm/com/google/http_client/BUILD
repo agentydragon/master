@@ -48,3 +48,15 @@ java_library(
 )
 
 
+
+java_library(
+    name = "google_http_client_protobuf",
+    exports = [
+        "//external:jar/com/google/http_client/google_http_client_protobuf"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+

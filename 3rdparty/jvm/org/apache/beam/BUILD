@@ -18,7 +18,6 @@ java_library(
         "//3rdparty/jvm/org/apache/avro:avro",
         "//3rdparty/jvm/org/slf4j:slf4j_api",
         "//external:jar/org/apache/beam/beam_runners_google_cloud_dataflow_java",
-        ":beam_sdks_common_runner_api",
         ":beam_sdks_java_core",
         ":beam_sdks_java_extensions_google_cloud_platform_core",
         ":beam_sdks_java_io_google_cloud_platform"
@@ -31,28 +30,9 @@ java_library(
 
 
 java_library(
-    name = "beam_sdks_common_runner_api",
-    exports = [
-        "//3rdparty/jvm/com/google/protobuf:protobuf_java",
-        "//external:jar/org/apache/beam/beam_sdks_common_runner_api"
-    ],
-    visibility = [
-        "//visibility:public"
-    ]
-)
-
-
-
-java_library(
     name = "beam_sdks_java_core",
     exports = [
-        "//3rdparty/jvm/com/fasterxml/jackson/core:jackson_annotations",
-        "//3rdparty/jvm/com/fasterxml/jackson/core:jackson_core",
-        "//3rdparty/jvm/com/fasterxml/jackson/core:jackson_databind",
-        "//3rdparty/jvm/com/google/code/findbugs:jsr305",
-        "//3rdparty/jvm/joda_time:joda_time",
-        "//3rdparty/jvm/org/apache/avro:avro",
-        "//3rdparty/jvm/org/slf4j:slf4j_api",
+        "//3rdparty/jvm/com/github/stephenc/findbugs:findbugs_annotations",
         "//3rdparty/jvm/org/xerial/snappy:snappy_java",
         "//external:jar/org/apache/beam/beam_sdks_java_core"
     ],
@@ -92,7 +72,8 @@ java_library(
 java_library(
     name = "beam_sdks_java_io_google_cloud_platform",
     exports = [
-        "//3rdparty/jvm/com/google/api/grpc:grpc_google_pubsub_v1",
+        "//3rdparty/jvm/com/google/api/grpc:grpc_google_cloud_pubsub_v1",
+        "//3rdparty/jvm/com/google/api/grpc:proto_google_cloud_pubsub_v1",
         "//3rdparty/jvm/com/google/api/grpc:proto_google_cloud_spanner_admin_database_v1",
         "//3rdparty/jvm/com/google/api/grpc:proto_google_common_protos",
         "//3rdparty/jvm/com/google/api:gax_grpc",
@@ -106,6 +87,7 @@ java_library(
         "//3rdparty/jvm/com/google/cloud:google_cloud_core_grpc",
         "//3rdparty/jvm/com/google/cloud:google_cloud_spanner",
         "//3rdparty/jvm/com/google/guava:guava",
+        "//3rdparty/jvm/com/google/protobuf:protobuf_java",
         "//3rdparty/jvm/io/grpc:grpc_all",
         "//3rdparty/jvm/io/grpc:grpc_auth",
         "//3rdparty/jvm/io/grpc:grpc_core",

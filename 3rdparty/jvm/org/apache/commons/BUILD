@@ -21,3 +21,27 @@ java_library(
 )
 
 
+
+java_library(
+    name = "commons_math",
+    exports = [
+        "//external:jar/org/apache/commons/commons_math"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
+    name = "commons_math3",
+    exports = [
+        "//external:jar/org/apache/commons/commons_math3"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+

@@ -19,7 +19,6 @@ java_library(
         "//3rdparty/jvm/io/netty:netty_tcnative_boringssl_static",
         "//3rdparty/jvm/io/opencensus:opencensus_api",
         "//3rdparty/jvm/io/opencensus:opencensus_contrib_grpc_util",
-        "//3rdparty/jvm/org/threeten:threetenbp",
         "//external:jar/com/google/cloud/bigtable/bigtable_client_core"
     ],
     visibility = [
@@ -47,11 +46,52 @@ java_library(
 
 
 java_library(
+    name = "bigtable_hbase_1_x_shaded",
+    exports = [
+        "//3rdparty/jvm/commons_logging:commons_logging",
+        "//3rdparty/jvm/io/dropwizard/metrics:metrics_core",
+        "//external:jar/com/google/cloud/bigtable/bigtable_hbase_1_x_shaded"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
     name = "bigtable_hbase_2_x",
     exports = [
         "//3rdparty/jvm/org/apache/hbase:hbase_shaded_client",
         "//external:jar/com/google/cloud/bigtable/bigtable_hbase_2_x",
         ":bigtable_hbase"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
+    name = "bigtable_hbase_beam",
+    exports = [
+        "//3rdparty/jvm/org/apache/beam:beam_sdks_java_core",
+        "//3rdparty/jvm/org/apache/beam:beam_sdks_java_io_hbase",
+        "//external:jar/com/google/cloud/bigtable/bigtable_hbase_beam",
+        ":bigtable_hbase_1_x_shaded"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
+    name = "bigtable_protos",
+    exports = [
+        "//external:jar/com/google/cloud/bigtable/bigtable_protos"
     ],
     visibility = [
         "//visibility:public"

@@ -23,3 +23,20 @@ java_library(
 )
 
 
+
+java_library(
+    name = "gax_grpc",
+    exports = [
+        "//3rdparty/jvm/com/google/auto/value:auto_value",
+        "//3rdparty/jvm/io/grpc:grpc_protobuf",
+        "//3rdparty/jvm/org/threeten:threetenbp",
+        "//external:jar/com/google/api/gax_grpc",
+        ":api_common",
+        ":gax"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
