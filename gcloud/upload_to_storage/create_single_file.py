@@ -1,5 +1,12 @@
 from __future__ import absolute_import
 
+# Running help("modules") makes the google.cloud module available. SOMEHOW.
+
+#help("modules")
+import google
+print dir(google)
+print dir(google.cloud)
+
 from google.cloud import storage
 import six
 import urllib2

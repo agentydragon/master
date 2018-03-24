@@ -1,9 +1,5 @@
 load("@io_bazel_rules_docker//python:image.bzl", "py_image")
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
-load(
-  "@io_bazel_rules_python//python:python.bzl",
-  "py_binary", "py_library", "py_test",
-)
 load("@io_bazel_rules_docker//container:push.bzl", "container_push")
 
 load("@my_deps//:requirements.bzl", "requirement")
