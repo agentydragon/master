@@ -2,14 +2,8 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: upload-to-storage
-  labels:
-    app: upload-to-storage
 spec:
   template:
-    metadata:
-      labels:
-        app: upload-to-storage
-        tier: worker
     spec:
       containers:
       - name: upload-to-storage

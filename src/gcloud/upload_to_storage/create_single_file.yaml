@@ -2,14 +2,8 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: create-single-file
-  labels:
-    app: create-single-file
 spec:
   template:
-    metadata:
-      labels:
-        app: create-single-file
-        tier: worker
     spec:
       containers:
       - name: create-single-file

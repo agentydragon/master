@@ -2,14 +2,8 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: split-to-articles
-  labels:
-    app: split-to-articles
 spec:
   template:
-    metadata:
-      labels:
-        app: split-to-articles
-        tier: worker
     spec:
       containers:
       - name: split-to-articles
