@@ -6,32 +6,24 @@ import com.google.cloud.ReadChannel;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Bucket;
-import com.google.cloud.storage.BucketInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import info.bliki.wiki.dump.IArticleFilter;
 import info.bliki.wiki.dump.Siteinfo;
 import info.bliki.wiki.dump.WikiArticle;
 import info.bliki.wiki.dump.WikiXMLParser;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.io.Reader;
-import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
-import java.nio.channels.WritableByteChannel;
+import java.time.Duration;
+import java.time.Instant;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.BufferedMutator;
 import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.ResultScanner;
-import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 
@@ -45,30 +37,74 @@ public class SplitToArticles {
   private static final String INSTANCE_ID = "wiki-articles";
 
   static class WriteToBigtableArticleFilter implements IArticleFilter {
+    private BufferedMutator mutator;
     private Table table;
+    private boolean batchMode;
+
+    private Instant processingStart;
     private int articlesProcessed = 0;
+    private Instant lastLog;
 
     private static final byte[] WIKITEXT_COLUMN = Bytes.toBytes("wikitext");
     private static final byte[] TITLE_COLUMN = Bytes.toBytes("title");
 
-    public WriteToBigtableArticleFilter(Table table) {
+    public WriteToBigtableArticleFilter(BufferedMutator mutator,
+		                        Table table, boolean batchMode) {
+      this.mutator = mutator;
       this.table = table;
+      this.batchMode = batchMode;
+      processingStart = Instant.now();
+      lastLog = Instant.MIN;
+    }
+
+    // Log every minute.
+    private static final Duration LOG_EVERY_DURATION = Duration.ofMinutes(1);
+
+    private double getSpeedInArticlesPerSec() {
+      Duration timeElapsed = Duration.between(processingStart, Instant.now());
+      double secondsElapsed = timeElapsed.toMillis() / 10000;
+      return ((double) articlesProcessed) / secondsElapsed;
+    }
+
+    private void logStats() {
+      lastLog = Instant.now();
+      double articlesPerSec = getSpeedInArticlesPerSec();
+      System.out.printf("Speed: %.2f articles/s (%s mode)\n", articlesPerSec,
+		        batchMode ? "batch" : "serial");
+    }
+
+    private Put createArticlePut(WikiArticle page) {
+      // Write the article into the Bigtable. Its rowkey is its title.
+      Put put = new Put(Bytes.toBytes(page.getTitle()));
+      put.addColumn(COLUMN_FAMILY_NAME, WIKITEXT_COLUMN,
+                    Bytes.toBytes(page.getText()));
+      put.addColumn(COLUMN_FAMILY_NAME, TITLE_COLUMN,
+                    Bytes.toBytes(page.getTitle()));
+      return put;
+    }
+
+    private boolean isTimeUpToLogStats() {
+      Instant now = Instant.now();
+      return Duration.between(lastLog, now).compareTo(LOG_EVERY_DURATION) >= 0;
     }
 
     public void process(WikiArticle page, Siteinfo info) {
       articlesProcessed++;
-      System.out.println("Writing article " + articlesProcessed + ": " + page.getTitle());
-      // Write the article into the Bigtable. Its rowkey is its title.
-      Put put = new Put(Bytes.toBytes(page.getTitle()));
-      put.addColumn(COLUMN_FAMILY_NAME, WIKITEXT_COLUMN,
-		    Bytes.toBytes(page.getText()));
-      put.addColumn(COLUMN_FAMILY_NAME, TITLE_COLUMN,
-                    Bytes.toBytes(page.getTitle()));
+      // Log every 1000 ms.
+      if (isTimeUpToLogStats()) {
+        logStats();
+        System.out.printf("Writing article #%d: %s\n", articlesProcessed, page.getTitle());
+      }
+      Put put = createArticlePut(page);
       try {
-        table.put(put);
+	if (batchMode) {
+          mutator.mutate(put);
+	} else {
+	  table.put(put);
+	}
       } catch (IOException e) {
-	print("io exception while writing " + page.getTitle());
-	System.exit(1);
+        print("io exception while writing " + page.getTitle());
+        System.exit(1);
       }
     }
   }
@@ -93,26 +129,20 @@ public class SplitToArticles {
     Blob blob = store.get(blobId);
     if (blob == null) {
       print("Did not find blob.");
-      return;
+      System.exit(1);
     }
 
     Table table = connection.getTable(TableName.valueOf(TABLE_NAME));
-    //PrintStream writeTo = System.out;
     try (ReadChannel reader = blob.reader()) {
-      IArticleFilter handler = new WriteToBigtableArticleFilter(table);
+      BufferedMutator mutator = connection.getBufferedMutator(TableName.valueOf(TABLE_NAME));
+      print("BufferedMutator write buffer size: " + mutator.getWriteBufferSize() + " B");
+      // print("BufferedMutator periodic flush timeout: " + mutator.getWriteBufferPeriodicFlushTimeoutMs() + " ms");
+      IArticleFilter handler = new WriteToBigtableArticleFilter(mutator, table, true);
       WikiXMLParser parser = new WikiXMLParser(
         new BZip2CompressorInputStream(
           Channels.newInputStream(reader), true), handler);
       parser.parse();
-
-      //WritableByteChannel channel = Channels.newChannel(writeTo);
-      //ByteBuffer bytes = ByteBuffer.allocate(1024);
-      //while (reader.read(bytes) > 0) {
-      //  bytes.flip();
-      //  channel.write(bytes);
-      //  bytes.clear();
-      //  break;  // print just first 1024 bytes to show we can do that.
-      //}
+      mutator.flush();
     } catch (IOException e) {
       print("io exception");
       System.exit(1);
