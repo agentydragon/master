@@ -37,10 +37,10 @@ load("@io_bazel_rules_python//python:pip.bzl", "pip_import")
 
 pip_import(
     name = "my_deps",
-    requirements = "//gcloud/upload_to_storage:requirements.txt"
+    requirements = "//src:requirements.txt"
 )
 
-load("@my_deps//:requirements.bzl", "pip_install")
+load("@my_deps//src:requirements.bzl", "pip_install")
 pip_install()
 
 # container_pull(
