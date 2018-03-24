@@ -167,6 +167,12 @@ public class SplitToArticles {
   }
 
   public static void main(String[] args) {
+    // We expect to operate on a huge XML document - disable checks against too
+    // large documents.
+    // See: https://github.com/dbpedia/extraction-framework/issues/487
+    System.setProperty("entityExpansionLimit", "0");
+    System.setProperty("totalEntitySizeLimit", "0");
+    System.setProperty("jdk.xml.totalEntitySizeLimit", "0");
     try (Connection connection = BigtableConfiguration.connect(PROJECT_ID, INSTANCE_ID)) {
       // NOTE: Uncomment to create the bigtable.
       // createTable(connection);
