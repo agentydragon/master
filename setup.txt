@@ -1,0 +1,6 @@
+- create a project
+- enable whatever? APIs
+- create bucket for dump
+- create bigtable for wiki-articles
+- download wiki dump
+- run article split
