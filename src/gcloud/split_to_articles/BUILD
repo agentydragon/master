@@ -8,3 +8,15 @@ java_binary(
         "//3rdparty/jvm/com/google/cloud/bigtable:bigtable_hbase_2_x",
     ],
 )
+
+java_binary(
+    name = "split_to_articles",
+    srcs = [
+        "SplitToArticles.java",
+    ],
+    main_class = "SplitToArticles",
+    deps = [
+        "//3rdparty/jvm/com/google/cloud/bigtable:bigtable_hbase_2_x",
+	"//3rdparty/jvm/com/google/cloud:google_cloud_storage",
+    ],
+)

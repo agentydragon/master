@@ -9,3 +9,17 @@ java_library(
 )
 
 
+
+java_library(
+    name = "gax",
+    exports = [
+        "//3rdparty/jvm/com/google/auto/value:auto_value",
+        "//3rdparty/jvm/org/threeten:threetenbp",
+        "//external:jar/com/google/api/gax"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
