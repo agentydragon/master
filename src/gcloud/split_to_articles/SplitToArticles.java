@@ -115,6 +115,7 @@ public class SplitToArticles {
 	  table.put(put);
 	}
       } catch (IOException e) {
+        e.printStackTrace();
         print("io exception while writing " + page.getTitle());
         System.exit(1);
       }
@@ -156,9 +157,11 @@ public class SplitToArticles {
       parser.parse();
       mutator.flush();
     } catch (IOException e) {
+      e.printStackTrace();
       print("io exception");
       System.exit(1);
     } catch (Exception e) {
+      e.printStackTrace();
       print("exception");
       System.exit(1);
     }
@@ -170,6 +173,7 @@ public class SplitToArticles {
       // createTable(connection);
       addArticles(connection);
     } catch (IOException e) {
+      e.printStackTrace();
       print("io exception");
       System.exit(1);
     }
