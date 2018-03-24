@@ -80,6 +80,7 @@ public class SplitToArticles {
     private int articlesProcessed = 0;
 
     private static final byte[] WIKITEXT_COLUMN = Bytes.toBytes("wikitext");
+    private static final byte[] TITLE_COLUMN = Bytes.toBytes("title");
 
     public WriteToBigtableArticleFilter(Table table) {
       this.table = table;
@@ -92,6 +93,8 @@ public class SplitToArticles {
       Put put = new Put(Bytes.toBytes(page.getTitle()));
       put.addColumn(COLUMN_FAMILY_NAME, WIKITEXT_COLUMN,
 		    Bytes.toBytes(page.getText()));
+      put.addColumn(COLUMN_FAMILY_NAME, TITLE_COLUMN,
+                    Bytes.toBytes(page.getTitle()));
       try {
         table.put(put);
       } catch (IOException e) {
@@ -153,8 +156,8 @@ public class SplitToArticles {
   public static void main(String[] args) {
     try (Connection connection = BigtableConfiguration.connect(PROJECT_ID, INSTANCE_ID)) {
       // NOTE: Uncomment to create the bigtable.
-      createTable(connection);
-      // addArticles(connection);
+      // createTable(connection);
+      addArticles(connection);
     } catch (IOException e) {
       print("io exception");
       System.exit(1);
