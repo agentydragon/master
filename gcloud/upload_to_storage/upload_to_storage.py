@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 
 from google.cloud import storage
-import six
 import urllib2
 
 url_to_download = 'https://dumps.wikimedia.org/enwiki/20180301/enwiki-20180301-pages-articles.xml.bz2'

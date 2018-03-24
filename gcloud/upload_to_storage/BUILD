@@ -13,10 +13,6 @@ py_image(
     main = "upload_to_storage.py",
     deps = [
         requirement("google-cloud-storage"),
-        requirement("google-cloud-logging"),
-        requirement("google-cloud-error_reporting"),
-        requirement("oauth2client"),
-        requirement("six"),
     ],
 )
 
@@ -39,11 +35,6 @@ py_binary(
     main = "create_single_file.py",
     deps = [
         requirement("google-cloud-storage"),
-        requirement("google-cloud-logging"),
-        requirement("google-cloud-error_reporting"),
-        requirement("oauth2client"),
-        requirement("six"),
-	requirement("requests")
     ],
 )
 
@@ -53,11 +44,6 @@ py_image(
     main = "create_single_file.py",
     deps = [
         requirement("google-cloud-storage"),
-#        requirement("google-cloud-logging"),
-#        requirement("google-cloud-error_reporting"),
-#        requirement("oauth2client"),
-        requirement("six"),
-#	requirement("requests")
     ],
 )
 
