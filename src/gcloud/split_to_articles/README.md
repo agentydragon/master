@@ -6,3 +6,15 @@ Demo:
 ```
 bazel run --jvmopt='-Dbigtable.projectID=extended-atrium-198523 -Dbigtable.instanceID=wiki-articles' :demo
 ```
+
+To push:
+
+```
+bazel run :push_split_to_articles
+```
+
+To run:
+
+```
+kubectl create -f split_to_articles.yaml
+```

@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: split-to-articles
+  labels:
+    app: split-to-articles
+spec:
+  template:
+    metadata:
+      labels:
+        app: split-to-articles
+        tier: worker
+    spec:
+      containers:
+      - name: split-to-articles
+        image: gcr.io/extended-atrium-198523/split_to_articles
+        imagePullPolicy: Always
+      restartPolicy: OnFailure
