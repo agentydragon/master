@@ -1,3 +1,5 @@
+Component to fetch a Wikipedia image and upload it to a Cloud Storage bucket.
+
 What used to work locally
 ====
 
