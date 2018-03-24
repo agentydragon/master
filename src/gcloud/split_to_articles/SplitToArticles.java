@@ -59,7 +59,7 @@ public class SplitToArticles {
 
     private double getSpeedInArticlesPerSec() {
       Duration timeElapsed = Duration.between(processingStart, Instant.now());
-      double secondsElapsed = timeElapsed.toMillis() / 10000;
+      double secondsElapsed = timeElapsed.toMillis() / 1000;
       return ((double) articlesProcessed) / secondsElapsed;
     }
 
