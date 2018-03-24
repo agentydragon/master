@@ -1,18 +1,18 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: upload-to-storage
+  name: create-single-file
   labels:
-    app: upload-to-storage
+    app: create-single-file
 spec:
   template:
     metadata:
       labels:
-        app: upload-to-storage
+        app: create-single-file
         tier: worker
     spec:
       containers:
-      - name: upload-to-storage
-        image: gcr.io/extended-atrium-198523/upload_to_storage
+      - name: create-single-file
+        image: gcr.io/extended-atrium-198523/create_single_file
         imagePullPolicy: Always
       restartPolicy: OnFailure
