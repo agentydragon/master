@@ -1,7 +1,6 @@
 load("@io_bazel_rules_docker//python:image.bzl", "py_image")
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 load("@io_bazel_rules_docker//container:push.bzl", "container_push")
-
 load("@pip_dependencies//:requirements.bzl", "requirement")
 
 py_image(
@@ -20,8 +19,8 @@ docker_build(
 
 container_push(
     name = "push_upload_to_storage",
-    image = ":upload_to_storage",
     format = "Docker",
+    image = ":upload_to_storage",
     registry = "gcr.io",
     repository = "extended-atrium-198523/upload_to_storage",
 )
@@ -54,8 +53,8 @@ docker_build(
 
 container_push(
     name = "push_create_single_file",
-    image = ":create_single_file",
     format = "Docker",
+    image = ":create_single_file",
     registry = "gcr.io",
     repository = "extended-atrium-198523/create_single_file",
 )
