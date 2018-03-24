@@ -5,5 +5,5 @@ ENV PATH /env/bin:$PATH
 ADD requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
 ADD . /app
-CMD python main.py
+CMD python upload_to_storage.py
 

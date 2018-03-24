@@ -1,3 +1,57 @@
+git_repository(
+    name = "io_bazel_rules_docker",
+    remote = "https://github.com/bazelbuild/rules_docker.git",
+    tag = "v0.4.0",
+)
+
+load(
+    "@io_bazel_rules_docker//container:container.bzl",
+    "container_pull",
+     container_repositories = "repositories",
+)
+
+# This is NOT needed when going through the language lang_image
+# "repositories" function(s).
+container_repositories()
+
+load(
+    "@io_bazel_rules_docker//python:image.bzl",
+     _py_image_repos = "repositories",
+)
+
+_py_image_repos()
+
+git_repository(
+    name = "io_bazel_rules_python",
+    remote = "https://github.com/bazelbuild/rules_python.git",
+    # NOT VALID!  Replace this with a Git commit SHA.
+    commit = "115e3a0dab4291184fdcb0d4e564a0328364571a",
+)
+
+# Only needed for PIP support:
+load("@io_bazel_rules_python//python:pip.bzl", "pip_repositories")
+
+pip_repositories()
+
+load("@io_bazel_rules_python//python:pip.bzl", "pip_import")
+
+pip_import(
+    name = "my_deps",
+    requirements = "//gcloud/upload_to_storage:requirements.txt"
+)
+
+load("@my_deps//:requirements.bzl", "pip_install")
+pip_install()
+
+# container_pull(
+#   name = "java_base",
+#   registry = "gcr.io",
+#   repository = "distroless/java",
+#   # 'tag' is also supported, but digest is encouraged for reproducibility.
+#   #digest = "sha256:deadbeef",
+#   tag = "v0.4.0",
+# )
+
 # TODO: want commons_cli_commons_cli
 
 # Stanford CoreNLP
