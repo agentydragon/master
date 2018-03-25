@@ -41,6 +41,18 @@ load("@pip_dependencies//:requirements.bzl", "pip_install")
 
 pip_install()
 
+# Maven dependencies.
+# =============================================================================
+#
+# 3rdparty/workspace.bzl generated using https://github.com/johnynek/bazel-deps:
+# bazel run //:parse -- generate \
+#     -r ~/repos/master -s 3rdparty/workspace.bzl -d dependencies.yaml
+# TODO: bazelbuild/migration-tooling also has transitive_maven_jars rule which
+# might alleviate the need for generating WORKSPACE.
+load("//3rdparty:workspace.bzl", "maven_dependencies")
+
+maven_dependencies()
+
 # TODO: want commons_cli_commons_cli
 
 # # Stanford CoreNLP
@@ -78,7 +90,7 @@ pip_install()
 # filegroup(
 #     name = "everything",
 #     srcs = glob(
-# 	include = ["**/*"]
+#         include = ["**/*"]
 #     ),
 #     visibility = ["//visibility:public"],
 # )
@@ -93,7 +105,7 @@ pip_install()
 # filegroup(
 #     name = "everything",
 #     srcs = glob(
-# 	include = ["**/*"]
+#         include = ["**/*"]
 #     ),
 #     visibility = ["//visibility:public"],
 # )
@@ -126,14 +138,6 @@ pip_install()
 #     "http://uk.maven.org/maven2/",
 #   ]
 # )
-
-# 3rdparty/workspace.bzl generated using https://github.com/johnynek/bazel-deps:
-# bazel run //:parse -- generate -r ~/repos/master -s 3rdparty/workspace.bzl -d dependencies.yaml
-# TODO: bazelbuild/migration-tooling also has transitive_maven_jars rule which
-# might alleviate the need for generating WORKSPACE.
-load("//3rdparty:workspace.bzl", "maven_dependencies")
-
-maven_dependencies()
 
 # TODO: Leftover artifacts from earlier version:
 #    --artifact=org.apache.hadoop:hadoop-common:2.6.0 \
