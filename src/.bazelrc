@@ -1,2 +1,0 @@
-build --ignore_unsupported_sandboxing
-run --ignore_unsupported_sandboxing
