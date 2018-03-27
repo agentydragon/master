@@ -63,8 +63,8 @@ public class CoreNLPOnArticles {
     public void setup() {
       Properties props = new Properties();
       // TODO: run parse, dcoref when we're ready.
-      // props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
-      props.setProperty("annotators", "tokenize");
+      props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
+      // props.setProperty("annotators", "tokenize");
       client = new StanfordCoreNLPClient(props, "http://corenlp-service", 9000, THREADS_PER_WORKER);
     }
 
