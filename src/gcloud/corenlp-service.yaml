@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: corenlp-service
+spec:
+  selector:
+    app: corenlp
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 9000
