@@ -19,16 +19,8 @@ import org.apache.hadoop.hbase.client.Mutation;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.util.Bytes;
 
 public class WikitextToPlaintext {
-  private static final byte[] COLUMN_FAMILY_NAME = Bytes.toBytes("wiki");
-  private static final byte[] PLAINTEXT_COLUMN = Bytes.toBytes("plaintext");
-  private static final String PROJECT_ID = "extended-atrium-198523";
-  private static final String INSTANCE_ID = "wiki-articles";
-  private static final String TABLE_NAME = "wiki-articles";
-  private static final byte[] WIKITEXT_COLUMN = Bytes.toBytes("wikitext");
-
   static final DoFn<Result, KV<byte[], String>> ROW_RESULT_TO_WIKITEXT =
       new DoFn<Result, KV<byte[], String>>() {
         private static final long serialVersionUID = 1L;
@@ -37,7 +29,10 @@ public class WikitextToPlaintext {
         public void processElement(DoFn<Result, KV<byte[], String>>.ProcessContext c)
             throws Exception {
           byte[] wikitextBytes =
-              c.element().getColumnLatestCell(COLUMN_FAMILY_NAME, WIKITEXT_COLUMN).getValueArray();
+              c.element()
+                  .getColumnLatestCell(
+                      WikiArticlesBigtable.COLUMN_FAMILY_NAME, WikiArticlesBigtable.WIKITEXT_COLUMN)
+                  .getValueArray();
           String wikitext = new String(wikitextBytes, StandardCharsets.UTF_8);
           c.output(KV.of(c.element().getRow(), wikitext));
         }
@@ -100,30 +95,23 @@ public class WikitextToPlaintext {
           c.output(
               new Put(c.element().getKey())
                   .addColumn(
-                      COLUMN_FAMILY_NAME, PLAINTEXT_COLUMN, c.element().getValue().getBytes()));
+                      WikiArticlesBigtable.COLUMN_FAMILY_NAME,
+                      WikiArticlesBigtable.PLAINTEXT_COLUMN,
+                      c.element().getValue().getBytes()));
         }
       };
 
   public static void main(String[] args) {
     CloudBigtableTableConfiguration config_write =
-        new CloudBigtableTableConfiguration.Builder()
-            .withProjectId(PROJECT_ID)
-            .withInstanceId(INSTANCE_ID)
-            .withTableId(TABLE_NAME)
-            .build();
+        WikiArticlesBigtable.CreateConfigurationBuilder().build();
 
     Scan scan = new Scan();
-    scan.addColumn(COLUMN_FAMILY_NAME, WIKITEXT_COLUMN);
+    scan.addColumn(WikiArticlesBigtable.COLUMN_FAMILY_NAME, WikiArticlesBigtable.WIKITEXT_COLUMN);
     // TODO: will this return just the last version...? if not, how to only
     // return the last version?
     // scan.setFilter(new FirstKeyOnlyFilter());
     CloudBigtableScanConfiguration config =
-        new CloudBigtableScanConfiguration.Builder()
-            .withProjectId(PROJECT_ID)
-            .withInstanceId(INSTANCE_ID)
-            .withTableId(TABLE_NAME)
-            .withScan(scan)
-            .build();
+        WikiArticlesBigtable.CreateScanConfigurationBuilder().withScan(scan).build();
 
     PipelineOptions options =
         PipelineOptionsFactory.fromArgs(args).withValidation().as(PipelineOptions.class);

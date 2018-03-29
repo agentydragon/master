@@ -51,12 +51,6 @@
         <artifactId>slf4j-simple</artifactId>
         <version>${slf4j.version}</version>
     </dependency>
-
-    <dependency>
-        <groupId>info.bliki.wiki</groupId>
-        <artifactId>bliki-core</artifactId>
-        <version>3.1.0</version>
-    </dependency>
   </dependencies>
 
   <profiles>  <!-- These are only required for runlocal -->

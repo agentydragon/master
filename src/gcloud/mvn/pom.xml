@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- To run: mvn package exec:exec -->
 <project>
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.agentydragon.master</groupId>
-  <artifactId>corenlp-on-articles</artifactId>
+  <artifactId>java-binaries</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
@@ -57,6 +56,12 @@
         <artifactId>stanford-corenlp</artifactId>
         <version>3.8.0</version>
     </dependency>
+
+    <dependency>
+        <groupId>info.bliki.wiki</groupId>
+        <artifactId>bliki-core</artifactId>
+        <version>3.1.0</version>
+    </dependency>
   </dependencies>
 
   <profiles>  <!-- These are only required for runlocal -->
@@ -67,26 +72,53 @@
           <name>CoreNLPOnArticles</name>
         </property>
       </activation>
-     <build>
-     <plugins>
-       <plugin>
-         <groupId>org.codehaus.mojo</groupId>
-         <artifactId>exec-maven-plugin</artifactId>
-         <version>1.4.0</version>
-         <configuration>
-           <executable>java</executable>
-           <arguments>
-             <argument>-classpath</argument>
-             <classpath/>
-             <argument>com.agentydragon.master.CoreNLPOnArticles</argument>
-             <argument>--runner=DataflowRunner</argument>
-             <argument>--region=europe-west1</argument>
-           </arguments>
-         </configuration>
-       </plugin>
-     </plugins>
-   </build>
- </profile>
- </profiles>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.4.0</version>
+            <configuration>
+              <executable>java</executable>
+              <arguments>
+                <argument>-classpath</argument>
+                <classpath/>
+                <argument>com.agentydragon.master.CoreNLPOnArticles</argument>
+                <argument>--runner=DataflowRunner</argument>
+                <argument>--region=europe-west1</argument>
+              </arguments>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>WikitextToPlaintext</id>
+      <activation>
+        <property>
+          <name>WikitextToPlaintext</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.4.0</version>
+            <configuration>
+              <executable>java</executable>
+              <arguments>
+                <argument>-classpath</argument>
+                <classpath/>
+                <argument>com.agentydragon.master.WikitextToPlaintext</argument>
+                <argument>--runner=DataflowRunner</argument>
+                <argument>--region=europe-west1</argument>
+              </arguments>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
  </project>
