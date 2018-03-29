@@ -1,0 +1,21 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: dbpedia-spotlight-deployment
+spec:
+  selector:
+    matchLabels:
+      app: dbpedia-spotlight
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: dbpedia-spotlight
+    spec:
+      containers:
+      - name: corenlp
+        # TODO(prvak): Use own container?
+        image: dbpedia/spotlight-english
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80

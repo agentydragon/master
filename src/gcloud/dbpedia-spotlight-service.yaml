@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: dbpedia-spotlight-service
+spec:
+  selector:
+    app: dbpedia-spotlight
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
