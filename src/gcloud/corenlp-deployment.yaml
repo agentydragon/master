@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: corenlp
-  replicas: 4
+  replicas: 2
   template:
     metadata:
       labels:
@@ -14,7 +14,11 @@ spec:
     spec:
       containers:
       - name: corenlp
-        image: nlpbox/corenlp
+        image: gcr.io/extended-atrium-198523/corenlp
         imagePullPolicy: Always
         ports:
         - containerPort: 9000
+        resources:
+          requests:
+            cpu: "1"
+            memory: 6Gi

@@ -21,6 +21,14 @@ load(
 
 _java_image_repos()
 
+load(
+    "@io_bazel_rules_docker//container:container.bzl",
+    "container_pull",
+    container_repositories = "repositories",
+)
+
+container_repositories()
+
 # Import pip dependencies.
 # =============================================================================
 
@@ -39,6 +47,32 @@ pip_import(
 
 load("@pip_dependencies//:requirements.bzl", "pip_install")
 
+# CoreNLP service and models
+# =============================================================================
+# Used to build CoreNLP service container.
+
+# Requires Java 8.
+# So I will need a Docker image for Java.
+# Unpack this file.
+# Download the models, too.
+# Unpack them in the Docker container.
+# dcoref / lemma apparently requires some extra model files.
+
+new_http_archive(
+    name = "stanford_corenlp_full",
+    build_file = "stanford_corenlp_full.bzl",
+    sha256 = "5c50ac680c678d07f86ed0494c68307b513829b563e7641b0d95894d7de1701f",
+    strip_prefix = "stanford-corenlp-full-2018-02-27",
+    url = "http://nlp.stanford.edu/software/stanford-corenlp-full-2018-02-27.zip",
+)
+
+# Model for the shift-reduce parser.
+http_file(
+    name = "stanford_corenlp_srparser_model",
+    url = "https://nlp.stanford.edu/software/stanford-srparser-2014-10-23-models.jar",
+    # TODO: Set sha256
+)
+
 pip_install()
 
 # Maven dependencies.
@@ -53,33 +87,31 @@ load("//3rdparty:workspace.bzl", "maven_dependencies")
 
 maven_dependencies()
 
-# TODO: want commons_cli_commons_cli
-
-# # Stanford CoreNLP
+# Stanford CoreNLP
 # http_jar(
 #     name = "corenlp_models",
+#     sha256 = "8ad16bb419044a8c3efc2d14b9072c56b300e6f462183c62ff1f6470c11389c0",
 #     url = "http://nlp.stanford.edu/software/stanford-english-corenlp-2016-01-10-models.jar",
-#     sha256 = "8ad16bb419044a8c3efc2d14b9072c56b300e6f462183c62ff1f6470c11389c0"
 # )
 #
 # http_jar(
 #     name = "corenlp_srparser_model",
+#     sha256 = "0335b1a443a41952d18a472ac65e49b4482424ffec12ddf41703c696e72c793d",
 #     url = "http://nlp.stanford.edu/software/stanford-srparser-2014-10-23-models.jar",
-#     sha256 = "0335b1a443a41952d18a472ac65e49b4482424ffec12ddf41703c696e72c793d"
 # )
 
 # # DBpedia Spotlight
-# http_jar(
-#     name = "dbpedia_spotlight",
-#     url = "http://spotlight.sztaki.hu/downloads/archive/version-0.1/dbpedia-spotlight.jar",
-#     sha256 = "760ce9440be6858f956ad98bcbb4754636c31cdf77d23c6f98019cb02412d32b"
-# )
-#
-# http_file(
-#     name = "dbpedia_spotlight_model_en",
-#     url = "http://spotlight.sztaki.hu/downloads/archive/version-0.1/en.tar.gz",
-#     sha256 = "773beb985b3a28d8618e620ac7ac699a59228e81f0afa56618f13e3984a40e2f",
-# )
+http_jar(
+    name = "dbpedia_spotlight",
+    sha256 = "760ce9440be6858f956ad98bcbb4754636c31cdf77d23c6f98019cb02412d32b",
+    url = "http://spotlight.sztaki.hu/downloads/archive/version-0.1/dbpedia-spotlight.jar",
+)
+
+http_file(
+    name = "dbpedia_spotlight_model_en",
+    sha256 = "773beb985b3a28d8618e620ac7ac699a59228e81f0afa56618f13e3984a40e2f",
+    url = "http://spotlight.sztaki.hu/downloads/archive/version-0.1/en.tar.gz",
+)
 
 # # Apache Jena Fuseki
 # new_http_archive(
@@ -148,5 +180,4 @@ maven_dependencies()
 #    --artifact=org.apache.httpcomponents:httpclient:4.2.6 \
 #    --artifact=org.apache.httpcomponents:httpcore:4.2.5 \
 #    --artifact=com.google.protobuf:protobuf-java:3.0.0 \
-#    --artifact=org.apache.hbase:hbase-client:1.2.2 \
 #    --artifact=org.apache.hbase:hbase-server:1.2.2
