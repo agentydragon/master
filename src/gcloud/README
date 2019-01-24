@@ -1,0 +1,26 @@
+kubectl create -f corenlp-deployment.yaml
+kubectl create -f corenlp-service.yaml
+    --> CoreNLP is now available under name 'corenlp-service'
+
+kubectl expose deployment/kubernetes-bootcamp --note=NodePort --port 8080
+
+To push CoreNLP package to Google Container Registry:
+	blaze run :push_corenlp_package
+
+When this container push is done, I should reload the CoreNLP service instances.
+
+When they are reloaded, I should check that they now can lemmatize things.
+And, ideally, FULLY parse including coreferences.
+
+Actually, DBpedia Spotlight is probably *MORE* important than fully parsing
+through CoreNLP.
+
+Once I have both DBpedia Spotlight running and articles split into sentences,
+I can start training truthiness classifiers.
+
+I should start Fuseki instances for DBpedia.
+
+Fuseki instances will probably need to download the DBpedia dump to local
+disk.
+
+
