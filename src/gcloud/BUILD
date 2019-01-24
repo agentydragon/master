@@ -1,4 +1,4 @@
-load("@io_bazel_rules_docker//container:layer.bzl", "container_layer")
+#load("@io_bazel_rules_docker//container:layer.bzl", "container_layer")
 load("@io_bazel_rules_docker//container:push.bzl", "container_push")
 load("@io_bazel_rules_docker//java:image.bzl", "java_image")
 
@@ -19,12 +19,12 @@ java_import(
     visibility = ["//visibility:public"],
 )
 
-container_layer(
-    name = "corenlp_layer",
-    files = [
-        "@stanford_corenlp_full//:everything",
-    ],
-)
+#container_layer(
+#    name = "corenlp_layer",
+#    files = [
+#        "@stanford_corenlp_full//:everything",
+#    ],
+#)
 
 # TODO: For making srparser work.
 # container_layer(

@@ -1,3 +1,5 @@
+mvn exec:exec -DLocalSplitAndPlaintextConversion -Dexec.args="-Dinput_file=[...].bz2"
+
 To run CoreNLP on articles:
 
 ```
