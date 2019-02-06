@@ -19,8 +19,16 @@ for file in glob.glob(os.path.join(d, '*', '*', '*.plaintext')):
     # default confidence = 0.5
     # default support = 0
     # TODO: could be useful to also use confidence >= 0.2?
+
+    # data = {"text": content, "support": 0, "confidence": 0.2}
+    # r = requests.post('http://' + endpoint + "/rest/annotate",
+    #                   data=urllib.parse.urlencode(data),
+    #                   headers={'content-type':
+    #                            'application/x-www-form-urlencoded',
+    #                            'accept': 'application/json'})
+
     data = {"text": content, "support": 0, "confidence": 0.2}
-    r = requests.post('http://' + endpoint + "/rest/annotate",
+    r = requests.post('http://' + endpoint + "/rest/candidates",
                       data=urllib.parse.urlencode(data),
                       headers={'content-type':
                                'application/x-www-form-urlencoded',

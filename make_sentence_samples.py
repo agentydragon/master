@@ -13,7 +13,6 @@ with open('sentences', 'w') as sf:
         spotlight_file = file + ".spotlightjson"
         if not os.path.isfile(corenlp_file) or not os.path.isfile(spotlight_file):
             continue
-        print(file)
 
         with open(file) as f:
             content = f.read()
@@ -25,8 +24,11 @@ with open('sentences', 'w') as sf:
         except Exception as e:
             print(e)
             continue
-        if "Resources" not in spotlight:
+        #if "Resources" not in spotlight:
+        #    continue
+        if 'annotation' not in spotlight:
             continue
+        print(file)
 
         # if len(content) > 200 or len(content) < 100:
         #     continue
@@ -43,21 +45,45 @@ with open('sentences', 'w') as sf:
 
             sf.write(sentence_content + '\n')
             print(sentence_content)
-            for resource in spotlight["Resources"]:
-                offset = int(
-                    resource["@offset"])
-                if offset >= start and offset < end:
-                    print(resource["@URI"], resource["@surfaceForm"],
-                          resource["@similarityScore"],
-                          resource["@support"],
-                          resource["@percentageOfSecondRank"])
-                    sf.write('%d %d %s %s\n' % (offset - start,
-                                                offset - start +
-                                                len(
-                                                    resource["@surfaceForm"]),
-                                                resource["@URI"],
-                                                resource["@surfaceForm"]
-                                                ))
+
+            for surfaceForm in spotlight["annotation"]["surfaceForm"]:
+                offset = int(surfaceForm["@offset"])
+                if not (offset >= start and offset < end):
+                    continue
+                sform = surfaceForm["@name"]
+                print(sform)
+
+                # Check that the surface for checks out.
+                assert content[offset:offset+len(sform)] == sform
+
+                sf.write('%d %s\n' % (offset, sform))
+
+                resource2 = surfaceForm["resource"]
+                if not isinstance(resource2, list):
+                    resource2 = [resource2]
+                for resource in resource2:
+                    uri = resource["@uri"]
+                    final_score = float(resource["@finalScore"])
+                    print(uri, final_score)
+                    sf.write('%s %f\n' % (uri, final_score))
+                #for resource in surfaceForm["resource"]:
+                # TODO(prvak): No idea whether the 'uri' parameter is useful at all.
+
+                # This is for the "annotate" Spotlight API: for resource in spotlight["Resources"]:
+                # This is for the "annotate" Spotlight API:     offset = int(
+                # This is for the "annotate" Spotlight API:         resource["@offset"])
+                # This is for the "annotate" Spotlight API:     if offset >= start and offset < end:
+                # This is for the "annotate" Spotlight API:         print(resource["@URI"], resource["@surfaceForm"],
+                # This is for the "annotate" Spotlight API:               resource["@similarityScore"],
+                # This is for the "annotate" Spotlight API:               resource["@support"],
+                # This is for the "annotate" Spotlight API:               resource["@percentageOfSecondRank"])
+                # This is for the "annotate" Spotlight API:         sf.write('%d %d %s %s\n' % (offset - start,
+                # This is for the "annotate" Spotlight API:                                     offset - start +
+                # This is for the "annotate" Spotlight API:                                     len(
+                # This is for the "annotate" Spotlight API:                                         resource["@surfaceForm"]),
+                # This is for the "annotate" Spotlight API:                                     resource["@URI"],
+                # This is for the "annotate" Spotlight API:                                     resource["@surfaceForm"]
+                # This is for the "annotate" Spotlight API:                                     ))
             sf.write('\n')
             print()
 
