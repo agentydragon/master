@@ -7,6 +7,67 @@ import glob
 
 d = 'individual-articles'
 
+from SPARQLWrapper import SPARQLWrapper, JSON
+
+
+class NoWikidataEquivalent(Exception):
+    pass
+
+
+def get_wikidata(uri):
+    sparql = SPARQLWrapper("http://dbpedia.org/sparql")
+#    sparql.setQuery("""
+#        PREFIX : <http://dbpedia.org/resource/>
+#        PREFIX owl: <http://www.w3.org/2002/07/owl#>
+#        SELECT ?same WHERE { :%s owl:sameAs ?same }
+#    """ % uri)
+    sparql.setQuery("""
+        PREFIX owl: <http://www.w3.org/2002/07/owl#>
+        SELECT ?same WHERE { <http://dbpedia.org/resource/%s> owl:sameAs ?same }
+    """ % uri)
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+    for row in results['results']['bindings']:
+        value = row['same']['value']
+        if value.startswith('http://www.wikidata.org/entity/'):
+            return value  # Q218005
+    raise NoWikidataEquivalent(f'No WikiData equivalent: {uri}')
+
+
+def relations_between(a, b):
+    sparql = SPARQLWrapper(
+        "https://query.wikidata.org/bigdata/namespace/wdq/sparql")
+    sparql.setQuery("""
+        PREFIX owl: <http://www.w3.org/2002/07/owl#>
+        SELECT ?pred WHERE { <%s> ?pred <%s> }
+    """ % (a, b))
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+    preds = []
+    for row in results['results']['bindings']:
+        preds.append(row['pred']['value'])
+    return preds
+
+
+def find_all_relations(entity_set):
+    triples = []
+    entities = list(sorted(entity_set))
+    for i, a in enumerate(entities):
+        for j, b in enumerate(entities):
+            if i >= j:
+                continue
+            # We now have a pair of entities.
+            # {A} UNION {B}  -->   that could become quite a long query...
+            relations = relations_between(a, b)
+            if not relations:
+                continue
+            #raise Exception('yep found a true relation: %s %s %s' % (a, b,
+            #                                                         relations))
+            for relation in relations:
+                triples.append((a, relation, b))
+    return triples
+
+
 with open('sentences', 'w') as sf:
     for file in glob.glob(os.path.join(d, '*', '*', '*.plaintext')):
         corenlp_file = file + ".corenlpjson"
@@ -33,39 +94,47 @@ with open('sentences', 'w') as sf:
         # if len(content) > 200 or len(content) < 100:
         #     continue
 
-        # print(content)
-        # print(corenlp)
-        # print(spotlight)
-
         for sentence in corenlp["sentences"]:
-            start = sentence["tokens"][0]["characterOffsetBegin"]
-            end = sentence["tokens"][-1]["characterOffsetEnd"]
-            sentence_content = content[start:end]
-            #print(sentence_content)
+            try:
+                start = sentence["tokens"][0]["characterOffsetBegin"]
+                end = sentence["tokens"][-1]["characterOffsetEnd"]
+                sentence_content = content[start:end]
 
-            sf.write(sentence_content + '\n')
-            print(sentence_content)
+                sf.write(sentence_content + '\n')
+                print(sentence_content)
 
-            for surfaceForm in spotlight["annotation"]["surfaceForm"]:
-                offset = int(surfaceForm["@offset"])
-                if not (offset >= start and offset < end):
-                    continue
-                sform = surfaceForm["@name"]
-                print(sform)
+                all_wikidata_uris = set()
 
-                # Check that the surface for checks out.
-                assert content[offset:offset+len(sform)] == sform
+                for surfaceForm in spotlight["annotation"]["surfaceForm"]:
+                    offset = int(surfaceForm["@offset"])
+                    if not (offset >= start and offset < end):
+                        continue
+                    sform = surfaceForm["@name"]
+                    print(sform)
 
-                sf.write('%d %s\n' % (offset, sform))
+                    # Check that the surface for checks out.
+                    assert content[offset:offset+len(sform)] == sform
 
-                resource2 = surfaceForm["resource"]
-                if not isinstance(resource2, list):
-                    resource2 = [resource2]
-                for resource in resource2:
-                    uri = resource["@uri"]
-                    final_score = float(resource["@finalScore"])
-                    print(uri, final_score)
-                    sf.write('%s %f\n' % (uri, final_score))
+                    sf.write('%d %s\n' % (offset, sform))
+
+                    resource2 = surfaceForm["resource"]
+                    if not isinstance(resource2, list):
+                        resource2 = [resource2]
+                    for resource in resource2:
+                        uri = resource["@uri"]
+                        wikidata_uri = get_wikidata(uri)
+                        final_score = float(resource["@finalScore"])
+                        print(uri, wikidata_uri, final_score)
+                        sf.write('%s %s %f\n' %
+                                 (uri, wikidata_uri, final_score))
+                        all_wikidata_uris.add(wikidata_uri)
+
+                relations = find_all_relations(all_wikidata_uris)
+                if relations:
+                    print('Truth: %s' % relations)
+
+                # The URI is <http://dbpedia.org/resource/> plus uri
+
                 #for resource in surfaceForm["resource"]:
                 # TODO(prvak): No idea whether the 'uri' parameter is useful at all.
 
@@ -84,8 +153,11 @@ with open('sentences', 'w') as sf:
                 # This is for the "annotate" Spotlight API:                                     resource["@URI"],
                 # This is for the "annotate" Spotlight API:                                     resource["@surfaceForm"]
                 # This is for the "annotate" Spotlight API:                                     ))
-            sf.write('\n')
-            print()
+                sf.write('\n')
+                print()
+            except NoWikidataEquivalent as e:
+                print(e)
+                print('Skipping sentence')
 
             # sys.exit(0)
 
